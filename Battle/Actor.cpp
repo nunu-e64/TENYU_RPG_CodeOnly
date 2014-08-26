@@ -18,7 +18,7 @@ void CActor::SetValue(int _atk, int _def, double _spd, int _maxhp){
 	Atk = max(1,_atk);
 	Def = max(1,_def);
 	Spd = between(1.0,100.0,_spd);
-	Hp = (MaxHp=_maxhp);
+	Hp = OldHp = MaxHp = _maxhp;
 
 	TimeGauge = 0;//rand()%100;	//ランダムでいいの？$
 	Accident = NULL;
@@ -28,6 +28,21 @@ void CActor::SetValue(int _atk, int _def, double _spd, int _maxhp){
 	NowTrick = NULL;
 
 	Init();
+}
+
+void CActor::SetRect(int _cx, int _cy){
+	int width, height;
+	GetGraphSize(Img, &width, &height);
+
+	Rect.Left = _cx-width/2;
+	Rect.Right = _cx+width/2;
+	Rect.Top = _cy-height/2;
+	Rect.Bottom = _cy+height/2;
+}
+
+void CActor::SetImg(int _img){
+	Img = _img;
+	SetRect(Rect.Center().x, Rect.Center().y);
 }
 
 void CActor::AddTrick(trick_tag const* _trick){
@@ -86,7 +101,7 @@ int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
 		return 0;
 	}
 	
-	int damage  = _trick->Power + _attacker->GetAtk() - Def;
+	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
 	Hp = between(0, MaxHp, Hp-damage);
 	
 	return damage;

@@ -959,10 +959,11 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			goto finish;
 		}
 
+		//•Ï”‚Ì€”õ‚ª‚Å‚«‚½‚ç‚¢‚´ˆ—‚Ö
 		if (mystrcmp(arg[3], "NORMAL")){
 			_battle->Damage(attacker_actorindex, target_actorindex, (trick_tag const*)trick);
 
-		//}else if (mystrcmp(arg[3], "NORMAL")){ 
+		//}else if (mystrcmp(arg[3], "STABLE")){ 
 		}else{
 			ErrorDx("Error->@Damange->Check arg[TYPE] :%s", arg[3]);
 		}

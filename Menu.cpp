@@ -78,8 +78,7 @@ CMenuNode* CMenu::Find(const char _label[32], CMenuNode* _top){
 	}
 
 	CMenuNode* result;
-	if (_top == NULL) tmp = front; else tmp = _top; 
-	while(tmp!=NULL){	
+	if (_top == NULL) tmp = front; else tmp = _top; 	while(tmp!=NULL){	
 		if (tmp->child!=NULL){
 			if ((result=Find(_label, tmp->child))!=NULL) return result;
 		}		

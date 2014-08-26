@@ -33,7 +33,7 @@ void CPlayer::Draw(int cx, int cy, int dx, int dy){
 	DrawGraph(cx-imgsize.x, cy-imgsize.y, Img, true);
 
 	DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+5+dy, 1+cx+25+dx, 1+cy+imgsize.y+15+dy, BLUE, true);
-	DrawRectGraph(cx-25+dx, cy+imgsize.y+5+dy, 0, 0, (int)(50*Hp/MaxHp), 10, Img_hpbar,false,false);
+	DrawRectGraph(cx-25+dx, cy+imgsize.y+5+dy, 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
 
 	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
 	DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+20+dy, 1+cx+25+dx, 1+cy+imgsize.y+30+dy, BLUE, true);
@@ -41,6 +41,11 @@ void CPlayer::Draw(int cx, int cy, int dx, int dy){
 	SetDrawBright(255,255,255);
 
 	BattleMenu.Draw();
+
+	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é
+	if (OldHp>Hp) OldHp--;
+	else if (OldHp<Hp) OldHp++;
+
 }
 
 bool CPlayer::Plan(){
@@ -134,9 +139,10 @@ bool CPlayer::Action(){
 	
 	if (NowTrick==NULL){
 		Target = -1;
-		ErrorDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)");
+		ErrorDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
 		return true;
 	}
+
 	
 	//‚Æ‚è‚ ‚¦‚¸SINGLE‚ÌŽž‚¾‚¯ŽÀ‘•
 	switch (NowTrick->TargetType){

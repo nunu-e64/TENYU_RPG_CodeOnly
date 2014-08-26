@@ -7,7 +7,6 @@ CBattle::CBattle(){
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
 	
-
 }
 
 void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
@@ -73,12 +72,20 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
-		for (int i=0; i<ACTOR_NUM; i++){	//$
+		for (int i=0; i<ACTOR_NUM; i++){	//$ざっつ
 			Actor[i]->ClearTrick();
 			Actor[i]->AddTrick(TrickManager.GetTrick("アタックマジックA"));
 			Actor[i]->AddTrick(TrickManager.GetTrick("アタックマジックB"));
 			Actor[i]->SetValue(5, 5, 1, 100);	//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
 		}
+
+		for (int i=0; i<MAX_ENEMY; i++){
+			Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
+		}
+		for (int i=0; i<MAX_PLAYER; i++){
+			Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
+		}
+			
 
 		EveManager_p = _evemanager_p;
 		FlagSet_p = _flagset_p;
@@ -199,6 +206,12 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	int target_actorindex   = between(0, ACTOR_NUM-1, _target_actorindex); 
 	
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
+
+	int timecount = 0;
+	while(BasicLoop()){
+		DrawCenterString(	
+		timecount++
+	}
 }
 
 void CBattle::CTargetMarker::Draw(int dx, int dy){

@@ -188,9 +188,9 @@ public:
 private:
 	
 	bool CreateFlag(const char* _key, int _num=0){
-		/*for(unsigned int i=0; i<Flag.size(); i++){
+		/*for(unsigned int i=0; i<Flag.size(); i++)
 			if (mystrcmp(Flag[i].Key, _key)) return false;
-		}*/
+		*/	
 		flag_tag newflag;
 		mystrcpy(newflag.Key, _key, 32);
 		newflag.Num = _num;

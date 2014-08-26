@@ -169,6 +169,36 @@ private:
 };
 /////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////
+///“ñŽŸŒ³BOXƒNƒ‰ƒX////////////////////////////////////////
+class CRect{
+public:
+	int Top;
+	int Left;
+	int Bottom;
+	int Right;
+	CRect(){
+		Top = Bottom = Left = Right = 0;
+	}
+	CRect(int _left, int _right, int _top, int _bottom){
+		Left = _left;
+		Right = _right;
+		Top = _top;
+		Bottom = _bottom;
+	}
+	CVector Center(){
+		CVector vec(Left+(Right-Left)/2, Top+(Bottom-Top)/2);
+		return vec;
+	}
+	int Width(){
+		return (Right-Left);
+	}
+	int Height(){
+		return (Bottom-Top);
+	}
+}
+/////////////////////////////////////////////////////////////
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////

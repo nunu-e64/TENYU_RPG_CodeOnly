@@ -17,6 +17,7 @@ public:
 	//初期設定関連
 		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank);
 		void SetValue(int _atk, int _def, double _spd, int _maxhp);
+		void SetRect((int _cx, int _cy);
 		void SetImg(int _img){	Img = _img;}
 		void AddTrick(trick_tag const* _trick);
 		void ClearTrick(){TrickList.clear();}
@@ -53,7 +54,7 @@ protected:
 			int Atk;
 			int Def;
 			double Spd;		//%
-			int Hp;
+			int Hp;		int OldHp;	//描画用
 			int MaxHp;
 			double TimeGauge;	//0~100%
 			int Accident;	//状態異常やステータス変動
@@ -68,7 +69,7 @@ protected:
 
 	//技関連
 		std::vector <trick_tag const*> TrickList;		//技リスト
-		trick_tag const* NowTrick;
+		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」
 		int Target;
 
 	//包含クラス
@@ -76,6 +77,7 @@ protected:
 		CCmdList* CmdList;
 
 	//グラフィック
+		CRect Rect;
 		int Img_hpbar;
 		int Img_timebar[2];
 		int Img;

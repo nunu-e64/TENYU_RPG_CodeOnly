@@ -39,6 +39,7 @@ trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 	if (mystrcmp(tmp->Name, _name)){
 		return tmp;
 	}else{
+		ErrorDx("TrickManager->GetTrick->NotFound:%s", _name);
 		return NULL;
 	}
 }
