@@ -12,7 +12,7 @@ void CEnemy::Draw(int dx, int dy){
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timecount*8)) ;
 
 			if (timecount==30){
-				timecount==0;
+				timecount=0;
 				Visible = false;
 			}
 		}

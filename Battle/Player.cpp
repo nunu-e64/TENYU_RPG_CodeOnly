@@ -34,16 +34,16 @@ void CPlayer::Draw(int dx, int dy){
 		timecount++;
 
 		//ここにプレイヤーが死んだときのエフェクト処理を書く///$
-		if (timecount%4<2){
+		if (timecount%11<5){
 			SetDrawBright(50,50,50);
 		}
 		//////////////////////////////////////////////////////
 
-		if (timecount==10){
-			timecount==0;
+		if (timecount==40){
+			timecount=0;
 			Visible = false;
 		}
-	}else if(Visible=false){
+	}else if(Visible==false){
 		SetDrawBright(50,50,50);
 	}else{
 		SetDrawBright(255,255,255);

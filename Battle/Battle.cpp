@@ -248,7 +248,7 @@ void CBattle::CTargetMarker::Move(int _dir){
 void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _deadok){
 	int actorindex = between(0, ACTOR_NUM-1, _actorindex); 
 
-	if (!_deadok && _battle->Actor[actorindex]->GetHp()==0){
+	if (!_deadok && _battle->Actor[Index + (EnemySide?MAX_PLAYER:0)]->GetHp()==0){
 		return;
 	}else{
 		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?MAX_PLAYER:0));
