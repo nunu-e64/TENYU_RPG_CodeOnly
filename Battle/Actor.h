@@ -17,15 +17,15 @@ public:
 	//初期設定関連
 		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank);
 		void SetValue(int _atk, int _def, double _spd, int _maxhp);
-		void SetRect((int _cx, int _cy);
-		void SetImg(int _img){	Img = _img;}
+		void SetRect(int _cx, int _cy);
+		void SetImg(int _img);
 		void AddTrick(trick_tag const* _trick);
 		void ClearTrick(){TrickList.clear();}
 
 
 	bool Main();
 	bool Do();
-	virtual void Draw(int cx, int cy, int dx=0, int dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
+	virtual void Draw(int dx=0, int dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
 	//戦闘関連
 		int GetDef(){return Def;}

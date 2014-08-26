@@ -157,10 +157,10 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 
 		//Player‚ÆEnemy‚Ì•`‰æ///////////////////////////////////////////////////////////////
 		for (int i=0; i<MAX_PLAYER; i++){
-			Player[i].Draw(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200, dx, dy);
+			Player[i].Draw(dx, dy);
 		}
 		for (int i=0; i<MAX_ENEMY; i++){
-			Enemy[i].Draw(WINDOW_WIDTH/4*(i+1), 70, dx, dy);
+			Enemy[i].Draw(dx, dy);
 		}
 
 
@@ -208,10 +208,10 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
 
 	int timecount = 0;
-	while(BasicLoop()){
-		DrawCenterString(	
-		timecount++
-	}
+	//while(BasicLoop()){
+	//	DrawCenterString(
+	//	timecount++
+	//}
 }
 
 void CBattle::CTargetMarker::Draw(int dx, int dy){

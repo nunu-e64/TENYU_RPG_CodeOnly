@@ -2,19 +2,33 @@
 #include "Enemy.h"
 #include "Battle.h"
 
-void CEnemy::Draw(int cx, int cy, int dx, int dy){
+void CEnemy::Draw(int dx, int dy){
 
-	CVector imgsize = GetGraphSize(Img)*0.5;
-	DrawGraph(cx-imgsize.x, cy-imgsize.y, Img, true);
+	DrawGraph(Rect.Left, Rect.Top, Img, true);
 
-	DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+5+dy, 1+cx+25+dx, 1+cy+imgsize.y+15+dy, BLUE, true);
-	DrawRectGraph(cx-25+dx, cy+imgsize.y+5+dy, 0, 0, (int)(50*Hp/MaxHp), 10, Img_hpbar,false,false);
+	//CVector imgsize = GetGraphSize(Img)*0.5;
+	//DrawGraph(cx-imgsize.x, cy-imgsize.y, Img, true);
 
+	//DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+5+dy, 1+cx+25+dx, 1+cy+imgsize.y+15+dy, BLUE, true);
+	//DrawRectGraph(cx-25+dx, cy+imgsize.y+5+dy, 0, 0, (int)(50*Hp/MaxHp), 10, Img_hpbar,false,false);
+
+	//if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
+	//DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+20+dy, 1+cx+25+dx, 1+cy+imgsize.y+30+dy, BLUE, true);
+	//DrawRectGraph(cx-25+dx, cy+imgsize.y+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+	//
+	//SetDrawBright(255,255,255);
+
+	//HpBar
+	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+5+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+15+dy, BLUE, true);
+	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+5+dy, 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
+
+	//TimeBar
 	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-	DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+20+dy, 1+cx+25+dx, 1+cy+imgsize.y+30+dy, BLUE, true);
-	DrawRectGraph(cx-25+dx, cy+imgsize.y+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
-	
+	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+20+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+30+dy, BLUE, true);
+	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+
 	SetDrawBright(255,255,255);
+
 }
 
 bool CEnemy::Plan(){

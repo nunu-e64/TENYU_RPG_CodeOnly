@@ -10,7 +10,7 @@
 class CPlayer : public CActor{
 public:
 	void Init();
-	void Draw(int cx, int cy, int dx=0, int dy=0);
+	void Draw(int dx=0, int dy=0);
 
 private:
 	//ƒƒ“ƒoŠÖ”
