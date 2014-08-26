@@ -34,7 +34,11 @@ public:
 		trick_tag const* GetNowTrick(){return NowTrick;}
 
 		int Damage(CActor* _attacker, trick_tag const* _trick);
+		bool DeadCheck();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){Target=_target;}
+
+	//ほか
+		CRect GetRect(){return Rect;}
 
 protected:
 	//メンバ関数
@@ -48,16 +52,21 @@ protected:
 		//void DamageStep(int _targetnum, ...);
 		//void DamageStep(CActor* _target);
 
-	//メンバ変数
+
+	//基礎情報
 		int ActorIndex;	//Actor全体の通し番号
 		int Index;	//Player,Enemyごとの通し番号
-			int Atk;
-			int Def;
-			double Spd;		//%
-			int Hp;		int OldHp;	//描画用
-			int MaxHp;
-			double TimeGauge;	//0~100%
-			int Accident;	//状態異常やステータス変動
+
+	//戦闘関連
+		bool Alive;
+		bool Visible;
+		int Atk;
+		int Def;
+		double Spd;		//%
+		int Hp;		int OldHp;	//描画用
+		int MaxHp;
+		double TimeGauge;	//0~100%
+		int Accident;	//状態異常やステータス変動
 
 		enum mode_tag{
 			STAY,

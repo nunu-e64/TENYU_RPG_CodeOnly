@@ -15,7 +15,7 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		trick_tag newtrick;{
 			strcpy_s(newtrick.Name, "アタックマジックA");
 			newtrick.Cost = 3;
-			newtrick.Power = 10;
+			newtrick.Power = 110;
 			newtrick.TargetType = newtrick.SINGLE;
 			TrickManager.Add(newtrick);
 		}
@@ -163,7 +163,6 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 			Enemy[i].Draw(dx, dy);
 		}
 
-
 		//ターゲットマーカーの描画//////////////////////////////////////////////
 		TargetMarker.Draw(dx,dy);
 
@@ -208,10 +207,18 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
 
 	int timecount = 0;
-	//while(BasicLoop()){
-	//	DrawCenterString(
-	//	timecount++
-	//}
+	CRect tmpRect = Actor[target_actorindex]->GetRect();
+	while(timecount<20){
+		Draw();
+		DrawCenterString(tmpRect.Center().x, tmpRect.Top-10*sin(timecount*(PI/2)/20), WHITE, "%d", damage); 
+		timecount++;
+		if (!BasicLoop()) break;
+	}
+
+	while(true){
+		Draw();
+		if (!BasicLoop() || Actor[target_actorindex]->DeadCheck()) break;
+	}
 }
 
 void CBattle::CTargetMarker::Draw(int dx, int dy){

@@ -15,6 +15,8 @@ void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::
 }
 
 void CActor::SetValue(int _atk, int _def, double _spd, int _maxhp){
+	Alive = Visible = true;
+
 	Atk = max(1,_atk);
 	Def = max(1,_def);
 	Spd = between(1.0,100.0,_spd);
@@ -106,6 +108,17 @@ int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
 	
 	return damage;
 }
+
+bool CActor::DeadCheck(){
+	
+	if (OldHp!=Hp) {
+		return false;
+	}else{
+		if (Hp==0) Alive = false;
+		return true;
+	}
+}
+
 
 bool CActor::TimeGaugeForward(){
 	if (TimeGauge==100)	{

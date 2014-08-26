@@ -29,8 +29,30 @@ void CPlayer::Init(){
 
 void CPlayer::Draw(int dx, int dy){
 
-	DrawGraph(Rect.Left, Rect.Top, Img, true);
+	if (Alive==false && Visible==true){
+		static int timecount = 0;
+		timecount++;
 
+		//ここにプレイヤーが死んだときのエフェクト処理を書く///$
+		if (timecount%4<2){
+			SetDrawBright(50,50,50);
+		}
+		//////////////////////////////////////////////////////
+
+		if (timecount==10){
+			timecount==0;
+			Visible = false;
+		}
+	}else if(Visible=false){
+		SetDrawBright(50,50,50);
+	}else{
+		SetDrawBright(255,255,255);
+	}
+
+
+	DrawGraph(Rect.Left, Rect.Top, Img, true);
+	SetDrawBright(255,255,255);
+	
 	//HpBar
 	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+5+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+15+dy, BLUE, true);
 	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+5+dy, 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
@@ -56,7 +78,7 @@ bool CPlayer::Plan(){
 	if (newplan){
 		char tmp[64];
 		sprintf_s(tmp, "Player%dのPlan", Index);
-		(*B_TextBox_pp)->AddStock(tmp);
+		//(*B_TextBox_pp)->AddStock(tmp);
 	}
 	//////////////////////////////////////////
 
@@ -135,7 +157,7 @@ bool CPlayer::Action(){
 	//テスト用////////////////////////////////
 	char tmp[64];
 	sprintf_s(tmp, "Player%dのAction", Index);
-	(*B_TextBox_pp)->AddStock(tmp);
+	//(*B_TextBox_pp)->AddStock(tmp);
 	//////////////////////////////////////////
 	
 	if (NowTrick==NULL){
