@@ -241,6 +241,11 @@ int LoadGraph(const TCHAR *filename, bool errorcheck)		//Dxƒ‰ƒCƒuƒ‰ƒŠ‚ÌLoadGraph
 //DrawGraph
 //DrawExtendGraph
 //DrawTurnGraph
+template<class T> int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag){
+	CVector imgsize = GetGraphSize(GrHandle);
+	DrawGraph(cx-imgsize.x/2, cy-imgsize.y/2, GrHandle, TransFlag);
+}
+
 
 int DrawString(int x, int y, int color, const TCHAR* format, ...){
 	va_list args;
@@ -261,7 +266,7 @@ int DrawString(int x, int y, int color, const TCHAR* format, ...){
 	return for_return;	
 }
 //DrawCenterString NotƒtƒH[ƒ}ƒbƒg”Å
-int DrawCenterString(int x, int y, int color, const TCHAR* format, ...){	//ƒtƒH[ƒ}ƒbƒg”Å
+int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...){	//ƒtƒH[ƒ}ƒbƒg”Å
 	va_list args;
 	char string[1024];
 	int for_return;
@@ -271,7 +276,7 @@ int DrawCenterString(int x, int y, int color, const TCHAR* format, ...){	//ƒtƒH
 	va_end( args );
 
 	if(strlen(string)<1024){
-		for_return = DrawCenterString(x,y,string,color);	
+		for_return = DrawCenterString(cx,y,string,color);	
 	}else{
 		ErrorDx("Error->nunuLib:DrawCenterString->too long string:%s", __FILE__, __LINE__, string);
 		for_return=-1;

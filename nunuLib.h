@@ -277,12 +277,17 @@ inline int DrawExtendGraph(double x1, double y1, double x2, double y2, int GrHan
 inline int DrawTurnGraph(double x, double y, int GrHandle, int TransFlag){		//DxライブラリのDrawTurnGraphでdoubleをintに自動キャストしてくれるだけ
 	return DrawTurnGraph((int)x, (int)y, GrHandle, TransFlag);
 }
+template<class T> int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag);
 
 int DrawString(int x, int y, int color, const TCHAR* format, ...);	//フォーマット対応
-inline int DrawCenterString(int x, int y, const TCHAR *String, int color){	//xを左右の中心にしてDrawStringで文字描画（※yは上下中心ではなく上辺）
-	return DrawString(x-GetDrawStringWidth(String, strlen(String))/2, y, String, color); 
+inline int DrawCenterString(int cx, int y, const TCHAR *String, int color, bool centerY=false){	//xを左右の中心にしてDrawStringで文字描画（※yは上下中心ではなく上辺）
+	if (centerY){
+		return DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y-GetFontSize()/2, String, color);	//あくまで目安 
+	}else{
+		return DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y, String, color); 
+	}
 }
-int DrawCenterString(int x, int y, int color, const TCHAR* format, ...);
+int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...);
 ////描画系ここまで//////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
