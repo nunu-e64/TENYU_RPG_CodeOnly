@@ -1,6 +1,6 @@
 #include "../Define.h"
 #include "Battle.h"
-
+#include "EnemyPlanManager.h"
 
 CBattle::CBattle(){
 
@@ -67,12 +67,19 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			Actor[i]->FirstSet(i, &TextBox, &B_CmdList, &ImgBank);
 			Actor[i]->SetImg(((i<MAX_PLAYER)? PlayerImgBank[i]: EnemyImgBank[i-MAX_PLAYER]));
 		}
+	
+	//EnemyPlanManagerはすべてのActorへのポインタを握る
+		CEnemyPlanManager::GetInstance()->SetActor_p(Actor);
+		CEnemyPlanManager::GetInstance()->Init();
+		for (int i=0; i<MAX_ENEMY; i++){
+			Enemy[i].SetEnemyPlanManager(CEnemyPlanManager::GetInstance());
+		}
 
 }
 
 void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
-		for (int i=0; i<ACTOR_NUM; i++){	//$ざっつ
+		for (int i=0; i<ACTOR_NUM; i++){	//$雑なテスト用初期値設定
 			Actor[i]->ClearTrick();
 			Actor[i]->AddTrick(TrickManager.GetTrick("アタックマジックA"));
 			Actor[i]->AddTrick(TrickManager.GetTrick("アタックマジックB"));
@@ -81,6 +88,7 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 
 		for (int i=0; i<MAX_ENEMY; i++){
 			Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
+			Enemy[i].MakePlan();
 		}
 		for (int i=0; i<MAX_PLAYER; i++){
 			Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);

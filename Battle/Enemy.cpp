@@ -1,6 +1,7 @@
 #include "../Define.h"
 #include "Enemy.h"
 #include "Battle.h"
+#include "EnemyPlanManager.h"
 
 void CEnemy::Draw(int dx, int dy){
 
@@ -49,6 +50,13 @@ void CEnemy::Draw(int dx, int dy){
 	}
 }
 
+void CEnemy::MakePlan(){
+
+	EnemyPlanManager->MakePlan(Index, 0.5, 0, 1);	//Ž©•ª‚ÌHp50%‚ð‹«ŠE‚ÉA‹Z0¨‹Z1
+
+}
+
+
 bool CEnemy::Plan(){
 	//ƒeƒXƒg—p////////////////////////////////
 		char tmp[64];
@@ -57,7 +65,8 @@ bool CEnemy::Plan(){
 	//////////////////////////////////////////
 
 	
-	unsigned int action_num = EnemyPlanner.Plan(this);
+	unsigned int action_num = EnemyPlanManager->Plan(this);
+
 	if (action_num<TrickList.size()){
 		NowTrick = TrickList[action_num];
 
@@ -104,17 +113,4 @@ bool CEnemy::Action(){
 	Target = -1;
 	
 	return true;
-}
-
-
-int CEnemyPlanner::Plan(CEnemy* _enemy){
-
-	//‚¢‚ë‚¢‚ë•¡ŽG‚ÈAI‚ðì‚è‚½‚¢I	$
-	//ˆÈ‰º‚Í‰¼ŽÀ‘•
-
-	if (_enemy->Hp > _enemy->MaxHp/2){
-		return 0;
-	}else{
-		return 1;
-	}
 }

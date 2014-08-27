@@ -28,7 +28,7 @@ public:
 	virtual void Draw(int dx=0, int dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
 	//戦闘関連
-		int GetDef(){return Def;}
+		//int GetDef(){return Def;}
 		int GetAtk(){return Atk;}
 		int GetHp(){return Hp;}
 		trick_tag const* GetNowTrick(){return NowTrick;}

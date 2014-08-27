@@ -53,48 +53,56 @@ void CActor::AddTrick(trick_tag const* _trick){
 
 bool CActor::Main(){
 
-	switch(Mode){
-	case PLAN:
-	case PREPARE:
-		if (TimeGaugeForward()){
-			Mode = ACTION;
-			return true;
-		}
-		break;
+	if (Alive){
+		switch(Mode){
+		case PLAN:
+		case PREPARE:
+			if (TimeGaugeForward()){
+				Mode = ACTION;
+				return true;
+			}
+			break;
 
-	case ACTION:
-	case STAY:
-		if (TimeGaugeForward()){
-			Mode = PLAN;
-			return true;
-		}
-		break;
+		case ACTION:
+		case STAY:
+			if (TimeGaugeForward()){
+				Mode = PLAN;
+				return true;
+			}
+			break;
 	
-	default:
-		ErrorDx("Error->CActor::Main->unexpected Mode:%d", __FILE__, __LINE__, Mode);
+		default:
+			ErrorDx("Error->CActor::Main->unexpected Mode:%d", __FILE__, __LINE__, Mode);
+		}
 	}
 
 	return false;
 }
 
 bool CActor::Do(){		//行動待機リスト上位のものから行動していく
-	switch (Mode){
-	case PLAN:
-		if (Plan()){
+
+	if (Alive){
+		switch (Mode){
+		case PLAN:
+			if (Plan()){
+				return true;
+			}else{
+				return false;
+			}
+		case ACTION:
+			if (Action()){
+				return true;
+			}else{
+				return false;
+			}
+		default:
+			ErrorDx("Error->CActor::Do->unexpected Mode:%d", __FILE__, __LINE__, Mode);
 			return true;
-		}else{
-			return false;
 		}
-	case ACTION:
-		if (Action()){
-			return true;
-		}else{
-			return false;
-		}
-	default:
-		ErrorDx("Error->CActor::Do->unexpected Mode:%d", __FILE__, __LINE__, Mode);
+	}else{
 		return true;
 	}
+
 }
 
 int CActor::Damage(CActor* _attacker, trick_tag const* _trick){

@@ -42,4 +42,5 @@ trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 		ErrorDx("TrickManager->GetTrick->NotFound:%s", _name);
 		return NULL;
 	}
+	//mapでは存在しないキーでアクセスしようとした場合、値をデフォルトコンストラクタで初期化し登録してくれやがる
 }

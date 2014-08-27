@@ -5,26 +5,25 @@
 
 #include "Actor.h"
 
-class CEnemy;
-class CEnemyPlanner{
-public:
-	//void MakePlan();
-	int Plan(CEnemy* _enemy);
-};
-
+class CEnemyPlanManager;
 
 class CEnemy : public CActor{	
-	friend class CEnemyPlanner;
 public:
-	void Draw(int dx=0, int dy=0);
+	
+	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
+		EnemyPlanManager = _enemyPlanManager;
+	}
 
+	void Draw(int dx=0, int dy=0);
+	void MakePlan();	
+	
 private:
 	//ƒƒ“ƒoŠÖ”
 		bool Plan();
 		bool Action();
 
 	//ƒƒ“ƒo•Ï”
-		CEnemyPlanner EnemyPlanner;
+		CEnemyPlanManager* EnemyPlanManager;
 		int Attention[MAX_PLAYER];
 };
 
