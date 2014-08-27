@@ -218,7 +218,9 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	CRect tmpRect = Actor[target_actorindex]->GetRect();
 	while(timecount<20){
 		Draw();
-		DrawCenterString(tmpRect.Center().x, tmpRect.Top-10*sin(timecount*(PI/2)/20), WHITE, "%d", damage); 
+		if (timecount<1){	DrawCenterString(tmpRect.Center().x, tmpRect.Top-5*sin(timecount*(PI/2)/10), WHITE, "%d", damage); 
+		}else{				DrawCenterString(tmpRect.Center().x, tmpRect.Top-5, WHITE, "%d", damage); 
+		}
 		timecount++;
 		if (!BasicLoop()) break;
 	}
