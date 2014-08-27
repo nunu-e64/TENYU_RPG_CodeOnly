@@ -35,8 +35,8 @@ public:
 	//戦闘用
 		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);
 
-	//グラフィック用
-		enum{	//システム画像
+	//グラフィック用 for ImgBank
+		enum{	//システム画像	
 			MENU_CURSOR,
 			HP_BAR,
 			TIME_BAR1,

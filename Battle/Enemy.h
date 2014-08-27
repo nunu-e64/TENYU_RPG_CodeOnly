@@ -6,10 +6,12 @@
 #include "Actor.h"
 
 class CEnemyPlanManager;
+class CEnemySpecies;
 
 class CEnemy : public CActor{	
 public:
 	
+	CEnemy(CEnemySpecies* _species);
 	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
 		EnemyPlanManager = _enemyPlanManager;
 	}

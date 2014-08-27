@@ -2,6 +2,13 @@
 #include "Enemy.h"
 #include "Battle.h"
 #include "EnemyPlanManager.h"
+#include "EnemySpecies.h"
+
+
+CEnemy::CEnemy(CEnemySpecies* _species){
+	
+}
+
 
 void CEnemy::Draw(int dx, int dy){
 
