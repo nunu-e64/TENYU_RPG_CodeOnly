@@ -21,17 +21,6 @@ void CEnemy::Draw(int dx, int dy){
 		DrawGraph(Rect.Left, Rect.Top, Img, true);
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
-		//CVector imgsize = GetGraphSize(Img)*0.5;
-		//DrawGraph(cx-imgsize.x, cy-imgsize.y, Img, true);
-
-		//DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+5+dy, 1+cx+25+dx, 1+cy+imgsize.y+15+dy, BLUE, true);
-		//DrawRectGraph(cx-25+dx, cy+imgsize.y+5+dy, 0, 0, (int)(50*Hp/MaxHp), 10, Img_hpbar,false,false);
-
-		//if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-		//DrawBox(-1+cx-25+dx, -1+cy+imgsize.y+20+dy, 1+cx+25+dx, 1+cy+imgsize.y+30+dy, BLUE, true);
-		//DrawRectGraph(cx-25+dx, cy+imgsize.y+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
-		//
-		//SetDrawBright(255,255,255);
 
 		//HpBar
 		DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+5+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+15+dy, BLUE, true);
@@ -52,7 +41,7 @@ void CEnemy::Draw(int dx, int dy){
 
 void CEnemy::MakePlan(){
 
-	EnemyPlanManager->MakePlan(Index, 0.5, 0, 1);	//©•ª‚ÌHp50%‚ğ‹«ŠE‚ÉA‹Z0¨‹Z1
+	EnemyPlanManager->MakePlan(Index, 50, 0, 1);	//©•ª‚ÌHp50%‚ğ‹«ŠE‚ÉA‹Z0¨‹Z1
 
 }
 

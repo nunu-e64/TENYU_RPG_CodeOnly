@@ -5,6 +5,7 @@
 
 #include "Actor.h"
 #include <map>
+#include <string>
 
 class CEnemy;
 
@@ -18,28 +19,28 @@ public:
 		Actor = _actorList;
 	}
 
-	//void MakePlan();
 	void Init();
 	void MakePlan(int _enemyIndex, int _borderHp, int _choice1, int _choice2);
-
 	int Plan(CEnemy* _enemy);
 
-
+private:
 	class CEnemyPlanner{
 	public:
 		int PlanType;
-		std::map <char256, int> Value;
+		std::map <std::string, int> Value;
 			//mapでは存在しないキーでアクセスしようとした場合、値をデフォルトコンストラクタで初期化し登録してくれやがる
 	};
-	
+	std::vector <CEnemyPlanner> EnemyPlanner;	//mapでも可
 
-private:
-	std::vector <CEnemyPlanner> EnemyPlanner;
-	CActor** Actor;
-	int ACTOR_NUM;
+	CEnemy* NowEnemy;
 
-	int Calc_HpBorder(float _hpBorder, int choice1, int choice2);
-	int Calc_PlayerNum(int choice_1player, int choice_2player, int choice_3player);
+	//全アクターへのアクセスを持たせておく
+		CActor** Actor;
+		int ACTOR_NUM;
+
+	//具体的なAI構築用関数
+		int Calc_HpBorder(float _hpBorder, int choice1, int choice2);
+		int Calc_PlayerNum(int choice_1player, int choice_2player, int choice_3player);
 
 
 	//単一性を保証(Singleton)

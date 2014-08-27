@@ -1,5 +1,6 @@
 #include "../Define.h"
 #include "EnemyPlanManager.h"
+#include "Enemy.h"
 
 
 void CEnemyPlanManager::Init(){
@@ -9,37 +10,54 @@ void CEnemyPlanManager::Init(){
 		CEnemyPlanner tmp;
 		EnemyPlanner.push_back(tmp);
 	}
+
+	NowEnemy = NULL;
 }
 
 void CEnemyPlanManager::MakePlan(int _enemyIndex, int _borderHp, int _choice1, int _choice2){
-
-	char256 tmpkey;
+	//最終的には外部ファイルからの読み込み化
 	EnemyPlanner[_enemyIndex].PlanType = 0;
 
-	mystrcpy(tmpkey.text, "BorderHp");
-	EnemyPlanner[_enemyIndex].Value.insert(std::map<char256, int>::value_type( tmpkey, _borderHp));
-	mystrcpy(tmpkey.text, "Choice1");
-	EnemyPlanner[_enemyIndex].Value.insert(std::map<char256, int>::value_type( tmpkey, _choice1));
-	mystrcpy(tmpkey.text, "Choice2");
-	EnemyPlanner[_enemyIndex].Value.insert(std::map<char256, int>::value_type( tmpkey, _choice2));
+	EnemyPlanner[_enemyIndex].Value.insert(std::map<std::string, int>::value_type( "BorderHp", _borderHp));
+	EnemyPlanner[_enemyIndex].Value.insert(std::map<std::string, int>::value_type( "Choice1", _choice1));
+	EnemyPlanner[_enemyIndex].Value.insert(std::map<std::string, int>::value_type( "Choice2", _choice2));
 
 }
 
 
 int CEnemyPlanManager::Plan(CEnemy* _enemy){
+	CEnemyPlanner p =  EnemyPlanner[_enemy->GetIndex()];
+	NowEnemy = _enemy;
 
-	return 0;	//$$
+	int choice = -1;
 
+	switch(p.PlanType){
+	case 0:
+		choice = Calc_HpBorder(p.Value["BorderHp"]/100, p.Value["Choice1"], p.Value["Choice2"]);
+		break;
+	case 1:
+		choice = Calc_PlayerNum(p.Value["Choice1"], p.Value["Choice2"], p.Value["Choice3"]); 
+		break;
+	default:
+		break;
+	}
+
+	return choice;
 }
 
 int CEnemyPlanManager::Calc_HpBorder(float _hpBorder, int choice1, int choice2){
-
-
-
+	if (NowEnemy->GetHp()>NowEnemy->GetMaxHp()*_hpBorder){
+		return choice1;
+	}else{
+		return choice2;
+	}	
 }
 
 
 int CEnemyPlanManager::Calc_PlayerNum(int choice_1player, int choice_2player, int choice_3player){
-
-
+	int count=0;
+	for (int i=0; i<MAX_PLAYER; i++){
+		if (Actor[i]->GetAlive()) count++;
+	}
+	return choose(count, choice_1player, choice_2player, choice_3player);
 }

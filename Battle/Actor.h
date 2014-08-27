@@ -27,10 +27,15 @@ public:
 	bool Do();
 	virtual void Draw(int dx=0, int dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
+	//基礎情報
+		int GetIndex(){return Index;}
+		
 	//戦闘関連
+		bool GetAlive(){return Alive;}
 		//int GetDef(){return Def;}
 		int GetAtk(){return Atk;}
 		int GetHp(){return Hp;}
+		int GetMaxHp(){return MaxHp;}
 		trick_tag const* GetNowTrick(){return NowTrick;}
 
 		int Damage(CActor* _attacker, trick_tag const* _trick);
