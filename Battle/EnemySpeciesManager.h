@@ -15,8 +15,8 @@ public:
 
 
 private:
-	std::map <std::string, CEnemySpecies> EnemyBank;
-	CEnemySpecies EnemyS_dammy;
+	//std::map <std::string, CEnemySpecies> EnemyBank;
+	//CEnemySpecies EnemyS_dammy;
 
 };
 

@@ -5,9 +5,6 @@
 #include "EnemySpecies.h"
 
 
-CEnemy::CEnemy(CEnemySpecies* _species){
-	
-}
 
 
 void CEnemy::Draw(int dx, int dy){
