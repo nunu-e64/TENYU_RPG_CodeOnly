@@ -102,7 +102,7 @@ bool CTextBox::Main(CCmdList* _cmdlist, CFlagSet *_flagset){
 					}*/
 				}
 
-				if ((GetNowCount()-starttime) > AutoPlaySpeed*1000){	//(500+sumstrlen*AutoPlaySpeed)){	//1文字あたりのスピード指定	
+				if ((GetNowCount()-starttime) > AutoPlaySpeed){	//(500+sumstrlen*AutoPlaySpeed)){	//1文字あたりのスピード指定	
 					NextPage(_cmdlist, _flagset);
 				}
 			}
