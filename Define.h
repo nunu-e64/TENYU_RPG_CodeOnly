@@ -3,7 +3,7 @@
 #define DEFINE_H							////
 ////////////////////////////////////////////////
 
-//#define DEBUG_MODE	//マクロの有効化/無効化
+#define DEBUG_MODE	//マクロの有効化/無効化
 	#ifndef DEBUG_MODE
 		#define WARNINGDX_DISABLE	//マクロの有効化/無効化
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
