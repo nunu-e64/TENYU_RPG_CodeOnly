@@ -253,7 +253,8 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 		dx = ((_dir==RIGHT)? d: ((_dir==LEFT)? -d: 0));
 		dy = ((_dir==DOWN)? d: ((_dir==UP)? -d: 0));
 		
-		Draw(true, true, dx, dy);
+		//Draw(true, true, dx, dy);	//140904変更　歩きながらもテキスト表示が進むように。もし不具合が出れば_eventewalkで処理を変える。
+		Draw(true, false, dx, dy);
 	};
 
 	switch(_dir){
