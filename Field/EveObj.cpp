@@ -4,7 +4,7 @@
 void CEveObj::Draw(int _x, int _y){
 	
 	if (Visible){
-		static int a=200;
+		//static int a=200;	//使ってないっぽいのでコメントアウト。なんじゃこれ。14/08/31
 
 		switch(Effect){
 		case NONE:

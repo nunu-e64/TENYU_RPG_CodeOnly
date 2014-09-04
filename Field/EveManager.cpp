@@ -425,7 +425,10 @@ void CEveManager::Walk(CField* _field, char* _name, int _dir, int _walkspeed, bo
 			if (_fade==-1) eveobj_p->Alpha = between(0, 255, (int)(alpha*(1-(double)abs(d)/MAP_CHIP_SIZE)));
 		};
 
-		if (_fade==-1) eveobj_p->Visible = false;
+		if (_fade==-1) {
+			eveobj_p->Visible = false;
+			eveobj_p->Alpha = alpha;
+		}
 
 	}else{
 		ErrorDx("Error->NotFound->@Walk arg[name]->%s", __FILE__, __LINE__, _name);

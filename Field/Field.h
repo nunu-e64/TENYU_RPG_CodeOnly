@@ -65,7 +65,7 @@ private:
 	//所持インスタンス
 		CMap Map;
 		CTextBox* TextBox;
-		///こっちに移すとField.Initで停止する原因不明14/06/10//////////$
+		///こっちに移すとField.Initで停止する原因不明14/06/10//////////$	DxLibの初期化との関係かなあ
 		//CTextBox  TextBox1;
 		//CTextWrap TextWrap1;
 		///////////////////////////////////////////////////////
