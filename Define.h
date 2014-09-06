@@ -165,11 +165,10 @@ public:
 	void SetFlag(const char* _key, int _num=0, bool _add=false){
 		for(unsigned int i=0; i<Flag.size(); i++){
 			if (mystrcmp(Flag[i].Key, _key)) {
-				if(!_add) {
-					Flag[i].Num=max(0,_num);
-				}else{ 
-					Flag[i].Num=max(0,Flag[i].Num+_num);
-				}
+				int num = (_add? Flag[i].Num+_num: _num);
+
+				if (num<0) ErrorDx("Error->You can't set [num<0] for FLAG (changed to 0):%s", _num);
+				Flag[i].Num=max(0,num);
 				return;
 			}
 		}
@@ -194,7 +193,14 @@ private:
 		*/	
 		flag_tag newflag;
 		mystrcpy(newflag.Key, _key, 32);
-		newflag.Num = _num;
+
+		if (_num<0){
+			ErrorDx("Error->You can't use [num<0] for FLAG (changed to 0) :%s", _num);
+			newflag.Num = 0;
+		}else{
+			newflag.Num = _num;
+		}
+		
 		Flag.push_back(newflag);
 		return true;
 	};
