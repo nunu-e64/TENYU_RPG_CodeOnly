@@ -25,6 +25,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			Dir=DOWN; 
 			Step=0; Dx=0; Dy=0; 
 			Visible=true;
+			Alpha = 255;
 			ImgBackGround = NULL;
 			TextAutoPlaySpeed = 1000;
 
@@ -208,12 +209,16 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 		//マップ描画////////////////////////////////////////////////////////////////////////////
 		CHECK_TIME_START2	Map.Draw(NowMap, X, Y, dx, dy);			CHECK_TIME_END2("Map.Draw")
 		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, false, dx, dy);	CHECK_TIME_END2("EveManager.Draw_under")
-			//プレイヤー
+
+		//プレイヤー
+			SetDrawBlendMode( DX_BLENDMODE_ALPHA, Alpha);
 			if(!_playeralsoshake){
-				if(Visible)Map.DrawPlayer(ImgPlayer[Dir*4+mod(Step,4)], Dx, Dy);
+				if(Visible) DrawGraph(Dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
 			}else{
-				if(Visible)Map.DrawPlayer(ImgPlayer[Dir*4+mod(Step,4)], Dx-dx, Dy-dy);
+				if(Visible) DrawGraph(Dx-dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy-dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
 			}
+			SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 );
+
 	
 		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager.Draw_over")
 	}
@@ -243,7 +248,10 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 	if (_walkspeed==0) _walkspeed=2;
 	if (_walkspeed<0) _walkspeed=-_walkspeed;
 
-	if(_walk)(++Step)%=4;
+	if (_walk) (++Step)%=4;
+	int alpha = Alpha;
+	if (_fade==1) {Visible = true; Alpha = 0;}
+
 	while(d!=MAP_CHIP_SIZE){
 		oldd=d;
 		d = between(-MAP_CHIP_SIZE, MAP_CHIP_SIZE, d+_walkspeed);
@@ -255,7 +263,17 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 		
 		//Draw(true, true, dx, dy);	//140904変更　歩きながらもテキスト表示が進むように。もし不具合が出れば_eventewalkで処理を変える。
 		Draw(true, false, dx, dy);
+
+		if (_fade==1)  Alpha = between(0, 255, (int)(alpha*(double)abs(d)/MAP_CHIP_SIZE));
+		if (_fade==-1) Alpha = between(0, 255, (int)(alpha*(1-(double)abs(d)/MAP_CHIP_SIZE)));
+
 	};
+
+	if (_fade==-1) {
+		Visible = false;
+		Alpha = alpha;
+	}
+
 
 	switch(_dir){
 	case RIGHT:

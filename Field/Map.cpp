@@ -46,10 +46,6 @@ void CMap::CreateMapGraph(int _mapnum){	//一気にCreateするのが重過ぎるなら、マッ
 	SetTitle(GAME_TITLE);	
 }
 
-void CMap::DrawPlayer(int _player, int _dx, int _dy){
-	DrawGraph(_dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, _dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, _player, true);	//_a.pngで透過情報を読み込み済み
-}
-
 void CMap::SetMap(unsigned int _mapnum, int _filesize, unsigned char* buf){
 	
 	for (int i = 0; i< MAP_SIZE*MAP_SIZE; i++){

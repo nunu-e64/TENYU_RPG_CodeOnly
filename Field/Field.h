@@ -32,6 +32,8 @@ public:
 	void SetMyPic(const int _img[CHARA_PIC_NUM], const char* _pickey);
 	void SetMyDir(int _dir){Dir = direction_tag(_dir);}
 	void SetMyVisible(bool _visible){Visible=_visible;}
+	void SetMyAlpha(unsigned char _alpha){Alpha = _alpha;}
+
 	void Jump();
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
@@ -50,6 +52,7 @@ private:
 	//メンバ変数
 		int NowMap;
 	
+		//そのうちわかりにくくなってきたら名前空間Playerとかで括ろうかな
 		unsigned int X, Y;
 		unsigned int OldX, OldY;
 		int ImgPlayer[CHARA_PIC_NUM];	char PlayerPicKey[32];
@@ -57,6 +60,16 @@ private:
 		int Step;	//0~3
 		int Dx, Dy;
 		bool Visible;
+		unsigned char Alpha;
+
+		//enum charaeffect_tag Effect;	//効果（点滅、自動歩行など）
+		//	int EffectNumCmd[5];
+		//	int EffectNum[5];
+		//	//BLINK
+		//		//[0]...下限, [1]...上限, [2]...往復時間, ([3]...変化量) 下限と上限は％, 変化量は255ベース
+		//	//RND_DIR
+		//		//[0]...向きを変える時間,（[1]..カウンター）
+
 
 		playdata_tag *PlayData_p;	//Main.cppからセーブデータをすべてポインタでもらっておく
 

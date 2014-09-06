@@ -263,7 +263,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				ErrorDx("Error->@Alpha_Set-> 0<=|arg[per]|<=100 :%d", per);
 			}else{
 				if( sys::PlayerName(arg[0]) ){
-					ErrorDx("Error->@AlphaSet->You can't change Player Alpha:%s", arg[0]);
+					_field->SetMyAlpha(per*255/100);
 				}else{
 					_evemanager->SetAlpha(arg[0], per*255/100);
 				}
@@ -307,7 +307,12 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				goto finish;
 			}
 		}
-		_evemanager->SetEffect(arg[0], effect, num);
+
+		if( sys::PlayerName(arg[0]) ){
+			ErrorDx("Error->@EffectSet->You can't change Player Effect...yet? :%s", arg[0]);
+		}else{	
+			_evemanager->SetEffect(arg[0], effect, num);
+		}
 
 //@Pic_Set
 	}else if (mystrcmp(_command, "@Pic_Set",'l')){

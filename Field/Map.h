@@ -22,7 +22,6 @@ public:
 	void Init(){ImgData.clear();}
 
 	void Draw(int _mapnum, int _x, int _y, int _dx=0, int _dy=0);
-	void DrawPlayer(int _player, int _dx=0, int _dy=0);
 
 	void SetMap(unsigned int _mapnum, int _filesize, unsigned char* buf);
 	void LoadChip(const char *_path, int _mapnum, bool _mapchip=true);
