@@ -148,7 +148,7 @@ int* CMap::GetImgData(const char _key[32]){
 	}
 	for (unsigned int i=0; i<ImgData.size(); i++){
 		if (mystrcmp(ImgData[i].Key, _key)){
-			return ImgData[i].Img;	//CMapのPrivate変数へのアドレスをMap→CmdManager、CmdManager→Fieldでfor文で値渡し　∴多分安全
+			return ImgData[i].Img;	//CMapのPrivate変数へのアドレスをMap→CmdManager、CmdManager→Fieldでfor文で値渡し  ∴多分安全
 		}
 	}
 

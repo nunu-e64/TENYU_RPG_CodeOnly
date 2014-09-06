@@ -6,7 +6,7 @@ using namespace mrtlib;		//usingƒfƒBƒŒƒNƒeƒBƒu‚ğg‚¤‚©‚Ç‚¤‚©‚Í‚¨”C‚¹‚µ‚Ü‚·
 
 namespace mrt{		//using‚Æ‚ÌˆÊ’uŠÖŒW‚ª‚±‚ê‚Å‚ ‚Á‚Ä‚é‚Ì‚©‚Í•s–¾
 
-int Title(){	//•Ô‚è’lFtitle_tag@ˆø”F‚È‚µ	
+int Title(){	//•Ô‚è’lFtitle_tag  ˆø”F‚È‚µ	
 	/*///////////////////////////////////////
 	‰º‹L‚ğQl‚ÉZƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«‚É“KØ‚È’l‚ğ•Ô‚µ‚Ä‚­‚¾‚³‚¢
 	enum title_tag{
@@ -46,7 +46,7 @@ int Title(){	//•Ô‚è’lFtitle_tag@ˆø”F‚È‚µ
 }
 
 
-int ChooseData(playdata_tag* _playdata){	//•Ô‚è’lFƒ[ƒh‚·‚éƒf[ƒ^”Ô†iƒGƒ‰[F-1[backtotitle]j@ˆø”FƒZ[ƒuƒf[ƒ^”z—ñ
+int ChooseData(playdata_tag* _playdata){	//•Ô‚è’lFƒ[ƒh‚·‚éƒf[ƒ^”Ô†iƒGƒ‰[F-1[backtotitle]j  ˆø”FƒZ[ƒuƒf[ƒ^”z—ñ
 	
 	/*///////////////////////////////////////
 	Exist‚ªtrue‚ÌƒZ[ƒuƒf[ƒ^‚Ì‚İ•\¦‚µ‚Ä‚­‚¾‚³‚¢Biplaydata_tag‚Ìd—l‚É‚Â‚¢‚Ä‚ÍDefine.hQÆj
@@ -82,7 +82,7 @@ int ChooseData(playdata_tag* _playdata){	//•Ô‚è’lFƒ[ƒh‚·‚éƒf[ƒ^”Ô†iƒGƒ‰[
 	return -1;
 }
 
-bool Setting(){	//•Ô‚è’lcİ’è•ÏX(true) İ’èI—¹(false)@ˆø”c‚¢‚Ü‚Ì‚Æ‚±‚ë‚È‚µ
+bool Setting(){	//•Ô‚è’lcİ’è•ÏX(true) İ’èI—¹(false)  ˆø”c‚¢‚Ü‚Ì‚Æ‚±‚ë‚È‚µ
 	
 	/*///////////////////////////////////////
 		Ú×–¢’èBd—l‚Í‚±‚ê‚©‚ç‹l‚ß‚éB

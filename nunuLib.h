@@ -210,7 +210,7 @@ bool mystrtol(const char* str, long int* result, int radix=10);
 bool mystrtol(const char* str, int* result, int radix=10);
 	//atoiにはエラー判定がないためこの関数を利用推奨
 	//	str		：	変換対象の文字列
-	//	*result	：	変換したLong型の数を受け取るアドレス　←int型も可に
+	//	*result	：	変換したLong型の数を受け取るアドレス ←int型も可に
 	//	radix	：	基数。数値を何進数とみなすかを設定。デフォルトは10進数
 /////////////////////////////////////////////////////////////
 
@@ -379,7 +379,7 @@ namespace nunuLib{			//クラス名衝突を避けるため名前空間に包む
 		bool Pressed[256];
 	};
 }
-bool CheckHitKeyDown(const int KEY_CODE); //※決定キー･･･Z,Enter　キャンセルキー･･･X,BackSpace　それぞれどちらでも可
+bool CheckHitKeyDown(const int KEY_CODE); //※決定キー･･･Z,Enter  キャンセルキー･･･X,BackSpace  それぞれどちらでも可
 /////////////////////////////////////////////////////////////
 
 

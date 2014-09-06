@@ -508,7 +508,7 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 						//その他のトークコマンドの処理
 						Solve(chStock[NowStock], _flagset);		//次の文章のあるはずのところを探索してNowStockを送る
 						
-						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//まだバグ残ってるかも$	　　←そんなん言われても…
+						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//まだバグ残ってるかも$	  ←そんなん言われても…
 							Term(_cmdlist);			//returnのあと呼び出し元[NextPage]の方で処理が続くのでめっちゃバグ起こりそう。怖い(笑)
 							return false;
 						}
@@ -683,7 +683,7 @@ bool CTextBox::Solve(const char* string, CFlagSet *_flagset){
 void CTextBox::ArgCut(const char* _string, char** &command, char** &arg, int _argnum){
 
 	char *cntx;		//strtok_s用の雑用
-	char* string_copy = new char[strlen(_string)+1];		//deleteしてないが返値に利用しているらしくこのプロシージャでdeleteするとエラーが出た 　←直ってる
+	char* string_copy = new char[strlen(_string)+1];		//deleteしてないが返値に利用しているらしくこのプロシージャでdeleteするとエラーが出た  ←直ってる
 	mystrcpy(string_copy, _string);
 	char* tmp;
 

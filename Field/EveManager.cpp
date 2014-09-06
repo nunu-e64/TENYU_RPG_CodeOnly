@@ -73,7 +73,7 @@ void CEveManager::SetEveObj(int _mapnum, int _datanum, int _kind, int _img[CHARA
 		}
 		strcpy_s(eveobj.PicKey, _pickey);
 
-	//Name	同Kindで同名は警告　禁止した方がいいのか？（違う見た目のNPCに同じ名前を与えることで同じイベントを割り当てる、などの時に不便？）$
+	//Name	同Kindで同名は警告  禁止した方がいいのか？（違う見た目のNPCに同じ名前を与えることで同じイベントを割り当てる、などの時に不便？）$
 	//→Kindが違っても同名で警告！！
 
 		if(strlen(_name)) {
