@@ -61,9 +61,15 @@ protected:
 		char chText[LINE_MAX][WORD_MAX];
 		bool Alive;
 		bool Visible;	//コマンドから変更可能
+
+		///AutoPlay関係////////////////////////////////////////
 		bool AutoPlay;	//コマンドから変更可能（デフォルトfalse）
 			int AutoPlaySpeed;	//コマンドから変更可能（デフォルトではDefaultAutoPlaySpeed）
 			int DefaultAutoPlaySpeed;	//Init時にField.cppから値を受け取り初期化される
+			enum{
+				PAGE
+			}AutoPlayMode;
+		////////////////////////////////////////////////////////
 
 		char chOldText[LINE_MAX][WORD_MAX];
 		char chDrawText[LINE_MAX][WORD_MAX];

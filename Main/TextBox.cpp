@@ -14,6 +14,7 @@ CTextBox::CTextBox(){
 	Visible = false;
 	AutoPlay = false;
 
+	AutoPlayMode = PAGE;
 	OriginalDir = DOWN;
 }
 
@@ -67,7 +68,7 @@ void CTextBox::Term(CCmdList* _cmdlist){
 	AutoPlaySpeed = DefaultAutoPlaySpeed;
 
 	Ruby.clear();
-
+	
 	//トークラベル（名前表示）のリセット＆非表示
 		TalkName.Clear(true);
 		TalkName.Clear(false);
