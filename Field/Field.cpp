@@ -25,7 +25,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			Dir=DOWN; 
 			Step=0; Dx=0; Dy=0; 
 			Visible=true;
-			Alpha = 255;
+			Alpha = 255;		
+			Effect=NONE;
 			ImgBackGround = NULL;
 			TextAutoPlaySpeed = 1000;
 
@@ -210,7 +211,18 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 		CHECK_TIME_START2	Map.Draw(NowMap, X, Y, dx, dy);			CHECK_TIME_END2("Map.Draw")
 		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, false, dx, dy);	CHECK_TIME_END2("EveManager.Draw_under")
 
-		//プレイヤー
+		//プレイヤー////////////////////////////////////////////////////////////////////////////
+			switch(Effect){
+			case NONE:
+				break;
+			case BLINK:
+				Alpha = between(0,255,Alpha+EffectNum[3]);
+				if (Alpha<=(EffectNum[0]*255/100)) EffectNum[3] = -EffectNum[3];
+				if (Alpha>=(EffectNum[1]*255/100)) EffectNum[3] = -EffectNum[3];
+				Alpha = between(EffectNum[0]*255/100, EffectNum[1]*255/100, (int)Alpha);
+				break;
+			}
+
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, Alpha);
 			if(!_playeralsoshake){
 				if(Visible) DrawGraph(Dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
@@ -218,7 +230,7 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 				if(Visible) DrawGraph(Dx-dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy-dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
 			}
 			SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 );
-
+		//////////////////////////////////////////////////////////////////////////////////////////
 	
 		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager.Draw_over")
 	}
@@ -303,6 +315,75 @@ void CField::SetMyPic(const int _img[CHARA_PIC_NUM], const char* _pickey){
 	}
 	strcpy_s(PlayerPicKey, _pickey);
 }
+
+
+void CField::ChangeTextMode(bool _box, const char* _eventtext){
+	if (_box){
+		TextBox = &TextBox1;
+	}else{
+		TextBox = &TextWrap1;
+
+		if (_eventtext!=NULL){	//EveManager::CopyOriginalEventを汎用性を上げて改善。これでTextWrap1に@EventWrapの内容を渡せた
+			std::vector<char256> tmptext;
+			EveManager.CopyOriginalEvent(&tmptext, _eventtext);
+			for (unsigned int i=0; i<tmptext.size(); i++){
+				TextWrap1.AddStock(tmptext[i].text);
+			}
+			TextBox->NextPage(&CmdList, &FlagSet);
+		}
+	}
+};
+
+void CField::SetMyEffect(int _effectname, int _effectnum[]){
+		
+		if (_effectname==-1) {	//TextBox.Termからの呼び出し
+			return;
+		}
+
+		Effect = (charaeffect_tag)_effectname;
+
+		for (int i=0; i<ARRAY_SIZE(EffectNum); i++){
+			EffectNum[i] = 0;
+			EffectNumCmd[i] = 0;
+			if (_effectnum[i]!=-1 && _effectname!=NONE)	EffectNumCmd[i] = _effectnum[i];
+		}
+
+		switch(Effect){
+		case NONE:
+			SetMyAlpha(255);
+			break;
+		case BLINK:
+			if (EffectNumCmd[0]<0 || 
+				EffectNumCmd[0]>100 || EffectNumCmd[1]<0 || EffectNumCmd[1]>100) {
+				ErrorDx("Error->SetMyEffect-> 0<=BLINK_num<=100", __FILE__, __LINE__);
+				goto reset;
+			}else{
+				EffectNum[0] = between(0, 100, EffectNumCmd[0]);
+				EffectNum[1] = between(0, 100, EffectNumCmd[1]);
+				EffectNum[2] = between(1, 10000, EffectNumCmd[2]);
+				EffectNum[3] = between(1, 255, ((EffectNumCmd[1]-EffectNumCmd[0])*255*2*10) / (EffectNumCmd[2]*60));
+			}
+			break;
+		case RND_DIR:
+		case WALK:
+			ErrorDx("Error->CField::SetMyEffect->You can't set [RND_DIR]or[WALK] for Player ....yet?",__FILE__,__LINE__);
+			goto reset;
+			break;
+		default:
+			break;
+		}
+
+		return;
+
+reset:
+		Effect = NONE;
+		for (int i=0; i<ARRAY_SIZE(EffectNum); i++){
+			EffectNum[i] = 0;
+			EffectNumCmd[i] = 0;
+		}
+		return;
+}
+
 void CField::Jump(){
 	Dy=-5;	
 	for(int i=0; i<5; i++){
@@ -491,20 +572,3 @@ bool CField::SaveData(int _dnum, const char _dataname[32]){
 	return true;
 }
 
-
-void CField::ChangeTextMode(bool _box, const char* _eventtext){
-	if (_box){
-		TextBox = &TextBox1;
-	}else{
-		TextBox = &TextWrap1;
-
-		if (_eventtext!=NULL){	//EveManager::CopyOriginalEventを汎用性を上げて改善。これでTextWrap1に@EventWrapの内容を渡せた
-			std::vector<char256> tmptext;
-			EveManager.CopyOriginalEvent(&tmptext, _eventtext);
-			for (unsigned int i=0; i<tmptext.size(); i++){
-				TextWrap1.AddStock(tmptext[i].text);
-			}
-			TextBox->NextPage(&CmdList, &FlagSet);
-		}
-	}
-};

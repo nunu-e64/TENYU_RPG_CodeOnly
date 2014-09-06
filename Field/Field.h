@@ -33,7 +33,8 @@ public:
 	void SetMyDir(int _dir){Dir = direction_tag(_dir);}
 	void SetMyVisible(bool _visible){Visible=_visible;}
 	void SetMyAlpha(unsigned char _alpha){Alpha = _alpha;}
-
+	void SetMyEffect(int _effectname, int _effectnum[]);
+	
 	void Jump();
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
@@ -62,14 +63,9 @@ private:
 		bool Visible;
 		unsigned char Alpha;
 
-		//enum charaeffect_tag Effect;	//効果（点滅、自動歩行など）
-		//	int EffectNumCmd[5];
-		//	int EffectNum[5];
-		//	//BLINK
-		//		//[0]...下限, [1]...上限, [2]...往復時間, ([3]...変化量) 下限と上限は％, 変化量は255ベース
-		//	//RND_DIR
-		//		//[0]...向きを変える時間,（[1]..カウンター）
-
+		enum charaeffect_tag Effect;	//効果（点滅、自動歩行など）//Playerはある程度限定される
+			int EffectNumCmd[5];
+			int EffectNum[5];
 
 		playdata_tag *PlayData_p;	//Main.cppからセーブデータをすべてポインタでもらっておく
 

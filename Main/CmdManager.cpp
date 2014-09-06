@@ -282,7 +282,11 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		if (!(mystrtol(arg[1], &effectnum))) effectnum=EFFECT_NUM;
 		
 		if (mystrcmp(arg[1], 'p', 3, "TMP", "Tmp", "tmp") || effectnum==-1){
-			_evemanager->SetEffect(arg[0], -1, num);		//TextBox.Term‚©‚ç‚ÌŒÄ‚Ño‚µ
+			if( sys::PlayerName(arg[0]) ){
+				ErrorDx("Error->@Effect_Set->You can't use [PlayerName]with[TMP]:%s",__FILE__, __LINE__, arg[0]);
+			}else{
+				_evemanager->SetEffect(arg[0], -1, num);		//TextBox.Term‚©‚ç‚ÌŒÄ‚Ño‚µ
+			}
 			goto finish;
 		}else if (mystrcmp(arg[1], 'p', 3, "NONE", "None", "none") || effectnum==NONE){
 			effect = NONE;
@@ -309,7 +313,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		}
 
 		if( sys::PlayerName(arg[0]) ){
-			ErrorDx("Error->@EffectSet->You can't change Player Effect...yet? :%s", arg[0]);
+			_field->SetMyEffect(effect, num);
 		}else{	
 			_evemanager->SetEffect(arg[0], effect, num);
 		}
