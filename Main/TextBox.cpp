@@ -33,7 +33,7 @@ void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , i
 
 	Color1 = _color1;
 	Color2 = _color2;
-	AutoPlaySpeed = (DefaultAutoPlaySpeed = between(1, 1000, _autoplayspeed));
+	AutoPlaySpeed = DefaultAutoPlaySpeed = max(1, _autoplayspeed);
 	
 	NowStock = 0;
 	NowTarget = 0;
@@ -457,7 +457,7 @@ void CTextBox::SetAutoPlay(bool _autoplay, int _autoplayspeed){
 	AutoPlay = _autoplay;
 	if (AutoPlay){
 		if (_autoplayspeed>0){
-			AutoPlaySpeed = between(1, 1000, _autoplayspeed);
+			AutoPlaySpeed = _autoplayspeed;
 		}else{
 			AutoPlaySpeed = DefaultAutoPlaySpeed;
 		}
@@ -587,20 +587,24 @@ bool CTextBox::Solve(const char* string, CFlagSet *_flagset){
 					}
 					
 				}else if (mystrcmp(command[0], "@FLAG")){
-					if (!mystrtol(arg[1], &num)){
-						if (mystrcmp(arg[1], 'p', 3, "ELSE", "Else", "else")) {
-							num = -1;
-						}else{
-							ErrorDx("Error->Could not change argument type->%s", __FILE__, __LINE__, chStock[i]);
-							continue;
+					if (arg[1]==NULL) {
+						ErrorDx("@FRAG_CASE needs 2 arg:[flagname,num]");
+					}else{
+						if (!mystrtol(arg[1], &num)){
+							if (mystrcmp(arg[1], 'p', 3, "ELSE", "Else", "else")) {
+								num = -1;
+							}else{
+								ErrorDx("Error->Could not change argument type->%s", __FILE__, __LINE__, chStock[i]);
+								continue;
+							}
+						}else if(num<-1){
+							ErrorDx("Error->You can't use arg[num]<-1 for FLAG:%s", arg[1]);
 						}
-					}else if(num<-1){
-						ErrorDx("Error->You can't use arg[num]<-1 for FLAG:%s", arg[1]);
-					}
 
-					if (num == _flagset->FlagNum(arg[0]) || num == -1){
-						NowStock = i+1;		//_CASEでNumも一致した場合、その次の行に標準を合わせてNextLineのループに返す
-						break;
+						if (num == _flagset->GetFlagNum(arg[0]) || num == -1){
+							NowStock = i+1;		//_CASEでNumも一致した場合、その次の行に標準を合わせてNextLineのループに返す
+							break;
+						}
 					}
 					
 				}else if (mystrcmp(command[0], "@DIR")){
@@ -679,7 +683,7 @@ bool CTextBox::Solve(const char* string, CFlagSet *_flagset){
 void CTextBox::ArgCut(const char* _string, char** &command, char** &arg, int _argnum){
 
 	char *cntx;		//strtok_s用の雑用
-	char* string_copy = new char[strlen(_string)+1];		//deleteしてないが返値に利用しているらしくこのプロシージャでdeleteするとエラーが出た
+	char* string_copy = new char[strlen(_string)+1];		//deleteしてないが返値に利用しているらしくこのプロシージャでdeleteするとエラーが出た 　←直ってる
 	mystrcpy(string_copy, _string);
 	char* tmp;
 

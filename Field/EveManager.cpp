@@ -539,6 +539,9 @@ bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char*
 					sprintf_s(str, "[arg%d%c", k+1, ']');
 					mystrrep(vectext_p->back().text, str, arg[k].text);
 				}
+				//	if (mystrcmp(_eventtext[i], "@Event(", 'l')){		//@Eventコマンドの時だけ事前登録したマクロを呼び出す処理
+				//	CopyOriginalEvent(&(eveobj_p->Text), _eventtext[i]);
+
 			}
 		}
 	}else{

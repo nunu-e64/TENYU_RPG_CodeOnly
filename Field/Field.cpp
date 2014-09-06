@@ -26,7 +26,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			Step=0; Dx=0; Dy=0; 
 			Visible=true;
 			ImgBackGround = NULL;
-			TextAutoPlaySpeed = 4;
+			TextAutoPlaySpeed = 1000;
 
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);

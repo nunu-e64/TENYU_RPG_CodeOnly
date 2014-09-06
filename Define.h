@@ -175,12 +175,12 @@ public:
 		CreateFlag(_key, _num);
 	};
 
-	int FlagNum(const char* _key){
+	int GetFlagNum(const char* _key){
 		for(unsigned int i=0; i<Flag.size(); i++){
 			if (mystrcmp(Flag[i].Key, _key)) return Flag[i].Num;
 		}
-		CreateFlag(_key,0);
-		return 0;
+		//CreateFlag(_key,0);
+		return -1;
 	};
 	
 	std::vector <flag_tag> Flag;

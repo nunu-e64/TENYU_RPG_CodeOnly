@@ -784,7 +784,7 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 		}else if(mystrcmp(arg[0], 'p', 3, "WRAP", "Wrap", "wrap")){
 			_worldmanager->ChangeTextMode(false);
 		}else{
-			ErrorDx("Warning->Check arg[mode]->%s", arg[0]);
+			WarningDx("Warning->@TextMode_Set->Check arg[mode]->%s", arg[0]);
 			_worldmanager->ChangeTextMode(true);
 		}
 		
