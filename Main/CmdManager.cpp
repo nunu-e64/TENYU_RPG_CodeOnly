@@ -867,6 +867,11 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 			_textbox->SetAutoPlay(false);
 		}
 
+//@Dammy
+	}else if (mystrcmp(_command, "@Dammy",'l')){
+		argnum = 1;		arg = new char*[argnum];	//ArgCut(_command, _argument, arg, argnum, false);
+
+			
 //コマンド不一致
 	}else{
 		return false;

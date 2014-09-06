@@ -280,13 +280,13 @@ void CTextBox::Draw(bool _showingstop){
 }
 
 void CTextBox::Draw_Animation(bool _showingstop){
-
-	if (NewText != -1 && !Showing) {
+	
+	if (Showing){
+		if (!_showingstop) ShowingTime++;
+	}else if (NewText != -1 && !Showing) {
 		ShowingTime = 0;
 		Showing = true;
-	}else if (Showing){
-		if (!_showingstop) ShowingTime++;
-	}else if (!Showing){
+	}else if (NewText == -1 && !Showing){
 		/*for (int i = 0; i<LineNum; i++){
 			strcpy_s(chDrawText[i], chText[i]);
 		} */
