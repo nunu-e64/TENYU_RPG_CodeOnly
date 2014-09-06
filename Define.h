@@ -8,13 +8,14 @@
 		#define WARNINGDX_DISABLE	//マクロの有効化/無効化
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
 		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化
+		#define #MEMORY_CHECK_DISABLE //マクロの有効化/無効化
 	#endif
 
 #include "Dxlib.h"
 #include <vector>
 
 //#define MEMORY_CHECK
-	#ifdef MEMORY_CHECK
+	#if defined(MEMORY_CHECK) && !defined(MEMORY_CHECK_DISABLE)
 		#include <crtdbg.h>
 		#define new  ::new( _NORMAL_BLOCK, __FILE__, __LINE__ )  
 	#endif

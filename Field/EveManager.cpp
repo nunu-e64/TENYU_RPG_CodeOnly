@@ -419,7 +419,8 @@ void CEveManager::Walk(CField* _field, char* _name, int _dir, int _walkspeed, bo
 			eveobj_p->Dx = oldDx+((_dir==RIGHT)? d: ((_dir==LEFT)? -d: 0));
 			eveobj_p->Dy = oldDy+((_dir==DOWN)? d: ((_dir==UP)? -d: 0));
 			
-			_field->Draw(true, true);
+			//_field->Draw(true, true);
+			_field->Draw(true, false);
 
 			if (_fade==1) eveobj_p->Alpha = between(0, 255, (int)(alpha*(double)abs(d)/MAP_CHIP_SIZE));
 			if (_fade==-1) eveobj_p->Alpha = between(0, 255, (int)(alpha*(1-(double)abs(d)/MAP_CHIP_SIZE)));

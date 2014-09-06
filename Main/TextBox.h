@@ -84,7 +84,7 @@ protected:
 
 		////テキストのアニメーション表示関係//////////////
 		int NewText;		//chTextに新たに追加された行　-1･･･変化なし　0~･･･上から何行目以降が追加されたか（空白もカウント）
-		bool Showing;
+		bool Showing;		//テキストアニメーション描画が済んでいるか
 		int ShowingTime; 
 
 		////AddTextのときに変更

@@ -33,7 +33,7 @@ void CCmdList::Get(char* _cmd){
 	front = p->next;	
 	if (p==tail) tail = NULL;
 
-	delete p;
+	delete p;	//コマンドリストから削除
 }
 bool CCmdList::Empty(){
 	return (front == NULL);
