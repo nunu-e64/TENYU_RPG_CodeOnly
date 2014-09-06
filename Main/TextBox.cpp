@@ -281,24 +281,25 @@ void CTextBox::Draw(bool _showingstop){
 
 void CTextBox::Draw_Animation(bool _showingstop){
 	
-	if (Showing){
+	if (Showing){	//テキストアニメーション中
 		if (!_showingstop) ShowingTime++;
-	}else if (NewText != -1 && !Showing) {
+	}else if (NewText != -1 && !Showing){	//テキストアニメーション前
 		ShowingTime = 0;
 		Showing = true;
-	}else if (NewText == -1 && !Showing){
-		/*for (int i = 0; i<LineNum; i++){
+	}else if (NewText == -1 && !Showing){	//テキストアニメーション済み
+		for (int i = 0; i<LineNum; i++){
 			strcpy_s(chDrawText[i], chText[i]);
-		} */
+		}
 	}			
-
-	for (int i = 0; i<LineNum; i++){
-		strcpy_s(chDrawText[i], chText[i]);
-	}
 			
-	if (Showing){
+	if (Showing && !_showingstop){
 		int NowShow = (int)(SHOWING_SPEED*ShowingTime/60)*2;
 		int Sumstrlen = 0;
+
+		for (int i = 0; i<NewText; i++){
+			strcpy_s(chDrawText[i], chText[i]);
+		}
+
 		for (int i = NewText; i<LineNum; i++){
 			if (NowShow-Sumstrlen <= 0) {
 				strcpy_s(chDrawText[i], "");
