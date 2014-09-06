@@ -775,7 +775,7 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 		sprintf_s(tmp, "@EventWrap(%s)", _argument);	//完全な形でコマンドが必要なため
 		_worldmanager->ChangeTextMode(false, tmp);
 
-//@TextMode_Set
+//@TextMode_Set	//Inner
 	}else if (mystrcmp(_command, "@TextMode_Set",'l')){
 		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
 

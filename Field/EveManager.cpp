@@ -484,7 +484,7 @@ bool CEveManager::GetEveObj(CEveObj** _eveobj_p, const char* _name, const int _k
 	return false;
 }
 
-bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char* _eventtext){
+bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char* _eventtext, int _count){
 	char *cntx, *cntx2;		//strtok_s用の雑用
 	char* string_copy = new char[strlen(_eventtext)+1];
 	char *eventname, *chtimes, *args, *p;
@@ -533,14 +533,24 @@ bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char*
 	if (GetOriginalEvent(&originalevent_p, eventname)){
 		for (int i = 0; i < times; i++){
 			for (unsigned int j=0; j < originalevent_p->Text.size(); j++){
-				vectext_p->push_back(originalevent_p->Text[j]);
-				for (unsigned int k=0; k<arg.size(); k++){
-					char str[8];
-					sprintf_s(str, "[arg%d%c", k+1, ']');
-					mystrrep(vectext_p->back().text, str, arg[k].text);
-				}
-				//	if (mystrcmp(_eventtext[i], "@Event(", 'l')){		//@Eventコマンドの時だけ事前登録したマクロを呼び出す処理
-				//	CopyOriginalEvent(&(eveobj_p->Text), _eventtext[i]);
+
+				if (mystrcmp(originalevent_p->Text[j].text, "@Event(", 'l')){		//@Eventコマンドの時だけ事前登録したマクロを呼び出す処理
+					
+					if (_count>100){
+						ErrorDx("無限ループってこわくね？   :%s", __FILE__, __LINE__, originalevent_p->Text[j].text);
+						continue;
+					}else{
+						CopyOriginalEvent(vectext_p, originalevent_p->Text[j].text, ++_count);
+					}
+
+				}else{
+					vectext_p->push_back(originalevent_p->Text[j]);
+					for (unsigned int k=0; k<arg.size(); k++){
+						char str[8];
+						sprintf_s(str, "[arg%d%c", k+1, ']');
+						mystrrep(vectext_p->back().text, str, arg[k].text);
+					}
+				}		
 
 			}
 		}

@@ -34,7 +34,7 @@ public:
 	
 	bool GetText(char** &_text, int &_count, int _mapnum, int _x, int _y, int _mydir, int _kind=-1);
 	void SetText(const char _eventtext[1000][256], const int _line, const char* _name, const int _kind);
-	bool CopyOriginalEvent(std::vector<char256> *vectext_p, const char* _eventtext);
+	bool CopyOriginalEvent(std::vector<char256> *vectext_p, const char* _eventtext, int _count=0);
 
 	bool CheckWalkable(int _mapnum, int _x, int _y);
 	
