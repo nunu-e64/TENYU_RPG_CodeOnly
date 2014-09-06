@@ -29,6 +29,7 @@ public:
 	direction_tag GetOriginalDir(){return OriginalDir;}
 
 	void SetVisible(bool _visible){Visible = _visible;}
+	void SetReturnVisible(bool _visible){ReturnVisible = _visible;}
 	void SetAutoPlay(bool _autoplay, int _autoplayspeed = NULL);
 
 	//TextName（話し手の名前をTextBoxの上に表示）
@@ -61,6 +62,7 @@ protected:
 		char chText[LINE_MAX][WORD_MAX];
 		bool Alive;
 		bool Visible;	//コマンドから変更可能
+		bool ReturnVisible;	//Walk系のときに操作
 
 		///AutoPlay関係////////////////////////////////////////
 		bool AutoPlay;	//コマンドから変更可能（デフォルトfalse）
@@ -89,21 +91,21 @@ protected:
 		bool PageChange;	//次にページリセットするか否か
 
 		////テキストのアニメーション表示関係//////////////
-		int NewText;		//chTextに新たに追加された行　-1･･･変化なし　0~･･･上から何行目以降が追加されたか（空白もカウント）
-		bool Showing;		//テキストアニメーションが現在進行中：True　完了：False
-		int ShowingTime; 
+			int NewText;		//chTextに新たに追加された行　-1･･･変化なし　0~･･･上から何行目以降が追加されたか（空白もカウント）
+			bool Showing;		//テキストアニメーションが現在進行中：True　完了：False
+			int ShowingTime; 
 
 		////AddTextのときに変更
-		int ObjCount;
-		direction_tag OriginalDir;
+			int ObjCount;
+			direction_tag OriginalDir;
 
 		//ルビ用
-		struct ruby_tag{
-			char Word[32];
-			char Ruby[32];
-			char chNum[3];	//00~99
-		};
-		std::vector <ruby_tag> Ruby;
+			struct ruby_tag{
+				char Word[32];
+				char Ruby[32];
+				char chNum[3];	//00~99
+			};
+			std::vector <ruby_tag> Ruby;
 };
 
 

@@ -12,6 +12,7 @@ CTextBox::CTextBox(){
 	StockClear();
 	Alive = false;
 	Visible = false;
+	ReturnVisible = true;
 	AutoPlay = false;
 
 	AutoPlayMode = PAGE;
@@ -270,7 +271,7 @@ void CTextBox::Draw(bool _showingstop){
 		}
 
 		//続きがあるときのマーク表示
-		if (!Showing && !AutoPlay) {
+		if (!Showing && !AutoPlay && ReturnVisible) {
 			DrawString(PosX+Width/2-10, PosY+Height-10 + (GetNowCount()/100)%5, "▼", WHITE);
 		}
 	

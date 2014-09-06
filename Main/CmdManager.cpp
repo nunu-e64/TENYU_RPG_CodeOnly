@@ -480,6 +480,8 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		if (cell>100) WarningDx("Warning->@Walk arg[cell]<=100: %d", __FILE__, __LINE__, cell); 
 		cell = between(1, 100, (int)cell);
 		
+		_textbox->SetReturnVisible(false);
+
 		for (int i=0; i<cell; i++){
 			if( sys::PlayerName(arg[0]) ){
 				_field->Walk(sys::StrtoDir(arg[1],_textbox->GetOriginalDir()), walkspeed, true, true);
@@ -487,6 +489,9 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				_evemanager->Walk(_field, arg[0], sys::StrtoDir(arg[1],_textbox->GetOriginalDir()), walkspeed, true);
 			}
 		}
+		
+		_textbox->SetReturnVisible(true);
+
 
 //@Slide
 	}else if (mystrcmp(_command, "@Slide",'p')){
@@ -510,6 +515,8 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			if (cell>100) WarningDx("Warning->@Slide |arg[cell]|<=100: %d", __FILE__, __LINE__, cell); 
 			cell = between(1, 100, cell);
 		}
+		
+		_textbox->SetReturnVisible(false);
 
 		if( sys::PlayerName(arg[0]) ){
 			for (int i=0; i<cell; i++){
@@ -536,6 +543,8 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			}
 		}
 
+		_textbox->SetReturnVisible(true);
+
 //@FadeWalk(name, dir, speed, fade)
 	}else if (mystrcmp(_command, "@FadeWalk",'p')){
 		argnum = 4;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
@@ -549,11 +558,16 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			WarningDx("Warning->@FadeWalk->arg[fade] should 1 or -1:  %s", arg[2]); 
 		}
 
+		_textbox->SetReturnVisible(false);
+
 		if( sys::PlayerName(arg[0]) ){
 			_field->Walk(sys::StrtoDir(arg[1],_textbox->GetOriginalDir()), walkspeed, true, true, fade);
 		}else{
 			_evemanager->Walk(_field, arg[0], sys::StrtoDir(arg[1],_textbox->GetOriginalDir()), walkspeed, true, fade);
 		}
+
+		_textbox->SetReturnVisible(true);
+
 
 //コマンド不一致
 	}else{
