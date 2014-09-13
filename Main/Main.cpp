@@ -9,7 +9,15 @@
 bool CMain::Init(){
 	srand((unsigned int)GetNowCount());
 	//ChangeFont("‚l‚r ‚oƒSƒVƒbƒN") ;	$
+	
+	if (_mkdir("tenyu_data")==0){
+		_rmdir("tenyu_data");
+		ErrorDx("Error->NotFound dir\"tenyu_data\" (exit)");
+		return false;
+	}
+
 	return true;
+	//ƒGƒ‰[‚É‚Íreturn false
 }
 
 bool CMain::GameLoop(){

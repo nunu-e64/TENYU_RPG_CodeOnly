@@ -39,18 +39,18 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		EnemyImgBank.clear();
 
 		Img_BattleBackGround = LoadGraph("tenyu_data/pic/sys/battle/background (4).bmp", true);		//いずれはコマンドから読み込む
-		ImgBank.insert( std::map<int, int>::value_type( MENU_CURSOR, LoadGraph("tenyu_data/pic/sys/battle/cursor.png")) );
-		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR1, LoadGraph("tenyu_data/pic/sys/battle/timebar1.png")) );
-		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR2, LoadGraph("tenyu_data/pic/sys/battle/timebar2.png")) );
-		ImgBank.insert( std::map<int, int>::value_type( HP_BAR, LoadGraph("tenyu_data/pic/sys/battle/hpbar.png")) );
+		ImgBank.insert( std::map<int, int>::value_type( MENU_CURSOR, LoadGraph("tenyu_data/pic/sys/battle/cursor.png",true)) );
+		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR1, LoadGraph("tenyu_data/pic/sys/battle/timebar1.png",true)) );
+		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR2, LoadGraph("tenyu_data/pic/sys/battle/timebar2.png",true)) );
+		ImgBank.insert( std::map<int, int>::value_type( HP_BAR, LoadGraph("tenyu_data/pic/sys/battle/hpbar.png",true)) );
 
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy01.bmp"));
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy02.bmp"));
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy03.bmp"));
+		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy01.bmp",true));
+		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy02.bmp",true));
+		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy03.bmp",true));
 		
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp"));
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp"));
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp"));
+		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
+		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
+		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
 
 
 	//ターゲット選択マーカー初期化
