@@ -496,7 +496,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			cell=-cell;
 		}
 		if (cell>100) WarningDx("Warning->@Walk arg[cell]<=100: %d", __FILE__, __LINE__, cell); 
-		cell = between(1, 100, (int)cell);
+		cell = between(0, 100, (int)cell);
 		
 		_textbox->SetReturnVisible(false);
 
@@ -531,7 +531,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				cell = -cell;
 			}
 			if (cell>100) WarningDx("Warning->@Slide |arg[cell]|<=100: %d", __FILE__, __LINE__, cell); 
-			cell = between(1, 100, cell);
+			cell = between(0, 100, cell);
 		}
 		
 		_textbox->SetReturnVisible(false);
