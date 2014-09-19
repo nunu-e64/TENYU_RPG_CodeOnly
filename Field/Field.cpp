@@ -21,9 +21,11 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//諸変数の初期化
 			NowMap=0;
-			X=0; Y=0; OldX=X; OldY=Y;
+			GodX = GodY = 0;
+
+			X = Y = 0;		OldX=X; OldY=Y;
 			Dir=DOWN; 
-			Step=0; Dx=0; Dy=0; 
+			Step=0;			Dx = Dy = 0; 
 			Visible=true;
 			Alpha = 255;		
 			Effect=NONE;
@@ -226,6 +228,13 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 		CVector picsize = GetGraphSize(ImgBackGround);
 		DrawGraph(WINDOW_WIDTH/2-picsize.x/2, WINDOW_HEIGHT/2-picsize.y/2, ImgBackGround, true);
 	}else{
+
+		///神システム作りかけ////////////////////////////////////////////////////////////////
+		GodX = 0; GodY = 0;
+		dx+=GodX*MAP_CHIP_SIZE; dy+=GodY*MAP_CHIP_SIZE;
+		/////////////////////////////////////////////////////////////////////////////
+
+
 		//マップ描画////////////////////////////////////////////////////////////////////////////
 		CHECK_TIME_START2	Map.Draw(NowMap, X, Y, dx, dy);			CHECK_TIME_END2("Map.Draw")
 		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, false, dx, dy);	CHECK_TIME_END2("EveManager.Draw_under")
@@ -243,11 +252,10 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 			}
 
 			SetDrawBlendMode( DX_BLENDMODE_ALPHA, Alpha);
-			if(!_playeralsoshake){
-				if(Visible) DrawGraph(Dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
-			}else{
-				if(Visible) DrawGraph(Dx-dx+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, Dy-dy+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
-			}
+			CVector playerD(Dx,Dy);
+				if(!_playeralsoshake){playerD.Add(-GodX*MAP_CHIP_SIZE,-GodY*MAP_CHIP_SIZE);
+				}else{				  playerD.Add(-dx,-dy);}
+					if(Visible) DrawGraph(playerD.x+WINDOW_WIDTH/2-MAP_CHIP_SIZE/2, playerD.y+WINDOW_HEIGHT/2-MAP_CHIP_SIZE/2, ImgPlayer[Dir*4+mod(Step,4)], true);	//_a.pngで透過情報を読み込み済み
 			SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 );
 		//////////////////////////////////////////////////////////////////////////////////////////
 	

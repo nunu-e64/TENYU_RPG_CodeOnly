@@ -52,6 +52,7 @@ private:
 		
 	//メンバ変数
 		int NowMap;
+		int GodX, GodY;	//神システム用
 	
 		//そのうちわかりにくくなってきたら名前空間Playerとかで括ろうかな
 		unsigned int X, Y;
