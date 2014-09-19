@@ -48,7 +48,7 @@ private:
 	//ƒƒ“ƒoŠÖ”
 		bool CheckEvent(bool _foot=false, bool _push=false);
 		bool StartSet (const int _dnum);
-		bool SaveData(int _dnum, const char _dataname[32] = "");
+		int SaveData(int _dnum, const char _dataname[32] = "");
 		
 	//ƒƒ“ƒo•Ï”
 		int NowMap;

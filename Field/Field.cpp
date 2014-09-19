@@ -128,36 +128,55 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					}else if (CheckHitKey(KEY_INPUT_3)){	tmpdnum = 3;						
 					}
 					if (tmpdnum!=-1){
-						//セーブデータ名の自由入力
-						char dataname[32];	dataname[0]='\0';
-						char inputchar;		char inputmessage[64];
-						ClearInputCharBuf() ;
-						while(BasicLoop()){
-							// 文字入力バッファから文字を取得する
-							inputchar = GetInputChar( TRUE ) ;
-							// 操作コード以外の文字入力があった場合のみ処理を行う
-							if( inputchar == CTRL_CODE_CR && strlen(dataname)>0){		//Enter
-								break;
-							}else if( inputchar == CTRL_CODE_BS && strlen(dataname)>0){	//BackSpace
-								dataname[strlen(dataname)-1]='\0';
-							}else{
-								switch(inputchar){
-								case '.':	case '|':	case '\\':	case '/':	case ':':	case '>':	case '<':	case '?':	case '*':	case '"':	case ' ':	case '%':	//なぜか知らんが%を使用すると応答なしエラーになる	//フォルダに使用できない文字その他の排除
+						while(1){
+							//セーブデータ名の自由入力
+							char dataname[32];	dataname[0]='\0';
+							char inputchar;		char inputmessage[64];
+							ClearInputCharBuf() ;
+							while(BasicLoop()){
+								// 文字入力バッファから文字を取得する
+								inputchar = GetInputChar( TRUE ) ;
+								// 操作コード以外の文字入力があった場合のみ処理を行う
+								if( inputchar == CTRL_CODE_CR && strlen(dataname)>0){		//Enter
 									break;
-								default:
-									if( inputchar != 0 && inputchar >= CTRL_CODE_CMP && strlen(dataname)<ARRAY_SIZE(dataname)-1){
-										dataname[strlen(dataname)+1]='\0';
-										dataname[strlen(dataname)]=inputchar;
+								}else if( inputchar == CTRL_CODE_BS && strlen(dataname)>0){	//BackSpace
+									dataname[strlen(dataname)-1]='\0';
+								}else{
+									switch(inputchar){
+									case '.':	case '|':	case '\\':	case '/':	case ':':	case '>':	case '<':	case '?':	case '*':	case '"':	case ' ':	case '%':	//なぜか知らんが%を使用すると応答なしエラーになる	//フォルダに使用できない文字その他の排除
+										break;
+									default:
+										if( inputchar != 0 && inputchar >= CTRL_CODE_CMP && strlen(dataname)<ARRAY_SIZE(dataname)-1){
+											dataname[strlen(dataname)+1]='\0';
+											dataname[strlen(dataname)]=inputchar;
+										}
 									}
 								}
+
+								sprintf_s(inputmessage, "Input Save Data Name->%s%s", dataname, (strlen(dataname)<ARRAY_SIZE(dataname)-1?"_":""));
+								DrawString(0, 0, inputmessage, WHITE);
 							}
 
-							sprintf_s(inputmessage, "Input Save Data Name->%s%s", dataname, (strlen(dataname)<ARRAY_SIZE(dataname)-1?"_":""));
-							DrawString(0, 0, inputmessage, WHITE);
-						}
-						if (SaveData(tmpdnum, dataname)){
-							char tmpmessage[32];			sprintf_s(tmpmessage, "%d番にセーブしました", tmpdnum);
-							TextBox->AddStock(tmpmessage);	TextBox->NextPage(&CmdList, &FlagSet);
+							//セーブ結果に応じて処理分岐（-1：エラー、0：リトライ、1：成功）
+							int saveResult= SaveData(tmpdnum, dataname);
+							if (saveResult == 1){
+								char tmpmessage[32];			sprintf_s(tmpmessage, "%d番にセーブしました", tmpdnum);
+								TextBox->AddStock(tmpmessage);	TextBox->NextPage(&CmdList, &FlagSet);
+								break;
+							}else if(saveResult == 0){
+								char tmpmessage[128];			sprintf_s(tmpmessage, "既に同名のセーブデータが別スロットに存在します。別の名前を入力してしてください。［%s］", dataname);
+								TextBox->AddStock(tmpmessage);	//TextBox->NextPage(&CmdList, &FlagSet);
+								while(BasicLoop()){
+									if( !TextBox->Main(&CmdList, &FlagSet)) {
+										break;	//テキストボックスが消されたら再入力画面へ
+									}else{
+										FieldCmdManager.Main(&CmdList, this, &Map, TextBox, &EveManager);
+										Draw();
+									}
+								}
+							}else{
+								break;
+							}
 						}
 					}
 
@@ -487,14 +506,14 @@ bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデー
 	}
 }
 
-bool CField::SaveData(int _dnum, const char _dataname[32]){
+int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リトライ、1：成功
 	char filename[256];
 	FILE *fp;
 	
 	//セーブデータ番号が適正かチェック
 		if (_dnum<0 || _dnum>=PLAYDATA_NUM) {
 			ErrorDx("Error->SaveDataNumber too small or big:%d", __FILE__, __LINE__, _dnum);
-			return false;
+			return -1;
 		}
 	
 	//セーブフォルダをリネーム又は新規作成（_datanameが空文字列のときはセーブ番号だけを頼りに上書き保存する）
@@ -504,10 +523,13 @@ bool CField::SaveData(int _dnum, const char _dataname[32]){
 			sprintf_s(olddirname, "tenyu_data/save/%s", PlayData_p[_dnum].DataName);
 			sprintf_s(newdirname, "tenyu_data/save/%s", _dataname); 
 
+			//セーブフォルダをリネーム
 			if (rename(olddirname, newdirname) != 0){
+				//リネームに失敗したので、既存フォルダがないと判断し新規作成
 				if (_mkdir(newdirname) !=0 ){
+					//フォルダ作成に失敗＝同名のフォルダが存在していた
 					ErrorDx("SaveError->MakeDirectoryError:%s", __FILE__, __LINE__, newdirname);
-					return false;
+					return 0;
 				}
 			}
 			strcpy_s(PlayData_p[_dnum].DataName, _dataname);
@@ -545,7 +567,7 @@ bool CField::SaveData(int _dnum, const char _dataname[32]){
 			//ファイルを開く
 			fopen_s(&fp, filename, "wb" );
 
-			/////////////////////////////////////////////////////////////////////////////////
+			////ファイルに書き込んで保存/////////////////////////////////////////////////////////////////////////////
 			switch(i){
 			case 0:
 				fwrite(&NowMap, sizeof(NowMap), 1, fp);
@@ -569,6 +591,6 @@ bool CField::SaveData(int _dnum, const char _dataname[32]){
 		}
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
-	return true;
+	return 1;
 }
 
