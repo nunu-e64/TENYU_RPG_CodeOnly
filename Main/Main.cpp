@@ -143,7 +143,7 @@ void CMain::Opening(){
 				scene = -1;
 			}
 			for (int i=0; i<11; i++){
-				DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT-timecount/3) + i*(fontsize*4), WHITE, optext[i]);
+				DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT-timecount/3) + i*(fontsize*4), optext[i], WHITE);
 			}
 			break;
 		}

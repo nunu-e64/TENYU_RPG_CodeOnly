@@ -33,7 +33,7 @@ int CEnemyPlanManager::Plan(CEnemy* _enemy){
 
 	switch(p.PlanType){
 	case 0:
-		choice = Calc_HpBorder(p.Value["BorderHp"]/100, p.Value["Choice1"], p.Value["Choice2"]);
+		choice = Calc_HpBorder((float)p.Value["BorderHp"]/100, p.Value["Choice1"], p.Value["Choice2"]);
 		break;
 	case 1:
 		choice = Calc_PlayerNum(p.Value["Choice1"], p.Value["Choice2"], p.Value["Choice3"]); 

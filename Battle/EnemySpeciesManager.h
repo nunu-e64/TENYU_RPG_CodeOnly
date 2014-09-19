@@ -5,8 +5,7 @@
 
 #include <map>
 #include <string>
-
-class CEnemySpecies;
+#include "EnemySpecies.h"
 
 
 class CEnemySpeciesManager{

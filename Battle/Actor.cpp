@@ -44,7 +44,7 @@ void CActor::SetRect(int _cx, int _cy){
 
 void CActor::SetImg(int _img){
 	Img = _img;
-	SetRect(Rect.Center().x, Rect.Center().y);
+	SetRect((int)(Rect.Center().x), (int)(Rect.Center().y));
 }
 
 void CActor::AddTrick(trick_tag const* _trick){

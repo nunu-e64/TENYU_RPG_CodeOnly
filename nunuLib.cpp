@@ -276,7 +276,7 @@ int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...){	//ƒtƒH
 	va_end( args );
 
 	if(strlen(string)<1024){
-		for_return = DrawCenterString(cx,y,string,color);	
+		for_return = DrawCenterString((int)cx,(int)y,string,color);	
 	}else{
 		ErrorDx("Error->nunuLib:DrawCenterString->too long string:%s", __FILE__, __LINE__, string);
 		for_return=-1;

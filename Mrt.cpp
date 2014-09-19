@@ -33,13 +33,13 @@ int Title(){	//•Ô‚è’lFtitle_tag  ˆø”F‚È‚µ
 
 		timecount++;
 
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/10), WHITE, "- “V —C -");
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*5/10), WHITE, "‚Â‚Ã‚«‚©‚ç");
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*6/10), WHITE, "‚Í‚¶‚ß‚©‚ç");
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*7/10), WHITE, "@İ’è@@");
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*8/10), WHITE, "ƒQ[ƒ€I—¹");
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/10), "- “V —C -" , WHITE );
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*5/10), "‚Â‚Ã‚«‚©‚ç", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*6/10), "‚Í‚¶‚ß‚©‚ç", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*7/10), "@İ’è@@", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*8/10), "ƒQ[ƒ€I—¹", WHITE);
 		
-		if (int(timecount/15)%2) DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*(target+5)/10), WHITE, "|>@@@@@@@");
+		if (int(timecount/15)%2) DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*(target+5)/10), "|>@@@@@@@", WHITE);
 	}
 
 	return TITLE_GAMEEND;
@@ -58,9 +58,9 @@ int ChooseData(playdata_tag* _playdata){	//•Ô‚è’lFƒ[ƒh‚·‚éƒf[ƒ^”Ô†iƒGƒ‰[
 
 	while( BasicLoop()){
 		sprintf_s(tmpstring, "ƒf[ƒ^”Ô†F%d ƒf[ƒ^–¼F%s", dnum, (_playdata[dnum].Exist?_playdata[dnum].DataName:"No Data")); 
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/4), WHITE, "ƒ[ƒh‚·‚éƒf[ƒ^‚ğ‘I‘ğ");
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*2/4), (_playdata[dnum].Exist? WHITE:GRAY), tmpstring);
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*3/4), WHITE, "ª«:ƒf[ƒ^‘I‘ğ@Z:Œˆ’è@Esc:ƒ^ƒCƒgƒ‹‚É–ß‚é");
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/4), "ƒ[ƒh‚·‚éƒf[ƒ^‚ğ‘I‘ğ", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*2/4), tmpstring, (_playdata[dnum].Exist? WHITE:GRAY));
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*3/4), "ª«:ƒf[ƒ^‘I‘ğ@Z:Œˆ’è@Esc:ƒ^ƒCƒgƒ‹‚É–ß‚é", WHITE);
 
 		if (CheckHitKeyDown (KEY_INPUT_DOWN)){
 			dnum = mod(dnum+1, PLAYDATA_NUM);
