@@ -162,25 +162,38 @@ class CFlagSet{
 public:
 	CFlagSet(){}
 
-	void SetFlag(const char* _key, int _num=0, bool _add=false){
+	bool CreateNewFlag(const char* _key){
+		for(unsigned int i=0; i<Flag.size(); i++){
+			if (mystrcmp(Flag[i].Key, _key)) return false;
+		}
+		CreateFlag(_key, 0);
+		return true;
+	}
+
+	void SetFlag(const char* _key, int _num=0, bool _add=false, bool _create=false){
 		for(unsigned int i=0; i<Flag.size(); i++){
 			if (mystrcmp(Flag[i].Key, _key)) {
 				int num = (_add? Flag[i].Num+_num: _num);
 
-				if (num<0) ErrorDx("Error->You can't set [num<0] for FLAG (changed to 0):%s", _num);
+				if (num<0) ErrorDx("Error->You can't set [num<0] for FLAG (changed to 0):%s", _key);
 				Flag[i].Num=max(0,num);
 				return;
 			}
 		}
-		CreateFlag(_key, _num);
+
+		if (_create){
+			CreateFlag(_key, _num);
+		}else{
+			ErrorDx("Error->Not Found Flag[%s]", _key);
+		}
 	};
 
 	int GetFlagNum(const char* _key){
 		for(unsigned int i=0; i<Flag.size(); i++){
 			if (mystrcmp(Flag[i].Key, _key)) return Flag[i].Num;
 		}
-		//CreateFlag(_key,0);
-		return -1;
+		ErrorDx("Error->Not Found Flag[%s] (return -2)", _key);
+		return -2;	//–¢’è‹`
 	};
 	
 	std::vector <flag_tag> Flag;
@@ -188,9 +201,6 @@ public:
 private:
 	
 	bool CreateFlag(const char* _key, int _num=0){
-		/*for(unsigned int i=0; i<Flag.size(); i++)
-			if (mystrcmp(Flag[i].Key, _key)) return false;
-		*/	
 		flag_tag newflag;
 		mystrcpy(newflag.Key, _key, 32);
 

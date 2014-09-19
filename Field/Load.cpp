@@ -150,7 +150,7 @@ void CLoad::LoadPlayData(char *_path, playdata_tag _playdata[]){
 				while( feof(fp)==0){
 					fread(&tmpname, sizeof(char), sizeof(tmpname), fp);
 					fread(&tmpvalue, sizeof(tmpvalue), 1, fp);
-					_playdata[h].FlagSet.SetFlag(tmpname, tmpvalue);
+					_playdata[h].FlagSet.SetFlag(tmpname, tmpvalue,false,true);
 				}
 				break;
 			case 2:

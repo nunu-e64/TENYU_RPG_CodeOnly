@@ -328,6 +328,15 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			_evemanager->SetPic(arg[0], _map->GetImgData(arg[1]), arg[1]);
 		}
 
+
+
+//@Flag_Create
+	}else if (mystrcmp(_command, "@Flag_Create",'l')){
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+		
+		_field->FlagSet.CreateNewFlag(arg[0]);
+
+
 //@Flag_Set
 	}else if (mystrcmp(_command, "@Flag_Set",'l')){
 		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
