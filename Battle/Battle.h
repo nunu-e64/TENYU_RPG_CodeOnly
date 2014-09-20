@@ -6,6 +6,7 @@
 #include "TrickManager.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "EnemySpeciesManager.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
@@ -102,9 +103,10 @@ private:
 			std::vector <int> PlayerImgBank;
 			std::vector <int> EnemyImgBank;
 
-
-		CTrickManager TrickManager;
-		std::queue <CActor*> ActionQueue;	//行動待機リスト
+		//重要な所持インスタンス
+			CEnemySpeciesManager EnemySpeciesManager;
+			CTrickManager TrickManager;
+			std::queue <CActor*> ActionQueue;	//行動待機リスト
 
 
 };

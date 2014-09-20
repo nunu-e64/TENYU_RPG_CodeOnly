@@ -1,9 +1,6 @@
 #include "../Define.h"
 #include "Field.h"
 #include "Load.h"
-#include "../Battle/Battle.h"
-
-static CBattle Battle;
 
 ///ƒƒ“ƒo•Ï”‚É‚·‚é‚ÆƒoƒO‚é////////////////
 static CTextBox TextBox1;

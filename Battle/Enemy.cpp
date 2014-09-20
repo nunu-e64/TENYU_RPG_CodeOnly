@@ -1,12 +1,16 @@
 #include "../Define.h"
 #include "Enemy.h"
-#include "Battle.h"
 #include "EnemyPlanManager.h"
 #include "EnemySpecies.h"
+#include "../Main/TextBox.h"
+//#include "../Main/TextWrap.h"
+#include "../Main/CmdList.h"
+
 
 
 CEnemy::CEnemy(CEnemySpecies* _species){
-	
+
+
 }
 
 

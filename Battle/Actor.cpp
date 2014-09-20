@@ -1,6 +1,8 @@
 #include "../Define.h"
 #include "Actor.h"
 #include "Battle.h"
+#include "../Main/TextBox.h"
+//#include "../Main/TextWrap.h"
 
 
 

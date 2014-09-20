@@ -5,14 +5,17 @@
 
 #include "../Define.h"	//インクルードしなくてもいい（赤線は出るがコンパイル時に解決するためエラーは出ない）
 
+#include "Map.h"
+#include "EveManager.h"
+
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
 #include "../Main/CmdManager.h"
 #include "../Main/CmdList.h"
-#include "Map.h"
-#include "EveManager.h"
-
 #include "../Main/WorldManager.h"
+
+#include "../Battle/Battle.h"
+
 
 class CField : public CWorldManager{
 public:
@@ -83,6 +86,8 @@ private:
 		CFirstSetCmdManager FirstSetCmdManager;
 		CCmdList CmdList;
 		CEveManager EveManager;
+		CBattle Battle;
+
 };
 
 
