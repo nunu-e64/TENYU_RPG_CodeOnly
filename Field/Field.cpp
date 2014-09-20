@@ -536,7 +536,6 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 				//リネームに失敗したので、既存フォルダがないと判断し新規作成
 				if (_mkdir(newdirname) !=0 ){
 					//フォルダ作成に失敗＝同名のフォルダが存在していた
-					ErrorDx("SaveError->MakeDirectoryError:%s", __FILE__, __LINE__, newdirname);
 					return 0;
 				}
 			}
