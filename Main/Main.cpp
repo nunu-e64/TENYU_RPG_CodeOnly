@@ -118,39 +118,10 @@ void CMain::StartDemo(){
 
 
 void CMain::Opening(){
-	int timecount = 0;
-	int scene = 0;
 	int oldfontsize = GetFontSize();
-	int fontsize = 14;
-	char* optext[] = {"物語の舞台は島国ソラリシア",
-		"この国にはかつて太陽の神と星の神を奉る二神教が存在し",
-		"信者の中には信仰を捧げた神から魔力を授かるものもいた",
-		"昼の太陽から力を授かる“太陽の魔法使い”と",
-		"夜の星から力を授かる“星の魔法使い”である",
-		"しかし、急速な発達が進む都市部では信仰は薄れ",
-		"ソラリシア王によって新たな宗教が興される",
-		"弾圧された旧教徒たちは、格差にあえぐ人々と手を組み反乱の狼煙を上げた",
-		"それから30年、この国には今なお争乱の火種がくすぶり続けている",
-		"そして今、レジスタンスに新たなリーダーが誕生する",
-		"これは、長きにわたる紛争に新たな歴史を刻む、若きリーダーの英雄譚である（ここまですべて嘘）"};
 	
-	SetFontSize(fontsize);
-	while( BasicLoop() && !CheckHitKeyDown(KEY_INPUT_ESCAPE) && !CheckHitKeyDown(KEY_INPUT_OK) && scene != -1){
-		
-		switch(scene){
-		case 0:
-			if(timecount==3300){
-				scene = -1;
-			}
-			for (int i=0; i<11; i++){
-				DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT-timecount/3) + i*(fontsize*4), WHITE, optext[i]);
-			}
-			break;
-		}
-		
-		timecount++;
-	}
-	
+	mrt::Opening();
+
 	SetFontSize(oldfontsize);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 };
