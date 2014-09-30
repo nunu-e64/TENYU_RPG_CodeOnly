@@ -16,7 +16,7 @@ public:
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 	bool SetImg(const char* _name, int _img);
 
-	CEnemySpecies* GetEnemySpecies(const char* _name);
+	CEnemySpecies GetEnemySpecies(const char* _name);
 
 
 private:

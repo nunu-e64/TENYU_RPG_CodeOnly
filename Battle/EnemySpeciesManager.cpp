@@ -11,9 +11,9 @@ bool CEnemySpeciesManager::CreateEnemySpecies(const char* _name, int _maxhp, int
 
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
-		
-	EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
 	
+	EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
+
 	return true;
 }
 
@@ -31,17 +31,15 @@ bool CEnemySpeciesManager::SetImg(const char* _name, int _img){
 
 
 
-
-
-CEnemySpecies* CEnemySpeciesManager::GetEnemySpecies(const char* _name){
+CEnemySpecies CEnemySpeciesManager::GetEnemySpecies(const char* _name){
 
 	CEnemySpecies* tmp = &EnemyBank[_name];
 
 	if (tmp->GetName()==_name){
-		return tmp;
+		return *tmp;
 	}else{
-		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, tmp->GetName().c_str());//_name);
-		return NULL;
+		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
+		return CEnemySpecies();
 	}
 
 }

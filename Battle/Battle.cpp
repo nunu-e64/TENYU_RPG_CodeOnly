@@ -97,8 +97,7 @@ void CBattle::SetEnemy(const int _enemyNum, ...){
 
 		Enemy = new CEnemy[ENEMY_NUM];
 		for (int i=0; i<ENEMY_NUM; i++){
-			DebugDx("SetEnemy:%d", i);
-			Enemy[i] = EnemySpeciesManager.GetEnemySpecies(va_arg(args, char*));		//target=1の時、一個目を返す（Not target=0）
+			Enemy[i] = CEnemy(EnemySpeciesManager.GetEnemySpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
 		}
 		va_end(args);
 	}
@@ -115,7 +114,7 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 			//エネミー設定（テスト用）
 				DebugDx("SetEnemy_Start:%d", ENEMY_NUM);
 				SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
-				DebugDx("SetEnemy_FIN:%d", ENEMY_NUM);
+				DebugDx("SetEnemy_FIN:%s", Enemy[0].GetName().c_str());
 
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			//Actorはnewでバトルごとに生成
@@ -131,7 +130,8 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 				Player[i].ClearTrick();
 				Player[i].AddTrick(TrickManager.GetTrick("アタックマジックA"));
 				Player[i].AddTrick(TrickManager.GetTrick("アタックマジックB"));
-				Player[i].SetValue(5, 5, 1, 100);	//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
+				Player[i].SetValue(5, 5, 1, 100);	
+				Player[i].Init();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
 				Player[i].SetImg(PlayerImgBank[i]);
 
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
@@ -141,7 +141,6 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 			CEnemyPlanManager::GetInstance()->Init();
 			for (int i=0; i<ENEMY_NUM; i++){
 				Enemy[i].SetEnemyPlanManager(CEnemyPlanManager::GetInstance());
-				Enemy[i].SetImg(EnemyImgBank[i]);
 				Enemy[i].MakePlan();
 
 				Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
@@ -176,12 +175,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	
 	while(BasicLoop()){
 		
-		DebugDx("OK0");
-
 		if( !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
-
-			DebugDx("OK");
-
 
 			if (ActionQueue.empty()){	//行動待機リストが空かチェック
 			
@@ -191,7 +185,6 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 				////////////////////////////////////////////////////////////
 
 				for (int i=0; i<ACTOR_NUM; i++){
-					DebugDx("Actor[i]->Main():%d",i);
 					if (Actor[i]->Main()) ActionQueue.push(Actor[i]);		//TimeBar進ませて必要なら行動待機リストに入れる
 				}
 
@@ -208,7 +201,6 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 			B_CmdManager.Main(&B_CmdList, this, TextBox);
 
 		////描画////////////////////////////////////////
-			DebugDx("LetsDraw");
 			Draw();
 	}
 	return -1;
@@ -237,11 +229,9 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 
 		//PlayerとEnemyの描画///////////////////////////////////////////////////////////////
 		for (int i=0; i<MAX_PLAYER; i++){
-			DebugDx("LetsDrawPlayer:%d", i);
 			Player[i].Draw(dx, dy);
 		}
 		for (int i=0; i<MAX_ENEMY; i++){
-			DebugDx("LetsDrawEnemy:%d", i);
 			Enemy[i].Draw(dx, dy);
 		}
 

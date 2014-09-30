@@ -17,6 +17,20 @@ public:
 		Img=Atk=Def=Spd=-1;
 		MaxHp = 1;
 	}
+
+	//CSpecies(const CSpecies& _obj){
+	//	Name = _obj.Name;
+	//	Img = _obj.Img;
+	//	MaxHp = _obj.MaxHp;
+	//	Atk = _obj.Atk;
+	//	Def = _obj.Def;
+	//	Spd = _obj.Spd;
+	//	TrickList = _obj.TrickList;
+	//	
+	//	DebugDx("Copy-CSpecoes:%s",Name.c_str());
+	//	DebugDx("Copy-CSpecoes_Img:%d",Img);
+	//};
+
 	~CSpecies(){}
 
 	std::string GetName(){return Name;}
@@ -37,7 +51,7 @@ protected:
 
 class CActor : public CSpecies{
 public:
-	CActor(const CSpecies* _species) : CSpecies(*_species){};
+	CActor(const CSpecies &_species) : CSpecies(_species){};
 	CActor(){}	//Actor = new CActor* [MAX_PLAYER+MAX_ENEMY];}
 	~CActor(){}	//delete [] Actor;}
 
@@ -105,7 +119,6 @@ protected:
 		}Mode;		//待機や詠唱,行動選択など
 
 	//技関連
-		std::vector <trick_tag const*> TrickList;		//技リスト
 		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」
 		int Target;
 
@@ -117,7 +130,6 @@ protected:
 		CRect Rect;
 		int Img_hpbar;
 		int Img_timebar[2];
-		int Img;
 		//...
 };
 
