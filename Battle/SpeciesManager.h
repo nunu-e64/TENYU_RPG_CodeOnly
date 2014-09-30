@@ -8,6 +8,7 @@
 #include "EnemySpecies.h"
 
 
+
 class CEnemySpeciesManager{
 public:
 	CEnemySpeciesManager(void);
@@ -18,10 +19,8 @@ public:
 
 	CEnemySpecies GetEnemySpecies(const char* _name);
 
-
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
-	CEnemySpecies EnemyS_dammy;
 
 };
 
