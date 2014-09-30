@@ -16,12 +16,14 @@ void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::
 	Img_timebar[1] = (*_imgbank)[CBattle::TIME_BAR2];
 }
 
-void CActor::SetValue(int _atk, int _def, double _spd, int _maxhp){
+void CActor::SetValue(int _atk, int _def, int _spd, int _maxhp){
 	Alive = Visible = true;
 
 	Atk = max(1,_atk);
 	Def = max(1,_def);
-	Spd = between(1.0,100.0,_spd);
+	Spd = max(1,_spd);
+
+	SpdPer = between(1.0, 100.0, (double)_spd/100);	//$相対値から絶対値への変換
 	Hp = OldHp = MaxHp = _maxhp;
 
 	TimeGauge = 0;//rand()%100;	//ランダムでいいの？$
@@ -135,7 +137,7 @@ bool CActor::TimeGaugeForward(){
 		TimeGauge = 0;
 		Mode = (mode_tag)((Mode+1) % MODE_NUM);
 	}
-	TimeGauge+=Spd;
+	TimeGauge+=SpdPer;
 	if (TimeGauge>=100){
 		TimeGauge = 100;
 		return true;

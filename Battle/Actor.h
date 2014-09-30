@@ -5,23 +5,46 @@
 
 #include <vector>
 #include <map>
+#include <string>
 
 class CTextBox;		//前方宣言
 class CCmdList;
 
-class CActor{
+class CSpecies{
 public:
+	CSpecies(){}
+	~CSpecies(){}
+
+	std::string GetName(){return Name;}
+
+
+protected:
+	std::string Name;
+	int Img;
+
+	int MaxHp;
+	int Atk;
+	int Def;
+	int Spd;		//%→相対値
+	
+	std::vector <trick_tag const*> TrickList;		//技リスト
+
+};
+
+
+class CActor : public CSpecies{
+public:
+	CActor(const CSpecies* _species) : CSpecies(*_species){};
 	CActor(){}	//Actor = new CActor* [MAX_PLAYER+MAX_ENEMY];}
 	~CActor(){}	//delete [] Actor;}
 
 	//初期設定関連
 		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank);
-		void SetValue(int _atk, int _def, double _spd, int _maxhp);
+		void SetValue(int _atk, int _def, int _spd, int _maxhp);
 		void SetRect(int _cx, int _cy);
 		void SetImg(int _img);
 		void AddTrick(trick_tag const* _trick);
 		void ClearTrick(){TrickList.clear();}
-
 
 	bool Main();
 	bool Do();
@@ -65,11 +88,8 @@ protected:
 	//戦闘関連
 		bool Alive;
 		bool Visible;
-		int Atk;
-		int Def;
-		double Spd;		//%
 		int Hp;		int OldHp;	//描画用
-		int MaxHp;
+		double SpdPer;
 		double TimeGauge;	//0~100%
 		int Accident;	//状態異常やステータス変動
 

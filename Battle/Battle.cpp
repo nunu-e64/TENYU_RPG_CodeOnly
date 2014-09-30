@@ -75,6 +75,26 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			Enemy[i].SetEnemyPlanManager(CEnemyPlanManager::GetInstance());
 		}
 
+	//EnemySpeciesの生成
+		EnemySpeciesManager.CreateEnemySpecies("エネミーA", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateEnemySpecies("エネミーB", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateEnemySpecies("エネミーC", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateEnemySpecies("エネミーD", 100, 5, 5, 1);
+}
+
+void CBattle::SetEnemy(const int _enemyNum, ...){
+	va_list args;
+	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
+	
+	if (_enemyNum<=0){
+		ErrorDx("Error->arg[enemyNum] should >=1: enemyNum=%d", __FILE__, __LINE__, _enemyNum);
+	}else{
+		for (int i=1; i<=_enemyNum; i++){
+			Enemy[i] = CEnemy(EnemySpeciesManager.GetEnemySpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
+		}
+		ENEMY_NUM = _enemyNum;
+		va_end(args);
+	}
 }
 
 void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){

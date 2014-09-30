@@ -207,6 +207,37 @@ finish:
 	delete [] arg;
 	return true;
 }
+bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CEnemySpeciesManager _enemySpeciesManager){
+	int argnum=0;	char** arg;
+		
+	if (strlen(_command)==0){
+		ErrorDx("Error->strlen(_command)==0->%s", __FILE__, __LINE__, _command);
+		return true;
+
+//@Enemy_Create
+	}else if (mystrcmp(_command,"@Enemy_Create")){		
+		argnum = 5;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
+
+		int value[4];
+		for (int i=0; i<4; i++){
+			if(!( mystrtol(arg[i+1], &value[i]))){
+				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				goto finish;
+			}
+		}
+
+		_enemySpeciesManager.CreateEnemySpecies(arg[0], value[0], value[1], value[2], value[3]);
+
+
+//コマンド不一致
+	}else{
+		return false;
+	}
+
+finish:
+	delete [] arg;
+	return true;
+}
 
 //////////////////////////////////////////////////////////////////
 //シナリオコマンド（アクションコマンド）の処理////////////////////
@@ -914,6 +945,9 @@ finish:
 	return true;
 }
 
+
+//////////////////////////////////////////////////////////////////
+//バトルコマンドの処理////////////////////////////////////////////
 bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle* _battle){
 	int argnum=0;	char** arg;
 
@@ -1017,3 +1051,4 @@ finish:
 	delete [] arg;
 	return true;
 }
+//////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 ////多重インクルード防止（インクルードガード）//
-#ifndef ENEMYSPECIESMANAGER_H							////
-#define ENYMYSPECIESMANAGER_H							////
+#ifndef ENEMYSPECIESMANAGER_H				////
+#define ENYMYSPECIESMANAGER_H				////
 ////////////////////////////////////////////////
 
 #include <map>
@@ -12,6 +12,11 @@ class CEnemySpeciesManager{
 public:
 	CEnemySpeciesManager(void);
 
+	bool CreateEnemySpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd);
+	bool SetTrickList();
+
+	CEnemySpecies* GetEnemySpecies(const char* _name);
+
 
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
@@ -21,5 +26,5 @@ private:
 
 
 ////多重インクルード防止（インクルードガード）//
-#endif										////
+#endif										  //
 ////////////////////////////////////////////////

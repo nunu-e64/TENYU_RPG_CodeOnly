@@ -3,24 +3,18 @@
 #define ENYMYSPECIES_H							////
 ////////////////////////////////////////////////
 
-#include <string>
-#include <vector>
+#include "Actor.h"
 
 
-class CEnemySpecies{
+class CEnemySpecies : public CSpecies{
 public:
-	CEnemySpecies(void);
-	~CEnemySpecies(void);
+	CEnemySpecies();
+	~CEnemySpecies();
+
+	void SetValue(const char* _name, int _maxhp, int _atk, int _def, int _spd);
 
 private:
-	std::string Name;
 	
-	int MaxHp;
-	int Atk;
-	int Def;
-
-	std::vector <trick_tag const*> TrickList;		//‹ZƒŠƒXƒg
-
 };
 
 

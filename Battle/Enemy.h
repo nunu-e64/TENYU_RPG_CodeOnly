@@ -8,11 +8,11 @@
 class CEnemyPlanManager;
 class CEnemySpecies;
 
-class CEnemy : public CActor{	
+class CEnemy : public CActor{
 public:
 	
 	CEnemy(){};
-	CEnemy(CEnemySpecies* _species);
+	CEnemy(const CSpecies* _species) : CActor(_species){};
 	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
 		EnemyPlanManager = _enemyPlanManager;
 	}

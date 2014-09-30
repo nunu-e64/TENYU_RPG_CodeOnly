@@ -26,6 +26,8 @@ public:
 
 	CBattle();
 	void Init();
+	void SetEnemy(const int _enemyNum, ...);
+
 	void Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
 
 	enum{ACTOR_NUM = MAX_PLAYER + MAX_ENEMY};
@@ -94,6 +96,7 @@ private:
 			CPlayer Player[MAX_PLAYER];
 			CEnemy Enemy[MAX_ENEMY];
 			CActor* Actor[ACTOR_NUM];
+			int ENEMY_NUM;
 			//vector<CEnemy>
 
 
