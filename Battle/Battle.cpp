@@ -15,19 +15,24 @@ CBattle::CBattle() : TargetMarker(&ACTOR_NUM){
 void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	//Field.Initにいずれ移動すると思われる
 		TrickManager.Clear();
-		trick_tag newtrick;{
-			strcpy_s(newtrick.Name, "アタックマジックA");
-			newtrick.Cost = 3;
-			newtrick.Power = 110;
-			newtrick.TargetType = newtrick.SINGLE;
-			TrickManager.Add(newtrick);
-		}
-		{	strcpy_s(newtrick.Name, "アタックマジックB");
-			newtrick.Cost = 2;
-			newtrick.Power = 8;
-			newtrick.TargetType = newtrick.SINGLE;
-			TrickManager.Add(newtrick);
-		}
+
+		TrickManager.Add("アタックマジックA", 110, 3, trick_tag::targetType_tag::SINGLE, 0);
+		TrickManager.Add("アタックマジックB", 8, 2, trick_tag::targetType_tag::SINGLE, 0);
+
+		//trick_tag newtrick;
+		//{
+		//	strcpy_s(newtrick.Name, "アタックマジックA");
+		//	newtrick.Cost = 3;
+		//	newtrick.Power = 110;
+		//	newtrick.TargetType = newtrick.SINGLE;
+		//	TrickManager.Add(newtrick);
+		//}
+		//{	strcpy_s(newtrick.Name, "アタックマジックB");
+		//	newtrick.Cost = 2;
+		//	newtrick.Power = 8;
+		//	newtrick.TargetType = newtrick.SINGLE;
+		//	TrickManager.Add(newtrick);
+		//}
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -136,7 +141,7 @@ void CBattle::SetEnemy(const int _enemyNum, ...){
 	}
 }
 
-void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
+void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
 		
 		//Player生成
@@ -158,13 +163,7 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 
 		//初期値設定
 			for (int i=0; i<PLAYER_NUM; i++){	//$雑なテスト用初期値設定
-				//Player[i].ClearTrick();
-				//Player[i].AddTrick(TrickManager.GetTrick("アタックマジックA"));
-				//Player[i].AddTrick(TrickManager.GetTrick("アタックマジックB"));
-				//Player[i].SetValue(5, 5, 1, 100);	
-				//Player[i].SetImg(PlayerImgBank[i]);
-				
-				Player[i].Init();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
+				Player[i].CreateBattleMenu();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
 			}
 			
@@ -196,7 +195,7 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 		tmp_result = MainLoop();
 
 	//終了処理///////////////////////////////////////////////////
-		Finish();
+		BattleFinish();
 		*_result = tmp_result;
 }
 
@@ -237,7 +236,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	return -1;
 }
 
-void CBattle::Finish(){
+void CBattle::BattleFinish(){
 	
 	delete [] Actor;
 	delete [] Player;

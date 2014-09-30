@@ -26,7 +26,7 @@ public:
 
 	CBattle();
 	void Init();
-	void Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
+	void BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
@@ -81,7 +81,7 @@ public:
 private:
 	//メンバ関数
 		int MainLoop();
-		void Finish();
+		void BattleFinish();
 	
 	//メンバ変数
 		//所持インスタンスとポインタ

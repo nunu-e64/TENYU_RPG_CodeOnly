@@ -12,7 +12,7 @@ public:
 	CPlayer(){Mc=0;}
 	CPlayer(const CSpecies& _species) : CActor(_species){Mc=0;};
 
-	void Init();
+	void CreateBattleMenu();
 	void Draw(int dx=0, int dy=0);
 
 private:

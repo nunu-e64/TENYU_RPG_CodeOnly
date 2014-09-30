@@ -240,14 +240,30 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 		}
 		_enemySpeciesManager.CreateSpecies(arg[0], value[0], value[1], value[2], value[3]);
 
-//@EnemyTrick_Set
+//@NormalTrick_Create
+	}else if (mystrcmp(_command,"@NormalTrick_Create")){		
+		argnum = 5;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, true);	//必須
+
+		int value[2];
+		for (int i=0; i<2; i++){
+			if(!( mystrtol(arg[i+1], &value[i]))){
+				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				goto finish;
+			}
+		}
+		_trickManager.Add(arg[0], value[0], value[1], trick_tag::SINGLE ,0);	
+
+//@PlayerTrick_Set
 	}else if (mystrcmp(_command,"@PlayerTrick_Set")){		
 		argnum = 10;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
 
 		if (arg[0]==NULL){
 			ErrorDx("Error->@PlayerTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
-		
-		}else if(arg[1]!=NULL){
+
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@PlayerTrick_Set->arg[TrickName]=NULL", __FILE__, __LINE__);
+
+		}else{
 			
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
@@ -257,7 +273,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 				}				
 			}
 			_playerSpeciesManager.SetTrickList(arg[0], trickList);
-
 		}
 
 //@EnemyTrick_Set
@@ -267,7 +282,10 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 		if (arg[0]==NULL){
 			ErrorDx("Error->@EnemyTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
 		
-		}else if(arg[1]!=NULL){
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@PlayerTrick_Set->arg[TrickName]=NULL", __FILE__, __LINE__);
+
+		}else{
 			
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
@@ -277,7 +295,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 				}				
 			}
 			_enemySpeciesManager.SetTrickList(arg[0], trickList);
-
 		}
 
 //コマンド不一致

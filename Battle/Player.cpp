@@ -4,7 +4,7 @@
 
 
 
-void CPlayer::Init(){
+void CPlayer::CreateBattleMenu(){
 	
 	BattleMenu.Init(10, 360, 100, 110);
 

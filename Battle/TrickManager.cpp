@@ -4,29 +4,36 @@
 void CTrickManager::Add(trick_tag trick){
 	char256 tmpkey;
 	mystrcpy(tmpkey.text, trick.Name);
-
+	
+	//登録時に技名の重複チェックをしたい。map.findを使えばできるのか？$
 	TrickBank.insert( std::map<char256, trick_tag>::value_type( tmpkey, trick) );
 }
 
-void CTrickManager::Add(char _name[32], int _power, int _cost, int _sideeffectnum, ...){
+void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, int _sideeffectnum, ...){
 	trick_tag tmp;
 	mystrcpy(tmp.Name, _name);
 	tmp.Power = _power;
 	tmp.Cost = _cost;
+	tmp.TargetType = _targetType;
 
 	sideeffect_tag tmpeffect;
 
-	va_list args;
-	va_start( args, _sideeffectnum);	//targetが大きすぎたときの処置方法はないのか？
-	for (int i=0; i<_sideeffectnum/3; i++){
-		tmpeffect.TrickEffect = va_arg(args, int);
-		tmpeffect.Power = va_arg(args, int);
-		tmpeffect.Incidence = va_arg(args, int);
-		tmp.SideEffect.push_back(tmpeffect);
-	}
-	va_end(args);
+	if (_sideeffectnum%3!=0){
+		ErrorDx("Error->TrickAdd->Number of arg[SideEffect] has something wrong.(Don'tAdd) %s",__FILE__, __LINE__, _name);
+		return;
+	}else{
+		va_list args;
+		va_start( args, _sideeffectnum);	//targetが大きすぎたときの処置方法はないのか？
+		for (int i=0; i<_sideeffectnum/3; i++){
+			tmpeffect.TrickEffect = va_arg(args, int);
+			tmpeffect.Power = va_arg(args, int);
+			tmpeffect.Incidence = va_arg(args, int);
+			tmp.SideEffect.push_back(tmpeffect);
+		}
+		va_end(args);
 	
-	Add(tmp);
+		Add(tmp);
+	}
 }
 
 trick_tag const* CTrickManager::GetTrick(const char _name[32]){

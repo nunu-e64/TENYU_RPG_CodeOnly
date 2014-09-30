@@ -147,7 +147,7 @@ struct trick_tag{
 	int Cost;
 	std::vector <sideeffect_tag> SideEffect;
 
-	enum{
+	enum targetType_tag{
 		SINGLE,
 		ALL,
 		SINGLE_FRIEND,

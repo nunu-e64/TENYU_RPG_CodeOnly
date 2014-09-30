@@ -190,7 +190,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					CmdList.Add("@AutoPlay_Set(true)");
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					int result;
-					Battle.Battle(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
+					Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
 					if (result==WIN) TextBox->AddStock("勝利");
 					if (result==LOSE) TextBox->AddStock("敗北");
 					TextBox->NextPage(&CmdList, &FlagSet);
