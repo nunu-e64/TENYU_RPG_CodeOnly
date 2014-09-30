@@ -207,12 +207,25 @@ finish:
 	delete [] arg;
 	return true;
 }
-bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CEnemySpeciesManager _enemySpeciesManager, CTrickManager _trickManager){
+bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CPlayerSpeciesManager _playerSpeciesManager, CEnemySpeciesManager _enemySpeciesManager, CTrickManager _trickManager){
 	int argnum=0;	char** arg;
 		
 	if (strlen(_command)==0){
 		ErrorDx("Error->strlen(_command)==0->%s", __FILE__, __LINE__, _command);
 		return true;
+
+//@Player_Create
+	}else if (mystrcmp(_command,"@Player_Create")){		
+		argnum = 5;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
+
+		int value[4];
+		for (int i=0; i<4; i++){
+			if(!( mystrtol(arg[i+1], &value[i]))){
+				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				goto finish;
+			}
+		}
+		_playerSpeciesManager.CreateSpecies(arg[0], value[0], value[1], value[2], value[3]);
 
 //@Enemy_Create
 	}else if (mystrcmp(_command,"@Enemy_Create")){		
@@ -225,7 +238,27 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CE
 				goto finish;
 			}
 		}
-		_enemySpeciesManager.CreateEnemySpecies(arg[0], value[0], value[1], value[2], value[3]);
+		_enemySpeciesManager.CreateSpecies(arg[0], value[0], value[1], value[2], value[3]);
+
+//@EnemyTrick_Set
+	}else if (mystrcmp(_command,"@PlayerTrick_Set")){		
+		argnum = 10;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@PlayerTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
+		
+		}else if(arg[1]!=NULL){
+			
+			std::vector <trick_tag const*>trickList;
+			trick_tag const* tmpTrick;
+			for (int i=1; arg[i]!=NULL && i<argnum; i++){
+				if ((tmpTrick = _trickManager.GetTrick(arg[i])) != NULL){
+					trickList.push_back(tmpTrick);
+				}				
+			}
+			_playerSpeciesManager.SetTrickList(arg[0], trickList);
+
+		}
 
 //@EnemyTrick_Set
 	}else if (mystrcmp(_command,"@EnemyTrick_Set")){		

@@ -7,46 +7,10 @@
 #include <map>
 #include <string>
 
+#include "Species.h"
+
 class CTextBox;		//前方宣言
 class CCmdList;
-
-class CSpecies{
-public:
-	CSpecies(){
-		Name="";
-		Img=Atk=Def=Spd=-1;
-		MaxHp = 1;
-	}
-
-	//CSpecies(const CSpecies& _obj){
-	//	Name = _obj.Name;
-	//	Img = _obj.Img;
-	//	MaxHp = _obj.MaxHp;
-	//	Atk = _obj.Atk;
-	//	Def = _obj.Def;
-	//	Spd = _obj.Spd;
-	//	TrickList = _obj.TrickList;
-	//	
-	//	DebugDx("Copy-CSpecoes:%s",Name.c_str());
-	//	DebugDx("Copy-CSpecoes_Img:%d",Img);
-	//};
-
-	~CSpecies(){}
-
-	std::string GetName(){return Name;}
-
-protected:
-	std::string Name;
-	int Img;
-
-	int MaxHp;
-	int Atk;
-	int Def;
-	int Spd;		//%→相対値
-	
-	std::vector <trick_tag const*> TrickList;		//技リスト
-
-};
 
 
 class CActor : public CSpecies{
@@ -57,7 +21,6 @@ public:
 
 	//初期設定関連
 		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank);
-		void SetValue(int _atk, int _def, int _spd, int _maxhp);
 		void SetRect(int _cx, int _cy);
 		void SetImg(int _img);
 		void AddTrick(trick_tag const* _trick);

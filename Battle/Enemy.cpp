@@ -1,7 +1,7 @@
 #include "../Define.h"
 #include "Enemy.h"
 #include "EnemyPlanManager.h"
-#include "EnemySpecies.h"
+#include "Species.h"
 #include "../Main/TextBox.h"
 //#include "../Main/TextWrap.h"
 #include "../Main/CmdList.h"

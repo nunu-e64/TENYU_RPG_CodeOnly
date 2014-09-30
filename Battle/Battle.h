@@ -6,7 +6,7 @@
 #include "TrickManager.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "EnemySpeciesManager.h"
+#include "SpeciesManager.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
@@ -26,14 +26,15 @@ public:
 
 	CBattle();
 	void Init();
-	void SetEnemy(const int _enemyNum, ...);
-
 	void Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
-
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
+
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
 
 	int GetActorNum(){return ACTOR_NUM;}
+
+	void SetPlayer(const int _playerNum, ...);
+	void SetEnemy(const int _enemyNum, ...);
 
 	//戦闘用
 		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);
@@ -115,6 +116,7 @@ private:
 			std::vector <int> EnemyImgBank;
 
 		//重要な所持インスタンス
+			CPlayerSpeciesManager PlayerSpeciesManager;
 			CEnemySpeciesManager EnemySpeciesManager;
 			CTrickManager TrickManager;
 			std::queue <CActor*> ActionQueue;	//行動待機リスト

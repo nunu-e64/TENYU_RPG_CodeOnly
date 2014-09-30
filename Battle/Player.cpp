@@ -4,16 +4,6 @@
 
 
 
-void CPlayer::SetValue(int _atk, int _def, int _spd, int _maxhp){
-	
-	Atk = max(1,_atk);
-	Def = max(1,_def);
-	Spd = max(1,_spd);
-
-	MaxHp = _maxhp;
-}
-
-
 void CPlayer::Init(){
 	
 	BattleMenu.Init(10, 360, 100, 110);

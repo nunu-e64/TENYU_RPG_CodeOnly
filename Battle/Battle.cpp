@@ -61,22 +61,41 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	
 	SetTransColor(0, 0, 0);	//透過色指定
 
-		DebugDx("CreateEnemySpecies_Start");
+	//PlayerSpeciesの生成（テスト用）
+		PlayerSpeciesManager.CreateSpecies("プレイヤーA", 100, 5, 5, 1);
+		PlayerSpeciesManager.CreateSpecies("プレイヤーB", 100, 5, 5, 1);
+		PlayerSpeciesManager.CreateSpecies("プレイヤーC", 100, 5, 5, 1);
+		PlayerSpeciesManager.CreateSpecies("プレイヤーD", 100, 5, 5, 1);
+	
+	//PlayerSpeciesの技リストセット（テスト用）
+		std::vector <trick_tag const*>p_trickList;
+		p_trickList.push_back(TrickManager.GetTrick("アタックマジックA"));
+		p_trickList.push_back(TrickManager.GetTrick("アタックマジックB"));
+		PlayerSpeciesManager.SetTrickList("プレイヤーA", p_trickList);
+		PlayerSpeciesManager.SetTrickList("プレイヤーB", p_trickList);
+		PlayerSpeciesManager.SetTrickList("プレイヤーC", p_trickList);
+		PlayerSpeciesManager.SetTrickList("プレイヤーD", p_trickList);
+
+	//PlayerSpeciesのImgセット（テスト用）
+		PlayerSpeciesManager.SetImg("プレイヤーA", PlayerImgBank[0]);
+		PlayerSpeciesManager.SetImg("プレイヤーB", PlayerImgBank[1]);
+		PlayerSpeciesManager.SetImg("プレイヤーC", PlayerImgBank[2]);
+		PlayerSpeciesManager.SetImg("プレイヤーD", PlayerImgBank[3]);
+
 	//EnemySpeciesの生成（テスト用）
-		EnemySpeciesManager.CreateEnemySpecies("エネミーA", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateEnemySpecies("エネミーB", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateEnemySpecies("エネミーC", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateEnemySpecies("エネミーD", 100, 5, 5, 1);
-		DebugDx("CreateEnemySpecies_Fin");
+		EnemySpeciesManager.CreateSpecies("エネミーA", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateSpecies("エネミーB", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateSpecies("エネミーC", 100, 5, 5, 1);
+		EnemySpeciesManager.CreateSpecies("エネミーD", 100, 5, 5, 1);
 	
 	//EnemySpeciesの技リストセット（テスト用）
-		std::vector <trick_tag const*>trickList;
-		trickList.push_back(TrickManager.GetTrick("アタックマジックA"));
-		trickList.push_back(TrickManager.GetTrick("アタックマジックB"));
-		EnemySpeciesManager.SetTrickList("エネミーA", trickList);
-		EnemySpeciesManager.SetTrickList("エネミーB", trickList);
-		EnemySpeciesManager.SetTrickList("エネミーC", trickList);
-		EnemySpeciesManager.SetTrickList("エネミーD", trickList);
+		std::vector <trick_tag const*>e_trickList;
+		e_trickList.push_back(TrickManager.GetTrick("アタックマジックA"));
+		e_trickList.push_back(TrickManager.GetTrick("アタックマジックB"));
+		EnemySpeciesManager.SetTrickList("エネミーA", e_trickList);
+		EnemySpeciesManager.SetTrickList("エネミーB", e_trickList);
+		EnemySpeciesManager.SetTrickList("エネミーC", e_trickList);
+		EnemySpeciesManager.SetTrickList("エネミーD", e_trickList);
 
 	//EnemySpeciesのImgセット（テスト用）
 		EnemySpeciesManager.SetImg("エネミーA", EnemyImgBank[0]);
@@ -85,19 +104,33 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		EnemySpeciesManager.SetImg("エネミーD", EnemyImgBank[3]);
 }
 
+void CBattle::SetPlayer(const int _playerNum, ...){
+	va_list args;
+	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
+	
+	if (_playerNum<=0){
+		ErrorDx("Error->arg[playerNum] should >=1: playerNum=%d", __FILE__, __LINE__, _playerNum);
+	}else{		
+		PLAYER_NUM = _playerNum;
+		Player = new CPlayer[PLAYER_NUM];
+		for (int i=0; i<PLAYER_NUM; i++){
+			Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
+		}
+		va_end(args);
+	}
+}
+
 void CBattle::SetEnemy(const int _enemyNum, ...){
 	va_list args;
 	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
 	
 	if (_enemyNum<=0){
 		ErrorDx("Error->arg[enemyNum] should >=1: enemyNum=%d", __FILE__, __LINE__, _enemyNum);
-	}else{
-		
+	}else{		
 		ENEMY_NUM = _enemyNum;
-
 		Enemy = new CEnemy[ENEMY_NUM];
 		for (int i=0; i<ENEMY_NUM; i++){
-			Enemy[i] = CEnemy(EnemySpeciesManager.GetEnemySpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
+			Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
 		}
 		va_end(args);
 	}
@@ -107,14 +140,12 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 	//開始処理///////////////////////////////////////////////////
 		
 		//Player生成
-			PLAYER_NUM = min(3, MAX_PLAYER);
-			Player = new CPlayer[PLAYER_NUM];		
+			SetPlayer(3, "プレイヤーA", "プレイヤーB", "プレイヤーC");
 
 		//Enemy生成
-			//エネミー設定（テスト用）
-				DebugDx("SetEnemy_Start:%d", ENEMY_NUM);
-				SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
-				DebugDx("SetEnemy_FIN:%s", Enemy[0].GetName().c_str());
+			DebugDx("SetEnemy_Start:%d", ENEMY_NUM);
+			SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
+			DebugDx("SetEnemy_FIN:%s", Enemy[0].GetName().c_str());
 
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			//Actorはnewでバトルごとに生成
@@ -127,13 +158,13 @@ void CBattle::Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap*
 
 		//初期値設定
 			for (int i=0; i<PLAYER_NUM; i++){	//$雑なテスト用初期値設定
-				Player[i].ClearTrick();
-				Player[i].AddTrick(TrickManager.GetTrick("アタックマジックA"));
-				Player[i].AddTrick(TrickManager.GetTrick("アタックマジックB"));
-				Player[i].SetValue(5, 5, 1, 100);	
+				//Player[i].ClearTrick();
+				//Player[i].AddTrick(TrickManager.GetTrick("アタックマジックA"));
+				//Player[i].AddTrick(TrickManager.GetTrick("アタックマジックB"));
+				//Player[i].SetValue(5, 5, 1, 100);	
+				//Player[i].SetImg(PlayerImgBank[i]);
+				
 				Player[i].Init();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
-				Player[i].SetImg(PlayerImgBank[i]);
-
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
 			}
 			
