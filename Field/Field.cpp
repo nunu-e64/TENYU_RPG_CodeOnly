@@ -5,6 +5,7 @@
 ///ƒƒ“ƒo•Ï”‚É‚·‚é‚ÆƒoƒO‚é////////////////
 static CTextBox TextBox1;
 static CTextWrap TextWrap1;
+static CBattle Battle;
 ///////////////////////////////////////////
 
 
@@ -15,7 +16,7 @@ CField::~CField(){
 
 bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 	CHECK_TIME_START
-
+	
 		//”•Ï”‚Ì‰Šú‰»
 			NowMap=0;
 			GodX = GodY = 0;

@@ -30,10 +30,10 @@ public:
 
 	void Battle(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
 
-	enum{ACTOR_NUM = MAX_PLAYER + MAX_ENEMY};
-
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
+
+	int GetActorNum(){return ACTOR_NUM;}
 
 	//戦闘用
 		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);
@@ -54,6 +54,7 @@ public:
 	//ターゲット選択マーカー
 		class CTargetMarker{
 		public:
+			CTargetMarker(int* _actorNum){ActorNum_p = _actorNum;}
 			void Init(int _img){
 				Img = _img;
 				Visible = false;
@@ -73,11 +74,13 @@ public:
 			int Img;
 			bool EnemySide;	//敵側か味方側か
 			int Index;		//敵ごと味方ごとの通し番号
+			int const* ActorNum_p;
 		}TargetMarker;
 
 private:
 	//メンバ関数
 		int MainLoop();
+		void Finish();
 	
 	//メンバ変数
 		//所持インスタンスとポインタ
@@ -93,9 +96,14 @@ private:
 
 		
 		//Actors
-			CPlayer Player[MAX_PLAYER];
-			CEnemy Enemy[MAX_ENEMY];
-			CActor* Actor[ACTOR_NUM];
+			//CPlayer Player[MAX_PLAYER];	//消す
+			//CEnemy Enemy[MAX_ENEMY];///消す
+
+			CPlayer* Player;
+			CEnemy* Enemy;
+			CActor** Actor;
+			int ACTOR_NUM;
+			int PLAYER_NUM;
 			int ENEMY_NUM;
 			//vector<CEnemy>
 

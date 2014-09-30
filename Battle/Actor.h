@@ -12,11 +12,14 @@ class CCmdList;
 
 class CSpecies{
 public:
-	CSpecies(){}
+	CSpecies(){
+		Name="";
+		Img=Atk=Def=Spd=-1;
+		MaxHp = 1;
+	}
 	~CSpecies(){}
 
 	std::string GetName(){return Name;}
-
 
 protected:
 	std::string Name;

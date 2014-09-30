@@ -9,6 +9,8 @@
 
 class CPlayer : public CActor{
 public:
+	CPlayer(){Mc=0;}
+	void SetValue(int _atk, int _def, int _spd, int _maxhp);
 	void Init();
 	void Draw(int dx=0, int dy=0);
 
@@ -18,7 +20,7 @@ private:
 		bool Action();
 
 	//ƒƒ“ƒo•Ï”
-		int Mc;
+		int Mc;	//MagicCount?
 
 		CBattleMenu BattleMenu;
 

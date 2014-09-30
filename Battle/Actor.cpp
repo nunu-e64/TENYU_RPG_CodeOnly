@@ -6,6 +6,7 @@
 
 
 
+
 void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank){
 	ActorIndex = _index;
 	Index = ((_index<MAX_PLAYER)? _index: _index-MAX_PLAYER);
@@ -14,17 +15,10 @@ void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::
 	Img_hpbar = (*_imgbank)[CBattle::HP_BAR];
 	Img_timebar[0] = (*_imgbank)[CBattle::TIME_BAR1];
 	Img_timebar[1] = (*_imgbank)[CBattle::TIME_BAR2];
-}
 
-void CActor::SetValue(int _atk, int _def, int _spd, int _maxhp){
 	Alive = Visible = true;
-
-	Atk = max(1,_atk);
-	Def = max(1,_def);
-	Spd = max(1,_spd);
-
-	SpdPer = between(1.0, 100.0, (double)_spd/100);	//$相対値から絶対値への変換
-	Hp = OldHp = MaxHp = _maxhp;
+	SpdPer = between(1.0, 100.0, (double)Spd/100);	//$相対値から絶対値への変換
+	Hp = OldHp = MaxHp;
 
 	TimeGauge = 0;//rand()%100;	//ランダムでいいの？$
 	Accident = NULL;

@@ -17,20 +17,30 @@ bool CEnemySpeciesManager::CreateEnemySpecies(const char* _name, int _maxhp, int
 	return true;
 }
 
-bool CEnemySpeciesManager::SetTrickList(){
+bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
+	EnemyBank[_name].TrickList = _trickList;
 
 	return true;
-
 };
+
+bool CEnemySpeciesManager::SetImg(const char* _name, int _img){
+	EnemyBank[_name].Img = _img;
+
+	return true;
+};
+
+
+
+
 
 CEnemySpecies* CEnemySpeciesManager::GetEnemySpecies(const char* _name){
 
 	CEnemySpecies* tmp = &EnemyBank[_name];
 
-	if (tmp->GetName().compare(_name)){
+	if (tmp->GetName()==_name){
 		return tmp;
 	}else{
-		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
+		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, tmp->GetName().c_str());//_name);
 		return NULL;
 	}
 

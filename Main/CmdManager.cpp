@@ -207,7 +207,7 @@ finish:
 	delete [] arg;
 	return true;
 }
-bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CEnemySpeciesManager _enemySpeciesManager){
+bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CEnemySpeciesManager _enemySpeciesManager, CTrickManager _trickManager){
 	int argnum=0;	char** arg;
 		
 	if (strlen(_command)==0){
@@ -225,9 +225,27 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CE
 				goto finish;
 			}
 		}
-
 		_enemySpeciesManager.CreateEnemySpecies(arg[0], value[0], value[1], value[2], value[3]);
 
+//@EnemyTrick_Set
+	}else if (mystrcmp(_command,"@EnemyTrick_Set")){		
+		argnum = 10;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@EnemyTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
+		
+		}else if(arg[1]!=NULL){
+			
+			std::vector <trick_tag const*>trickList;
+			trick_tag const* tmpTrick;
+			for (int i=1; arg[i]!=NULL && i<argnum; i++){
+				if ((tmpTrick = _trickManager.GetTrick(arg[i])) != NULL){
+					trickList.push_back(tmpTrick);
+				}				
+			}
+			_enemySpeciesManager.SetTrickList(arg[0], trickList);
+
+		}
 
 //コマンド不一致
 	}else{
@@ -996,7 +1014,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 
 		int actorindex = -1;
 		if (!mystrtol(arg[0], &actorindex)) ErrorDx("Error->@Target_Decode->Check type arg[index]->%s", __FILE__, __LINE__, arg[0]);
-		if (actorindex<0 || actorindex>_battle->ACTOR_NUM){
+		if (actorindex<0 || actorindex>_battle->GetActorNum()){
 			ErrorDx("Error->@Target_Decide-> 0<=arg[actorindex]<ACTOR_NUM :%d", actorindex);
 			goto finish;
 		}
@@ -1012,14 +1030,14 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 
 		int attacker_actorindex = -1;
 		if (!mystrtol(arg[0], &attacker_actorindex)) ErrorDx("Error->@Damage->Check type arg[attacker_actorindex]->%s", __FILE__, __LINE__, arg[0]);
-		if (attacker_actorindex<0 || attacker_actorindex>_battle->ACTOR_NUM){
+		if (attacker_actorindex<0 || attacker_actorindex>_battle->GetActorNum()){
 			ErrorDx("Error->@Damage-> 0<=arg[attacker_actorindex]<ACTOR_NUM :%d", attacker_actorindex);
 			goto finish;
 		}
 
 		int target_actorindex = -1;
 		if (!mystrtol(arg[1], &target_actorindex)) ErrorDx("Error->@Damage->Check type arg[target_actorindex]->%s", __FILE__, __LINE__, arg[1]);
-		if (target_actorindex<0 || target_actorindex>_battle->ACTOR_NUM){
+		if (target_actorindex<0 || target_actorindex>_battle->GetActorNum()){
 			ErrorDx("Error->@Damage-> 0<=arg[target_actorindex]<ACTOR_NUM :%d", target_actorindex);
 			goto finish;
 		}

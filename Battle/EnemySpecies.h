@@ -7,6 +7,8 @@
 
 
 class CEnemySpecies : public CSpecies{
+	friend class CEnemySpeciesManager;
+
 public:
 	CEnemySpecies();
 	~CEnemySpecies();

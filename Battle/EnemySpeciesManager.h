@@ -13,7 +13,8 @@ public:
 	CEnemySpeciesManager(void);
 
 	bool CreateEnemySpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd);
-	bool SetTrickList();
+	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
+	bool SetImg(const char* _name, int _img);
 
 	CEnemySpecies* GetEnemySpecies(const char* _name);
 

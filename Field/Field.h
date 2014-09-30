@@ -81,12 +81,12 @@ private:
 		///‚±‚Á‚¿‚ÉˆÚ‚·‚ÆField.Init‚Å’â~‚·‚éŒ´ˆö•s–¾14/06/10//////////$	DxLib‚Ì‰Šú‰»‚Æ‚ÌŠÖŒW‚©‚È‚ 
 		//CTextBox  TextBox1;
 		//CTextWrap TextWrap1;
+		//CBattle Battle;	//140930
 		///////////////////////////////////////////////////////
 		CFieldCmdManager FieldCmdManager;
 		CFirstSetCmdManager FirstSetCmdManager;
 		CCmdList CmdList;
 		CEveManager EveManager;
-		CBattle Battle;
 
 };
 
