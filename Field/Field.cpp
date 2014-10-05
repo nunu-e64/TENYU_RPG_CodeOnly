@@ -30,6 +30,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			ImgBackGround = NULL;
 			TextAutoPlaySpeed = 1000;
 
+
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);
 			TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, TextAutoPlaySpeed);  
@@ -189,11 +190,12 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				}else if (CheckHitKeyDown(KEY_INPUT_P)){
 					CmdList.Add("@AutoPlay_Set(true)");
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
-					int result;
-					Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
-					if (result==WIN) TextBox->AddStock("勝利");
-					if (result==LOSE) TextBox->AddStock("敗北");
-					TextBox->NextPage(&CmdList, &FlagSet);
+					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
+					//int result;
+					//Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
+					//if (result==WIN) TextBox->AddStock("勝利");
+					//if (result==LOSE) TextBox->AddStock("敗北");
+					//TextBox->NextPage(&CmdList, &FlagSet);
 				}
 
 
@@ -203,7 +205,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 		CHECK_TIME_END("Main_Walk")	
 
 		////デバッグの時にはプレイヤー座標をタイトルバーに表示////////////////////////////////////////
-			#ifdef DEBUG_MODE
+			#ifndef PRODUCT_MODE
 				SetTitle("Pos_%d:%d Data_%d:%d", X, Y, Map.GetMapData(NowMap, X, Y, 0),Map.GetMapData(NowMap, X, Y, 1));
 			#endif
 
@@ -326,6 +328,15 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 	return false;
 }
 
+void CField::Jump(){
+	Dy=-5;	
+	for(int i=0; i<5; i++){
+		Draw(true, true);
+	}
+	Dy=0;
+	Draw(true, true);
+}
+
 void CField::SetPosition(int _mapnum, int _x, int _y, bool _d){
 	if (_mapnum>=0){
 		MAP_MAX_CHECK(_mapnum,);	
@@ -409,13 +420,16 @@ reset:
 		return;
 }
 
-void CField::Jump(){
-	Dy=-5;	
-	for(int i=0; i<5; i++){
-		Draw(true, true);
-	}
-	Dy=0;
-	Draw(true, true);
+void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){
+	int result;
+	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
+	Battle.SetPlayer();
+	Battle.SetEnemy(_enemyList);
+	Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
+	
+	//(仮)/////////////////
+		if (result==WIN) TextBox->AddStock("勝利");
+		if (result==LOSE) TextBox->AddStock("敗北");
 }
 
 

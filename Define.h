@@ -6,6 +6,9 @@
 //#define PRODUCT_MODE  //製品版
 	#ifdef PRODUCT_MODE
 		#define WARNINGDX_DISABLE	//マクロの有効化/無効化
+		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
+		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化
+		#define MEMORY_CHECK_DISABLE //マクロの有効化/無効化
 	#endif
 
 #define DEBUG_MODE	//デバッグ版

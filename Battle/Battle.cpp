@@ -73,20 +73,36 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
-				
+		
 
 	//ターゲット選択マーカー初期化
 		TargetMarker.Init(LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
 	
+	//仮///////
+		PlayerSpeciesManager.SetBattleMember(3);
+
+
 	SetTransColor(0, 0, 0);	//透過色指定
-
 }
 
-void CBattle::SetBackGround(const int _img){
-	Img_BattleBackGround = _img;
+void CBattle::SetBackGround(const char* _pickey){
+	Img_BattleBackGround = BImgBank.GetImg(_pickey);
 }
 
+void CBattle::SetPlayer(){
+	PLAYER_NUM = PlayerSpeciesManager.BattleMember.size();
+	if (PLAYER_NUM==0){
+		ErrorDx("Error->Battle::SetPlayer->PLAYER_NUM=0.  SetPartyBattleMember!", __FILE__, __LINE__);
+		return;
+	}
+
+	Player = new CPlayer[PLAYER_NUM];
+	for (int i=0; i<PLAYER_NUM; i++){
+		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(PlayerSpeciesManager.BattleMember[i].c_str()));
+	}
+}
 void CBattle::SetPlayer(const int _playerNum, ...){
+	PLAYER_NUM=0;
 	va_list args;
 	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
 	
@@ -108,29 +124,36 @@ void CBattle::SetEnemy(const int _enemyNum, ...){
 	
 	if (_enemyNum<=0){
 		ErrorDx("Error->arg[enemyNum] should >=1: enemyNum=%d", __FILE__, __LINE__, _enemyNum);
-	}else{		
-		ENEMY_NUM = _enemyNum;
-		Enemy = new CEnemy[ENEMY_NUM];
-		for (int i=0; i<ENEMY_NUM; i++){
-			Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
+	}else{
+		std::vector<std::string> enemyList;
+		for (int i=0; i<_enemyNum; i++){
+			enemyList.push_back(va_arg(args, char*));		//target=1の時、一個目を返す（Not target=0）
 		}
 		va_end(args);
 	}
 }
+void CBattle::SetEnemy(std::vector<std::string> _enemyList){
+	if (_enemyList.size()==0) ErrorDx("Error->Battle::SetEnemy->enemyNum=0 :%d", __FILE__, __LINE__, _enemyList.size());
+
+	ENEMY_NUM = _enemyList.size();
+	Enemy = new CEnemy[ENEMY_NUM];
+	for (int i=0; i<ENEMY_NUM; i++){
+		Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str()));		//target=1の時、一個目を返す（Not target=0）
+	}
+}
+
 
 void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
 	
 		//背景設定
-			SetBackGround(BImgBank.GetImg("bg_01"));
+			//SetBackGround("bg_01");
 
 		//Player生成
-			SetPlayer(3, "プレイヤーA", "プレイヤーB", "プレイヤーC");
+			//SetPlayer(3, "プレイヤーA", "プレイヤーB", "プレイヤーC");
 
 		//Enemy生成
-			DebugDx("SetEnemy_Start:%d", ENEMY_NUM);
-			SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
-			DebugDx("SetEnemy_FIN:%s", Enemy[0].GetName().c_str());
+			//SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
 
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			//Actorはnewでバトルごとに生成
@@ -163,11 +186,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 		B_CmdManager.Init(_map_p);
 
 
-		TextBox->AddStock("戦闘開始！");/*
-		TextBox->AddStock("@EventWrap(wrap_sample, [戦闘])");
-		TextBox->AddStock("@Anten(1000)");
-		TextBox->AddStock("@Meiten(2000)");
-		TextBox->AddStock("@Window_Shake(30,5)");*/
+		TextBox->AddStock("戦闘開始！");
 		TextBox->NextPage(&B_CmdList, FlagSet_p);
 
 
@@ -222,6 +241,10 @@ void CBattle::BattleFinish(){
 	delete [] Actor;
 	delete [] Player;
 	delete [] Enemy;
+
+	ACTOR_NUM = 0;
+	ENEMY_NUM = 0;
+	PLAYER_NUM = 0;
 
 }
 

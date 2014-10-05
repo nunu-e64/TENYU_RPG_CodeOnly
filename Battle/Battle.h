@@ -18,6 +18,8 @@
 
 #include "../Main/WorldManager.h"
 
+#include <vector>
+#include <string>
 #include <queue>
 #include <map>
 
@@ -34,9 +36,12 @@ public:
 
 	int GetActorNum(){return ACTOR_NUM;}
 
-	void SetBackGround(const int _img);
+	void SetBackGround(const char* _pickey);
+	void SetPlayer();
 	void SetPlayer(const int _playerNum, ...);
 	void SetEnemy(const int _enemyNum, ...);
+	void SetEnemy(std::vector<std::string> _enemyList);
+	
 
 	//êÌì¨óp
 		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);

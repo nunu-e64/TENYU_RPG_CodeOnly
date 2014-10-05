@@ -27,6 +27,7 @@ public:
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 	
 	bool Walk(int _dir, int _walkspeed=0, bool _eventwalk=false, bool _walk=true, int _fade=0);
+	void Jump();
 
 	inline int GetNowMap(){return NowMap;}
 	inline void SetNowMap(int _mapnum) {	if(_mapnum<MAP_MAX) NowMap = _mapnum;}
@@ -38,7 +39,7 @@ public:
 	void SetMyAlpha(unsigned char _alpha){Alpha = _alpha;}
 	void SetMyEffect(int _effectname, int _effectnum[]);
 	
-	void Jump();
+	void BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList);
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
 	////////////////////////////////////////////
@@ -74,6 +75,7 @@ private:
 		playdata_tag *PlayData_p;	//Main.cppからセーブデータをすべてポインタでもらっておく
 
 		int TextAutoPlaySpeed;
+
 
 	//所持インスタンス
 		CMap Map;

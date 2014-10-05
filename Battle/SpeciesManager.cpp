@@ -15,6 +15,29 @@ bool CPlayerSpeciesManager::SetTrickList(const char* _name, std::vector <trick_t
 	return true;
 }
 
+bool CPlayerSpeciesManager::SetBattleMember(int _index, const char* _name){
+	if (_index<0){
+		ErrorDx("Error->SetBattleMember->size error:%d", _index);
+		return false;
+	}else if (_index>=(int)(BattleMember.size())){
+		BattleMember.push_back(_name);
+	}else{
+		BattleMember[_index] = _name;
+	}
+	return true;
+}
+bool CPlayerSpeciesManager::SetBattleMember(int _num){
+	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
+	BattleMember.clear();
+	int i = 0;
+	while( it != PlayerBank.end() && i<_num){
+		BattleMember.push_back((*it).second.GetName());
+		++it;
+		++i;
+	}
+	return true;
+}
+
 CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
 	CPlayerSpecies* tmp = &PlayerBank[_name];
 

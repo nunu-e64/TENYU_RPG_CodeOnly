@@ -341,6 +341,24 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		ErrorDx("Error->strlen(_command)==0->%s", __FILE__, __LINE__, _command);
 		return true;
 
+
+//@Battle
+	}else if (mystrcmp(_command, "@Battle",'l')){
+		argnum = 7;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
+
+		if (arg[0]==NULL || arg[1]==NULL){
+			ErrorDx("Error->@Battle->arg[pic_bg] or arg[enemy00] == NULL (do nothing)");
+			goto finish;
+		}
+
+		std::vector <std::string> enemyList;
+		for (int i=1; i<argnum; i++){
+			if (arg[i]!=NULL) enemyList.push_back(arg[i]);
+		}
+
+		_field->BattleStart(arg[0], enemyList);
+
+
 //@Dir_Set
 	}else if (mystrcmp(_command, "@Dir_Set",'l')){
 		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
@@ -719,7 +737,6 @@ finish:
 	delete [] arg;
 	return true;
 }
-
 
 bool CCmdManager::WindowCmdSolve(const char* _command, char* _argument, CWorldManager* _worldmanager, CMap* _map, CTextBox* _textbox){
 	int argnum=0;	char** arg;
