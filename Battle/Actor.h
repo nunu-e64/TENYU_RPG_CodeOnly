@@ -13,7 +13,7 @@ class CTextBox;		//‘O•ûéŒ¾
 class CCmdList;
 class CBImgBank;
 
-class CActor : public CSpecies{
+class CActor : public virtual CSpecies{
 public:
 	CActor(const CSpecies &_species) : CSpecies(_species){};
 	CActor(){}	//Actor = new CActor* [MAX_PLAYER+MAX_ENEMY];}

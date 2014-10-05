@@ -11,7 +11,7 @@ class CEnemySpecies;
 //ゆくゆくはCActorとCEnemySpeciesから多重継承する
 //戦闘情報はActorが、取得ゴールドや経験値情報はEnemySpeciesが持っているため。
 
-class CEnemy : public CActor{
+class CEnemy : public CActor, public CEnemySpecies{
 public:
 	
 	CEnemy(){};

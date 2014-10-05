@@ -7,7 +7,7 @@
 #include "../Menu.h"
 
 
-class CPlayer : public CActor{
+class CPlayer : public CActor, public CPlayerSpecies{
 public:
 	CPlayer(){Mc=0;}
 	CPlayer(const CSpecies& _species) : CActor(_species){Mc=0;};

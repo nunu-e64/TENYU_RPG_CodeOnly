@@ -31,7 +31,7 @@ protected:
 };
 
 
-class CPlayerSpecies : public CSpecies{
+class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
 
 public:
@@ -39,7 +39,7 @@ public:
 	~CPlayerSpecies(){};
 };
 
-class CEnemySpecies : public CSpecies{
+class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
 
 public:

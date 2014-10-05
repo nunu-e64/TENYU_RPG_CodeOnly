@@ -30,6 +30,4 @@ int CBImgBank::GetImg(const char* _key){
 		ErrorDx("BImgBank->GetImg->Not Found:%s", _key);		
 		return tmp;
 	}
-
-
 }
