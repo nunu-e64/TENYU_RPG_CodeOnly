@@ -6,14 +6,11 @@
 
 
 
-void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank){
+void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist){
 	ActorIndex = _index;
 	Index = ((_index<MAX_PLAYER)? _index: _index-MAX_PLAYER);
 	B_TextBox_pp = _textbox;
 	CmdList = _cmdlist;
-	Img_hpbar = (*_imgbank)[CBattle::HP_BAR];
-	Img_timebar[0] = (*_imgbank)[CBattle::TIME_BAR1];
-	Img_timebar[1] = (*_imgbank)[CBattle::TIME_BAR2];
 
 	Alive = Visible = true;
 	SpdPer = between(1.0, 100.0, (double)Spd/100);	//$‘Š‘Î’l‚©‚çâ‘Î’l‚Ö‚Ì•ÏŠ·
@@ -41,6 +38,13 @@ void CActor::SetRect(int _cx, int _cy){
 void CActor::SetImg(int _img){
 	Img = _img;
 	SetRect((int)(Rect.Center().x), (int)(Rect.Center().y));
+}
+
+bool CActor::SetSystemImg(CBImgBank* _bimgbank){
+	Img_hpbar		= _bimgbank->GetImg("HP_BAR");
+	Img_timebar[0]	= _bimgbank->GetImg("TIME_BAR1");
+	Img_timebar[1]	= _bimgbank->GetImg("TIME_BAR2");
+	return true;
 }
 
 void CActor::AddTrick(trick_tag const* _trick){

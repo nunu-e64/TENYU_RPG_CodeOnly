@@ -7,13 +7,13 @@
 #include <string>
 #include "Species.h"
 
+
 class CPlayerSpeciesManager{
 public:
 	CPlayerSpeciesManager(){};
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
-	bool SetImg(const char* _name, int _img);
 
 	CPlayerSpecies GetSpecies(const char* _name);
 	
@@ -29,7 +29,6 @@ public:
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
-	bool SetImg(const char* _name, int _img);
 
 	CEnemySpecies GetSpecies(const char* _name);
 

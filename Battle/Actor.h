@@ -11,7 +11,7 @@
 
 class CTextBox;		//‘O•ûéŒ¾
 class CCmdList;
-
+class CBImgBank;
 
 class CActor : public CSpecies{
 public:
@@ -20,9 +20,10 @@ public:
 	~CActor(){}	//delete [] Actor;}
 
 	//‰Šúİ’èŠÖ˜A
-		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank);
+		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist);
 		void SetRect(int _cx, int _cy);
 		void SetImg(int _img);
+		bool SetSystemImg(CBImgBank* _bimgbank);
 		void AddTrick(trick_tag const* _trick);
 		void ClearTrick(){TrickList.clear();}
 

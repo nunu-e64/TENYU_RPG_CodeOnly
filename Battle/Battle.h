@@ -34,6 +34,7 @@ public:
 
 	int GetActorNum(){return ACTOR_NUM;}
 
+	void SetBackGround(const int _img);
 	void SetPlayer(const int _playerNum, ...);
 	void SetEnemy(const int _enemyNum, ...);
 
@@ -112,9 +113,6 @@ private:
 
 		//グラフィック
 			int Img_BattleBackGround;	//戦闘背景
-			std::map <int, int> ImgBank;
-			std::vector <int> PlayerImgBank;
-			std::vector <int> EnemyImgBank;
 
 		//重要な所持インスタンス
 			CBImgBank BImgBank;

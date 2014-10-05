@@ -15,11 +15,6 @@ bool CPlayerSpeciesManager::SetTrickList(const char* _name, std::vector <trick_t
 	return true;
 }
 
-bool CPlayerSpeciesManager::SetImg(const char* _name, int _img){
-	PlayerBank[_name].Img = _img;
-	return true;
-}
-
 CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
 	CPlayerSpecies* tmp = &PlayerBank[_name];
 
@@ -42,11 +37,6 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 
 bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
 	EnemyBank[_name].TrickList = _trickList;
-	return true;
-}
-
-bool CEnemySpeciesManager::SetImg(const char* _name, int _img){
-	EnemyBank[_name].Img = _img;
 	return true;
 }
 

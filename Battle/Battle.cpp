@@ -18,16 +18,34 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	CCmdList bfsCmdList;
 
 	TrickManager.Clear();
-
+	
+	SetTransColor(255, 0, 255);	//透過色指定	//最終的には統一しないとな…$
+	
 	//Load.cppを通して.rpgの読み込み/////////////////////$
 		bfsCmdList.Add("@NormalTrick_Create(アタックA, 110, 3)");
 		bfsCmdList.Add("@NormalTrick_Create(アタックB, 8, 2)");
-
+		
+		//画像読み込み
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/cursor.png, MENU_CURSOR)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/timebar1.png, TIME_BAR1)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/timebar2.png, TIME_BAR2)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/hpbar.png, HP_BAR)");
+			
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy01.bmp, pic_enemy01)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy02.bmp, pic_enemy02)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy03.bmp, pic_enemy03)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player01)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player02)");
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player03)");
+			
+			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/background04.bmp, bg_01)");
+			//Img_BattleBackGround = LoadGraph("tenyu_data/pic/sys/battle/background (4).bmp", true);		//いずれはコマンドから読み込む
+		
 		//PlayerSpeciesの生成（テスト用）
-			bfsCmdList.Add("@Player_Create(プレイヤーA, 100, 5, 5, 1))");
-			bfsCmdList.Add("@Player_Create(プレイヤーB, 100, 5, 5, 1))");
-			bfsCmdList.Add("@Player_Create(プレイヤーC, 100, 5, 5, 1))");
-			bfsCmdList.Add("@Player_Create(プレイヤーD, 100, 5, 5, 1))");
+			bfsCmdList.Add("@Player_Create(プレイヤーA, 100, 5, 5, 1, pic_player01)");
+			bfsCmdList.Add("@Player_Create(プレイヤーB, 100, 5, 5, 1, pic_player02)");
+			bfsCmdList.Add("@Player_Create(プレイヤーC, 100, 5, 5, 1, pic_player03)");
+			bfsCmdList.Add("@Player_Create(プレイヤーD, 100, 5, 5, 1, pic_player04)");
 	
 		//PlayerSpeciesの技リストセット（テスト用）
 			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーA, アタックA, アタックB)");
@@ -36,17 +54,17 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーD, アタックA, アタックB)");
 
 		//EnemySpeciesの生成（テスト用）
-			bfsCmdList.Add("@Enemy_Create(エネミーA, 100, 5, 5, 1)");
-			bfsCmdList.Add("@Enemy_Create(エネミーB, 100, 5, 5, 1)");
-			bfsCmdList.Add("@Enemy_Create(エネミーC, 100, 5, 5, 1)");
-			bfsCmdList.Add("@Enemy_Create(エネミーD, 100, 5, 5, 1)");
+			bfsCmdList.Add("@Enemy_Create(エネミーA, 100, 5, 5, 1 ,pic_enemy01)");
+			bfsCmdList.Add("@Enemy_Create(エネミーB, 100, 5, 5, 1 ,pic_enemy02)");
+			bfsCmdList.Add("@Enemy_Create(エネミーC, 100, 5, 5, 1 ,pic_enemy03)");
+			bfsCmdList.Add("@Enemy_Create(エネミーD, 100, 5, 5, 1 ,pic_enemy04)");
 	
 		//EnemySpeciesの技リストセット（テスト用）
-			bfsCmdList.Add("@PlayerTrick_Set(エネミーA, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(エネミーB, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(エネミーC, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(エネミーD, アタックA, アタックB)");
-
+			bfsCmdList.Add("@EnemyTrick_Set(エネミーA, アタックA, アタックB)");
+			bfsCmdList.Add("@EnemyTrick_Set(エネミーB, アタックA, アタックB)");
+			bfsCmdList.Add("@EnemyTrick_Set(エネミーC, アタックA, アタックB)");
+			bfsCmdList.Add("@EnemyTrick_Set(エネミーD, アタックA, アタックB)");
+		
 		bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
 	/////////////////////////////////////////////////////
 
@@ -55,46 +73,17 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
-		
-	SetTransColor(255, 0, 255);	//透過色指定	//最終的には統一しないとな…$
-
-	//画像読み込み
-		ImgBank.clear();
-		PlayerImgBank.clear();
-		EnemyImgBank.clear();
-
-		Img_BattleBackGround = LoadGraph("tenyu_data/pic/sys/battle/background (4).bmp", true);		//いずれはコマンドから読み込む
-		ImgBank.insert( std::map<int, int>::value_type( MENU_CURSOR, LoadGraph("tenyu_data/pic/sys/battle/cursor.png",true)) );
-		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR1, LoadGraph("tenyu_data/pic/sys/battle/timebar1.png",true)) );
-		ImgBank.insert( std::map<int, int>::value_type( TIME_BAR2, LoadGraph("tenyu_data/pic/sys/battle/timebar2.png",true)) );
-		ImgBank.insert( std::map<int, int>::value_type( HP_BAR, LoadGraph("tenyu_data/pic/sys/battle/hpbar.png",true)) );
-
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy01.bmp",true));
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy02.bmp",true));
-		EnemyImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/enemy03.bmp",true));
-		
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
-		PlayerImgBank.push_back(LoadGraph("tenyu_data/pic/sys/battle/player.bmp",true));
-
+				
 
 	//ターゲット選択マーカー初期化
 		TargetMarker.Init(LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
 	
 	SetTransColor(0, 0, 0);	//透過色指定
 
+}
 
-	//PlayerSpeciesのImgセット（テスト用）
-		PlayerSpeciesManager.SetImg("プレイヤーA", PlayerImgBank[0]);
-		PlayerSpeciesManager.SetImg("プレイヤーB", PlayerImgBank[1]);
-		PlayerSpeciesManager.SetImg("プレイヤーC", PlayerImgBank[2]);
-		PlayerSpeciesManager.SetImg("プレイヤーD", PlayerImgBank[3]);
-
-	//EnemySpeciesのImgセット（テスト用）
-		EnemySpeciesManager.SetImg("エネミーA", EnemyImgBank[0]);
-		EnemySpeciesManager.SetImg("エネミーB", EnemyImgBank[1]);
-		EnemySpeciesManager.SetImg("エネミーC", EnemyImgBank[2]);
-		EnemySpeciesManager.SetImg("エネミーD", EnemyImgBank[3]);
+void CBattle::SetBackGround(const int _img){
+	Img_BattleBackGround = _img;
 }
 
 void CBattle::SetPlayer(const int _playerNum, ...){
@@ -131,7 +120,10 @@ void CBattle::SetEnemy(const int _enemyNum, ...){
 
 void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
-		
+	
+		//背景設定
+			SetBackGround(BImgBank.GetImg("bg_01"));
+
 		//Player生成
 			SetPlayer(3, "プレイヤーA", "プレイヤーB", "プレイヤーC");
 
@@ -146,7 +138,8 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 			Actor = new CActor*[ACTOR_NUM];
 			for (int i=0; i<ACTOR_NUM; i++){
 				Actor[i] = ((i<MAX_PLAYER)? (CActor*)&Player[i]: (CActor*)&Enemy[i-MAX_PLAYER]);
-				Actor[i]->FirstSet(i, &TextBox, &B_CmdList, &ImgBank);
+				Actor[i]->FirstSet(i, &TextBox, &B_CmdList);
+				Actor[i]->SetSystemImg(&BImgBank);
 			}
 
 		//初期値設定

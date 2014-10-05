@@ -9,16 +9,17 @@ void CBImgBank::LoadPic(const char *_path, const char _key[32], const char _kind
 bool CBImgBank::Add(const char* _key, const int _img){
 	
 	if (mystrcmp(_key, "NULL")){
-		ErrorDx("Error->CBImgManager::LoadPic->You can't use \"NULL\" for PicKey(cancel):%s", __FILE__, __LINE__, _key);
+		ErrorDx("Error->BImgBank::LoadPic->You can't use \"NULL\" for PicKey(cancel):%s", __FILE__, __LINE__, _key);
 		return false;
 	}
 	
 	if (ImgBank[_key]!=0){
-		ErrorDx("Error->CBImgManager->AlreadyResiteredImageKey (cancel):%s", __FILE__, __LINE__, _key);
+		ErrorDx("Error->BImgBank->AlreadyResiteredImageKey (cancel):%s", __FILE__, __LINE__, _key);
 		return false;
 	}
 
-	ImgBank.insert( std::map<std::string, int>::value_type( _key, _img) );
+	ImgBank[_key] = _img;		//上記重複チェックif文で自動insertしてしまっているため、ここでinsertすると内部エラーが発生し何も起こらなくなってしまう
+	return true;
 }
 
 int CBImgBank::GetImg(const char* _key){
@@ -26,7 +27,9 @@ int CBImgBank::GetImg(const char* _key){
 	if (tmp != 0){
 		return tmp;
 	}else{
-		ErrorDx("BImgManager->GetImg->Not Found:%s", _key);
-		return NULL;
+		ErrorDx("BImgBank->GetImg->Not Found:%s", _key);		
+		return tmp;
 	}
+
+
 }
