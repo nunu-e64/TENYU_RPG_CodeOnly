@@ -30,7 +30,7 @@ protected:
 	bool WindowCmdSolve(const char* _command, char* _argument, CWorldManager* _worldmanager, CMap* _map, CTextBox* _textbox);
 	bool TextCmdSolve  (const char* _command, char* _argument, CWorldManager* _worldmanager, CTextBox* _textbox);
 
-	bool BattleSystemCmdSolve(const char* _command, char* _argument, CPlayerSpeciesManager _playerSpeciesManager, CEnemySpeciesManager _enemySpeciesManager, CTrickManager _trickManager);
+	bool BattleSystemCmdSolve(const char* _command, char* _argument, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 	bool BattleCmdSolve(const char* _command, char* _argument, CBattle* _battle);
 
 };
@@ -53,8 +53,13 @@ public:
 
 private:
 	CMap* Map_p;				//Fieldから受け継ぐ
-
 };
+
+class CBattleFirstSetCmdManager : public CCmdManager{
+public:
+	void Main(CCmdList* _cmdlist, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
+};
+
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////

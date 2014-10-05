@@ -13,8 +13,44 @@ CBattle::CBattle() : TargetMarker(&ACTOR_NUM){
 }
 
 void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
+
+	CBattleFirstSetCmdManager  bfsCmdManager;
+	CCmdList bfsCmdList;
+
+	TrickManager.Clear();
+
+	//Load.cppを通して.rpgの読み込み/////////////////////$
+		bfsCmdList.Add("@NormalTrick_Create(アタックA, 110, 3)");
+		bfsCmdList.Add("@NormalTrick_Create(アタックB, 8, 2)");
+
+		//PlayerSpeciesの生成（テスト用）
+			bfsCmdList.Add("@Player_Create(プレイヤーA, 100, 5, 5, 1))");
+			bfsCmdList.Add("@Player_Create(プレイヤーB, 100, 5, 5, 1))");
+			bfsCmdList.Add("@Player_Create(プレイヤーC, 100, 5, 5, 1))");
+			bfsCmdList.Add("@Player_Create(プレイヤーD, 100, 5, 5, 1))");
+	
+		//PlayerSpeciesの技リストセット（テスト用）
+			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーA, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーB, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーC, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーD, アタックA, アタックB)");
+
+		//EnemySpeciesの生成（テスト用）
+			bfsCmdList.Add("@Enemy_Create(エネミーA, 100, 5, 5, 1)");
+			bfsCmdList.Add("@Enemy_Create(エネミーB, 100, 5, 5, 1)");
+			bfsCmdList.Add("@Enemy_Create(エネミーC, 100, 5, 5, 1)");
+			bfsCmdList.Add("@Enemy_Create(エネミーD, 100, 5, 5, 1)");
+	
+		//EnemySpeciesの技リストセット（テスト用）
+			bfsCmdList.Add("@PlayerTrick_Set(エネミーA, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(エネミーB, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(エネミーC, アタックA, アタックB)");
+			bfsCmdList.Add("@PlayerTrick_Set(エネミーD, アタックA, アタックB)");
+
+		bfsCmdManager.Main(&bfsCmdList, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
+	/////////////////////////////////////////////////////
+
 	//Field.Initにいずれ移動すると思われる
-		TrickManager.Clear();
 
 		TrickManager.Add("アタックマジックA", 110, 3, trick_tag::targetType_tag::SINGLE, 0);
 		TrickManager.Add("アタックマジックB", 8, 2, trick_tag::targetType_tag::SINGLE, 0);
@@ -66,41 +102,12 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	
 	SetTransColor(0, 0, 0);	//透過色指定
 
-	//PlayerSpeciesの生成（テスト用）
-		PlayerSpeciesManager.CreateSpecies("プレイヤーA", 100, 5, 5, 1);
-		PlayerSpeciesManager.CreateSpecies("プレイヤーB", 100, 5, 5, 1);
-		PlayerSpeciesManager.CreateSpecies("プレイヤーC", 100, 5, 5, 1);
-		PlayerSpeciesManager.CreateSpecies("プレイヤーD", 100, 5, 5, 1);
-	
-	//PlayerSpeciesの技リストセット（テスト用）
-		std::vector <trick_tag const*>p_trickList;
-		p_trickList.push_back(TrickManager.GetTrick("アタックマジックA"));
-		p_trickList.push_back(TrickManager.GetTrick("アタックマジックB"));
-		PlayerSpeciesManager.SetTrickList("プレイヤーA", p_trickList);
-		PlayerSpeciesManager.SetTrickList("プレイヤーB", p_trickList);
-		PlayerSpeciesManager.SetTrickList("プレイヤーC", p_trickList);
-		PlayerSpeciesManager.SetTrickList("プレイヤーD", p_trickList);
 
 	//PlayerSpeciesのImgセット（テスト用）
 		PlayerSpeciesManager.SetImg("プレイヤーA", PlayerImgBank[0]);
 		PlayerSpeciesManager.SetImg("プレイヤーB", PlayerImgBank[1]);
 		PlayerSpeciesManager.SetImg("プレイヤーC", PlayerImgBank[2]);
 		PlayerSpeciesManager.SetImg("プレイヤーD", PlayerImgBank[3]);
-
-	//EnemySpeciesの生成（テスト用）
-		EnemySpeciesManager.CreateSpecies("エネミーA", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateSpecies("エネミーB", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateSpecies("エネミーC", 100, 5, 5, 1);
-		EnemySpeciesManager.CreateSpecies("エネミーD", 100, 5, 5, 1);
-	
-	//EnemySpeciesの技リストセット（テスト用）
-		std::vector <trick_tag const*>e_trickList;
-		e_trickList.push_back(TrickManager.GetTrick("アタックマジックA"));
-		e_trickList.push_back(TrickManager.GetTrick("アタックマジックB"));
-		EnemySpeciesManager.SetTrickList("エネミーA", e_trickList);
-		EnemySpeciesManager.SetTrickList("エネミーB", e_trickList);
-		EnemySpeciesManager.SetTrickList("エネミーC", e_trickList);
-		EnemySpeciesManager.SetTrickList("エネミーD", e_trickList);
 
 	//EnemySpeciesのImgセット（テスト用）
 		EnemySpeciesManager.SetImg("エネミーA", EnemyImgBank[0]);
