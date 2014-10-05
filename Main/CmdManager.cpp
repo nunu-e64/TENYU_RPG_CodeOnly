@@ -53,14 +53,14 @@ void CBattleCmdManager::Main(CCmdList* _cmdlist, CBattle* _battle, CTextBox* _te
 	}
 }
 
-void CBattleFirstSetCmdManager::Main(CCmdList* _cmdlist, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager){
+void CBattleFirstSetCmdManager::Main(CCmdList* _cmdlist, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager){
 	
 	char commandline[256];	//ÉRÉ}ÉìÉhçs
 	char command[256];	//@ÅõÅõ
 	char *argument;	//à¯êî
 
 	while (NextCommand(_cmdlist, commandline, command, argument)){
-		if (!BattleSystemCmdSolve(command, argument, _playerSpeciesManager, _enemySpeciesManager, _trickManager)){
+		if (!BattleSystemCmdSolve(command, argument, _bimgbank, _playerSpeciesManager, _enemySpeciesManager, _trickManager)){
 			WarningDx("Warning->CBattleFirstSetCmdManager->Unregisterd command->%s", command);
 		}
 	}
@@ -220,16 +220,23 @@ finish:
 	delete [] arg;
 	return true;
 }
-bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager){
+bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager){
 	int argnum=0;	char** arg;
 		
 	if (strlen(_command)==0){
 		ErrorDx("Error->strlen(_command)==0->%s", __FILE__, __LINE__, _command);
 		return true;
+		
+//@Load_Pic
+	}else if (mystrcmp(_command, "@Load_Pic")){
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
 
+		_bimgbank->Add(arg[1], LoadGraph(arg[0], true));
+		//_map->LoadPic(arg[0], arg[1], arg[2]);
+		
 //@Player_Create
-	}else if (mystrcmp(_command,"@Player_Create")){		
-		argnum = 5;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
+	}else if (mystrcmp(_command,"@Player_Create")){	
+		argnum = 6;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
 
 		int value[4];
 		for (int i=0; i<4; i++){
@@ -238,11 +245,11 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 				goto finish;
 			}
 		}
-		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3]);
+		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
 
 //@Enemy_Create
 	}else if (mystrcmp(_command,"@Enemy_Create")){		
-		argnum = 5;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
+		argnum = 6;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
 
 		int value[4];
 		for (int i=0; i<4; i++){
@@ -251,7 +258,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CP
 				goto finish;
 			}
 		}
-		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3]);
+		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){		

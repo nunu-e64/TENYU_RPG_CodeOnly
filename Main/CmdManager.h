@@ -10,6 +10,7 @@ class CEveManager;
 class CTextBox;
 
 class CBattle;
+class CBImgBank;
 class CPlayerSpeciesManager;
 class CEnemySpeciesManager;
 class CTrickManager;
@@ -30,7 +31,7 @@ protected:
 	bool WindowCmdSolve(const char* _command, char* _argument, CWorldManager* _worldmanager, CMap* _map, CTextBox* _textbox);
 	bool TextCmdSolve  (const char* _command, char* _argument, CWorldManager* _worldmanager, CTextBox* _textbox);
 
-	bool BattleSystemCmdSolve(const char* _command, char* _argument, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
+	bool BattleSystemCmdSolve(const char* _command, char* _argument, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 	bool BattleCmdSolve(const char* _command, char* _argument, CBattle* _battle);
 
 };
@@ -57,7 +58,7 @@ private:
 
 class CBattleFirstSetCmdManager : public CCmdManager{
 public:
-	void Main(CCmdList* _cmdlist, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
+	void Main(CCmdList* _cmdlist, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 };
 
 

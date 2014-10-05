@@ -3,6 +3,7 @@
 #define BATTLE_H							////
 ////////////////////////////////////////////////
 
+#include "BImgBank.h"
 #include "TrickManager.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -116,6 +117,7 @@ private:
 			std::vector <int> EnemyImgBank;
 
 		//重要な所持インスタンス
+			CBImgBank BImgBank;
 			CPlayerSpeciesManager PlayerSpeciesManager;
 			CEnemySpeciesManager EnemySpeciesManager;
 			CTrickManager TrickManager;

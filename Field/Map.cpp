@@ -103,7 +103,7 @@ void CMap::LoadPic(const char *_path, const char _key[32], const char _kind[32])
 		}
 
 	}else{
-		newimg.Img[0] = LoadGraph(_path);
+		newimg.Img[0] = LoadGraph(_path, true);
 		if (newimg.Img[0]==-1){
 			ErrorDx("FileLoadError->@Load_Pic->%s", __FILE__, __LINE__, _path);
 			return;

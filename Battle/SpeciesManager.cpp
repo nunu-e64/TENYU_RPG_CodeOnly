@@ -2,9 +2,10 @@
 #include "SpeciesManager.h"
 
 
-bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd){
+bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
 	CPlayerSpecies newPlayer;
 	newPlayer.SetValue(_name, _maxhp, _atk, _def, _spd);
+	newPlayer.Img = _img;
 	PlayerBank.insert( std::map<std::string, CPlayerSpecies>::value_type( _name, newPlayer) );
 	return true;
 }
@@ -31,9 +32,10 @@ CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
 }
 
 //////////////////////////////////////////////////////////////////////////////
-bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd){
+bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
+	newEnemy.Img = _img;
 	EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
 	return true;
 }

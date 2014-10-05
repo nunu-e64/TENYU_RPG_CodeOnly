@@ -47,28 +47,9 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			bfsCmdList.Add("@PlayerTrick_Set(エネミーC, アタックA, アタックB)");
 			bfsCmdList.Add("@PlayerTrick_Set(エネミーD, アタックA, アタックB)");
 
-		bfsCmdManager.Main(&bfsCmdList, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
+		bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
 	/////////////////////////////////////////////////////
 
-	//Field.Initにいずれ移動すると思われる
-
-		TrickManager.Add("アタックマジックA", 110, 3, trick_tag::targetType_tag::SINGLE, 0);
-		TrickManager.Add("アタックマジックB", 8, 2, trick_tag::targetType_tag::SINGLE, 0);
-
-		//trick_tag newtrick;
-		//{
-		//	strcpy_s(newtrick.Name, "アタックマジックA");
-		//	newtrick.Cost = 3;
-		//	newtrick.Power = 110;
-		//	newtrick.TargetType = newtrick.SINGLE;
-		//	TrickManager.Add(newtrick);
-		//}
-		//{	strcpy_s(newtrick.Name, "アタックマジックB");
-		//	newtrick.Cost = 2;
-		//	newtrick.Power = 8;
-		//	newtrick.TargetType = newtrick.SINGLE;
-		//	TrickManager.Add(newtrick);
-		//}
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった

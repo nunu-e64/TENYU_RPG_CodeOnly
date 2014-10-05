@@ -9,7 +9,7 @@
 void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist, std::map <int,int> *_imgbank){
 	ActorIndex = _index;
 	Index = ((_index<MAX_PLAYER)? _index: _index-MAX_PLAYER);
-	B_TextBox_pp = _textbox; 
+	B_TextBox_pp = _textbox;
 	CmdList = _cmdlist;
 	Img_hpbar = (*_imgbank)[CBattle::HP_BAR];
 	Img_timebar[0] = (*_imgbank)[CBattle::TIME_BAR1];
