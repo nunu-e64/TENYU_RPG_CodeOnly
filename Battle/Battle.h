@@ -28,7 +28,9 @@ class CBattle : public CWorldManager{
 public:
 
 	CBattle();
-	void Init();
+
+	bool Init();
+	void Term();
 	void BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 

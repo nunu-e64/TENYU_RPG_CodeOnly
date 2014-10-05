@@ -10,8 +10,10 @@ static CBattle Battle;
 
 
 CField::~CField(){
+		DebugDx("Field_Destruct");
 	Map.Init();
 	EveManager.Init();
+	Battle.Term();
 }
 
 bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
@@ -44,7 +46,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	
 
 		//CBattleの初期化
-			Battle.Init();
+			if (!(Battle.Init())) return false;
 			
 		//外部テキストのロード
 			CLoad SystemLoad;
@@ -191,11 +193,6 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					CmdList.Add("@AutoPlay_Set(true)");
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
-					//int result;
-					//Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//コマンド化を
-					//if (result==WIN) TextBox->AddStock("勝利");
-					//if (result==LOSE) TextBox->AddStock("敗北");
-					//TextBox->NextPage(&CmdList, &FlagSet);
 				}
 
 

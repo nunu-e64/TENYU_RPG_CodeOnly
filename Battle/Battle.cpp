@@ -2,6 +2,8 @@
 #include "Battle.h"
 #include "EnemyPlanManager.h"
 
+#include "../Field/Load.h"
+
 CBattle::CBattle() : TargetMarker(&ACTOR_NUM){
 	
 	ACTOR_NUM = 0;
@@ -9,65 +11,40 @@ CBattle::CBattle() : TargetMarker(&ACTOR_NUM){
 	ENEMY_NUM = 0;
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
-	
+
 }
 
-void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
+void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
-	CBattleFirstSetCmdManager  bfsCmdManager;
-	CCmdList bfsCmdList;
+}
 
+
+
+bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
+	PlayerSpeciesManager.Clear();
+	EnemySpeciesManager.Clear();
+	BImgBank.Clear();
 	TrickManager.Clear();
+	ACTOR_NUM = 0;
+	PLAYER_NUM = 0;
+	ENEMY_NUM = 0;
 	
 	SetTransColor(255, 0, 255);	//透過色指定	//最終的には統一しないとな…$
 	
-	//Load.cppを通して.rpgの読み込み/////////////////////$
-		bfsCmdList.Add("@NormalTrick_Create(アタックA, 110, 3)");
-		bfsCmdList.Add("@NormalTrick_Create(アタックB, 8, 2)");
-		
-		//画像読み込み
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/cursor.png, MENU_CURSOR)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/timebar1.png, TIME_BAR1)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/timebar2.png, TIME_BAR2)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/sys/battle/hpbar.png, HP_BAR)");
-			
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy01.bmp, pic_enemy01)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy02.bmp, pic_enemy02)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/enemy03.bmp, pic_enemy03)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player01)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player02)");
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/player.bmp, pic_player03)");
-			
-			bfsCmdList.Add("@Load_Pic(tenyu_data/pic/battle/background04.bmp, bg_01)");
-			//Img_BattleBackGround = LoadGraph("tenyu_data/pic/sys/battle/background (4).bmp", true);		//いずれはコマンドから読み込む
-		
-		//PlayerSpeciesの生成（テスト用）
-			bfsCmdList.Add("@Player_Create(プレイヤーA, 100, 5, 5, 1, pic_player01)");
-			bfsCmdList.Add("@Player_Create(プレイヤーB, 100, 5, 5, 1, pic_player02)");
-			bfsCmdList.Add("@Player_Create(プレイヤーC, 100, 5, 5, 1, pic_player03)");
-			bfsCmdList.Add("@Player_Create(プレイヤーD, 100, 5, 5, 1, pic_player04)");
+	//Load.cppを通して.rpgの読み込み/////////////////////
 	
-		//PlayerSpeciesの技リストセット（テスト用）
-			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーA, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーB, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーC, アタックA, アタックB)");
-			bfsCmdList.Add("@PlayerTrick_Set(プレイヤーD, アタックA, アタックB)");
-
-		//EnemySpeciesの生成（テスト用）
-			bfsCmdList.Add("@Enemy_Create(エネミーA, 100, 5, 5, 1 ,pic_enemy01)");
-			bfsCmdList.Add("@Enemy_Create(エネミーB, 100, 5, 5, 1 ,pic_enemy02)");
-			bfsCmdList.Add("@Enemy_Create(エネミーC, 100, 5, 5, 1 ,pic_enemy03)");
-			bfsCmdList.Add("@Enemy_Create(エネミーD, 100, 5, 5, 1 ,pic_enemy04)");
-	
-		//EnemySpeciesの技リストセット（テスト用）
-			bfsCmdList.Add("@EnemyTrick_Set(エネミーA, アタックA, アタックB)");
-			bfsCmdList.Add("@EnemyTrick_Set(エネミーB, アタックA, アタックB)");
-			bfsCmdList.Add("@EnemyTrick_Set(エネミーC, アタックA, アタックB)");
-			bfsCmdList.Add("@EnemyTrick_Set(エネミーD, アタックA, アタックB)");
-		
-		bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
-	/////////////////////////////////////////////////////
-
+		//外部テキストのロード
+			CLoad bfsLoad;
+			CBattleFirstSetCmdManager  bfsCmdManager;
+			CCmdList bfsCmdList;
+			
+			if (bfsLoad.LoadAddText("tenyu_data/b_system.rpg")){			
+				bfsLoad.CommandCopy(&bfsCmdList);
+				bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
+			}else{
+				return false;
+			}
+	////////////////////////////////////////////////
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -83,6 +60,7 @@ void CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 
 	SetTransColor(0, 0, 0);	//透過色指定
+	return true;
 }
 
 void CBattle::SetBackGround(const char* _pickey){
@@ -200,8 +178,6 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 }
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
-
-	DebugDx("MainLoopStart");
 	
 	while(BasicLoop()){
 		
@@ -237,7 +213,9 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 }
 
 void CBattle::BattleFinish(){
-	
+	while(!ActionQueue.empty()) {ActionQueue.pop();}
+	B_CmdList.Clear();
+
 	delete [] Actor;
 	delete [] Player;
 	delete [] Enemy;
