@@ -422,13 +422,16 @@ void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyLis
 	Battle.SetBackGround(_pic_bg);	//‘‚¦‚Ä‚«‚½‚ç‚Ü‚é‚²‚ÆB_CmdList‚É“Š‚°‚é
 	Battle.SetPlayer();
 	Battle.SetEnemy(_enemyList);
-	Battle.BattleStart(&result, &FlagSet, this, &Map, &EveManager);		//ƒRƒ}ƒ“ƒh‰»‚ð
+	Battle.BattleStart(&result, &FlagSet, &CmdList, &Map, &EveManager);	
 	
 	//(‰¼)/////////////////
 		if (result==WIN) TextBox->AddStock("Ÿ—˜");
 		if (result==LOSE) TextBox->AddStock("”s–k");
+		TextBox->Main(&CmdList, &FlagSet);
 }
-
+void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
+	Battle.BattleSetting(_winmessage, _losemessage);
+}
 
 
 ////////private/////////////////////////////////////////////////////////////////////////////////////////////

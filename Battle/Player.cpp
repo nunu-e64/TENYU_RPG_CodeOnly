@@ -37,7 +37,7 @@ void CPlayer::Draw(int dx, int dy){
 			/*if (timecount%11<5){
 				SetDrawBright(50,50,50);
 			}*/
-		SetDrawBlendMode( DX_BLENDMODE_ALPHA , 250-(timecount*5)) ;
+		SetDrawBright(250-(timecount*5),250-(timecount*5),250-(timecount*5));
 		if (timecount==40){
 			timecount=0;
 			Visible = false;

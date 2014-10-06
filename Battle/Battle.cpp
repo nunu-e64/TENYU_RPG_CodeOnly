@@ -12,12 +12,18 @@ CBattle::CBattle(){
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
 
+	WinMessage[0] = '\0';
+	LoseMessage[0] = '\0';
 }
 
 void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
 }
-
+void CBattle::BattleSetting(const char* _winmessage, const char* _losemessage){
+	mystrcpy(WinMessage, _winmessage);
+	mystrcpy(LoseMessage, _losemessage);
+}
+	
 bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	PlayerSpeciesManager.Clear();
 	EnemySpeciesManager.Clear();
@@ -114,7 +120,7 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 }
 
 
-void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
+void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcmdlist_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////	
 		
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
@@ -159,7 +165,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 		int tmp_result = MainLoop();
 
 	//終了処理///////////////////////////////////////////////////
-		BattleFinish();
+		BattleFinish(tmp_result, _fieldcmdlist_p);
 		*_result = tmp_result;
 }
 
@@ -206,7 +212,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	return -1;
 }
 
-void CBattle::BattleFinish(){
+void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	while(!ActionQueue.empty()) {ActionQueue.pop();}
 	B_CmdList.Clear();
 
@@ -217,7 +223,21 @@ void CBattle::BattleFinish(){
 	ACTOR_NUM = 0;
 	ENEMY_NUM = 0;
 	PLAYER_NUM = 0;
-
+	//////////////////////////
+	
+	switch (_result){
+	case WIN:
+		if (strlen(WinMessage)) _fieldcmdlist->Add(WinMessage);
+		break;
+	case LOSE:
+		if (strlen(LoseMessage)) _fieldcmdlist->Add(LoseMessage);
+		break;
+	default:
+		break;
+	}
+	WinMessage[0] = '\0';
+	LoseMessage[0] = '\0';
+	
 }
 
 void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool _playeralsoshake){

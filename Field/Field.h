@@ -40,6 +40,7 @@ public:
 	void SetMyEffect(int _effectname, int _effectnum[]);
 	
 	void BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList);
+	void SetBattleResult(const char* _winmessage, const char* _losemessage); 
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
 	////////////////////////////////////////////

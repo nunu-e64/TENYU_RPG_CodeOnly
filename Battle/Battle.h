@@ -31,7 +31,9 @@ public:
 
 	bool Init();
 	void Term();
-	void BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p);
+	void BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcmdlist_p, CMap* _map_p, CEveManager* _evemanager_p);
+	void BattleSetting(const char* _winmessage, const char* _losemessage);
+	
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
@@ -47,19 +49,6 @@ public:
 
 	//戦闘用
 		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);
-
-	//グラフィック用 for ImgBank
-		enum{	//システム画像	
-			MENU_CURSOR,
-			HP_BAR,
-			TIME_BAR1,
-			TIME_BAR2,
-		};
-		enum{	//キャラクタ画像
-			//FACE1,
-			//FACE2,
-			CHARA_IMG_NUM
-		};
 
 	//ターゲット選択マーカー
 		class CTargetMarker{
@@ -87,7 +76,7 @@ public:
 private:
 	//メンバ関数
 		int MainLoop();
-		void BattleFinish();
+		void BattleFinish(int _result, CCmdList* _fieldcmdlist);
 		int ResultCheck();
 
 	
@@ -103,7 +92,6 @@ private:
 			CEveManager* EveManager_p;	//ラップモード時にオリジナルイベント読み込み用
 			CFlagSet* FlagSet_p;
 
-		
 		//Actors
 			CPlayer* Player;
 			CEnemy* Enemy;
@@ -124,6 +112,9 @@ private:
 			CTrickManager TrickManager;
 			std::queue <CActor*> ActionQueue;	//行動待機リスト
 
+		//戦闘設定
+			char WinMessage[256];
+			char LoseMessage[256];
 
 };
 
