@@ -53,6 +53,7 @@ public:
 protected:
 	//メンバ関数
 		virtual void Init(){}	//Playerのみ必要なので。Enemyの時にはこっちを通る
+		void Draw_Sub(int dx=0, int dy=0);
 
 		virtual bool Plan()=0;
 		virtual bool Action()=0;

@@ -127,6 +127,28 @@ bool CActor::DeadCheck(){
 	}
 }
 
+void CActor::Draw_Sub(int dx, int dy){
+
+	SetDrawBright(255,255,255);
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+	
+	//HpBar
+	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+5+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+15+dy, BLUE, true);
+	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+5+dy, 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
+
+	//TimeBar
+	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
+	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+20+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+30+dy, BLUE, true);
+	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+	
+	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é
+	if (OldHp>Hp) OldHp--;
+	else if (OldHp<Hp) OldHp++;
+	
+	SetDrawBright(255,255,255);
+}
+
+
 
 bool CActor::TimeGaugeForward(){
 	if (TimeGauge==100)	{

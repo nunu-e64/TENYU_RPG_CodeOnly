@@ -4,7 +4,7 @@
 
 #include "../Field/Load.h"
 
-CBattle::CBattle() : TargetMarker(&ACTOR_NUM){
+CBattle::CBattle(){
 	
 	ACTOR_NUM = 0;
 	PLAYER_NUM = 0;
@@ -50,10 +50,6 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
-		
-
-	//ターゲット選択マーカー初期化
-		TargetMarker.Init(LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
 	
 	//どこに書くべきか･･･Field?///////
 		PlayerSpeciesManager.SetMemberList();
@@ -123,15 +119,8 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////
 	
-		//背景設定
-			//SetBackGround("bg_01");
-
-		//Player生成
-			//SetPlayer(3, "プレイヤーA", "プレイヤーB", "プレイヤーC");
-
-		//Enemy生成
-			//SetEnemy(3, "エネミーA", "エネミーB", "エネミーC");
-
+	
+		
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			//Actorはnewでバトルごとに生成
 			ACTOR_NUM = PLAYER_NUM + ENEMY_NUM;
@@ -157,6 +146,9 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 				Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
 			}
 
+		//ターゲット選択マーカー初期化
+			TargetMarker.Init(ACTOR_NUM, LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
+		
 
 		EveManager_p = _evemanager_p;
 		FlagSet_p = _flagset_p;
@@ -239,11 +231,8 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 		/////////////////////////////////////////////////////////////////////
 
 		//PlayerとEnemyの描画///////////////////////////////////////////////////////////////
-		for (int i=0; i<MAX_PLAYER_NUM; i++){
-			Player[i].Draw(dx, dy);
-		}
-		for (int i=0; i<MAX_ENEMY_NUM; i++){
-			Enemy[i].Draw(dx, dy);
+		for (int i=0; i<ACTOR_NUM; i++){
+			Actor[i]->Draw(dx, dy);
 		}
 
 		//ターゲットマーカーの描画//////////////////////////////////////////////
@@ -331,7 +320,7 @@ void CBattle::CTargetMarker::Move(int _dir){
 }
 
 void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _deadok){
-	int actorindex = between(0, (*ActorNum_p)-1, _actorindex); 
+	int actorindex = between(0, ActorNum-1, _actorindex); 
 
 	if (!_deadok && _battle->Actor[Index + (EnemySide?MAX_PLAYER_NUM:0)]->GetHp()==0){
 		return;

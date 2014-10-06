@@ -64,8 +64,7 @@ public:
 	//ターゲット選択マーカー
 		class CTargetMarker{
 		public:
-			CTargetMarker(int* _actorNum){ActorNum_p = _actorNum;}
-			void Init(int _img){
+			void Init(int _actornum, int _img){
 				Img = _img;
 				Visible = false;
 				EnemySide = true;
@@ -84,7 +83,7 @@ public:
 			int Img;
 			bool EnemySide;	//敵側か味方側か
 			int Index;		//敵ごと味方ごとの通し番号
-			int const* ActorNum_p;
+			int ActorNum;
 		}TargetMarker;
 
 private:
