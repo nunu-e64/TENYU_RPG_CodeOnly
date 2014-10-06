@@ -71,7 +71,9 @@ void CBattle::SetPlayer(){	//隊列に基づいて選出
 	}
 	Player = new CPlayer[PLAYER_NUM];
 	for (int i=0; i<PLAYER_NUM; i++){
+		DebugDx("PlayerSpeciesName:%s", PlayerSpeciesManager.GetSpecies(i).GetName().c_str());
 		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
+		DebugDx("PlayerName:%s",Player[i].GetName().c_str());
 	}
 }
 void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）

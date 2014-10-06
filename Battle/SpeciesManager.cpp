@@ -28,14 +28,16 @@ bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
 	return true;
 }
 bool CPlayerSpeciesManager::SetMemberList(){
-	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
 	MemberList.clear();
 	int i = 0;
+	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
 	while( it != PlayerBank.end()){
-		MemberList.push_back(&GetSpecies((*it).second.GetName().c_str()));
+		MemberList.push_back(&(*it).second);
+		DebugDx("SetMemberList:%s", MemberList[i]->GetName().c_str());
 		++it;
 		++i;
 	}
+	DebugDx("SetMemberList:%d", (int)(MemberList.size()));
 	return true;
 }
 
@@ -49,12 +51,12 @@ CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
 		return CPlayerSpecies();
 	}
 }
-const CPlayerSpecies CPlayerSpeciesManager::GetSpecies(int _index){
-	if (_index<0 || _index>=MemberList.size()){
+CPlayerSpecies CPlayerSpeciesManager::GetSpecies(int _index){
+	if (_index<0 || _index>=(int)(MemberList.size())){
 		ErrorDx("Error->MemberList size error:%d", _index);
 		return Dammy_Player;
 	}else{
-		return *MemberList[_index];
+		return *(MemberList[_index]);
 	}
 }
 
