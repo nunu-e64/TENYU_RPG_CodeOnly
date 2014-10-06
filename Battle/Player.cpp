@@ -49,7 +49,6 @@ void CPlayer::Draw(int dx, int dy){
 		SetDrawBright(255,255,255);
 	}
 
-
 	DrawGraph(Rect.Left, Rect.Top, Img, true);
 	SetDrawBright(255,255,255);
 	

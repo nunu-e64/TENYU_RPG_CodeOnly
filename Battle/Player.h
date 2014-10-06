@@ -10,7 +10,7 @@
 class CPlayer : public CActor, public CPlayerSpecies{
 public:
 	CPlayer(){Mc=0;}
-	CPlayer(const CSpecies& _species) : CActor(_species){Mc=0;};
+	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){Mc=0;};
 
 	void CreateBattleMenu();
 	void Draw(int dx=0, int dy=0);

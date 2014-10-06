@@ -7,6 +7,7 @@ bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _at
 	newPlayer.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newPlayer.Img = _img;
 	PlayerBank.insert( std::map<std::string, CPlayerSpecies>::value_type( _name, newPlayer) );
+
 	return true;
 }
 

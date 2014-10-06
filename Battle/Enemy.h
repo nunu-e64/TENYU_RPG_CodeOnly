@@ -15,7 +15,7 @@ class CEnemy : public CActor, public CEnemySpecies{
 public:
 	
 	CEnemy(){};
-	CEnemy(const CSpecies& _species) : CActor(_species){};
+	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){};
 	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
 		EnemyPlanManager = _enemyPlanManager;
 	}

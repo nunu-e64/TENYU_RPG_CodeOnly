@@ -15,7 +15,8 @@ class CBImgBank;
 
 class CActor : public virtual CSpecies{
 public:
-	CActor(const CSpecies &_species) : CSpecies(_species){};
+	CActor(const CSpecies &obj) : CSpecies(obj){}
+
 	CActor(){}	//Actor = new CActor* [MAX_PLAYER+MAX_ENEMY];}
 	~CActor(){}	//delete [] Actor;}
 

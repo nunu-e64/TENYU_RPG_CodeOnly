@@ -6,6 +6,9 @@
 
 class CSpecies{
 public:
+	/*CSpecies(const CSpecies& obj){
+		*this = obj;
+	}*/
 	CSpecies(){
 		Name="";
 		Img=Atk=Def=Spd=-1;
@@ -35,6 +38,9 @@ class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
 
 public:
+	CPlayerSpecies(const CPlayerSpecies& obj){
+		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
+	}
 	CPlayerSpecies(){};
 	~CPlayerSpecies(){};
 };
@@ -43,6 +49,9 @@ class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
 
 public:
+	CEnemySpecies(const CEnemySpecies& obj){
+		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
+	}
 	CEnemySpecies(){};
 	~CEnemySpecies(){};
 };
