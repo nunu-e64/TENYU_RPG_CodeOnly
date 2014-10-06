@@ -8,9 +8,6 @@
 class CEnemyPlanManager;
 class CEnemySpecies;
 
-//ゆくゆくはCActorとCEnemySpeciesから多重継承する
-//戦闘情報はActorが、取得ゴールドや経験値情報はEnemySpeciesが持っているため。
-
 class CEnemy : public CActor, public CEnemySpecies{
 public:
 	
@@ -30,7 +27,7 @@ private:
 
 	//メンバ変数
 		CEnemyPlanManager* EnemyPlanManager;
-		int Attention[MAX_PLAYER];
+		int Attention[MAX_PLAYER_NUM];
 };
 
 

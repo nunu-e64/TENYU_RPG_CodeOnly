@@ -10,8 +10,8 @@ public:
 		*this = obj;
 	}*/
 	CSpecies(){
-		Name="";
-		Img=Atk=Def=Spd=-1;
+		Name="NULL_NAME";
+		Lv=Img=Atk=Def=Spd=-1;
 		MaxHp = 1;
 	}
 	~CSpecies(){}
@@ -22,6 +22,7 @@ protected:
 	std::string Name;
 	int Img;
 
+	int Lv;
 	int MaxHp;
 	int Atk;
 	int Def;
@@ -36,24 +37,27 @@ protected:
 
 class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
-
 public:
 	CPlayerSpecies(const CPlayerSpecies& obj){
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
-	CPlayerSpecies(){};
-	~CPlayerSpecies(){};
+	CPlayerSpecies(){Exp=0;};
+
+private:
+	int Exp;
 };
 
 class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
-
 public:
 	CEnemySpecies(const CEnemySpecies& obj){
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
 	CEnemySpecies(){};
-	~CEnemySpecies(){};
+
+private:
+	int GoldGene;
+	int ExpGene;
 };
 
 

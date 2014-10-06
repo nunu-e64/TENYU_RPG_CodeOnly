@@ -8,7 +8,7 @@
 
 void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist){
 	ActorIndex = _index;
-	Index = ((_index<MAX_PLAYER)? _index: _index-MAX_PLAYER);
+	Index = ((_index<MAX_PLAYER_NUM)? _index: _index-MAX_PLAYER_NUM);
 	B_TextBox_pp = _textbox;
 	CmdList = _cmdlist;
 

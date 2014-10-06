@@ -1,6 +1,6 @@
 ////多重インクルード防止（インクルードガード）//
-#ifndef ACTOR_H							////
-#define ACTOR_H							////
+#ifndef ACTOR_H								////
+#define ACTOR_H								////
 ////////////////////////////////////////////////
 
 #include <vector>
@@ -17,7 +17,7 @@ class CActor : public virtual CSpecies{
 public:
 	CActor(const CSpecies &obj) : CSpecies(obj){}
 
-	CActor(){}	//Actor = new CActor* [MAX_PLAYER+MAX_ENEMY];}
+	CActor(){}	//Actor = new CActor* [MAX_PLAYER_NUM+MAX_ENEMY_NUM];}
 	~CActor(){}	//delete [] Actor;}
 
 	//初期設定関連

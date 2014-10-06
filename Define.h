@@ -53,8 +53,8 @@ const unsigned int MAP_MAX = 2;	//読み込めるマップの最大数	//MAPデータ配列の一次
 const int CHARA_PIC_NUM = 16;	//キャラの絵が一枚何コマなのか
 
 //戦闘関連///////////////////////////////////////////////
-const int MAX_PLAYER = 3;
-const int MAX_ENEMY = 3;
+const int MAX_PLAYER_NUM = 3;
+const int MAX_ENEMY_NUM = 3;
 const int MAX_MP = 10;
 /////////////////////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";

@@ -55,9 +55,9 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	//ターゲット選択マーカー初期化
 		TargetMarker.Init(LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
 	
-	//仮///////
-		PlayerSpeciesManager.SetBattleMember(3);
-
+	//どこに書くべきか･･･Field?///////
+		PlayerSpeciesManager.SetMemberList();
+	//////////////////
 
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
@@ -67,19 +67,18 @@ void CBattle::SetBackGround(const char* _pickey){
 	Img_BattleBackGround = BImgBank.GetImg(_pickey);
 }
 
-void CBattle::SetPlayer(){
-	PLAYER_NUM = PlayerSpeciesManager.BattleMember.size();
+void CBattle::SetPlayer(){	//隊列に基づいて選出
+	PLAYER_NUM = min(PlayerSpeciesManager.GetMemberListSize(), MAX_PLAYER_NUM);
 	if (PLAYER_NUM==0){
 		ErrorDx("Error->Battle::SetPlayer->PLAYER_NUM=0.  SetPartyBattleMember!", __FILE__, __LINE__);
 		return;
 	}
-
 	Player = new CPlayer[PLAYER_NUM];
 	for (int i=0; i<PLAYER_NUM; i++){
-		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(PlayerSpeciesManager.BattleMember[i].c_str()));
+		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
 	}
 }
-void CBattle::SetPlayer(const int _playerNum, ...){
+void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
 	PLAYER_NUM=0;
 	va_list args;
 	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
@@ -96,7 +95,7 @@ void CBattle::SetPlayer(const int _playerNum, ...){
 	}
 }
 
-void CBattle::SetEnemy(const int _enemyNum, ...){
+void CBattle::SetEnemy(const int _enemyNum, ...){	//出現モンスター自由指定用
 	va_list args;
 	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
 	
@@ -138,7 +137,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 			ACTOR_NUM = PLAYER_NUM + ENEMY_NUM;
 			Actor = new CActor*[ACTOR_NUM];
 			for (int i=0; i<ACTOR_NUM; i++){
-				Actor[i] = ((i<MAX_PLAYER)? (CActor*)&Player[i]: (CActor*)&Enemy[i-MAX_PLAYER]);
+				Actor[i] = ((i<MAX_PLAYER_NUM)? (CActor*)&Player[i]: (CActor*)&Enemy[i-MAX_PLAYER_NUM]);
 				Actor[i]->FirstSet(i, &TextBox, &B_CmdList);
 				Actor[i]->SetSystemImg(&BImgBank);
 			}
@@ -240,10 +239,10 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 		/////////////////////////////////////////////////////////////////////
 
 		//PlayerとEnemyの描画///////////////////////////////////////////////////////////////
-		for (int i=0; i<MAX_PLAYER; i++){
+		for (int i=0; i<MAX_PLAYER_NUM; i++){
 			Player[i].Draw(dx, dy);
 		}
-		for (int i=0; i<MAX_ENEMY; i++){
+		for (int i=0; i<MAX_ENEMY_NUM; i++){
 			Enemy[i].Draw(dx, dy);
 		}
 
@@ -320,10 +319,10 @@ void CBattle::CTargetMarker::Draw(int dx, int dy){
 void CBattle::CTargetMarker::Move(int _dir){
 	switch (_dir){
 	case RIGHT:
-		Index = mod(Index+1,(EnemySide? MAX_ENEMY: MAX_PLAYER));
+		Index = mod(Index+1,(EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM));
 		break;
 	case LEFT:
-		Index = mod(Index-1,(EnemySide? MAX_ENEMY: MAX_PLAYER));
+		Index = mod(Index-1,(EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM));
 		break;
 	default:
 		break;
@@ -334,10 +333,10 @@ void CBattle::CTargetMarker::Move(int _dir){
 void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _deadok){
 	int actorindex = between(0, (*ActorNum_p)-1, _actorindex); 
 
-	if (!_deadok && _battle->Actor[Index + (EnemySide?MAX_PLAYER:0)]->GetHp()==0){
+	if (!_deadok && _battle->Actor[Index + (EnemySide?MAX_PLAYER_NUM:0)]->GetHp()==0){
 		return;
 	}else{
-		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?MAX_PLAYER:0));
+		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?MAX_PLAYER_NUM:0));
 		SetVisible(false);
 	}
 

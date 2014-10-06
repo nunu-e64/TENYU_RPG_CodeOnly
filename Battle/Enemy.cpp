@@ -93,7 +93,7 @@ bool CEnemy::Action(){
 	//Tatget‚Ì‘I‘ð‚É‚ÍAttention‚ðŽg‚¤‚±‚Æ$  PlanŽž‚©ActionŽž‚©‚Ç‚Á‚¿‚ÅTarget‚ðŒˆ‚ß‚é‚×‚«H
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
-		Target = rand()%MAX_PLAYER;
+		Target = rand()%MAX_PLAYER_NUM;
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
 		CmdList->Add(tmpcmd);
 		break;

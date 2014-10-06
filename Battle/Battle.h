@@ -74,7 +74,7 @@ public:
 			void SetVisible(bool _visible){Visible = _visible;}
 			void SetSide(bool _enemy){EnemySide = _enemy;}
 			bool GetSide(){return EnemySide;}
-			void SetIndex(int _index){Index = between(0, (EnemySide? MAX_ENEMY: MAX_PLAYER), _index);}
+			void SetIndex(int _index){Index = between(0, (EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM), _index);}
 			void Move(int _dir); 
 			void Decide(CBattle* _battle, int _actorindex, bool _deadok);
 			void Draw(int dx = 0, int dy = 0);
@@ -106,8 +106,8 @@ private:
 
 		
 		//Actors
-			//CPlayer Player[MAX_PLAYER];	//è¡Ç∑
-			//CEnemy Enemy[MAX_ENEMY];///è¡Ç∑
+			//CPlayer Player[MAX_PLAYER_NUM];	//è¡Ç∑
+			//CEnemy Enemy[MAX_ENEMY_NUM];///è¡Ç∑
 
 			CPlayer* Player;
 			CEnemy* Enemy;

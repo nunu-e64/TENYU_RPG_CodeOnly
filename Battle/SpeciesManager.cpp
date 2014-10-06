@@ -16,23 +16,23 @@ bool CPlayerSpeciesManager::SetTrickList(const char* _name, std::vector <trick_t
 	return true;
 }
 
-bool CPlayerSpeciesManager::SetBattleMember(int _index, const char* _name){
+bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
 	if (_index<0){
-		ErrorDx("Error->SetBattleMember->size error:%d", _index);
+		ErrorDx("Error->SetMemberList->size error:%d", _index);
 		return false;
-	}else if (_index>=(int)(BattleMember.size())){
-		BattleMember.push_back(_name);
+	}else if (_index>=(int)(MemberList.size())){
+		MemberList.push_back(&GetSpecies(_name));
 	}else{
-		BattleMember[_index] = _name;
+		MemberList[_index] = &GetSpecies(_name);
 	}
 	return true;
 }
-bool CPlayerSpeciesManager::SetBattleMember(int _num){
+bool CPlayerSpeciesManager::SetMemberList(){
 	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
-	BattleMember.clear();
+	MemberList.clear();
 	int i = 0;
-	while( it != PlayerBank.end() && i<_num){
-		BattleMember.push_back((*it).second.GetName());
+	while( it != PlayerBank.end()){
+		MemberList.push_back(&GetSpecies((*it).second.GetName().c_str()));
 		++it;
 		++i;
 	}
@@ -47,6 +47,14 @@ CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
 	}else{
 		ErrorDx("PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
 		return CPlayerSpecies();
+	}
+}
+const CPlayerSpecies CPlayerSpeciesManager::GetSpecies(int _index){
+	if (_index<0 || _index>=MemberList.size()){
+		ErrorDx("Error->MemberList size error:%d", _index);
+		return Dammy_Player;
+	}else{
+		return *MemberList[_index];
 	}
 }
 
