@@ -3,10 +3,13 @@
 #include "Enemy.h"
 
 
-void CEnemyPlanManager::Init(){
+void CEnemyPlanManager::Init(int _playernum, int _enemynum){
+	PLAYER_NUM = _playernum;
+	ENEMY_NUM = _enemynum;
+
 	EnemyPlanner.clear();
 
-	for (int i=0; i<MAX_ENEMY_NUM; i++){
+	for (int i=0; i<ENEMY_NUM; i++){
 		CEnemyPlanner tmp;
 		EnemyPlanner.push_back(tmp);
 	}
@@ -56,7 +59,7 @@ int CEnemyPlanManager::Calc_HpBorder(float _hpBorder, int choice1, int choice2){
 
 int CEnemyPlanManager::Calc_PlayerNum(int choice_1player, int choice_2player, int choice_3player){
 	int count=0;
-	for (int i=0; i<MAX_PLAYER_NUM; i++){
+	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()) count++;
 	}
 	return choose(count, choice_1player, choice_2player, choice_3player);

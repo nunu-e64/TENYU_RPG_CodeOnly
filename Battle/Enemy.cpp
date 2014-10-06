@@ -11,19 +11,23 @@
 void CEnemy::Draw(int dx, int dy){
 
 	if (Visible){
-		if (Alive==false){
+		if (!Alive){
+
 			static int timecount = 0;
 			timecount++;
+			
+			//ここにエネミー死んだときのエフェクト処理を書く///$
+				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timecount*8)) ;
 
-			SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timecount*8)) ;
+				if (timecount==30){
+					timecount=0;
+					Visible = false;
+				}
+			//////////////////////////////////////////////////////
 
-			if (timecount==30){
-				timecount=0;
-				Visible = false;
-			}
 		}
-
-		DrawGraph(Rect.Left, Rect.Top, Img, true);
+		
+		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
 		Draw_Sub(dx, dy);
@@ -79,7 +83,7 @@ bool CEnemy::Action(){
 	//Tatgetの選択にはAttentionを使うこと$  Plan時かAction時かどっちでTargetを決めるべき？
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
-		Target = rand()%MAX_PLAYER_NUM;
+		Target = rand()%PLAYER_NUM;
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
 		CmdList->Add(tmpcmd);
 		break;

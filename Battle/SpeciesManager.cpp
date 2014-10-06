@@ -33,11 +33,9 @@ bool CPlayerSpeciesManager::SetMemberList(){
 	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
 	while( it != PlayerBank.end()){
 		MemberList.push_back(&(*it).second);
-		DebugDx("SetMemberList:%s", MemberList[i]->GetName().c_str());
 		++it;
 		++i;
 	}
-	DebugDx("SetMemberList:%d", (int)(MemberList.size()));
 	return true;
 }
 

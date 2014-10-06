@@ -19,7 +19,7 @@ public:
 		Actor = _actorList;
 	}
 
-	void Init();
+	void Init(int _playernum, int _enemynum);
 	void MakePlan(int _enemyIndex, int _borderHp, int _choice1, int _choice2);
 	int Plan(CEnemy* _enemy);
 
@@ -36,7 +36,8 @@ private:
 
 	//全アクターへのアクセスを持たせておく
 		CActor** Actor;
-		int ACTOR_NUM;
+		int PLAYER_NUM;
+		int ENEMY_NUM;
 
 	//具体的なAI構築用関数
 		int Calc_HpBorder(float _hpBorder, int choice1, int choice2);

@@ -64,16 +64,12 @@ public:
 	//ターゲット選択マーカー
 		class CTargetMarker{
 		public:
-			void Init(int _actornum, int _img){
-				Img = _img;
-				Visible = false;
-				EnemySide = true;
-				Index = 0;
-			}
+			void Init(int _actornum, int _playernum, int _enemynum, int _img);
+
 			void SetVisible(bool _visible){Visible = _visible;}
 			void SetSide(bool _enemy){EnemySide = _enemy;}
 			bool GetSide(){return EnemySide;}
-			void SetIndex(int _index){Index = between(0, (EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM), _index);}
+			void SetIndex(int _index){Index = between(0, (EnemySide? ENEMY_NUM: PLAYER_NUM), _index);}
 			void Move(int _dir); 
 			void Decide(CBattle* _battle, int _actorindex, bool _deadok);
 			void Draw(int dx = 0, int dy = 0);
@@ -83,13 +79,17 @@ public:
 			int Img;
 			bool EnemySide;	//敵側か味方側か
 			int Index;		//敵ごと味方ごとの通し番号
-			int ActorNum;
+			int ACTOR_NUM;
+			int PLAYER_NUM;
+			int ENEMY_NUM;
 		}TargetMarker;
 
 private:
 	//メンバ関数
 		int MainLoop();
 		void BattleFinish();
+		int ResultCheck();
+
 	
 	//メンバ変数
 		//所持インスタンスとポインタ
@@ -105,9 +105,6 @@ private:
 
 		
 		//Actors
-			//CPlayer Player[MAX_PLAYER_NUM];	//消す
-			//CEnemy Enemy[MAX_ENEMY_NUM];///消す
-
 			CPlayer* Player;
 			CEnemy* Enemy;
 			CActor** Actor;

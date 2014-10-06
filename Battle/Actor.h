@@ -17,11 +17,11 @@ class CActor : public virtual CSpecies{
 public:
 	CActor(const CSpecies &obj) : CSpecies(obj){}
 
-	CActor(){}	//Actor = new CActor* [MAX_PLAYER_NUM+MAX_ENEMY_NUM];}
-	~CActor(){}	//delete [] Actor;}
+	CActor(){}
+	~CActor(){}
 
 	//‰Šúİ’èŠÖ˜A
-		void FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist);
+		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist);
 		void SetRect(int _cx, int _cy);
 		void SetImg(int _img);
 		bool SetSystemImg(CBImgBank* _bimgbank);
@@ -65,6 +65,8 @@ protected:
 
 
 	//Šî‘bî•ñ
+		int PLAYER_NUM;
+		int ENEMY_NUM;
 		int ActorIndex;	//Actor‘S‘Ì‚Ì’Ê‚µ”Ô†
 		int Index;	//Player,Enemy‚²‚Æ‚Ì’Ê‚µ”Ô†
 

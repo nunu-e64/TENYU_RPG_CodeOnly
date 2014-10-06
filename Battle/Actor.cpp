@@ -6,9 +6,12 @@
 
 
 
-void CActor::FirstSet(int _index, CTextBox** _textbox, CCmdList* _cmdlist){
+void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist){
+	PLAYER_NUM = _playernum;
+	ENEMY_NUM = _enemynum;
+	
 	ActorIndex = _index;
-	Index = ((_index<MAX_PLAYER_NUM)? _index: _index-MAX_PLAYER_NUM);
+	Index = ((_index<PLAYER_NUM)? _index: _index-PLAYER_NUM);
 	B_TextBox_pp = _textbox;
 	CmdList = _cmdlist;
 
@@ -117,9 +120,10 @@ int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
 	return damage;
 }
 
-bool CActor::DeadCheck(){
+bool CActor::DeadCheck(){	//Ž€–S”»’è
 	
 	if (OldHp!=Hp) {
+		//Hpƒo[Œ¸­’†
 		return false;
 	}else{
 		if (Hp==0) Alive = false;

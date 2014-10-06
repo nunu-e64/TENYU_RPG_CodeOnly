@@ -18,8 +18,6 @@ void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
 }
 
-
-
 bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	PlayerSpeciesManager.Clear();
 	EnemySpeciesManager.Clear();
@@ -71,9 +69,7 @@ void CBattle::SetPlayer(){	//隊列に基づいて選出
 	}
 	Player = new CPlayer[PLAYER_NUM];
 	for (int i=0; i<PLAYER_NUM; i++){
-		DebugDx("PlayerSpeciesName:%s", PlayerSpeciesManager.GetSpecies(i).GetName().c_str());
 		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
-		DebugDx("PlayerName:%s",Player[i].GetName().c_str());
 	}
 }
 void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
@@ -119,17 +115,14 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 
 
 void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, CMap* _map_p, CEveManager* _evemanager_p){
-	//開始処理///////////////////////////////////////////////////
-	
-	
+	//開始処理///////////////////////////////////////////////////	
 		
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
-			//Actorはnewでバトルごとに生成
 			ACTOR_NUM = PLAYER_NUM + ENEMY_NUM;
 			Actor = new CActor*[ACTOR_NUM];
 			for (int i=0; i<ACTOR_NUM; i++){
-				Actor[i] = ((i<MAX_PLAYER_NUM)? (CActor*)&Player[i]: (CActor*)&Enemy[i-MAX_PLAYER_NUM]);
-				Actor[i]->FirstSet(i, &TextBox, &B_CmdList);
+				Actor[i] = ((i<PLAYER_NUM)? (CActor*)&Player[i]: (CActor*)&Enemy[i-PLAYER_NUM]);
+				Actor[i]->FirstSet(PLAYER_NUM, ENEMY_NUM, i, &TextBox, &B_CmdList);
 				Actor[i]->SetSystemImg(&BImgBank);
 			}
 
@@ -140,7 +133,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 			}
 			
 			CEnemyPlanManager::GetInstance()->SetActor_p(Actor);	//EnemyPlanManagerはすべてのActorへのポインタを握る
-			CEnemyPlanManager::GetInstance()->Init();
+			CEnemyPlanManager::GetInstance()->Init(PLAYER_NUM, ENEMY_NUM);
 			for (int i=0; i<ENEMY_NUM; i++){
 				Enemy[i].SetEnemyPlanManager(CEnemyPlanManager::GetInstance());
 				Enemy[i].MakePlan();
@@ -149,8 +142,9 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 			}
 
 		//ターゲット選択マーカー初期化
-			TargetMarker.Init(ACTOR_NUM, LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
-		
+			SetTransColor(255, 0, 255);	//透過色指定
+			TargetMarker.Init(ACTOR_NUM, PLAYER_NUM, ENEMY_NUM, LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
+			SetTransColor(0, 0, 0);	//透過色指定
 
 		EveManager_p = _evemanager_p;
 		FlagSet_p = _flagset_p;
@@ -162,8 +156,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 
 
 	//メインループ処理///////////////////////////////////////////////////
-		int tmp_result;
-		tmp_result = MainLoop();
+		int tmp_result = MainLoop();
 
 	//終了処理///////////////////////////////////////////////////
 		BattleFinish();
@@ -171,6 +164,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CField* _field_p, 
 }
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
+	int result;
 	
 	while(BasicLoop()){
 		
@@ -194,6 +188,13 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 					//行動待機リスト戦闘のキャラの行動が完了しなかったときにはなにもしない
 				}
 			}
+
+			if ((result=ResultCheck())!=-1){
+				B_CmdManager.Main(&B_CmdList, this, TextBox);
+				Draw();
+				return result;
+			}
+
 		}
 
 		////TextBoxなどによってCmdListに蓄積されたコマンドを処理////////////////////////////////////////
@@ -238,6 +239,7 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 		}
 
 		//ターゲットマーカーの描画//////////////////////////////////////////////
+		SetDrawBright(255,255,255);
 		TargetMarker.Draw(dx,dy);
 
 	}
@@ -257,22 +259,21 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 	if (_screenflip)	{BasicLoop();}
 }
 
-void CBattle::ChangeTextMode(bool _box, const char* _eventtext){
-	if (_box){
-		TextBox = &TextBox1;
-	}else{
-		TextBox = &TextWrap1;
-
-		if (_eventtext!=NULL){	//EveManager::CopyOriginalEventを汎用性を上げて改善。これでTextWrap1に@EventWrapの内容を渡せた
-			std::vector<char256> tmptext;
-			EveManager_p->CopyOriginalEvent(&tmptext, _eventtext);
-			for (unsigned int i=0; i<tmptext.size(); i++){
-				TextWrap1.AddStock(tmptext[i].text);
-			}
-			TextBox->NextPage(&B_CmdList, FlagSet_p);
-		}
+int CBattle::ResultCheck(){
+	
+	int i;
+	for (i=0; i<PLAYER_NUM; i++){
+		if (Player[i].GetAlive()) break;
 	}
-};
+	if (i==PLAYER_NUM) return LOSE;
+
+	for (i=0; i<ENEMY_NUM; i++){
+		if (Enemy[i].GetAlive()) break;
+	}
+	if (i==ENEMY_NUM) return WIN;
+
+	return -1;
+}
 
 void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick){
 	int attacker_actorindex = between(0, ACTOR_NUM-1, _attacker_actorindex); 
@@ -297,6 +298,17 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	}
 }
 
+
+//////////////////////////////////////////////////////////////
+void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, int _img){
+	ACTOR_NUM = _actornum;
+	PLAYER_NUM = _playernum;
+	ENEMY_NUM = _enemynum;
+	Img = _img;
+	Visible = false;
+	EnemySide = true;
+	Index = 0;
+}
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
 		if(EnemySide){
@@ -310,10 +322,10 @@ void CBattle::CTargetMarker::Draw(int dx, int dy){
 void CBattle::CTargetMarker::Move(int _dir){
 	switch (_dir){
 	case RIGHT:
-		Index = mod(Index+1,(EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM));
+		Index = mod(Index+1,(EnemySide? ENEMY_NUM: PLAYER_NUM));
 		break;
 	case LEFT:
-		Index = mod(Index-1,(EnemySide? MAX_ENEMY_NUM: MAX_PLAYER_NUM));
+		Index = mod(Index-1,(EnemySide? ENEMY_NUM: PLAYER_NUM));
 		break;
 	default:
 		break;
@@ -322,15 +334,30 @@ void CBattle::CTargetMarker::Move(int _dir){
 }
 
 void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _deadok){
-	int actorindex = between(0, ActorNum-1, _actorindex); 
+	int actorindex = between(0, ACTOR_NUM-1, _actorindex); 
 
-	if (!_deadok && _battle->Actor[Index + (EnemySide?MAX_PLAYER_NUM:0)]->GetHp()==0){
+	if (!_deadok && _battle->Actor[Index + (EnemySide?PLAYER_NUM:0)]->GetHp()==0){
 		return;
 	}else{
-		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?MAX_PLAYER_NUM:0));
+		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?PLAYER_NUM:0));
 		SetVisible(false);
 	}
 
 }
 
+void CBattle::ChangeTextMode(bool _box, const char* _eventtext){
+	if (_box){
+		TextBox = &TextBox1;
+	}else{
+		TextBox = &TextWrap1;
 
+		if (_eventtext!=NULL){	//EveManager::CopyOriginalEventを汎用性を上げて改善。これでTextWrap1に@EventWrapの内容を渡せた
+			std::vector<char256> tmptext;
+			EveManager_p->CopyOriginalEvent(&tmptext, _eventtext);
+			for (unsigned int i=0; i<tmptext.size(); i++){
+				TextWrap1.AddStock(tmptext[i].text);
+			}
+			TextBox->NextPage(&B_CmdList, FlagSet_p);
+		}
+	}
+};

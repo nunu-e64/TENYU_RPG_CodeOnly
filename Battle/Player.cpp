@@ -29,7 +29,7 @@ void CPlayer::CreateBattleMenu(){
 
 void CPlayer::Draw(int dx, int dy){
 
-	if (Alive==false && Visible==true){
+	if (!Alive && Visible){
 		static int timecount = 0;
 		timecount++;
 
@@ -44,15 +44,15 @@ void CPlayer::Draw(int dx, int dy){
 		}
 		//////////////////////////////////////////////////////
 
-	}else if(Visible==false){	//Ž€‚ñ‚Å‚é
+	}else if(!Visible){	//Ž€‚ñ‚Å‚é
 		SetDrawBright(50,50,50);
 	}else{
 		SetDrawBright(255,255,255);
 	}
 
-	DrawGraph(Rect.Left, Rect.Top, Img, true);
+	DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 
-	Draw_Sub();
+	Draw_Sub(dx, dy);
 	BattleMenu.Draw();	
 }
 
