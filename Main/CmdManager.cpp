@@ -80,9 +80,14 @@ bool CCmdManager::NextCommand(CCmdList* _cmdlist, char* commandline, char* comma
 				argument = command;
 			}else{
 				argument++;
-				if (strrchr(argument, ')')==NULL) WarningDx("Warning->You may forget ')' in CommandText:%s", commandline);
-				char *cntx;		//strtok_s用の雑用
-				strtok_s(argument, ")", &cntx);
+				char* p;
+				if ((p = strrchr(argument, ')'))!=NULL) {
+					*p = '\0';					
+					//char *cntx;		//strtok_s用の雑用
+					//strtok_s(argument, ")", &cntx);
+				}else{
+					WarningDx("Warning->You may forget ')' in CommandText:%s", commandline);
+				}
 			}
 
 		return true;
@@ -343,11 +348,33 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 		
 //@BattleResult_Set
-	}else if (mystrcmp(_command, "@BattleResult_Set",'l')){
-		argnum = 2;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+	}else if (mystrcmp(_command, "@BattleResult_Set",'p')){
+		argnum = 2;		arg = new char*[argnum];	//if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須の例外
 
-		//(),をエスケープしなければ、コマンド引数にコマンドを指定できない	$
-		_field->SetBattleResult(arg[0], arg[1]);
+		//@BattleResult_Set()の引数を手動分解することで、ArgCutの引数誤認を回避
+		//@コマンド以外でも分解して渡せる
+		char winCommand[256];
+		char loseCommand[256];
+		char* p;
+	
+		mystrsmt(_argument, " ,");
+		if ((p=strrchr(_argument, '@'))!=NULL && p!=_argument){
+			mystrcpy(loseCommand, p);
+			*p = '\0';
+			mystrsmt(_argument, " ,");
+			mystrcpy(winCommand, _argument);
+		}else if ((p=strrchr(_argument, ','))!=NULL){
+			*p = '\0';
+			mystrcpy(winCommand, _argument);
+			mystrcpy(loseCommand, ++p);
+			mystrsmt(winCommand, " ,");
+			mystrsmt(loseCommand, " ,");
+		}else{
+			ErrorDx("Error->@BattleResult_Set->argErr:%s", _argument);
+			goto finish;
+		}
+
+		_field->SetBattleResult(winCommand, loseCommand);
 
 
 //@Battle

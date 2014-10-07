@@ -32,7 +32,7 @@ public:
 	bool Init();
 	void Term();
 	void BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcmdlist_p, CMap* _map_p, CEveManager* _evemanager_p);
-	void BattleSetting(const char* _winmessage, const char* _losemessage);
+	void BattleSetting(const char* _wincommand, const char* _losecommand);
 	
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 
@@ -113,8 +113,8 @@ private:
 			std::queue <CActor*> ActionQueue;	//行動待機リスト
 
 		//戦闘設定
-			char WinMessage[256];
-			char LoseMessage[256];
+			char WinCommand[256];
+			char LoseCommand[256];
 
 };
 

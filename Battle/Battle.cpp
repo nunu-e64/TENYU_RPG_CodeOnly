@@ -12,16 +12,16 @@ CBattle::CBattle(){
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
 
-	WinMessage[0] = '\0';
-	LoseMessage[0] = '\0';
+	WinCommand[0] = '\0';
+	LoseCommand[0] = '\0';
 }
 
 void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
 }
-void CBattle::BattleSetting(const char* _winmessage, const char* _losemessage){
-	mystrcpy(WinMessage, _winmessage);
-	mystrcpy(LoseMessage, _losemessage);
+void CBattle::BattleSetting(const char* _wincommand, const char* _losecommand){
+	mystrcpy(WinCommand, _wincommand);
+	mystrcpy(LoseCommand, _losecommand);
 }
 	
 bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
@@ -227,16 +227,16 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	
 	switch (_result){
 	case WIN:
-		if (strlen(WinMessage)) _fieldcmdlist->Add(WinMessage);
+		if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
 		break;
 	case LOSE:
-		if (strlen(LoseMessage)) _fieldcmdlist->Add(LoseMessage);
+		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
 		break;
 	default:
 		break;
 	}
-	WinMessage[0] = '\0';
-	LoseMessage[0] = '\0';
+	WinCommand[0] = '\0';
+	LoseCommand[0] = '\0';
 	
 }
 
