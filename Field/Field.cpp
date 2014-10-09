@@ -32,6 +32,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			ImgBackGround = NULL;
 			TextAutoPlaySpeed = 1000;
 
+			Mode = MODE_PLAYING;
 
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);
@@ -208,6 +209,8 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 
 		////TextBoxなどによってCmdListに蓄積されたコマンドを処理////////////////////////////////////////
 			CHECK_TIME_START	FieldCmdManager.Main(&CmdList, this, &Map, TextBox, &EveManager);	CHECK_TIME_END("Command.Main")
+			if (Mode != MODE_PLAYING)	return Mode;
+
 
 		////描画////////////////////////////////////////
 			CHECK_TIME_START
@@ -419,15 +422,20 @@ reset:
 
 void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){
 	int result;
+	CCmdList resultcmdlist;
+
 	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
 	Battle.SetPlayer();
 	Battle.SetEnemy(_enemyList);
-	Battle.BattleStart(&result, &FlagSet, &CmdList, &Map, &EveManager);	
+	Battle.BattleStart(&result, &FlagSet, &resultcmdlist, &Map, &EveManager);	
+	
+	//戦闘結果コマンドの処理
+	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);
 	
 	//(仮)/////////////////
-		if (result==WIN) TextBox->AddStock("勝利");
-		if (result==LOSE) TextBox->AddStock("敗北");
-		TextBox->Main(&CmdList, &FlagSet);
+		//if (result==WIN) TextBox->AddStock("勝利");
+		//if (result==LOSE) TextBox->AddStock("敗北");
+		//TextBox->Main(&CmdList, &FlagSet);
 }
 void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
 	Battle.BattleSetting(_winmessage, _losemessage);

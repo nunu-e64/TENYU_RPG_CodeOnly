@@ -28,7 +28,7 @@ private:
 	std::map <std::string, CPlayerSpecies> PlayerBank;
 	CPlayerSpecies Dammy_Player;
 
-	int Gold;
+	int Gold;	//所持金
 	std::vector <CPlayerSpecies*> MemberList;		//プレイヤーリスト。0~MAX_PLAYER_NUM-1	が戦闘に出る
 
 };

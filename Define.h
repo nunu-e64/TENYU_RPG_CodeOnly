@@ -73,6 +73,7 @@ const char _IFCASE[] = "_CASE";
 const char JOKER_NAME[] = "joker";
 ////////////////////////////////////////////////////
 enum gamemode_tag{
+	MODE_PLAYING,
 	MODE_GAMEOVER,
 	MODE_GAMECLEAR,
 	MODE_BACKTOTITLE,

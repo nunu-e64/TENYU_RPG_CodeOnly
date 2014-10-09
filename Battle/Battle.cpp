@@ -13,7 +13,7 @@ CBattle::CBattle(){
 	Img_BattleBackGround = NULL;
 
 	WinCommand[0] = '\0';
-	LoseCommand[0] = '\0';
+	mystrcpy(LoseCommand, "@GameOver");
 }
 
 void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
@@ -223,11 +223,17 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	ACTOR_NUM = 0;
 	ENEMY_NUM = 0;
 	PLAYER_NUM = 0;
-	//////////////////////////
+	////////////////////////////////////////////////////////////
 	
 	switch (_result){
 	case WIN:
-		if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
+		//事前登録したコマンドをフィールドのコマンドリストに挿入
+			if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
+
+		//金と経験値計算
+			
+
+
 		break;
 	case LOSE:
 		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
@@ -236,8 +242,9 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 		break;
 	}
 	WinCommand[0] = '\0';
-	LoseCommand[0] = '\0';
+	mystrcpy(LoseCommand, "@GameOver");
 	
+
 }
 
 void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool _playeralsoshake){

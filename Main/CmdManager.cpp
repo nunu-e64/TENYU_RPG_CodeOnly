@@ -29,7 +29,7 @@ void CFieldCmdManager::Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CTex
 	char command[256];	//@○○
 	char *argument;	//引数
 
-	while (NextCommand(_cmdlist, commandline, command, argument)){
+	while (NextCommand(_cmdlist, commandline, command, argument) && _field->GetGameMode()==MODE_PLAYING){	//Modeが変更されてGameOverとかしていたら強制終了
 		if (!FieldCmdSolve (command, argument, _field, _map, _textbox, _evemanager) 
 		 && !WindowCmdSolve(command, argument, _field, _map, _textbox)
 		 && !TextCmdSolve  (command, argument, _field, _textbox)){
@@ -345,8 +345,22 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 	if (strlen(_command)==0){
 		ErrorDx("Error->strlen(_command)==0->%s", __FILE__, __LINE__, _command);
 		return true;
-
 		
+//@GameOver
+	}else if (mystrcmp(_command, "@GameOver",'p')){
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
+		_field->SetGameMode(MODE_GAMEOVER);
+		
+//@GameClear
+	}else if (mystrcmp(_command, "@GameOver",'p')){
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
+		_field->SetGameMode(MODE_GAMECLEAR);
+
+//@BackToTitle
+	}else if (mystrcmp(_command, "@GameOver",'p')){
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
+		_field->SetGameMode(MODE_BACKTOTITLE);
+
 //@BattleResult_Set
 	}else if (mystrcmp(_command, "@BattleResult_Set",'p')){
 		argnum = 2;		arg = new char*[argnum];	//if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須の例外

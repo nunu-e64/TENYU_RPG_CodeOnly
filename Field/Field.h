@@ -39,6 +39,9 @@ public:
 	void SetMyAlpha(unsigned char _alpha){Alpha = _alpha;}
 	void SetMyEffect(int _effectname, int _effectnum[]);
 	
+	void SetGameMode(gamemode_tag _mode){Mode = _mode;}
+	gamemode_tag GetGameMode(){return Mode;}
+
 	void BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList);
 	void SetBattleResult(const char* _winmessage, const char* _losemessage); 
 
@@ -76,6 +79,7 @@ private:
 		playdata_tag *PlayData_p;	//Main.cppからセーブデータをすべてポインタでもらっておく
 
 		int TextAutoPlaySpeed;
+		gamemode_tag Mode;
 
 
 	//所持インスタンス
