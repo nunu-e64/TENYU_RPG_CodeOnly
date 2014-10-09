@@ -24,6 +24,8 @@ public:
 	bool SetMemberList();
 	int GetMemberListSize(){return MemberList.size();}
 
+	void AddGold(int _gold){Gold+=_gold;}
+
 private:
 	std::map <std::string, CPlayerSpecies> PlayerBank;
 	CPlayerSpecies Dammy_Player;

@@ -1,6 +1,7 @@
 #include "../Define.h"
 #include "Battle.h"
 #include "EnemyPlanManager.h"
+#include "BattleCalculator.h"
 
 #include "../Field/Load.h"
 
@@ -231,8 +232,14 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 			if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
 
 		//金と経験値計算
-			
-
+			{int gold = BattleCalc::CalcGold(1, 2);
+			int exp = BattleCalc::CalcExp(1, 2);
+			PlayerSpeciesManager.AddGold(gold);
+			//PlayerSpeciesManager.AddExp(exp);
+			char text[256];
+			sprintf_s(text, "取得Gold：%d", gold); TextBox->AddStock(text);
+			sprintf_s(text, "取得Exp：%d", exp);	TextBox->AddStock(text);
+			}
 
 		break;
 	case LOSE:
@@ -241,10 +248,16 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	default:
 		break;
 	}
+
+	while(BasicLoop()){
+		if( !TextBox->Main(&B_CmdList, FlagSet_p)) break;
+		B_CmdManager.Main(&B_CmdList, this, TextBox);
+		Draw();
+	}
+
+	//////////////////////////////////////////////////////
 	WinCommand[0] = '\0';
 	mystrcpy(LoseCommand, "@GameOver");
-	
-
 }
 
 void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool _playeralsoshake){

@@ -5,11 +5,9 @@
 
 class CBattleCalculator{
 public:
-	int CalcGold(int _lv, int _goldgene);
-	int CalcExp(int _lv, int _expgene);
-
-
-};
+	static int CalcGold(int _lv, int _goldgene);
+	static int CalcExp(int _lv, int _expgene);
+}typedef BattleCalc;
 
 
 ////多重インクルード防止（インクルードガード）//
