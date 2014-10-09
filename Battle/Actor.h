@@ -47,7 +47,7 @@ public:
 		bool DeadCheck();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){Target=_target;}
 
-	//ほか
+	//その他
 		CRect GetRect(){return Rect;}
 
 protected:
@@ -73,7 +73,8 @@ protected:
 	//戦闘関連
 		bool Alive;
 		bool Visible;
-		int Hp;		int OldHp;	//描画用
+		//int Hp;
+		int OldHp;	//描画用
 		double SpdPer;
 		double TimeGauge;	//0~100%
 		int Accident;	//状態異常やステータス変動

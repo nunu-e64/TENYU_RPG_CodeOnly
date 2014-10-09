@@ -12,7 +12,7 @@ public:
 	CSpecies(){
 		Name="NULL_NAME";
 		Lv=Img=Atk=Def=Spd=-1;
-		MaxHp = 1;
+		Hp=MaxHp = 1;
 	}
 	~CSpecies(){}
 
@@ -23,6 +23,7 @@ protected:
 	int Img;
 
 	int Lv;
+	int Hp;
 	int MaxHp;
 	int Atk;
 	int Def;

@@ -216,14 +216,6 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	while(!ActionQueue.empty()) {ActionQueue.pop();}
 	B_CmdList.Clear();
-
-	delete [] Actor;
-	delete [] Player;
-	delete [] Enemy;
-
-	ACTOR_NUM = 0;
-	ENEMY_NUM = 0;
-	PLAYER_NUM = 0;
 	////////////////////////////////////////////////////////////
 	
 	switch (_result){
@@ -241,6 +233,10 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 			sprintf_s(text, "取得Exp：%d", exp);	TextBox->AddStock(text);
 			}
 
+		//Player元データに保存
+			PlayerSpeciesManager.CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
+
+
 		break;
 	case LOSE:
 		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
@@ -256,6 +252,14 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	}
 
 	//////////////////////////////////////////////////////
+	delete [] Actor;
+	delete [] Player;
+	delete [] Enemy;
+
+	ACTOR_NUM = 0;
+	ENEMY_NUM = 0;
+	PLAYER_NUM = 0;
+
 	WinCommand[0] = '\0';
 	mystrcpy(LoseCommand, "@GameOver");
 }

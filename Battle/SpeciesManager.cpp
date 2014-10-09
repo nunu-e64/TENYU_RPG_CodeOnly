@@ -1,5 +1,6 @@
 #include "../Define.h"
 #include "SpeciesManager.h"
+#include "Player.h"
 
 
 bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
@@ -58,6 +59,22 @@ CPlayerSpecies CPlayerSpeciesManager::GetSpecies(int _index){
 	}
 }
 
+
+void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
+
+	//戦闘終了後、PlayerBankに保存すべき情報をコピーする
+
+	for (int i=0; i<PLAYER_NUM; i++){
+		PlayerBank[_player[i].GetName()].Hp = _player[i].Hp;
+		//PlayerBank[_player[i].GetName()].Mp = _player[i].Mp;
+		PlayerBank[_player[i].GetName()].Exp = _player[i].Exp;
+	}
+
+}
+
+
+
+//CEnemySpecies//
 //////////////////////////////////////////////////////////////////////////////
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
 	CEnemySpecies newEnemy;

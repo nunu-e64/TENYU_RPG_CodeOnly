@@ -7,6 +7,7 @@
 #include <string>
 #include "Species.h"
 
+class CPlayer;
 
 class CPlayerSpeciesManager{
 public:
@@ -25,6 +26,7 @@ public:
 	int GetMemberListSize(){return MemberList.size();}
 
 	void AddGold(int _gold){Gold+=_gold;}
+	void CopyValue(int PLAYER_NUM, CPlayer* _player); 
 
 private:
 	std::map <std::string, CPlayerSpecies> PlayerBank;

@@ -15,9 +15,9 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	B_TextBox_pp = _textbox;
 	CmdList = _cmdlist;
 
-	Alive = Visible = true;
+	Alive = Visible = (Hp!=0? true:false);
 	SpdPer = between(1.0, 100.0, (double)Spd/100);	//$相対値から絶対値への変換
-	Hp = OldHp = MaxHp;
+	OldHp = Hp;
 
 	TimeGauge = 0;//rand()%100;	//ランダムでいいの？$
 	Accident = NULL;
