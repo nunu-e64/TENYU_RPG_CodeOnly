@@ -191,7 +191,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				}else if (CheckHitKeyDown(KEY_INPUT_ESCAPE) || CheckHitKey(KEY_INPUT_3)){
 					return MODE_BACKTOTITLE;
 				}else if (CheckHitKeyDown(KEY_INPUT_P)){
-					CmdList.Add("@AutoPlay_Set(true)");
+					CmdList.Add("@AutoPlay_Set(true,1)");
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
 				}
