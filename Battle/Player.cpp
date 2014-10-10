@@ -60,11 +60,13 @@ bool CPlayer::Plan(){
 	static bool newplan = true;
 	
 	//テスト用////////////////////////////////
-	if (newplan){
-		char tmp[64];
-		sprintf_s(tmp, "Player%dのPlan", Index);
-		//(*B_TextBox_pp)->AddStock(tmp);
-	}
+	#ifdef DEBUG_MODE
+		if (newplan){
+			char tmp[64];
+			sprintf_s(tmp, "Player%dのPlan", Index);
+			//(*B_TextBox_pp)->AddStock(tmp);
+		}
+	#endif
 	//////////////////////////////////////////
 
 
@@ -140,14 +142,16 @@ bool CPlayer::Plan(){
 
 bool CPlayer::Action(){
 	//テスト用////////////////////////////////
-	char tmp[64];
-	sprintf_s(tmp, "Player%dのAction", Index);
+	#ifdef DEBUG_MODE
+		char tmp[64];
+		sprintf_s(tmp, "Player%dのAction", Index);
+	#endif
 	//(*B_TextBox_pp)->AddStock(tmp);
 	//////////////////////////////////////////
 	
 	if (NowTrick==NULL){
 		Target = -1;
-		ErrorDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
+		DebugDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
 		return true;
 	}
 

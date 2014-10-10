@@ -98,7 +98,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 			}else{
 				//歩行/////////////////////////////////////////////////////
 				int walkspeed = ((CheckHitKey(KEY_INPUT_LSHIFT)||CheckHitKey(KEY_INPUT_RSHIFT))? 4:2);
-				#ifdef DEBUG_MODE
+				#ifndef PRODUCT_MODE
 					walkspeed = ((CheckHitKey(KEY_INPUT_LCONTROL)||CheckHitKey(KEY_INPUT_RCONTROL))? MAP_CHIP_SIZE:walkspeed);
 				#endif
 				

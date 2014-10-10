@@ -43,9 +43,11 @@ void CEnemy::MakePlan(){
 
 bool CEnemy::Plan(){
 	//テスト用////////////////////////////////
+	#ifdef DEBUG_MODE
 		char tmp[64];
 		sprintf_s(tmp, "%sのPlan", Name.c_str());
 		(*B_TextBox_pp)->AddStock(tmp);
+	#endif
 	//////////////////////////////////////////
 
 	
@@ -67,9 +69,11 @@ bool CEnemy::Plan(){
 
 bool CEnemy::Action(){
 	//テスト用////////////////////////////////
+	#ifdef DEBUG_MODE
 		char tmp[64];
 		sprintf_s(tmp, "%sのAction", Name.c_str());
 		(*B_TextBox_pp)->AddStock(tmp);
+	#endif
 	//////////////////////////////////////////	
 
 	if (NowTrick==NULL){
