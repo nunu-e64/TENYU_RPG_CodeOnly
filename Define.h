@@ -72,6 +72,11 @@ const char _IFEND[] = "_IF_END";
 const char _IFCASE[] = "_CASE";
 const char JOKER_NAME[] = "joker";
 ////////////////////////////////////////////////////
+
+enum screenchange_tag{
+	SCREEN_FADE,
+	SCREEN_NUM
+};
 enum gamemode_tag{
 	MODE_PLAYING,
 	MODE_GAMEOVER,

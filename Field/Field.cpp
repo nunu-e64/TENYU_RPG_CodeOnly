@@ -10,7 +10,8 @@ static CBattle Battle;
 
 
 CField::~CField(){
-		DebugDx("Field_Destruct");
+	DebugDx("Field_Destruct");
+	
 	Map.Init();
 	EveManager.Init();
 	Battle.Term();
@@ -269,7 +270,6 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 	
 	if (_screenflip)	{BasicLoop();}
 }
-
 	
 bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fade){	
 	if(_walk){
@@ -427,15 +427,30 @@ void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyLis
 	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
 	Battle.SetPlayer();
 	Battle.SetEnemy(_enemyList);
-	Battle.BattleStart(&result, &FlagSet, &resultcmdlist, &Map, &EveManager);	
+	Battle.BattleReady(&FlagSet, &Map, &EveManager);
+
+	//画面切り替え効果（戦闘開始）
+		int fieldGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+			SetDrawScreen(fieldGraph);
+			Draw(false,true);
+		int battleGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
+			SetDrawScreen(battleGraph);
+			Battle.Draw(false,true);
+		SetDrawScreen(DX_SCREEN_BACK);
+		ScreenChanger.ChangeScreen(fieldGraph, battleGraph, SCREEN_FADE, 60);
 	
+	//戦闘開始
+	Battle.BattleStart(&result, &resultcmdlist);
+	
+	//画面切り替え効果（戦闘終了）
+		SetDrawScreen(DX_SCREEN_FRONT);
+		GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
+		SetDrawScreen(DX_SCREEN_BACK);
+		ScreenChanger.ChangeScreen(battleGraph, fieldGraph, SCREEN_FADE, 60);
+
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);
-	
-	//(仮)/////////////////
-		//if (result==WIN) TextBox->AddStock("勝利");
-		//if (result==LOSE) TextBox->AddStock("敗北");
-		//TextBox->Main(&CmdList, &FlagSet);
+
 }
 void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
 	Battle.BattleSetting(_winmessage, _losemessage);

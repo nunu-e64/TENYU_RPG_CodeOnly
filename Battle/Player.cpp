@@ -85,7 +85,6 @@ bool CPlayer::Plan(){
 			CMenuNode* result = NULL;
 
 			if (BattleMenu.Move(result)){
-				DebugDx("MenuResult:%s", result->label);
 
 				if (mystrcmp(result->parent->label, "‹Z")){
 					unsigned int index = BattleMenu.GetIndex(result);

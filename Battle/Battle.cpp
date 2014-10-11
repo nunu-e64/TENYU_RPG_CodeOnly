@@ -6,7 +6,8 @@
 #include "../Field/Load.h"
 
 CBattle::CBattle(){
-	
+	Ready = false;
+
 	ACTOR_NUM = 0;
 	PLAYER_NUM = 0;
 	ENEMY_NUM = 0;
@@ -121,7 +122,7 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 }
 
 
-void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcmdlist_p, CMap* _map_p, CEveManager* _evemanager_p){
+void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////	
 		
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
@@ -134,7 +135,7 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcm
 			}
 
 		//初期値設定
-			for (int i=0; i<PLAYER_NUM; i++){	//$雑なテスト用初期値設定
+			for (int i=0; i<PLAYER_NUM; i++){
 				Player[i].CreateBattleMenu();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
 			}
@@ -157,17 +158,21 @@ void CBattle::BattleStart(int* _result, CFlagSet* _flagset_p, CCmdList* _fieldcm
 		FlagSet_p = _flagset_p;
 		B_CmdManager.Init(_map_p);
 
+		Ready = true;
+}
 
-		TextBox->AddStock("戦闘開始！");
-		TextBox->NextPage(&B_CmdList, FlagSet_p);
+void CBattle::BattleStart(int* _result, CCmdList* _fieldcmdlist_p){
+	if (!Ready){
+		ErrorDx("Error->BattleStart->Battle isn't Ready to Start.", __FILE__, __LINE__);
+		*_result = -1;
+	}else{
+		//メインループ処理///////////////////////////////////////////////////
+			int tmp_result = MainLoop();
 
-
-	//メインループ処理///////////////////////////////////////////////////
-		int tmp_result = MainLoop();
-
-	//終了処理///////////////////////////////////////////////////
-		BattleFinish(tmp_result, _fieldcmdlist_p);
-		*_result = tmp_result;
+		//終了処理///////////////////////////////////////////////////
+			BattleFinish(tmp_result, _fieldcmdlist_p);
+			*_result = tmp_result;
+	}
 }
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
@@ -214,6 +219,8 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 }
 
 void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
+	if (!Ready) {WarningDx("Warning->BattleFinish->Battle hasn't started yet.(do nothing return)", __FILE__, __LINE__); return;}
+	Ready = false;
 	while(!ActionQueue.empty()) {ActionQueue.pop();}
 	B_CmdList.Clear();
 	////////////////////////////////////////////////////////////

@@ -13,6 +13,7 @@
 #include "../Main/CmdManager.h"
 #include "../Main/CmdList.h"
 #include "../Main/WorldManager.h"
+#include "../Main/ScreenChanger.h"
 
 #include "../Battle/Battle.h"
 
@@ -94,6 +95,8 @@ private:
 		CFirstSetCmdManager FirstSetCmdManager;
 		CCmdList CmdList;
 		CEveManager EveManager;
+
+		CScreenChanger ScreenChanger;
 
 };
 
