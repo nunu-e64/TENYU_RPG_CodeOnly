@@ -5,12 +5,19 @@
 
 class CScreenChanger{
 public:
-	void ChangeScreen(const int _pGraph, const int _nGraph, const screenchange_tag _type, const int _count);
+	enum screenchange_tag{
+		SCREEN_FADE,
+		SCREEN_BOKASHI,
+		SCREEN_NUM
+	};
+
+	void ChangeScreen(const int _pGraph, const int _nGraph, const screenchange_tag _type, int _count);
+
 
 private:
-	static void Fade(const int _pGraph, const int _nGraph, const int _count);
+	static void Fade(const int _pGraph, const int _nGraph, int _count);
+	static void Bokashi(const int _pGraph, const int _nGraph, int _count);
 };
-
 
 
 ////多重インクルード防止（インクルードガード）//

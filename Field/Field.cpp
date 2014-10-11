@@ -437,16 +437,21 @@ void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyLis
 			SetDrawScreen(battleGraph);
 			Battle.Draw(false,true);
 		SetDrawScreen(DX_SCREEN_BACK);
-		ScreenChanger.ChangeScreen(fieldGraph, battleGraph, SCREEN_FADE, 60);
+		int blankGraph =  MakeScreen(WINDOW_WIDTH,WINDOW_HEIGHT);
+		ScreenChanger.ChangeScreen(fieldGraph, blankGraph, ScreenChanger.SCREEN_FADE, 10);
+		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 10);
+		ScreenChanger.ChangeScreen(fieldGraph, blankGraph, ScreenChanger.SCREEN_FADE, 10);
+		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 10);
+		ScreenChanger.ChangeScreen(fieldGraph, battleGraph, ScreenChanger.SCREEN_BOKASHI, 60);
 	
 	//戦闘開始
 	Battle.BattleStart(&result, &resultcmdlist);
 	
 	//画面切り替え効果（戦闘終了）
-		SetDrawScreen(DX_SCREEN_FRONT);
 		GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
 		SetDrawScreen(DX_SCREEN_BACK);
-		ScreenChanger.ChangeScreen(battleGraph, fieldGraph, SCREEN_FADE, 60);
+		ScreenChanger.ChangeScreen(battleGraph, blankGraph, ScreenChanger.SCREEN_FADE, 30);
+		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 30);
 
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);

@@ -178,17 +178,11 @@ void CBattle::BattleStart(int* _result, CCmdList* _fieldcmdlist_p){
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
 	
-	while(BasicLoop()){
-		
+	do{		
 		if( !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
 
 			if (ActionQueue.empty()){	//行動待機リストが空かチェック
 			
-				//$/////////////////////////////////////////////////////////
-					if (CheckHitKeyDown(KEY_INPUT_W)) return WIN;
-					if (CheckHitKeyDown(KEY_INPUT_L)) return LOSE;
-				////////////////////////////////////////////////////////////
-
 				for (int i=0; i<ACTOR_NUM; i++){
 					if (Actor[i]->Main()) ActionQueue.push(Actor[i]);		//TimeBar進ませて必要なら行動待機リストに入れる
 				}
@@ -214,7 +208,8 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 
 		////描画////////////////////////////////////////
 			Draw();
-	}
+	}while(BasicLoop());
+
 	return -1;
 }
 
@@ -243,7 +238,6 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 		//Player元データに保存
 			PlayerSpeciesManager.CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
 
-
 		break;
 	case LOSE:
 		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
@@ -252,11 +246,14 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 		break;
 	}
 
+	int i=0;
 	while(BasicLoop()){
 		if( !TextBox->Main(&B_CmdList, FlagSet_p)) break;
 		B_CmdManager.Main(&B_CmdList, this, TextBox);
 		Draw();
 	}
+
+	Draw();	//裏画面に描画（画面切り替え演出用）
 
 	//////////////////////////////////////////////////////
 	delete [] Actor;
@@ -311,7 +308,11 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 }
 
 int CBattle::ResultCheck(){
-	
+	//$/////////////////////////////////////////////////////////
+		if (CheckHitKeyDown(KEY_INPUT_W)) return WIN;
+		if (CheckHitKeyDown(KEY_INPUT_L)) return LOSE;
+	////////////////////////////////////////////////////////////
+
 	int i;
 	for (i=0; i<PLAYER_NUM; i++){
 		if (Player[i].GetAlive()) break;
