@@ -66,20 +66,4 @@ void CScreenChanger::Bokashi(const int _pGraph, const int _nGraph, int _count){
 		DrawExtendGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, dGraph,false);
 	}while(BasicLoop() && ++i<_count/2);
 
-	/*do{
-		dGraph = _pGraph;
-		GraphFilter( dGraph, DX_GRAPH_FILTER_GAUSS, 8, 100*i/(double)(_count/2) ) ;
-		DrawGraph(0,0,dGraph,false);
-	}while(BasicLoop() && ++i<_count/2);
-
-	i = 0;
-
-	do{
-		dGraph2 = _nGraph;
-		GraphFilter( dGraph2, DX_GRAPH_FILTER_GAUSS, 8, (int)(100-100*i/(double)(_count/2)) ) ;
-		DrawGraph(0,0,dGraph2,false);
-		DebugDx("%d",(int)(100-100*i/(double)(_count/2)));
-	}while(BasicLoop() && ++i<_count/2);
-*/
-
 }
