@@ -310,11 +310,11 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			ErrorDx("Error->@EnemyTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
 		
 		}else if (arg[1]==NULL){
-			ErrorDx("Error->@PlayerTrick_Set->arg[TrickName]=NULL", __FILE__, __LINE__);
+			ErrorDx("Error->@EnemyTrick_Set->arg[TrickName]=NULL", __FILE__, __LINE__);
 
 		}else{
 			
-			if (arg[19]!=NULL) WarningDx("Warning->@EnemyTrick_Set->Number of arg[trick] is max :%s", arg[0]);
+			if (arg[19]!=NULL) WarningDx("Warning->@EnemyTrick_Set->Number of arg[trick] is max :%s", _command);
 			
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
@@ -325,6 +325,52 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			}
 			_enemySpeciesManager->SetTrickList(arg[0], trickList);
 		}
+
+//@Encount_Set
+	}else if (mystrcmp(_command,"@Encount_Set")){		
+		argnum = 3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
+
+		int num[3];
+		for (int i=0; i<3; i++){
+			if(!( mystrtol(arg[i], &num[i]))){
+				ErrorDx("Error->@Encount_Set->Check argument type->%s", __FILE__, __LINE__, _argument);
+				goto finish;
+			}
+		}
+
+		_enemySpeciesManager->SetMapEncount(num[0], num[1], num[2]);
+
+
+//@Party_Set
+	}else if (mystrcmp(_command,"@Party_Set")){		
+		argnum = MAX_ENEMY_NUM+3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//必須
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@Party_Set->arg[mapnum]=NULL", __FILE__, __LINE__);
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@Party_Set->arg[chipnum]=NULL", __FILE__, __LINE__);
+		}else if (arg[2]==NULL){
+			ErrorDx("Error->@Party_Set->arg[encount]=NULL", __FILE__, __LINE__);
+
+		}else{
+			int num[3];
+			for (int i=0; i<3; i++){
+				if(!( mystrtol(arg[i], &num[i]))){
+					ErrorDx("Error->@Party_Set->Check argument type->%s", __FILE__, __LINE__, _argument);
+					goto finish;
+				}
+			}
+			
+			if (arg[argnum-1]!=NULL) WarningDx("Warning->@Party_Set->Number of arg[enemy] >= max :%s", _argument);
+			
+			std::vector <std::string> enemyList;
+			
+			for (int i=3; arg[i]!=NULL && i<argnum; i++){
+				enemyList.push_back(arg[i]);				
+			}
+			_enemySpeciesManager->AddMapEncountParty(num[0], num[1], num[2], enemyList);
+		}
+
 
 //コマンド不一致
 	}else{

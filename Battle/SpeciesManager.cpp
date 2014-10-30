@@ -99,3 +99,44 @@ CEnemySpecies CEnemySpeciesManager::GetSpecies(const char* _name){
 		return CEnemySpecies();
 	}
 }
+
+bool CEnemySpeciesManager::SetMapEncount(int _mapnum, int _chipnum, int _encount){
+
+	MAP_MAX_CHECK(_mapnum, false);
+
+	if (_chipnum<0 || _chipnum>255){
+		ErrorDx("Error->_chipnum should between(0,255) :%d", __FILE__, __LINE__, _chipnum);
+		return false;
+	}
+	if (_encount<0 || _encount>1000){
+		ErrorDx("Error->_encount should between(0,1000) :%d", __FILE__, __LINE__, _encount);
+		return false;
+	}
+
+	MapEncount[_mapnum][_chipnum].encount = _encount;
+	return true;
+
+}
+bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party){
+
+	MAP_MAX_CHECK(_mapnum, false);
+
+	if (_chipnum<0 || _chipnum>255){
+		ErrorDx("Error->_chipnum should between(0,255) :%d", __FILE__, __LINE__, _chipnum);
+		return false;
+	}
+
+	encount_tag::party_tag tmp;
+	
+	for (unsigned int i=0; i<_party.size(); i++){
+		tmp.party.push_back(&GetSpecies(_party[i].c_str()));
+	}
+
+	tmp.per = _encount;
+
+	MapEncount[_mapnum][_chipnum].partyset.push_back(tmp) ;
+
+	if (MapEncount[_mapnum][_chipnum].encount < 0 || MapEncount[_mapnum][_chipnum].encount >1000){
+		MapEncount[_mapnum][_chipnum].encount = 0;
+	}
+}

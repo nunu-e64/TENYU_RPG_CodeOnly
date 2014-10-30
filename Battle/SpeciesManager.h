@@ -48,9 +48,23 @@ public:
 
 	CEnemySpecies GetSpecies(const char* _name);
 
+	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
+	bool AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party);
+
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
+	
+	struct encount_tag{
+		struct party_tag{
+			int per;
+			std::vector<CEnemySpecies*> party;
+		};
 
+		int encount;
+		std::vector <party_tag> partyset;
+	};
+	
+	std::map <int, std::map<int, encount_tag> > MapEncount;
 };
 
 
