@@ -212,6 +212,9 @@ bool mystrtol(const char* str, int* result, int radix=10);
 	//	str		：	変換対象の文字列
 	//	*result	：	変換したLong型の数を受け取るアドレス ←int型も可に
 	//	radix	：	基数。数値を何進数とみなすかを設定。デフォルトは10進数
+bool mystrtod(const char* str, double* result);	
+bool mystrtod(const char* str, float* result);
+	//浮動小数点数（doubleもfloatも可）
 /////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////

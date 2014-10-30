@@ -29,6 +29,29 @@ bool mystrtol(const char* str, int* result, int radix){
 	if((flag = mystrtol(str, &num, radix)))	*result = (int)num;
 	return flag;
 }
+bool mystrtod(const char* str, double* result){
+	double num;
+	char* end;
+
+	if( str == NULL || result == NULL )return false;
+	errno=0;
+
+	num = strtod( str, &end);
+	if( num== 0 && errno== ERANGE ){
+		return false; /*アンダーフロー*/
+	}else if( (num== HUGE_VAL || num== -HUGE_VAL) && errno== ERANGE ){
+		return false;	/*"結果が表現できない*/
+	}
+
+	*result = num;
+	return true;
+}
+bool mystrtod(const char* str, float* result){
+	double num;
+	bool flag;
+	if((flag = mystrtod(str, &num))) *result = (float)num;
+	return flag;
+}
 /////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////

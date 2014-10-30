@@ -330,15 +330,20 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 	}else if (mystrcmp(_command,"@Encount_Set")){		
 		argnum = 3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
 
-		int num[3];
-		for (int i=0; i<3; i++){
+		int num[2];
+		for (int i=0; i<2; i++){
 			if(!( mystrtol(arg[i], &num[i]))){
 				ErrorDx("Error->@Encount_Set->Check argument type->%s", __FILE__, __LINE__, _argument);
 				goto finish;
 			}
 		}
-
-		_enemySpeciesManager->SetMapEncount(num[0], num[1], num[2]);
+		double dnum;
+		if(!( mystrtod(arg[2], &dnum))){
+			ErrorDx("Error->@Encount_Set->Check argument type->%s", __FILE__, __LINE__, _argument);
+			goto finish;
+		}
+	
+		_enemySpeciesManager->SetMapEncount(num[0], num[1], (int)(dnum*10));	//100% = 1000‚É•ÏŠ·
 
 
 //@Party_Set
