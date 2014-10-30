@@ -44,6 +44,7 @@ public:
 	gamemode_tag GetGameMode(){return Mode;}
 
 	void BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList);
+	void BattleStart();
 	void SetBattleResult(const char* _winmessage, const char* _losemessage); 
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);

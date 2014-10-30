@@ -114,7 +114,14 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				
 				if (OldX!=X||OldY!=Y) {		//移動しなかった時は足元チェックしない
 					OldX=X; OldY=Y;
-					if (CheckEvent(true)) TextBox->NextPage(&CmdList, &FlagSet);		//足元にテキストが設定してあれば表示
+					if (CheckEvent(true)){
+						TextBox->NextPage(&CmdList, &FlagSet);		//足元にテキストが設定してあれば表示
+					}else{
+						//戦闘エンカウント判定
+						if (Battle.CheckEncount(NowMap, Map.GetMapData(NowMap, X, Y))){
+							CmdList.Add("@BattleEncount");
+						}
+					}
 				}
 				///////////////////////////////////////////////////////////
 				
@@ -205,7 +212,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 
 		////デバッグの時にはプレイヤー座標をタイトルバーに表示////////////////////////////////////////
 			#ifndef PRODUCT_MODE
-				SetTitle("Pos_%d:%d Data_%d:%d", X, Y, Map.GetMapData(NowMap, X, Y, 0),Map.GetMapData(NowMap, X, Y, 1));
+				SetTitle("Map_%d Pos_%d:%d Data_%d:%d", NowMap, X, Y, Map.GetMapData(NowMap, X, Y, 0),Map.GetMapData(NowMap, X, Y, 1));
 			#endif
 
 		////TextBoxなどによってCmdListに蓄積されたコマンドを処理////////////////////////////////////////
@@ -421,14 +428,20 @@ reset:
 }
 
 void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){
+
+	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
+	Battle.SetEnemy(_enemyList);
+	BattleStart();
+}
+
+void CField::BattleStart(){
+	DebugDx("BattleStart");
 	int result;
 	CCmdList resultcmdlist;
 
-	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
 	Battle.SetPlayer();
-	Battle.SetEnemy(_enemyList);
 	Battle.BattleReady(&FlagSet, &Map, &EveManager);
-
+	
 	//画面切り替え効果（戦闘開始）
 		int fieldGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
 			SetDrawScreen(fieldGraph);
@@ -455,8 +468,8 @@ void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyLis
 
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);
-
 }
+
 void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
 	Battle.BattleSetting(_winmessage, _losemessage);
 }

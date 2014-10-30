@@ -366,7 +366,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				}
 			}
 			
-			if (arg[argnum-1]!=NULL) WarningDx("Warning->@Party_Set->Number of arg[enemy] >= max :%s", _argument);
+			if (arg[argnum-1]!=NULL) WarningDx("Warning->@Party_Set->Number of arg[enemy] >= max :%s", arg[argnum-1]);
 			
 			std::vector <std::string> enemyList;
 			
@@ -424,7 +424,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 	
 		mystrsmt(_argument, " ,");
 		if ((p=strrchr(_argument, '@'))!=NULL && p!=_argument){
-			mystrcpy(loseCommand, p);
+				mystrcpy(loseCommand, p);
 			*p = '\0';
 			mystrsmt(_argument, " ,");
 			mystrcpy(winCommand, _argument);
@@ -444,7 +444,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 //@Battle
 	}else if (mystrcmp(_command, "@Battle",'p')){
-		argnum = 7;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+		argnum = MAX_ENEMY_NUM;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		if (arg[0]==NULL || arg[1]==NULL){
 			ErrorDx("Error->@Battle->arg[pic_bg] or arg[enemy00] == NULL (do nothing)");
@@ -458,6 +458,11 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 		_field->BattleStart(arg[0], enemyList);
 
+//@BattleEncount
+	}else if (mystrcmp(_command, "@BattleEncount",'p')){
+		argnum = 1;		arg = new char*[argnum];	//ArgCut(_command, _argument, arg, argnum, false);	//•K{
+
+		_field->BattleStart();
 
 //@Dir_Set
 	}else if (mystrcmp(_command, "@Dir_Set",'l')){

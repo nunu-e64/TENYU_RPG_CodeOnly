@@ -50,6 +50,7 @@ public:
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
 	bool AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party);
+	bool CheckEncount(int _mapnum, int _chipnum, std::vector<CEnemySpecies*> &_party_p);
 
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;

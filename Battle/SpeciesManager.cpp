@@ -139,4 +139,42 @@ bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _en
 	if (MapEncount[_mapnum][_chipnum].encount < 0 || MapEncount[_mapnum][_chipnum].encount >1000){
 		MapEncount[_mapnum][_chipnum].encount = 0;
 	}
+	return true;
+}
+
+bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<CEnemySpecies*> &_party_p){
+
+	MAP_MAX_CHECK(_mapnum, false);
+	if (_chipnum<0 || _chipnum>255){
+		ErrorDx("Error->_chipnum should between(0,255) :%d", __FILE__, __LINE__, _chipnum);
+		return false;
+	}
+
+	if (MapEncount[_mapnum][_chipnum].encount > rand()%1000){
+		//エンカウント決定したので戦う敵パーティを決定
+
+		DebugDx("EnemySpeciesManager:Encount!");
+
+		int probability=0;
+		int partynum = -1;
+		for (unsigned int i = 0; i < MapEncount[_mapnum][_chipnum].partyset.size(); i++){
+			probability += MapEncount[_mapnum][_chipnum].partyset[i].per;
+		    if ((rand()%1000)/(double)1000 * probability < MapEncount[_mapnum][_chipnum].partyset[i].per){
+				partynum = i;
+			}
+		}
+
+		DebugDx("EnemySpeciesManager:Encount:%d",partynum);
+
+		if (partynum!=-1){
+			_party_p = MapEncount[_mapnum][_chipnum].partyset[partynum].party;
+			DebugDx("*_party_p[0]:%s", _party_p[0]->GetName().c_str());
+			return true;
+		}else{
+			return false;
+		}
+
+	}else{
+		return false;
+	}
 }

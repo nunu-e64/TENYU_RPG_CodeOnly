@@ -34,6 +34,7 @@ public:
 	void BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void BattleStart(int* _result, CCmdList* _fieldcmdlist_p);
 	void BattleSetting(const char* _wincommand, const char* _losecommand);
+	bool CheckEncount(int _mapnum, int _chipnum);
 	
 	void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false);
 
@@ -46,6 +47,7 @@ public:
 	void SetPlayer(const int _playerNum, ...);
 	void SetEnemy(const int _enemyNum, ...);
 	void SetEnemy(std::vector<std::string> _enemyList);
+	void SetEnemy(std::vector<CEnemySpecies*> _enemyParty);
 	
 
 	//êÌì¨óp

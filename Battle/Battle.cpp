@@ -18,14 +18,7 @@ CBattle::CBattle(){
 	mystrcpy(LoseCommand, "@GameOver");
 }
 
-void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
-}
-void CBattle::BattleSetting(const char* _wincommand, const char* _losecommand){
-	mystrcpy(WinCommand, _wincommand);
-	mystrcpy(LoseCommand, _losecommand);
-}
-	
 bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	PlayerSpeciesManager.Clear();
 	EnemySpeciesManager.Clear();
@@ -64,64 +57,9 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
 }
+void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
-void CBattle::SetBackGround(const char* _pickey){
-	Img_BattleBackGround = BImgBank.GetImg(_pickey);
 }
-
-void CBattle::SetPlayer(){	//隊列に基づいて選出
-	PLAYER_NUM = min(PlayerSpeciesManager.GetMemberListSize(), MAX_PLAYER_NUM);
-	if (PLAYER_NUM==0){
-		ErrorDx("Error->Battle::SetPlayer->PLAYER_NUM=0.  SetPartyBattleMember!", __FILE__, __LINE__);
-		return;
-	}
-	Player = new CPlayer[PLAYER_NUM];
-	for (int i=0; i<PLAYER_NUM; i++){
-		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
-	}
-}
-void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
-	PLAYER_NUM=0;
-	va_list args;
-	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
-	
-	if (_playerNum<=0){
-		ErrorDx("Error->arg[playerNum] should >=1: playerNum=%d", __FILE__, __LINE__, _playerNum);
-	}else{		
-		PLAYER_NUM = _playerNum;
-		Player = new CPlayer[PLAYER_NUM];
-		for (int i=0; i<PLAYER_NUM; i++){
-			Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
-		}
-		va_end(args);
-	}
-}
-
-void CBattle::SetEnemy(const int _enemyNum, ...){	//出現モンスター自由指定用
-	va_list args;
-	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
-	
-	if (_enemyNum<=0){
-		ErrorDx("Error->arg[enemyNum] should >=1: enemyNum=%d", __FILE__, __LINE__, _enemyNum);
-	}else{
-		std::vector<std::string> enemyList;
-		for (int i=0; i<_enemyNum; i++){
-			enemyList.push_back(va_arg(args, char*));		//target=1の時、一個目を返す（Not target=0）
-		}
-		va_end(args);
-	}
-}
-void CBattle::SetEnemy(std::vector<std::string> _enemyList){
-	if (_enemyList.size()==0) ErrorDx("Error->Battle::SetEnemy->enemyNum=0 :%d", __FILE__, __LINE__, _enemyList.size());
-
-	ENEMY_NUM = _enemyList.size();
-	Enemy = new CEnemy[ENEMY_NUM];
-	for (int i=0; i<ENEMY_NUM; i++){
-		Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str()));		//target=1の時、一個目を返す（Not target=0）
-	}
-}
-
-
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//開始処理///////////////////////////////////////////////////	
 		
@@ -174,6 +112,96 @@ void CBattle::BattleStart(int* _result, CCmdList* _fieldcmdlist_p){
 			*_result = tmp_result;
 	}
 }
+void CBattle::BattleSetting(const char* _wincommand, const char* _losecommand){
+	mystrcpy(WinCommand, _wincommand);
+	mystrcpy(LoseCommand, _losecommand);
+}
+
+bool CBattle::CheckEncount(int _mapnum, int _chipnum){
+	std::vector <CEnemySpecies*> tmpparty;
+
+	if (EnemySpeciesManager.CheckEncount(_mapnum, _chipnum, tmpparty)){
+		DebugDx("Encount_begin:%d",tmpparty.size());
+
+		for (int i =0; i<tmpparty.size(); i++){		
+			DebugDx("enemy:%s", tmpparty[i]->GetName().c_str());
+		}
+
+		SetEnemy(tmpparty);
+		DebugDx("Encount_middle");
+		SetBackGround("bg_01");	//これもMapNumとChipNum依存でBattleに持たせておく$
+		DebugDx("Encount_fin");
+		return true;
+	}else{
+		return false;
+	}
+}
+
+void CBattle::SetBackGround(const char* _pickey){
+	Img_BattleBackGround = BImgBank.GetImg(_pickey);
+}
+
+void CBattle::SetPlayer(){	//隊列に基づいて選出
+	PLAYER_NUM = min(PlayerSpeciesManager.GetMemberListSize(), MAX_PLAYER_NUM);
+	if (PLAYER_NUM==0){
+		ErrorDx("Error->Battle::SetPlayer->PLAYER_NUM=0.  SetPartyBattleMember!", __FILE__, __LINE__);
+		return;
+	}
+	Player = new CPlayer[PLAYER_NUM];
+	for (int i=0; i<PLAYER_NUM; i++){
+		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
+	}
+}
+void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
+	PLAYER_NUM=0;
+	va_list args;
+	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
+	
+	if (_playerNum<=0){
+		ErrorDx("Error->arg[playerNum] should >=1: playerNum=%d", __FILE__, __LINE__, _playerNum);
+	}else{		
+		PLAYER_NUM = _playerNum;
+		Player = new CPlayer[PLAYER_NUM];
+		for (int i=0; i<PLAYER_NUM; i++){
+			Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(va_arg(args, char*)));		//target=1の時、一個目を返す（Not target=0）
+		}
+		va_end(args);
+	}
+}
+
+void CBattle::SetEnemy(const int _enemyNum, ...){	//出現モンスター自由指定用
+	va_list args;
+	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
+	
+	if (_enemyNum<=0){
+		ErrorDx("Error->arg[enemyNum] should >=1: enemyNum=%d", __FILE__, __LINE__, _enemyNum);
+	}else{
+		std::vector<std::string> enemyList;
+		for (int i=0; i<_enemyNum; i++){
+			enemyList.push_back(va_arg(args, char*));
+		}
+		va_end(args);
+	}
+}
+void CBattle::SetEnemy(std::vector<std::string> _enemyList){
+	if (_enemyList.size()==0) ErrorDx("Error->Battle::SetEnemy->enemyNum=0 :%d", __FILE__, __LINE__, _enemyList.size());
+
+	ENEMY_NUM = _enemyList.size();
+	Enemy = new CEnemy[ENEMY_NUM];
+	for (int i=0; i<ENEMY_NUM; i++){
+		Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str()));		//target=1の時、一個目を返す（Not target=0）
+	}
+}
+void CBattle::SetEnemy(std::vector<CEnemySpecies*> _enemyParty){
+	if (_enemyParty.size()==0) ErrorDx("Error->Battle::SetEnemy->enemyNum=0 :%d", __FILE__, __LINE__, _enemyParty.size());
+
+	ENEMY_NUM = _enemyParty.size();
+	Enemy = new CEnemy[ENEMY_NUM];
+	for (int i=0; i<ENEMY_NUM; i++){
+		Enemy[i] = CEnemy(*(_enemyParty[i]));
+	}
+}
+
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
