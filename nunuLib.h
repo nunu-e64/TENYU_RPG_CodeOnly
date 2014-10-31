@@ -196,6 +196,19 @@ public:
 	int Height(){
 		return (Bottom-Top);
 	}
+	void SetWidth(int _width){
+		Left -= (_width-Width())/2;
+		Right += (_width-Width())/2;		
+		if (_width>Width()) Right++;
+		if (_width<Width()) Right--;
+	}
+	void SetHeight(int _height){
+		Top -= (_height-Height())/2;
+		Bottom += (_height-Height())/2;
+		if (_height>Height()) Bottom++;
+		if (_height<Height()) Bottom--;
+	}
+
 };
 /////////////////////////////////////////////////////////////
 
@@ -291,6 +304,7 @@ inline int DrawCenterString(int cx, int y, const TCHAR *String, int color, bool 
 	}
 }
 int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...);
+int DrawCenterString(int cx, int y, int color, bool centerY, const TCHAR* format, ...);
 ////•`‰æŒn‚±‚±‚Ü‚Å//////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 

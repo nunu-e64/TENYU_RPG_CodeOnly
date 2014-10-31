@@ -289,7 +289,7 @@ int DrawString(int x, int y, int color, const TCHAR* format, ...){
 	return for_return;	
 }
 //DrawCenterString Notフォーマット版
-int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...){	//フォーマット版
+int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...){
 	va_list args;
 	char string[1024];
 	int for_return;
@@ -300,6 +300,24 @@ int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...){	//フォ
 
 	if(strlen(string)<1024){
 		for_return = DrawCenterString((int)cx,(int)y,string,color);	
+	}else{
+		ErrorDx("Error->nunuLib:DrawCenterString->too long string:%s", __FILE__, __LINE__, string);
+		for_return=-1;
+	}
+
+	return for_return;	
+}
+int DrawCenterString(int cx, int y, int color, bool centerY, const TCHAR* format, ...){	//フォーマット版
+	va_list args;
+	char string[1024];
+	int for_return;
+
+	va_start( args, format );
+	vsprintf_s( string, format, args );
+	va_end( args );
+
+	if(strlen(string)<1024){
+		for_return = DrawCenterString((int)cx,(int)y,string,color,centerY);	
 	}else{
 		ErrorDx("Error->nunuLib:DrawCenterString->too long string:%s", __FILE__, __LINE__, string);
 		for_return=-1;
