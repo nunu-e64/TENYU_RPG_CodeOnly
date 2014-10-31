@@ -73,9 +73,20 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 }
 
 
-
+////////////////////////////////////////////////////////////////////////////////
 //CEnemySpecies//
 //////////////////////////////////////////////////////////////////////////////
+void CEnemySpeciesManager::Clear(){
+	EnemyBank.clear(); 
+	
+	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
+	while(it!=MapEncount.end()){
+		(*it).second.clear();
+		++it;
+	}
+	MapEncount.clear();
+}
+
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
@@ -140,7 +151,6 @@ bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _en
 	if (MapEncount[_mapnum][_chipnum].encount < 0 || MapEncount[_mapnum][_chipnum].encount >1000){
 		MapEncount[_mapnum][_chipnum].encount = 0;
 	}
-	
 	return true;
 }
 
@@ -151,6 +161,22 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 		ErrorDx("Error->_chipnum should between(0,255) :%d", __FILE__, __LINE__, _chipnum);
 		return false;
 	}
+
+
+	//mapの自動増殖を防止（エンカウント設定がされてない場合、エンカウントしない）/////////
+		std::map <int, std::map<int, encount_tag> >::iterator it=MapEncount.begin();
+		while( it != MapEncount.end()){
+			if ((*it).first==_mapnum) break;
+			++it;
+		}
+		if (it == MapEncount.end()) return false;
+		std::map <int, encount_tag>::iterator it2 = MapEncount[_mapnum].begin();
+		while( it2 != MapEncount[_mapnum].end()){
+			if ((*it2).first==_chipnum) break;
+			++it2;
+		}
+		if (it2 == MapEncount[_mapnum].end()) return false;
+	///////////////////////////////////////////////////////////////////////////////////////
 
 	if (MapEncount[_mapnum][_chipnum].encount > rand()%1000){
 		//エンカウント決定したので戦う敵パーティを決定
@@ -163,8 +189,9 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 				partynum = i;
 			}
 		}
-
-		DebugDx("EnemySpeciesManager:Encount:%d",partynum);
+		DebugDx("MapEncount[_mapnum][_chipnum].encount:%d",MapEncount[_mapnum][_chipnum].encount);
+		DebugDx("EnemySpeciesManager:EncountPartySetSize:%d",MapEncount[_mapnum][_chipnum].partyset.size());
+		DebugDx("EnemySpeciesManager:EncountPartyNum:%d",partynum);
 
 		if (partynum!=-1){
 			_party_p = MapEncount[_mapnum][_chipnum].partyset[partynum].party;

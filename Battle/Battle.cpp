@@ -22,8 +22,9 @@ CBattle::CBattle(){
 bool CBattle::Init(){	//Field.Init()Ç≈åƒÇ—èoÇ∑	//14/06/26
 	PlayerSpeciesManager.Clear();
 	EnemySpeciesManager.Clear();
-	BImgBank.Clear();
+	BImgBank.Init();
 	TrickManager.Clear();
+	
 	ACTOR_NUM = 0;
 	PLAYER_NUM = 0;
 	ENEMY_NUM = 0;
@@ -122,7 +123,7 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 
 	if (EnemySpeciesManager.CheckEncount(_mapnum, _chipnum, tmpparty)){
 
-		for (int i =0; i<tmpparty.size(); i++){		
+		for (unsigned int i =0; i<tmpparty.size(); i++){		
 			DebugDx("enemy:%s", tmpparty[i]->GetName().c_str());
 		}
 

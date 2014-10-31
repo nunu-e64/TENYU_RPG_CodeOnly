@@ -111,7 +111,7 @@ private:
 
 		//グラフィック
 			int Img_BattleBackGround;	//戦闘背景
-
+			
 		//重要な所持インスタンス
 			CBImgBank BImgBank;
 			CPlayerSpeciesManager PlayerSpeciesManager;

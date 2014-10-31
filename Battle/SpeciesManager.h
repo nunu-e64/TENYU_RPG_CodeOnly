@@ -41,13 +41,12 @@ private:
 class CEnemySpeciesManager{
 public:
 	CEnemySpeciesManager(){};
-	void Clear(){EnemyBank.clear(); MapEncount.clear();}
+	void Clear();
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 
 	CEnemySpecies* GetSpecies(const char* _name);
-	//CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
 	bool AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party);
@@ -66,7 +65,6 @@ private:
 		int encount;
 		std::vector <party_tag> partyset;
 	};
-	
 	std::map <int, std::map<int, encount_tag> > MapEncount;
 };
 
