@@ -142,7 +142,7 @@ bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _en
 	
 	for (unsigned int i=0; i<_party.size(); i++){
 		tmp.party.push_back(GetSpecies(_party[i].c_str()));
-		DebugDx("tmp.GetName:%s", tmp.party[i]->GetName().c_str());
+		//DebugDx("tmp.GetName:%s", tmp.party[i]->GetName().c_str());
 	}
 	tmp.per = _encount;
 

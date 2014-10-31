@@ -29,7 +29,7 @@ public:
 
 	CBattle();
 	~CBattle(){
-		//DebugDx("CBattle::~CBattle()");
+		//DebugDx("CBattle::~CBattle()");	//デストラクタでDxLib読んだらあぶな～い
 	}
 	bool Init();
 	void Term();
@@ -82,6 +82,7 @@ public:
 
 private:
 	//メンバ関数
+		void StartEffect();
 		int MainLoop();
 		void BattleFinish(int _result, CCmdList* _fieldcmdlist);
 		int ResultCheck();

@@ -62,7 +62,7 @@ void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
 }
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
-	//開始処理///////////////////////////////////////////////////	
+	//戦闘ごとに行う開始内部準備処理///////////////////////////////////////////////////	
 		
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			ACTOR_NUM = PLAYER_NUM + ENEMY_NUM;
@@ -105,6 +105,11 @@ void CBattle::BattleStart(int* _result, CCmdList* _fieldcmdlist_p){
 		ErrorDx("Error->BattleStart->Battle isn't Ready to Start.", __FILE__, __LINE__);
 		*_result = -1;
 	}else{
+
+		//開始演出//////////////////////////////////////////////////////////
+			StartEffect();
+		///////////////////////////////////////////////////////////////////
+
 		//メインループ処理///////////////////////////////////////////////////
 			int tmp_result = MainLoop();
 
@@ -129,7 +134,6 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 
 		SetEnemy(tmpparty);
 		SetBackGround(_mapnum, _chipnum);
-		DebugDx("Encount_fin");
 		return true;
 	}else{
 		return false;
@@ -142,7 +146,6 @@ void CBattle::SetBackGround(const char* _pickey){
 void CBattle::SetBackGround(int _mapnum, int _chipnum){
 	Img_BattleBackGround = BImgBank.GetBattleBackGround(_mapnum, _chipnum);
 }
-
 void CBattle::SetPlayer(){	//隊列に基づいて選出
 	PLAYER_NUM = min(PlayerSpeciesManager.GetMemberListSize(), MAX_PLAYER_NUM);
 	if (PLAYER_NUM==0){
@@ -170,7 +173,6 @@ void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベン
 		va_end(args);
 	}
 }
-
 void CBattle::SetEnemy(const int _enemyNum, ...){	//出現モンスター自由指定用
 	va_list args;
 	va_start( args, _enemyNum);	//targetが大きすぎたときの処置方法はないのか？
@@ -204,6 +206,43 @@ void CBattle::SetEnemy(std::vector<CEnemySpecies*> _enemyParty){
 	}
 }
 
+void CBattle::StartEffect(){	//戦闘開始演出
+
+	char enemyName[256];
+	enemyName[0]='\0';
+	for (int i=0; i<ENEMY_NUM; i++){
+		mystrcat(enemyName, Enemy[i].GetName().c_str());
+	}
+
+	int x=WINDOW_WIDTH+20;
+	int timecount=0;
+	CRect obi(0, WINDOW_WIDTH, 230, 230); 
+
+	do{
+		SetTitle("%s", enemyName);
+		
+		Draw();
+	
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		DrawBox(obi.Left, obi.Top, obi.Right, obi.Bottom, BLACK, true);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		DrawCenterString(x, obi.Center().y, WHITE, true, "あ！やせいの%sがあらわれた！", enemyName);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+		if (timecount<13) {obi.SetHeight(timecount*4);}
+		else if (timecount>100) {obi.SetHeight(max(0,obi.Height()-5));}
+
+		if (x>WINDOW_WIDTH/2+160) {x-=10;}
+		else if(x<WINDOW_WIDTH/2-160) {x-=18;}
+		else{ x-=4;}
+
+		++timecount;
+		if (timecount==120) break;
+
+
+	}while(BasicLoop());
+
+}
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
@@ -393,11 +432,18 @@ void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, 
 }
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
+		static int timecount=0;
+		if (timecount==60) timecount=0;
+		dy += (int)(5*sin((++timecount)*2*PI/60));
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 150);
+		
 		if(EnemySide){
 			DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  20+dy, Img, true);
 		}else{
 			DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  WINDOW_HEIGHT-290+dy, Img, true);			
 		}
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	}
 }
 
