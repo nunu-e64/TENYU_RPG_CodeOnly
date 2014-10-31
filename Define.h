@@ -11,7 +11,7 @@
 		#define MEMORY_CHECK_DISABLE //マクロの有効化/無効化
 	#endif
 
-#define DEBUG_MODE	//プログラマデバッグ版
+#define DEBUG_MODE	//プログラマデバッグ版 （他のメンバーに渡す時にはコメントアウト）
 	#ifndef DEBUG_MODE
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
 		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化

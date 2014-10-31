@@ -427,15 +427,14 @@ reset:
 		return;
 }
 
-void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){
-
+void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){	
+	//イベントバトル用（背景画像と出現敵を指定した戦闘）
 	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
 	Battle.SetEnemy(_enemyList);
 	BattleStart();
 }
 
 void CField::BattleStart(){
-	DebugDx("BattleStart");
 	int result;
 	CCmdList resultcmdlist;
 

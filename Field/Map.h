@@ -18,6 +18,9 @@ public:
 			MapCreated[m] = false;
 		}
 	};
+	~CMap(){
+		DebugDx("CMap::~CMap()");
+	}
 	
 	void Init(){ImgData.clear();}
 
