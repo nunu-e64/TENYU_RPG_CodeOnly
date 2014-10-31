@@ -22,9 +22,9 @@ bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
 		ErrorDx("Error->SetMemberList->size error:%d", _index);
 		return false;
 	}else if (_index>=(int)(MemberList.size())){
-		MemberList.push_back(&GetSpecies(_name));
+		MemberList.push_back(GetSpecies(_name));
 	}else{
-		MemberList[_index] = &GetSpecies(_name);
+		MemberList[_index] = GetSpecies(_name);
 	}
 	return true;
 }
@@ -40,22 +40,22 @@ bool CPlayerSpeciesManager::SetMemberList(){
 	return true;
 }
 
-CPlayerSpecies CPlayerSpeciesManager::GetSpecies(const char* _name){
+CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(const char* _name){
 	CPlayerSpecies* tmp = &PlayerBank[_name];
 
 	if (tmp->GetName()==_name){
-		return *tmp;
+		return tmp;
 	}else{
 		ErrorDx("PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
-		return CPlayerSpecies();
+		return NULL;
 	}
 }
-CPlayerSpecies CPlayerSpeciesManager::GetSpecies(int _index){
+CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(int _index){
 	if (_index<0 || _index>=(int)(MemberList.size())){
 		ErrorDx("Error->MemberList size error:%d", _index);
-		return Dammy_Player;
+		return &Dammy_Player;
 	}else{
-		return *(MemberList[_index]);
+		return MemberList[_index];
 	}
 }
 
@@ -89,14 +89,14 @@ bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_ta
 	return true;
 }
 
-CEnemySpecies CEnemySpeciesManager::GetSpecies(const char* _name){
+CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){
 	CEnemySpecies* tmp = &EnemyBank[_name];
 
 	if (tmp->GetName()==_name){
-		return *tmp;
+		return tmp;
 	}else{
 		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
-		return CEnemySpecies();
+		return NULL;
 	}
 }
 //CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){
@@ -140,7 +140,7 @@ bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _en
 	encount_tag::party_tag tmp;
 	
 	for (unsigned int i=0; i<_party.size(); i++){
-		tmp.party.push_back(&GetSpecies(_party[i].c_str()));
+		tmp.party.push_back(GetSpecies(_party[i].c_str()));
 		DebugDx("_party[i]:%s", _party[i].c_str());
 		DebugDx("tmp.GetName:%s", tmp.party[i]->GetName().c_str());
 	}

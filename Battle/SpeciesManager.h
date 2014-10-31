@@ -18,8 +18,8 @@ public:
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
-	CPlayerSpecies GetSpecies(const char* _name);
-	CPlayerSpecies GetSpecies(int _index);
+	CPlayerSpecies* GetSpecies(const char* _name);
+	CPlayerSpecies* GetSpecies(int _index);
 
 	bool SetMemberList(int _index, const char* _name);
 	bool SetMemberList();
@@ -46,7 +46,7 @@ public:
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 
-	CEnemySpecies GetSpecies(const char* _name);
+	CEnemySpecies* GetSpecies(const char* _name);
 	//CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);

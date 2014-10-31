@@ -149,7 +149,7 @@ void CBattle::SetPlayer(){	//隊列に基づいて選出
 	}
 	Player = new CPlayer[PLAYER_NUM];
 	for (int i=0; i<PLAYER_NUM; i++){
-		Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(i));
+		Player[i] = CPlayer(*(PlayerSpeciesManager.GetSpecies(i)));
 	}
 }
 void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
@@ -163,7 +163,7 @@ void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベン
 		PLAYER_NUM = _playerNum;
 		Player = new CPlayer[PLAYER_NUM];
 		for (int i=0; i<PLAYER_NUM; i++){
-			Player[i] = CPlayer(PlayerSpeciesManager.GetSpecies(va_arg(args, char*)));
+			Player[i] = CPlayer(*(PlayerSpeciesManager.GetSpecies(va_arg(args, char*))));
 		}
 		va_end(args);
 	}
@@ -189,7 +189,7 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 	ENEMY_NUM = _enemyList.size();
 	Enemy = new CEnemy[ENEMY_NUM];
 	for (int i=0; i<ENEMY_NUM; i++){
-		Enemy[i] = CEnemy(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str()));
+		Enemy[i] = CEnemy(*(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str())));
 	}
 }
 void CBattle::SetEnemy(std::vector<CEnemySpecies*> _enemyParty){
