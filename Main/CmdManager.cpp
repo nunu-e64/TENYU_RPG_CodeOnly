@@ -444,7 +444,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 //@Battle
 	}else if (mystrcmp(_command, "@Battle",'p')){
-		argnum = MAX_ENEMY_NUM;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+		argnum = MAX_ENEMY_NUM+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		if (arg[0]==NULL || arg[1]==NULL){
 			ErrorDx("Error->@Battle->arg[pic_bg] or arg[enemy00] == NULL (do nothing)");
