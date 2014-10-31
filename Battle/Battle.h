@@ -45,6 +45,8 @@ public:
 	int GetActorNum(){return ACTOR_NUM;}
 
 	void SetBackGround(const char* _pickey);
+	void SetBackGround(int _mapnum, int _chipnum=-1);
+
 	void SetPlayer();
 	void SetPlayer(const int _playerNum, ...);
 	void SetEnemy(const int _enemyNum, ...);

@@ -238,7 +238,33 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 		_bimgbank->Add(arg[1], LoadGraph(arg[0], true));
 		//_map->LoadPic(arg[0], arg[1], arg[2]);
-		
+
+//@BackGround_Set
+	}else if (mystrcmp(_command,"@BackGround_Set")){	
+		argnum = 3;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum, false))goto finish;	//ïKê{
+
+		if (arg[0]==NULL || arg[1]==NULL){
+			ErrorDx("Error->@BackGround_Set->Need more argument:%s", arg[0]);
+			goto finish;
+		}
+
+		int mapnum;
+		if (!mystrtol(arg[0], &mapnum)){
+			ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+			goto finish;
+		}
+
+		if (arg[2]!=NULL){
+			int chipnum;
+			if (!mystrtol(arg[1], &chipnum)){
+				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				goto finish;
+			}
+			_bimgbank->SetBattleBackGround(arg[2], mapnum, chipnum);
+		}else{
+			_bimgbank->SetBattleBackGround(arg[1], mapnum);
+		}
+
 //@Player_Create
 	}else if (mystrcmp(_command,"@Player_Create")){	
 		argnum = 6;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//ïKê{

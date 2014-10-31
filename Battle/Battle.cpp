@@ -128,7 +128,7 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 		}
 
 		SetEnemy(tmpparty);
-		SetBackGround("bg_01");	//‚±‚ê‚àMapNum‚ÆChipNumˆË‘¶‚ÅBattle‚É‚½‚¹‚Ä‚¨‚­$
+		SetBackGround(_mapnum, _chipnum);
 		DebugDx("Encount_fin");
 		return true;
 	}else{
@@ -138,6 +138,9 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 
 void CBattle::SetBackGround(const char* _pickey){
 	Img_BattleBackGround = BImgBank.GetImg(_pickey);
+}
+void CBattle::SetBackGround(int _mapnum, int _chipnum){
+	Img_BattleBackGround = BImgBank.GetBattleBackGround(_mapnum, _chipnum);
 }
 
 void CBattle::SetPlayer(){	//‘à—ñ‚ÉŠî‚Ã‚¢‚Ä‘Io
