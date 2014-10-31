@@ -19,7 +19,7 @@ public:
 		}
 	};
 	~CMap(){
-		DebugDx("CMap::~CMap()");
+		//DebugDx("CMap::~CMap()");
 	}
 	
 	void Init(){ImgData.clear();}

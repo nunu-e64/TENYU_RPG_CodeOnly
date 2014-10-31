@@ -41,7 +41,7 @@ private:
 class CEnemySpeciesManager{
 public:
 	CEnemySpeciesManager(){};
-	void Clear(){EnemyBank.clear();}
+	void Clear(){EnemyBank.clear(); MapEncount.clear();}
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
@@ -55,6 +55,7 @@ public:
 
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
+	CEnemySpecies Dammy_Enemy;
 	
 	struct encount_tag{
 		struct party_tag{

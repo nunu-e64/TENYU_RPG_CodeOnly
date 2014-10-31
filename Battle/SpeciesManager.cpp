@@ -47,7 +47,7 @@ CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(const char* _name){
 		return tmp;
 	}else{
 		ErrorDx("PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
-		return NULL;
+		return &Dammy_Player;
 	}
 }
 CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(int _index){
@@ -96,19 +96,9 @@ CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){
 		return tmp;
 	}else{
 		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
-		return NULL;
+		return &Dammy_Enemy;
 	}
 }
-//CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){
-//	CEnemySpecies* tmp = &EnemyBank[_name];
-//
-//	if (tmp->GetName()==_name){
-//		return *tmp;
-//	}else{
-//		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
-//		return CEnemySpecies();
-//	}
-//}
 
 bool CEnemySpeciesManager::SetMapEncount(int _mapnum, int _chipnum, int _encount){
 
@@ -141,34 +131,15 @@ bool CEnemySpeciesManager::AddMapEncountParty(int _mapnum, int _chipnum, int _en
 	
 	for (unsigned int i=0; i<_party.size(); i++){
 		tmp.party.push_back(GetSpecies(_party[i].c_str()));
-		DebugDx("_party[i]:%s", _party[i].c_str());
 		DebugDx("tmp.GetName:%s", tmp.party[i]->GetName().c_str());
 	}
 	tmp.per = _encount;
 
-
-	for (unsigned int i=0; i<MapEncount[_mapnum][_chipnum].partyset.size(); i++){
-		DebugDx("i=%d",i);
-		for (unsigned int j=0; j<MapEncount[_mapnum][_chipnum].partyset[i].party.size(); j++){
-			DebugDx("MapEncount[_mapnum][_chipnum].partyset[i].party[j]:%s", MapEncount[_mapnum][_chipnum].partyset[i].party[j]->GetName().c_str());
-		}
-	}
-
 	MapEncount[_mapnum][_chipnum].partyset.push_back(tmp) ;
 
-	//if (MapEncount[_mapnum][_chipnum].encount < 0 || MapEncount[_mapnum][_chipnum].encount >1000){
-	//	MapEncount[_mapnum][_chipnum].encount = 0;
-	//}
-
-	for (unsigned int i=0; i<MapEncount[_mapnum][_chipnum].partyset.size(); i++){
-		DebugDx("i2=%d",i);
-		for (unsigned int j=0; j<MapEncount[_mapnum][_chipnum].partyset[i].party.size(); j++){
-			DebugDx("MapEncount[_mapnum][_chipnum].partyset[i].party[j]:%s", MapEncount[_mapnum][_chipnum].partyset[i].party[j]->GetName().c_str());
-		}
+	if (MapEncount[_mapnum][_chipnum].encount < 0 || MapEncount[_mapnum][_chipnum].encount >1000){
+		MapEncount[_mapnum][_chipnum].encount = 0;
 	}
-
-	DebugDx("%d", MapEncount[_mapnum][_chipnum].partyset.size());	
-	DebugDx("%s", MapEncount[_mapnum][_chipnum].partyset[MapEncount[_mapnum][_chipnum].partyset.size()-1].party[0]->GetName().c_str());
 	
 	return true;
 }
@@ -184,8 +155,6 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 	if (MapEncount[_mapnum][_chipnum].encount > rand()%1000){
 		//エンカウント決定したので戦う敵パーティを決定
 
-		DebugDx("EnemySpeciesManager:Encount!");
-
 		int probability=0;
 		int partynum = -1;
 		for (unsigned int i = 0; i < MapEncount[_mapnum][_chipnum].partyset.size(); i++){
@@ -198,9 +167,7 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 		DebugDx("EnemySpeciesManager:Encount:%d",partynum);
 
 		if (partynum!=-1){
-			DebugDx("*_party_p[0]:%s", MapEncount[_mapnum][_chipnum].partyset[partynum].party[0]->GetName().c_str());
 			_party_p = MapEncount[_mapnum][_chipnum].partyset[partynum].party;
-			DebugDx("*_party_p[0]:%s", MapEncount[_mapnum][_chipnum].partyset[partynum].party[0]->GetName().c_str());
 			return true;
 		}else{
 			return false;

@@ -28,7 +28,9 @@ class CBattle : public CWorldManager{
 public:
 
 	CBattle();
-
+	~CBattle(){
+		//DebugDx("CBattle::~CBattle()");
+	}
 	bool Init();
 	void Term();
 	void BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p);

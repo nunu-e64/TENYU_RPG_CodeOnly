@@ -121,14 +121,12 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 	std::vector <CEnemySpecies*> tmpparty;
 
 	if (EnemySpeciesManager.CheckEncount(_mapnum, _chipnum, tmpparty)){
-		DebugDx("Encount_begin:%d",tmpparty.size());
 
 		for (int i =0; i<tmpparty.size(); i++){		
 			DebugDx("enemy:%s", tmpparty[i]->GetName().c_str());
 		}
 
 		SetEnemy(tmpparty);
-		DebugDx("Encount_middle");
 		SetBackGround("bg_01");	//‚±‚ê‚àMapNum‚ÆChipNumˆË‘¶‚ÅBattle‚É‚½‚¹‚Ä‚¨‚­$
 		DebugDx("Encount_fin");
 		return true;
