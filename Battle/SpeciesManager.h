@@ -47,6 +47,7 @@ public:
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 
 	CEnemySpecies GetSpecies(const char* _name);
+	//CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
 	bool AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party);
