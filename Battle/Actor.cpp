@@ -26,6 +26,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 
 	NowTrick = NULL;
 
+	Dx=0; Dy=0;
 }
 
 void CActor::SetRect(int _cx, int _cy){
@@ -47,6 +48,7 @@ bool CActor::SetSystemImg(CBImgBank* _bimgbank){
 	Img_hpbar		= _bimgbank->GetImg("HP_BAR");
 	Img_timebar[0]	= _bimgbank->GetImg("TIME_BAR1");
 	Img_timebar[1]	= _bimgbank->GetImg("TIME_BAR2");
+	BImgBank_p = _bimgbank;
 	return true;
 }
 
@@ -87,17 +89,9 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 	if (Alive){
 		switch (Mode){
 		case PLAN:
-			if (Plan()){
-				return true;
-			}else{
-				return false;
-			}
+			return Plan();
 		case ACTION:
-			if (Action()){
-				return true;
-			}else{
-				return false;
-			}
+			return Action();
 		default:
 			ErrorDx("Error->CActor::Do->unexpected Mode:%d", __FILE__, __LINE__, Mode);
 			return true;
@@ -131,19 +125,19 @@ bool CActor::DeadCheck(){	//死亡判定
 	}
 }
 
-void CActor::Draw_Sub(int dx, int dy){
+void CActor::Draw_Sub(int _dx, int _dy){
 
 	SetDrawBright(255,255,255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	
 	//HpBar
-	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+5+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+15+dy, BLUE, true);
-	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+5+dy, 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
+	DrawBox(-1+Rect.Center().x-25+_dx, -1+Rect.Bottom+5+_dy, 1+Rect.Center().x+25+_dx, 1+Rect.Bottom+15+_dy, BLUE, true);
+	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+5+_dy), 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
 
 	//TimeBar
 	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-	DrawBox(-1+Rect.Center().x-25+dx, -1+Rect.Bottom+20+dy, 1+Rect.Center().x+25+dx, 1+Rect.Bottom+30+dy, BLUE, true);
-	DrawRectGraph(Rect.Center().x-25+dx, Rect.Bottom+20+dy, 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+	DrawBox(-1+Rect.Center().x-25+_dx, -1+Rect.Bottom+20+_dy, 1+Rect.Center().x+25+_dx, 1+Rect.Bottom+30+_dy, BLUE, true);
+	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+20+_dy), 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
 	
 	//OldHpとHpのギャップを埋める
 	if (OldHp>Hp) OldHp--;

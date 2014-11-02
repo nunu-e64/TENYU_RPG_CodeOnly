@@ -9,9 +9,10 @@
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
 		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化
 		#define MEMORY_CHECK_DISABLE //マクロの有効化/無効化
+		#define FPS_DISABLE
 	#endif
 
-#define DEBUG_MODE	//プログラマデバッグ版 （他のメンバーに渡す時にはコメントアウト）
+//#define DEBUG_MODE	//プログラマデバッグ版 （他のメンバーに渡す時にはコメントアウト）
 	#ifndef DEBUG_MODE
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
 		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化
@@ -40,8 +41,6 @@
 	}}
 
 const int PLAYDATA_NUM = 4;	//セーブデータの数(0~3)
-const int WINDOW_WIDTH = 640;	//32px*20cell
-const int WINDOW_HEIGHT = 480;	//32px*15cell
 const int MAP_CHIP_SIZE = 32;
 const int MAP_SIZE = 128;		//正方形を想定
 const int MAP_DATA_SIZE = 256;	//バイナリデータに格納されているデータの最大値（256=0~255=8bit=1byte）

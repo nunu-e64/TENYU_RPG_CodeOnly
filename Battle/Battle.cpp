@@ -226,7 +226,7 @@ void CBattle::StartEffect(){	//戦闘開始演出
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		DrawBox(obi.Left, obi.Top, obi.Right, obi.Bottom, BLACK, true);
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-		DrawCenterString(x, obi.Center().y, WHITE, true, "あ！やせいの%sがあらわれた！", enemyName);
+		DrawCenterString(x, (int)(obi.Center().y), WHITE, true, "あ！やせいの%sがあらわれた！", enemyName);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 		if (timecount<13) {obi.SetHeight(timecount*4);}
@@ -400,23 +400,74 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	int attacker_actorindex = between(0, ACTOR_NUM-1, _attacker_actorindex); 
 	int target_actorindex   = between(0, ACTOR_NUM-1, _target_actorindex); 
 	
+	//技発動演出//////////////////////////////////////////////////////////////
+	int timecount = 0;
+	CVector ball[8];
+	int a=60;
+	for (int i=0; i<8; i++){
+		ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(i*PI/4),a*sin(i*PI/4)));		
+	}
+	do{
+		Draw();
+		SetDrawBlendMode(DX_BLENDMODE_ADD, timecount*2);
+		for (int i=0; i<8; i++){
+			DrawExtendGraph(ball[i].x-10, ball[i].y-10, ball[i].x+10, ball[i].y+10, BImgBank.GetImg("EFFECT_BOMB"), false);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		++timecount;
+		a-=1;
+		for (int i=0; i<8; i++){
+			ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(timecount*PI/(60*2)+i*PI/4),a*sin(timecount*PI/(60*2)+i*PI/4)));		
+		}
+	}while(a!=0 && BasicLoop());
+
+	timecount=0;
+	a=20;
+	CVector vec = Actor[target_actorindex]->GetRect().Center()-Actor[attacker_actorindex]->GetRect().Center();
+	vec *= 1/vec.GetLength();
+	do{
+		Draw();
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
+		DrawExtendGraph(ball[0].x-15, ball[0].y-15, ball[0].x+15, ball[0].y+15, BImgBank.GetImg("EFFECT_BOMB"), false);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		++timecount;
+		ball[0].Add(a*vec.x, a*vec.y);
+	}while(ball[0].y>Actor[target_actorindex]->GetRect().Center().y && BasicLoop());
+	//////////////////////////////////////////////////////////////////////////
+
+	timecount=0;
+	do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
+	
+	//実際のダメージ計算
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
 
-	int timecount = 0;
-	CRect tmpRect = Actor[target_actorindex]->GetRect();
-	while(timecount<20){
+	//ダメージ演出//////////////////////////////////////////////////////////////
+	timecount = 0;
+	bool oldVisible = Actor[target_actorindex]->GetVisible();
+	CVector charPos(Actor[target_actorindex]->GetRect().Center().x, Actor[target_actorindex]->GetRect().Top);
+	do{
 		Draw();
-		if (timecount<1){	DrawCenterString((int)(tmpRect.Center().x), (int)(tmpRect.Top-5*sin(timecount*(PI/2)/10)), WHITE, "%d", damage); 
-		}else{				DrawCenterString((int)(tmpRect.Center().x), tmpRect.Top-5								 , WHITE, "%d", damage); 
-		}
-		timecount++;
-		if (!BasicLoop()) break;
-	}
+		DrawCenterString((int)(charPos.x), (int)(charPos.y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage); 
+		
+		if (timecount%6==0) Actor[target_actorindex]->SetVisible(oldVisible&&true);
+		if (timecount%6==3) Actor[target_actorindex]->SetVisible(oldVisible&&false);
 
+		if (++timecount>40){
+			Actor[target_actorindex]->SetVisible(oldVisible);
+			break;
+		}
+	}while(BasicLoop());
+	////////////////////////////////////////////////////////////////////////////
+
+
+	//HPバー減少を待つ///////////////
 	while(true){
 		Draw();
 		if (!BasicLoop() || Actor[target_actorindex]->DeadCheck()) break;
 	}
+	/////////////////////////////////
 }
 
 
@@ -429,18 +480,29 @@ void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, 
 	Visible = false;
 	EnemySide = true;
 	Index = 0;
+	Status=0;
 }
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 200);
 		static int timecount=0;
-		if (timecount==60) timecount=0;
-		dy += (int)(5*sin((++timecount)*2*PI/60));
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 150);
+		timecount++;
+
+		if (Status==0){
+			if (timecount==60) timecount=0;
+			dy += (int)(5*sin((timecount)*2*PI/60));
+		}else if(Status==1){
+			timecount=0; Status=2;
+		}else if(Status==2){
+			if (timecount>30){ Status=0; Visible=false; timecount=0;}
+		}
 		
-		if(EnemySide){
-			DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  20+dy, Img, true);
-		}else{
-			DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  WINDOW_HEIGHT-290+dy, Img, true);			
+		if (!(Status==2 && timecount%10<6)){
+			if(EnemySide){
+				DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  20+dy, Img, true);
+			}else{
+				DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  WINDOW_HEIGHT-290+dy, Img, true);			
+			}
 		}
 
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
@@ -448,6 +510,7 @@ void CBattle::CTargetMarker::Draw(int dx, int dy){
 }
 
 void CBattle::CTargetMarker::Move(int _dir){
+	if (Status==1) return;	//バグ予防
 	switch (_dir){
 	case RIGHT:
 		Index = mod(Index+1,(EnemySide? ENEMY_NUM: PLAYER_NUM));
@@ -468,7 +531,10 @@ void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _dea
 		return;
 	}else{
 		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?PLAYER_NUM:0));
-		SetVisible(false);
+		Status = 1;
+		do {
+			_battle->Draw();	//カーソル確定点滅演出
+		}while(BasicLoop()&&Status!=0);
 	}
 
 }

@@ -9,11 +9,14 @@
 
 //#define WARNINGDX_DISABLE	//マクロの無効化
 //#define DEBUGDX_DISABLE	//マクロの無効化
+//#define FPS_DISABLE
 #define CHECK_TIME_DISABLE	//時間測定マクロの無効化
 	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
 
 const double PI = 3.1415926535897932384626433832795f;
+const int WINDOW_WIDTH = 640;	//32px*20cell
+const int WINDOW_HEIGHT = 480;	//32px*15cell
 
 ////////////////////////////////////////////////////////
 //色定数////////////////////////////////////////////////
@@ -415,6 +418,19 @@ inline int mod(int a, int b){	//VB6のように必ず非負のあまりを返す関数。%演算子は
 	return ((b)+((a)%(b)))%(b);
 }
 inline bool BasicLoop(){
+	#ifndef FPS_DISABLE
+		static int start = GetNowCount();
+		static int counter = 0;
+		static int fps = 0;
+		++counter;
+		if (counter==30){
+			fps = 1000/((GetNowCount()-start)/counter);
+			start = GetNowCount();
+			counter = 0;
+		}
+		DrawFormatString(WINDOW_WIDTH-20, WINDOW_HEIGHT-20, GRAY, "%d", fps); 
+	#endif
+
 	if(ScreenFlip()==0 && ProcessMessage()==0 && ClearDrawScreen()==0){
 		return true;
 	}else{ return false;}

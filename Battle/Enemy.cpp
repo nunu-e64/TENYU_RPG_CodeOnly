@@ -8,7 +8,8 @@
 
 
 
-void CEnemy::Draw(int dx, int dy){
+void CEnemy::Draw(int _dx, int _dy){
+	int dx=_dx+Dx; int dy=_dy+Dy;
 
 	if (Visible){
 		if (!Alive){
@@ -30,7 +31,7 @@ void CEnemy::Draw(int dx, int dy){
 		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
-		Draw_Sub(dx, dy);
+		Draw_Sub(_dx, _dy);
 	}
 }
 

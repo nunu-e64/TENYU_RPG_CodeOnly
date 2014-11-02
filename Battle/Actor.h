@@ -30,12 +30,14 @@ public:
 
 	bool Main();
 	bool Do();
-	virtual void Draw(int dx=0, int dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
+	virtual void Draw(int _dx=0, int _dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
 	//基礎情報
 		int GetIndex(){return Index;}
 		
 	//戦闘関連
+		void SetVisible(bool _visible){Visible = _visible;}
+		bool GetVisible(){return Visible;}
 		bool GetAlive(){return Alive;}
 		//int GetDef(){return Def;}
 		int GetAtk(){return Atk;}
@@ -53,7 +55,7 @@ public:
 protected:
 	//メンバ関数
 		virtual void Init(){}	//Playerのみ必要なので。Enemyの時にはこっちを通る
-		void Draw_Sub(int dx=0, int dy=0);
+		void Draw_Sub(int _dx=0, int _dy=0);
 
 		virtual bool Plan()=0;
 		virtual bool Action()=0;
@@ -94,12 +96,13 @@ protected:
 	//包含クラス
 		CTextBox** B_TextBox_pp;
 		CCmdList* CmdList;
+		CBImgBank* BImgBank_p;
 
 	//グラフィック
 		CRect Rect;
 		int Img_hpbar;
 		int Img_timebar[2];
-		//...
+		int Dx; int Dy;
 };
 
 

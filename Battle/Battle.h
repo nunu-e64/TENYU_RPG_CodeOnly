@@ -78,6 +78,7 @@ public:
 			int ACTOR_NUM;
 			int PLAYER_NUM;
 			int ENEMY_NUM;
+			int Status; //0...ふよふよ　1...確定つなぎ　2...確定演出中
 		}TargetMarker;
 
 private:

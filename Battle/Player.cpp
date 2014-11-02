@@ -27,7 +27,8 @@ void CPlayer::CreateBattleMenu(){
 
 }
 
-void CPlayer::Draw(int dx, int dy){
+void CPlayer::Draw(int _dx, int _dy){
+	int dx=_dx+Dx; int dy=_dy+Dy;
 
 	if (!Alive && Visible){
 		static int timecount = 0;
@@ -50,26 +51,22 @@ void CPlayer::Draw(int dx, int dy){
 		SetDrawBright(255,255,255);
 	}
 
-	DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 
-	Draw_Sub(dx, dy);
+	if (BattleMenu.Alive){
+		static int timecount=0;
+		if (timecount==120) timecount=0;
+		DrawGraph(Rect.Left+dx, Rect.Top+dy+(int)(5*sin(++timecount*2*PI/120)), Img, true);
+	}else{
+		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
+	}
+
+	Draw_Sub(_dx, _dy);
 	BattleMenu.Draw();	
 }
 
 bool CPlayer::Plan(){
 	static bool newplan = true;
 	
-	//テスト用////////////////////////////////
-	#ifdef DEBUG_MODE
-		if (newplan){
-			char tmp[64];
-			sprintf_s(tmp, "Player%dのPlan", Index);
-			//(*B_TextBox_pp)->AddStock(tmp);
-		}
-	#endif
-	//////////////////////////////////////////
-
-
 	if (newplan){
 		BattleMenu.Alive = true;
 		BattleMenu.Cursor = BattleMenu.front;
@@ -140,13 +137,6 @@ bool CPlayer::Plan(){
 }
 
 bool CPlayer::Action(){
-	//テスト用////////////////////////////////
-	#ifdef DEBUG_MODE
-		char tmp[64];
-		sprintf_s(tmp, "Player%dのAction", Index);
-	#endif
-	//(*B_TextBox_pp)->AddStock(tmp);
-	//////////////////////////////////////////
 	
 	if (NowTrick==NULL){
 		Target = -1;

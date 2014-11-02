@@ -13,7 +13,7 @@ public:
 	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){Mc=0;};
 
 	void CreateBattleMenu();
-	void Draw(int dx=0, int dy=0);
+	void Draw(int _dx=0, int _dy=0);
 
 private:
 	//ƒƒ“ƒoŠÖ”
