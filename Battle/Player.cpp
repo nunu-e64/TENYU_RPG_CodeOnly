@@ -61,7 +61,7 @@ void CPlayer::Draw(int _dx, int _dy){
 	}
 
 	Draw_Sub(_dx, _dy);
-	BattleMenu.Draw();	
+	BattleMenu.Draw();
 }
 
 bool CPlayer::Plan(){

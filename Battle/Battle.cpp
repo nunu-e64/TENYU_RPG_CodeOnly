@@ -378,8 +378,8 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 
 int CBattle::ResultCheck(){
 	//$/////////////////////////////////////////////////////////
-		if (CheckHitKeyDown(KEY_INPUT_W)) return WIN;
-		if (CheckHitKeyDown(KEY_INPUT_L)) return LOSE;
+		if (CheckHitKeyDown(KEY_INPUT_W) && ActionQueue.empty()) return WIN;
+		if (CheckHitKeyDown(KEY_INPUT_L) && ActionQueue.empty()) return LOSE;
 	////////////////////////////////////////////////////////////
 
 	int i;
@@ -434,7 +434,7 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 
 		++timecount;
 		ball[0].Add(a*vec.x, a*vec.y);
-	}while(ball[0].y>Actor[target_actorindex]->GetRect().Center().y && BasicLoop());
+	}while(vec.y*(ball[0].y-Actor[target_actorindex]->GetRect().Center().y)<0 && BasicLoop());
 	//////////////////////////////////////////////////////////////////////////
 
 	timecount=0;
@@ -480,7 +480,7 @@ void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, 
 	Visible = false;
 	EnemySide = true;
 	Index = 0;
-	Status=0;
+	Status = 0;
 }
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
