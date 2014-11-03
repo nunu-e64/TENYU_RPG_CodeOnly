@@ -287,6 +287,7 @@ bool mystrgrt(const char* string, const char* target, bool greater=true);
 ////描画系//////////////////////////////////////////////////////////////////////////
 CVector GetGraphSize(int GrHandle);		//画像のサイズをCVector型で返す
 int LoadGraph(const TCHAR *filename, bool errorcheck);		//DxライブラリのLoadGraphのファイルエラー出力付き版。コード節約が目的。
+
 inline int DrawGraph(double x, double y, int GrHandle, int TransFlag){		//DxライブラリのDrawGraphでdoubleをintに自動キャストしてくれるだけ
 	return DrawGraph((int)x, (int)y, GrHandle, TransFlag);
 }
@@ -308,6 +309,10 @@ inline int DrawCenterString(int cx, int y, const TCHAR *String, int color, bool 
 }
 int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...);
 int DrawCenterString(int cx, int y, int color, bool centerY, const TCHAR* format, ...);
+
+inline int DrawBox(CRect _rect, int _color, bool _fillflag){
+	return DrawBox(_rect.Left, _rect.Top, _rect.Right, _rect.Bottom, _color, _fillflag);
+}
 ////描画系ここまで//////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
