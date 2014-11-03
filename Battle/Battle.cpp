@@ -314,7 +314,7 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 			do{
 				Draw();
 
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(200*timecount/(double)60));
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(200*min(timecount,60)/(double)60));
 				DrawBox(resultScreen, BLACK, true);
 				DrawString(resultScreen.Left+30, resultScreen.Top+30, resultMessage[0], WHITE);
 				DrawString(resultScreen.Left+30, resultScreen.Top+60, resultMessage[1], WHITE);
@@ -323,7 +323,7 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 				}
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
-				if (timecount<60) ++timecount;
+				++timecount;
 				if (CheckHitKeyDown(KEY_INPUT_OK)){
 					if (timecount<60) {
 						timecount=60;

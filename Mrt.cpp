@@ -74,8 +74,9 @@ int Title(){	//返り値：title_tag  引数：なし
 		timecount++;
 
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/10), "- 天 佑 -" , WHITE );
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*5/10), "つづきから", WHITE);
+		//デバッグ用に一時逆転$
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*6/10), "はじめから", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*5/10), "つづきから", WHITE);
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*7/10), "　設定　　", WHITE);
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*8/10), "ゲーム終了", WHITE);
 		
