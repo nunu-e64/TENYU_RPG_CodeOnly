@@ -113,7 +113,8 @@ enum charaeffect_tag{
 };
 enum btlresult_tag{
 	WIN,
-	LOSE
+	LOSE,
+	LOSE_NOSCREENCHANGE
 };
 struct char256{
 	char text[256];

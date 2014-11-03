@@ -85,7 +85,7 @@ bool CEnemy::Action(){
 
 	char tmpcmd[256];
 
-	//Tatgetの選択にはAttentionを使うこと$  Plan時かAction時かどっちでTargetを決めるべき？
+	//Tatgetの選択にはAttentionを使うこと（じゃないとプレイヤーが戦略を立てにくい）$  Plan時かAction時かどっちでTargetを決めるべき？
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
 		Target = rand()%PLAYER_NUM;

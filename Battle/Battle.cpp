@@ -282,7 +282,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	return -1;
 }
 
-void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
+void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 	if (!Ready) {WarningDx("Warning->BattleFinish->Battle hasn't started yet.(do nothing return)", __FILE__, __LINE__); return;}
 	Ready = false;
 	while(!ActionQueue.empty()) {ActionQueue.pop();}
@@ -323,7 +323,7 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 				}
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
-				++timecount;
+				if (timecount<60) ++timecount;
 				if (CheckHitKeyDown(KEY_INPUT_OK)){
 					if (timecount<60) {
 						timecount=60;
@@ -338,6 +338,7 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 		break;
 	case LOSE:
 		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
+		if (mystrcmp(LoseCommand, "@GameOver")) _result = LOSE_NOSCREENCHANGE;	//敗北時処理が通常ならフィールドに戻さない
 		break;
 	default:
 		break;

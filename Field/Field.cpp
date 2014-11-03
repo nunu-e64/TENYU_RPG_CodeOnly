@@ -460,11 +460,12 @@ void CField::BattleStart(){
 	Battle.BattleStart(&result, &resultcmdlist);
 	
 	//画面切り替え効果（戦闘終了）
-		GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
-		SetDrawScreen(DX_SCREEN_BACK);
-		ScreenChanger.ChangeScreen(battleGraph, blankGraph, ScreenChanger.SCREEN_FADE, 30);
-		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 30);
-
+		if (result!=LOSE_NOSCREENCHANGE){
+			GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
+			SetDrawScreen(DX_SCREEN_BACK);
+			ScreenChanger.ChangeScreen(battleGraph, blankGraph, ScreenChanger.SCREEN_FADE, 30);
+			ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 30);
+		}
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);
 }

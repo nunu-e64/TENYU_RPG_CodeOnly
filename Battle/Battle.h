@@ -85,7 +85,7 @@ private:
 	//ƒƒ“ƒoŠÖ”
 		void StartEffect();
 		int MainLoop();
-		void BattleFinish(int _result, CCmdList* _fieldcmdlist);
+		void BattleFinish(int &_result, CCmdList* _fieldcmdlist);
 		int ResultCheck();
 
 	

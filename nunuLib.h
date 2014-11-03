@@ -429,7 +429,7 @@ inline bool BasicLoop(){
 		static int fps = 0;
 		++counter;
 		if (counter==30){
-			fps = 1000/((GetNowCount()-start)/counter);
+			fps = counter*1000/(GetNowCount()-start);
 			start = GetNowCount();
 			counter = 0;
 		}
