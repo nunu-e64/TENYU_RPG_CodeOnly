@@ -43,13 +43,13 @@ void CEnemy::MakePlan(){
 
 
 bool CEnemy::Plan(){
-	//テスト用////////////////////////////////
+	/*//テスト用////////////////////////////////
 	#ifdef DEBUG_MODE
 		char tmp[64];
 		sprintf_s(tmp, "%sのPlan", Name.c_str());
 		(*B_TextBox_pp)->AddStock(tmp);
 	#endif
-	//////////////////////////////////////////
+	*///////////////////////////////////////////
 
 	
 	unsigned int action_num = EnemyPlanManager->Plan(this);
@@ -69,13 +69,13 @@ bool CEnemy::Plan(){
 }
 
 bool CEnemy::Action(){
-	//テスト用////////////////////////////////
+	/*//テスト用////////////////////////////////
 	#ifdef DEBUG_MODE
 		char tmp[64];
 		sprintf_s(tmp, "%sのAction", Name.c_str());
 		(*B_TextBox_pp)->AddStock(tmp);
 	#endif
-	//////////////////////////////////////////	
+	*///////////////////////////////////////////	
 
 	if (NowTrick==NULL){
 		Target = -1;

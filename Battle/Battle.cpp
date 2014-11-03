@@ -291,22 +291,50 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	
 	switch (_result){
 	case WIN:
+		{//コンパイルエラー回避の為にスコープを制限
 		//事前登録したコマンドをフィールドのコマンドリストに挿入
 			if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
 
 		//金と経験値計算
-			{int gold = BattleCalc::CalcGold(1, 2);
+			int gold = BattleCalc::CalcGold(1, 2);
 			int exp = BattleCalc::CalcExp(1, 2);
 			PlayerSpeciesManager.AddGold(gold);
 			//PlayerSpeciesManager.AddExp(exp);
-			char text[256];
-			sprintf_s(text, "取得Gold：%d", gold); TextBox->AddStock(text);
-			sprintf_s(text, "取得Exp：%d", exp);	TextBox->AddStock(text);
-			}
-
+		
 		//Player元データに保存
 			PlayerSpeciesManager.CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
 
+		//リザルト画面出力
+			char resultMessage[2][256];
+			sprintf_s(resultMessage[0], "取得Gold：%d", gold);
+			sprintf_s(resultMessage[1], "取得Exp：%d", exp);
+			CRect resultScreen(200, WINDOW_WIDTH-200, 150, WINDOW_HEIGHT-200);
+			int timecount=0;
+
+			do{
+				Draw();
+
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(200*timecount/(double)60));
+				DrawBox(resultScreen, BLACK, true);
+				DrawString(resultScreen.Left+30, resultScreen.Top+30, resultMessage[0], WHITE);
+				DrawString(resultScreen.Left+30, resultScreen.Top+60, resultMessage[1], WHITE);
+				if (timecount>=60){
+					DrawCenterString(resultScreen.Center().x, resultScreen.Bottom-10+(timecount/6)%5, WHITE, "▼");
+				}
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+				++timecount;
+				if (CheckHitKeyDown(KEY_INPUT_OK)){
+					if (timecount<60) {
+						timecount=60;
+					}else{
+						break;
+					}
+				}
+			}while(BasicLoop());
+
+
+		}
 		break;
 	case LOSE:
 		if (strlen(LoseCommand)) _fieldcmdlist->Add(LoseCommand);
@@ -325,6 +353,7 @@ void CBattle::BattleFinish(int _result, CCmdList* _fieldcmdlist){
 	Draw();	//裏画面に描画（画面切り替え演出用）
 
 	//////////////////////////////////////////////////////
+	//戦闘関連変数の初期化
 	delete [] Actor;
 	delete [] Player;
 	delete [] Enemy;
