@@ -1,5 +1,6 @@
 #include "nunuLib.h"
 
+//using namespace nunuLib;
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////文字列系///////////////////////////////////////////////////////////////////////
@@ -358,16 +359,16 @@ int choose(const int target, ...){
 
 /////////////////////////////////////////////////////////////
 ///KeyDown判定用関数/////////////////////////////////////////
-static nunuLib::CKeyManager KeyManager;
+static nunuLibKey::CKeyManager KeyManager;
 bool CheckHitKeyDown(const int KEY_CODE){
 	return KeyManager.CheckDown(KEY_CODE);
 }
-nunuLib::CKeyManager::CKeyManager(){
+nunuLibKey::CKeyManager::CKeyManager(){
 	for (int i=0; i<ARRAY_SIZE(Pressed); i++){
 		Pressed[i]=false;
 	}
 }
-bool nunuLib::CKeyManager::CheckDown(const int KEY_CODE){		//押した瞬間だけtrueを返す
+bool nunuLibKey::CKeyManager::CheckDown(const int KEY_CODE){		//押した瞬間だけtrueを返す
 	//決定キー･･･Z,Enter  キャンセルキー･･･X,BackSpace  それぞれどちらでも可
 	switch (KEY_CODE){
 		case KEY_INPUT_OK:

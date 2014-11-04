@@ -29,6 +29,8 @@
 	#endif
 
 #include "nunuLib.h"
+//using namespace nunuLib;
+
 //"Mrt.h"でDefine.hをインクルードしているのでMrt.hは使うとことで任意にインクルード
 
 

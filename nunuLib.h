@@ -14,6 +14,9 @@
 	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
 
+
+//namespace nunuLib{
+
 const double PI = 3.1415926535897932384626433832795f;
 const int WINDOW_WIDTH = 640;	//32px*20cell
 const int WINDOW_HEIGHT = 480;	//32px*15cell
@@ -302,23 +305,48 @@ template<class T> int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag);
 int DrawString(int x, int y, int color, const TCHAR* format, ...);	//フォーマット対応
 inline int DrawCenterString(int cx, int y, const TCHAR *String, int color, bool centerY=false){	//xを左右の中心にしてDrawStringで文字描画（※yは上下中心ではなく上辺）
 	if (centerY){
-		return DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y-GetFontSize()/2, String, color);	//あくまで目安 
+		return DxLib::DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y-GetFontSize()/2, String, color);	//あくまで目安 
 	}else{
-		return DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y, String, color); 
+		return DxLib::DrawString(cx-GetDrawStringWidth(String, strlen(String))/2, y, String, color); 
 	}
 }
 int DrawCenterString(int cx, int y, int color, const TCHAR* format, ...);
 int DrawCenterString(int cx, int y, int color, bool centerY, const TCHAR* format, ...);
 
 inline int DrawBox(CRect _rect, int _color, bool _fillflag){
-	return DrawBox(_rect.Left, _rect.Top, _rect.Right, _rect.Bottom, _color, _fillflag);
+	return DxLib::DrawBox(_rect.Left, _rect.Top, _rect.Right, _rect.Bottom, _color, _fillflag);
 }
 ////描画系ここまで//////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////
 ///エラー&デバッグ出力用関数/////////////////////////////////
-template<class T>inline void ErrorDx(const char* format, char* filename, int line, const T& a){
+inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
+	char string[1024];
+	//va_start(args, format);
+	vsprintf_s(string, format, args);
+	//va_end(args);
+	if (filename!=NULL) sprintf_s(string, "\n->%s(%d)\n", filename, line);
+
+	printfDx(string);
+	ScreenFlip();
+	WaitKey();
+	clsDx();
+	ClearDrawScreen();
+}
+inline void ErrorDx(const char* format, char* filename, int line, ...){
+	va_list args;
+	va_start(args, format);
+	myprintfDx(format, args, filename, line);
+	va_end(args);
+}
+inline void ErrorDx(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	myprintfDx(format, args);
+	va_end(args);
+}
+/*template<class T>inline void ErrorDx(const char* format, char* filename, int line, const T& a){
 	printfDx(format, a);
 	printfDx("\n->%s(%d)\n", filename, line);
 	ScreenFlip();
@@ -339,46 +367,51 @@ inline void ErrorDx(const char* format, char* filename, int line){
 }
 inline void ErrorDx(const char* format){
 	ErrorDx(format,0);
-}
+}*/
 
-template<class T>inline void WarningDx(const char* format, char* filename, int line, const T& a){
+inline void WarningDx(const char* format, char* filename, int line, ...){
 	#ifndef	WARNINGDX_DISABLE 
-		ErrorDx(format, filename, line, a);
+		va_list args;
+		va_start(args, format);
+		myprintfDx(format, args, filename, line);
+		va_end(args);
 	#endif
 }
-template<class T>inline void WarningDx(const char* format, const T& a){
+inline void WarningDx(const char* format, ...){
 	#ifndef	WARNINGDX_DISABLE 
-		ErrorDx(format, a);
+		va_list args;
+		va_start(args, format);
+		myprintfDx(format, args);
+		va_end(args);
 	#endif
 }
-inline void WarningDx(const char* format, char* filename, int line){
-	#ifndef	WARNINGDX_DISABLE 
-		ErrorDx(format, filename, line);
-	#endif
-}
-inline void WarningDx(const char* format){
-	#ifndef	WARNINGDX_DISABLE 
-		ErrorDx(format);
-	#endif
-}
-template<class T>inline void DebugDx(const char* format, char* filename, int line, const T& a){
+//inline void WarningDx(const char* format, char* filename, int line, ...){
+//	#ifndef	WARNINGDX_DISABLE 
+//		va_list args;
+//		va_start(args, format);
+//		myprintfDx(format, args, filename, line);
+//		va_end(args);
+//	#endif
+//}
+//inline void WarningDx(const char* format){
+//	#ifndef	WARNINGDX_DISABLE 
+//		ErrorDx(format);
+//	#endif
+//}
+inline void DebugDx(const char* format, char* filename, int line, ...){
 	#ifndef	DEBUGDX_DISABLE 
-		ErrorDx(format, filename, line, a);
+		va_list args;
+		va_start(args, format);
+		myprintfDx(format, args, filename, line);
+		va_end(args);
 	#endif
 }
-template<class T>inline void DebugDx(const char* format, const T& a){
+inline void DebugDx(const char* format, ...){
 	#ifndef	DEBUGDX_DISABLE 
-		ErrorDx(format, a);
-	#endif
-}
-inline void DebugDx(const char* format, char* filename, int line){
-	#ifndef	DEBUGDX_DISABLE 
-		ErrorDx(format, filename, line);
-	#endif
-}
-inline void DebugDx(const char* format){
-	#ifndef	DEBUGDX_DISABLE 
-		ErrorDx(format);
+		va_list args;
+		va_start(args, format);
+		myprintfDx(format, args);
+		va_end(args);
 	#endif
 }
 /////////////////////////////////////////////////////////////
@@ -395,7 +428,7 @@ int choose(const int target, ...);	//int限定	//VB6仕様（一個目を指定したい→targ
 const int KEY_INPUT_OK = -1;
 const int KEY_INPUT_CANCEL = -2;
 
-namespace nunuLib{			//クラス名衝突を避けるため名前空間に包む
+namespace nunuLibKey{			//クラス名衝突を避けるため名前空間に包む
 	class CKeyManager{		//構造体変数にしてもいいけどなるべくstaticを使いたくなかった
 	public:
 		CKeyManager();
@@ -442,7 +475,7 @@ inline bool BasicLoop(){
 }
 /////////////////////////////////////////////////////////////
 
-
+//}
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////
