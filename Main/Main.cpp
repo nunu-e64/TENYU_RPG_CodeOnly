@@ -25,7 +25,7 @@ bool CMain::GameLoop(){
 
 	StartDemo();
 
-	{
+	if (PLAYDATA_NUM>0){
 		CLoad PlayDataLoad;
 			char path[256]; strcpy_s(path, "tenyu_data/save");
 			PlayDataLoad.LoadPlayData(path, PlayData);
@@ -38,7 +38,7 @@ bool CMain::GameLoop(){
 			return Playing();
 
 		case TITLE_LOADSTART:
-			if ((dnum = ChooseData()) != -1){
+			if (PLAYDATA_NUM>0 && (dnum = ChooseData()) != -1){
 				return Playing(dnum);
 			}
 			break;
@@ -62,7 +62,7 @@ bool CMain::Playing(const int _dnum){
 	//DebugDx("PlayingStart");
 	CField Field;
 	//DebugDx("Playing_CFieldCreate");
-	if (!Field.Init(PlayData, _dnum)) return true;
+	if (!Field.Init((PLAYDATA_NUM>0?PlayData:NULL), _dnum)) return true;
 	//DebugDx("Playing_FieldInit_finish");
 
 	switch (Field.MainLoop()){

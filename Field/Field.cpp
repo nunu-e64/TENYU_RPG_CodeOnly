@@ -35,10 +35,14 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 			Mode = MODE_PLAYING;
 
+	//DebugDx("TextBox_Init_Start");
+
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);
 			TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, TextAutoPlaySpeed);  
 			TextBox = &TextBox1;
+
+	//DebugDx("TextBox_Init_End");
 
 		////WorldManagerのポインタ変数に代入
 		//	EveManager_p = &EveManager;
@@ -49,6 +53,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//CBattleの初期化
 			if (!(Battle.Init())) return false;
+
+	//DebugDx("Battle_Init_End");
 			
 		//外部テキストのロード
 			CLoad SystemLoad;
@@ -68,9 +74,11 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			}else{
 				return false;
 			}
+	
+	//DebugDx("Load_Init_End");
 			
 		//セーブデータの読み込み
-			PlayData_p = _playdata_p;
+			if (PLAYDATA_NUM>0) PlayData_p = _playdata_p;
 			if (!StartSet(_dnum)) return false;
 
 	CHECK_TIME_END("Init_Field")

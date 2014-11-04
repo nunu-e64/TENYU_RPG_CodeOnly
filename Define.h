@@ -40,7 +40,7 @@
 		ErrorDx("Error mapnum<0: %d",_mapnum);return _return;	\
 	}}
 
-const int PLAYDATA_NUM = 4;	//セーブデータの数(0~3)
+const int PLAYDATA_NUM = 0;	//セーブデータの数(0~3)
 const int MAP_CHIP_SIZE = 32;
 const int MAP_SIZE = 128;		//正方形を想定
 const int MAP_DATA_SIZE = 256;	//バイナリデータに格納されているデータの最大値（256=0~255=8bit=1byte）

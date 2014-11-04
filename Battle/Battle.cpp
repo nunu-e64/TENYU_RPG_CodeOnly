@@ -319,7 +319,7 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 				DrawString(resultScreen.Left+30, resultScreen.Top+30, resultMessage[0], WHITE);
 				DrawString(resultScreen.Left+30, resultScreen.Top+60, resultMessage[1], WHITE);
 				if (timecount>=60){
-					DrawCenterString(resultScreen.Center().x, resultScreen.Bottom-10+(timecount/6)%5, WHITE, "Бе");
+					DrawCenterString((int)resultScreen.Center().x, (int)resultScreen.Bottom-10+(timecount/6)%5, WHITE, "Бе");
 				}
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
