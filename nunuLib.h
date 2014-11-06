@@ -323,9 +323,7 @@ inline int DrawBox(CRect _rect, int _color, bool _fillflag){
 ///エラー&デバッグ出力用関数/////////////////////////////////
 inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
 	char string[1024];
-	//va_start(args, format);
 	vsprintf_s(string, format, args);
-	//va_end(args);
 	if (filename!=NULL) sprintf_s(string, "\n->%s(%d)\n", filename, line);
 
 	printfDx(string);
