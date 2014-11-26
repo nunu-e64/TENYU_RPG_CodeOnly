@@ -125,7 +125,7 @@ bool CEnemySpeciesManager::SetMapEncount(int _mapnum, int _chipnum, int _encount
 	}
 
 	MapEncount[_mapnum][_chipnum].encount = _encount;
-	DebugDx("%d", MapEncount[_mapnum][_chipnum].encount);
+	DebugDx("MapEncount[_mapnum][_chipnum].encount:%d", MapEncount[_mapnum][_chipnum].encount);
 	return true;
 
 }

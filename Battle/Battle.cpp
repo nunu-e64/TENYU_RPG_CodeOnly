@@ -14,6 +14,8 @@ CBattle::CBattle(){
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
 
+	TrickManager = CTrickManager::GetInstance();
+
 	WinCommand[0] = '\0';
 	mystrcpy(LoseCommand, "@GameOver");
 }
@@ -23,7 +25,7 @@ bool CBattle::Init(){	//Field.Init()‚ÅŒÄ‚Ño‚·	//14/06/26
 	PlayerSpeciesManager.Clear();
 	EnemySpeciesManager.Clear();
 	BImgBank.Init();
-	TrickManager.Clear();
+	TrickManager->Clear();
 	
 	ACTOR_NUM = 0;
 	PLAYER_NUM = 0;
@@ -40,7 +42,7 @@ bool CBattle::Init(){	//Field.Init()‚ÅŒÄ‚Ño‚·	//14/06/26
 			
 			if (bfsLoad.LoadAddText("tenyu_data/b_system.rpg")){			
 				bfsLoad.CommandCopy(&bfsCmdList);
-				bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, &TrickManager);
+				bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, TrickManager);
 			}else{
 				return false;
 			}

@@ -7,7 +7,12 @@
 
 class CTrickManager{
 public:
-	
+
+	static CTrickManager* GetInstance(){
+		static CTrickManager TrickManager;
+		return &TrickManager;
+	}
+
 	~CTrickManager(){
 		
 	}
@@ -20,6 +25,11 @@ public:
 private:
 	std::map <char256, trick_tag> TrickBank;
 	trick_tag Trick_dammy;
+
+	//’Pˆê«‚ğ•ÛØ(Singleton)
+		CTrickManager(){}
+		CTrickManager(const CTrickManager& hoge);
+		CTrickManager& operator=(const CTrickManager& hoge);
 };
 
 

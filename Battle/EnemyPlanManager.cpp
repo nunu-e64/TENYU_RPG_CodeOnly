@@ -18,7 +18,7 @@ void CEnemyPlanManager::Init(int _playernum, int _enemynum){
 }
 
 void CEnemyPlanManager::MakePlan(int _enemyIndex, int _borderHp, int _choice1, int _choice2){
-	//最終的には外部ファイルからの読み込み化
+	//最終的には外部ファイルからの読み込み化$
 	EnemyPlanner[_enemyIndex].PlanType = 0;
 
 	EnemyPlanner[_enemyIndex].Value.insert(std::map<std::string, int>::value_type( "BorderHp", _borderHp));
