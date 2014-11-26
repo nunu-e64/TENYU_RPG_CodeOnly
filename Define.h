@@ -22,7 +22,7 @@
 #include "Dxlib.h"
 #include <vector>
 
-//#define MEMORY_CHECK
+//#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
 	#if defined(MEMORY_CHECK) && !defined(MEMORY_CHECK_DISABLE)
 		#include <crtdbg.h>
 		#define new  ::new( _NORMAL_BLOCK, __FILE__, __LINE__ )  
@@ -161,6 +161,7 @@ struct trick_tag{
 		ALL_FRIEND,
 		TARGETTYPE_NUM,
 	}TargetType;
+
 
 };
 

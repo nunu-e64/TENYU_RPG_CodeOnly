@@ -344,29 +344,6 @@ inline void ErrorDx(const char* format, ...){
 	myprintfDx(format, args);
 	va_end(args);
 }
-/*template<class T>inline void ErrorDx(const char* format, char* filename, int line, const T& a){
-	printfDx(format, a);
-	printfDx("\n->%s(%d)\n", filename, line);
-	ScreenFlip();
-	WaitKey();
-	clsDx();
-	ClearDrawScreen();
-}
-template<class T>inline void ErrorDx(const char* format, const T& a){
-	printfDx(format, a);
-	printfDx("\n");
-	ScreenFlip();
-	WaitKey();
-	clsDx();
-	ClearDrawScreen();
-}
-inline void ErrorDx(const char* format, char* filename, int line){
-	ErrorDx(format,filename,line,0);
-}
-inline void ErrorDx(const char* format){
-	ErrorDx(format,0);
-}*/
-
 inline void WarningDx(const char* format, char* filename, int line, ...){
 	#ifndef	WARNINGDX_DISABLE 
 		va_list args;
@@ -383,19 +360,6 @@ inline void WarningDx(const char* format, ...){
 		va_end(args);
 	#endif
 }
-//inline void WarningDx(const char* format, char* filename, int line, ...){
-//	#ifndef	WARNINGDX_DISABLE 
-//		va_list args;
-//		va_start(args, format);
-//		myprintfDx(format, args, filename, line);
-//		va_end(args);
-//	#endif
-//}
-//inline void WarningDx(const char* format){
-//	#ifndef	WARNINGDX_DISABLE 
-//		ErrorDx(format);
-//	#endif
-//}
 inline void DebugDx(const char* format, char* filename, int line, ...){
 	#ifndef	DEBUGDX_DISABLE 
 		va_list args;
