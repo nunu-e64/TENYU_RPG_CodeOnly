@@ -35,7 +35,6 @@ void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::target
 		Add(tmp);
 	}
 }
-
 trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 	trick_tag* tmp;
 	char256 tmpkey;
@@ -50,4 +49,28 @@ trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 		return NULL;
 	}
 	//mapでは存在しないキーでアクセスしようとした場合、値をデフォルトコンストラクタで初期化し登録してくれやがる
+}
+
+void CTrickManager::CreateDamageEffect(std::string _typeName){
+
+	if (_typeName=="BOMB"){
+		TrickDamageEffectBank.push_back(new CTrickDamageEffect_BOMB());
+		
+	}else if(_typeName=="SPREAD"){
+	
+	
+	}else{
+		ErrorDx("Error->TrickEffectTypeName does't match any Effects. name:%s", _typeName);
+		
+	}
+}
+
+
+void CTrickDamageEffect_BOMB::DrawDamageEffect(){
+
+	while(){
+		//ここに実際のあれこれを書く
+		return;
+	}
+	
 }

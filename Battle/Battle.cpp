@@ -450,7 +450,7 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 		++timecount;
 		a-=1;
 		for (int i=0; i<8; i++){
-			ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(timecount*PI/(60*2)+i*PI/4),a*sin(timecount*PI/(60*2)+i*PI/4)));		
+			ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(timecount*PI/(60*2)+i*PI/4),a*sin(timecount*PI/(60*2)+i*PI/4)));
 		}
 	}while(a!=0 && BasicLoop());
 

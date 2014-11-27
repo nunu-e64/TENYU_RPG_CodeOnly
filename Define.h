@@ -153,6 +153,7 @@ struct trick_tag{
 	int Power;
 	int Cost;
 	std::vector <sideeffect_tag> SideEffect;
+	int DamageEffectIndex;
 
 	enum targetType_tag{
 		SINGLE,
