@@ -1,185 +1,182 @@
-�V�CProject -system-
+天佑Project -system-
 ======================
-���쒆�̒���RPG�u�V�C�v�̃v���O�����\�[�X�R�[�h�ł��B
+制作中の長編RPG「天佑」のプログラムソースコードです。
 
-# �u�V�CProject�v�ɂ���
-2014�N�t����10���قǂ̃����o�[�ƂƂ��ɁA2�N��̊�����ڎw���Đ��삵�Ă��钷��RPG�ł��B  
-�V�X�e���̃v���O�����͌��݂��ׂĎ�NUNU���S�����A�ꂩ��R�[�h�������Ă��܂��B  
+## 「天佑Project」について
+2014年春から10名ほどのメンバーとともに、2年後の完成を目指して制作している長編RPGです。  
+システムのプログラムは現在すべて私NUNUが担当し、一からコードを書いています。  
 
-�V�i���I�G�f�B�^�[��}�b�v�G�f�B�^�[�̐���������S�����Ă��܂��B
-
-
-# �v���O�����̓���
-
-�ő�̓����́A**�v���O�����ƍ�i�̕���**�y��**��i�݌v���R�x�̍���**�ł��B  
-���̂��߂̎�i�Ƃ���**�Ǝ��R�}���h����**�ɂ�鏈���Ǘ���g�ݍ���ł��܂��B
-
-���̃v���O�����ł�RPG�̂��߂̘g�g�݂݂̂�񋟂��A  
-��i����ҁi�V�C�v���W�F�N�g�̏ꍇ�̓V�i���I���C�^�[�j���A���̘g�g�ݏ�œƎ���RPG������Ă����܂��B
-
-��̓I�ɂ́A�}�b�v�E�e��O���t�B�b�N�E�C�x���g�E��b�E�퓬�f�[�^�������ׂĊO���ǂݍ��݂ɂ��Ă��܂��B  
-�Q�[�������́A�O���ǂݍ��݃t�@�C���u.rpg�t�@�C���v��Łu@�R�}���h�v�ŕ\����A��i����҂�@�R�}���h��g�ݍ��킹�邱�ƂŁA�����̐��E�ς����R�ɕ\�����邱�Ƃ��o���܂��B  
-�i�ڂ�����Release�t�H���_����.rpg�t�@�C�����������������B.rpg�t�@�C���̎��̂͑��̃e�L�X�g�ł��j
-
-���݂̓t�B�[���h�ƃC�x���g�֘A�V�X�e�����قڊ������A�퓬�V�X�e���𐧍쒆�ł��B  
-�������ł����t�B�[���h�Ƃ̓v���C���[�L�������}�b�v��ɕ\������Ă����Ԃ��w���A�X�̒��≮�����܂݂܂��B
+現在はフィールドとイベント関連システムがほぼ完成し、戦闘システムを制作中です。  
+シナリオエディターやマップエディターの制作も私が担当しています。
 
 
-# �\�[�X�R�[�h�ɂ���
-�e�w�b�_�t�@�C���Ƃ��̒��Œ�`����Ă���N���X�ɂ��Ă̊ȒP�Ȑ����ł��B  
-�\�[�X�R�[�h�{�̂ɂ��قړ��l�̃R�����g���L�ڂ��Ă���܂��B  
+## プログラムの特徴
 
-�t�@�C�����̑������G�ȃv���O�����ł��̂ŁA��ǂ̈ꏕ�ƂȂ�΍K���ł��B
+最大の特徴は、**プログラムと作品の分離**及び**作品設計自由度の高さ**です。  
+そのための手段として**独自コマンド方式**による処理管理を組み込んでいます。
+
+このプログラムではRPGのための枠組みのみを提供し、作品制作者（天佑プロジェクトの場合はシナリオライター）がこの枠組み上で独自のRPGを作っていきます。
+
+具体的には、マップ・各種グラフィック・イベント・会話・戦闘データ等をすべて外部読み込みにしています。  
+ゲーム処理は、外部読み込みファイル「.rpgファイル」上で「@コマンド」で表され、  
+作品制作者は@コマンドを組み合わせることで、自分の世界観を自由に表現することが出来ます。  
+（詳しくはReleaseフォルダ内の.rpgファイルをご覧ください。.rpgファイルの実体は只のテキストです）
+
+
+## ソースコードについて
+各ヘッダファイルとその中で定義されているクラスについての簡単な説明を以下に書きます。  
+ソースコード本体にもほぼ同様のコメントが記載してあります。  
+
+ファイル数の多いコードですので、解読の一助となれば幸いです。
 
 ----------------------------------------------
 
-### Define.h
-���ׂĂ�cpp�œǂݍ��܂�܂��B  
-�O���[�o���Ȓ萔�E�^�E�֐���u���Ă��܂��B  
-define�}�N���Ńr���h���[�h�i���i��/�v���O���}�f�o�b�O�łȂǁj���Ǘ����Ă��܂��B
+##### Define.h
+すべてのcppで読み込まれます。  
+グローバルな定数・型・関数を置いています。  
+defineマクロでビルドモード（製品版/プログラマデバッグ版など）を管理しています。
 
-### nunuLib.h
-���색�C�u�����ł��B  
-char�^���������K�̂��ߍŋ߂܂�std::string�𕕈󂵂Ă������߁Achar��char*�Ɋւ���֐�����������܂��B  
-�G���[/�f�o�b�O���O�o�͗p�֐��͎����̎g������ׂ̈ɂ������܂����B
+##### nunuLib.h
+自作ライブラリです。  
+char型を扱う練習のため最近までstd::stringを封印していたため、charやchar*に関する関数が多くあります。  
+エラー/デバッグログ出力用関数は自分の使い勝手の為にこだわりました。
 
-### Mrt.h
-�^�C�g����ʂ̃f�U�C���ƃV�X�e���𕪗����邽�߂̎d�g�݂ł��B  
-�����I�ɑ������o�[�ƃv���O���~���O�𕪒S����\�����l���Ď����I�ɍ��܂����B  
-���܂̂Ƃ�����Ɏg�p���Ă��܂���B
+##### Mrt.h
+タイトル画面のデザインとシステムを分離するための仕組みです。  
+将来的に他メンバーとプログラミングを分担する可能性を考えて試験的に作りました。  
+いまのところ特に使用していません。
 
-### mrtLib.h
-�����I�ɑ������o�[�ƃv���O���~�O���𕪒S����\�����l���āA�������o�[�����색�C�u������u���Ƃ���Ƃ��Ď����I�ɍ��܂����B  
-���܂̂Ƃ�����Ɏg�p���Ă��܂���B
+##### mrtLib.h
+将来的に他メンバーとプログラミグぐを分担する可能性を考えて、他メンバーが自作ライブラリを置くところとして試験的に作りました。  
+いまのところ特に使用していません。
 
-### Menu.h
-�ėp���j���[�N���XCMenu���`���Ă��܂��B  
-�K�w�\���������j���[�����Ƃ��Ɍp�������Ďg���܂��B  
-���݂͐퓬�̍s���I�����j���[�Ŏg�p���B
-
------------------------------------
-
-### Main/Main.h
-�Q�[���J�n���̊�_�Ƃ��āA�^�C�g����ʂ���̑J�ڂ��Ǘ����܂��B
-
-### Main/CmdList.h
-���̃v���O�����̊̂ł��B  
-�Ǝ���@�R�}���h�𕶎���Ƃ��Ċi�[���܂��B  
-@�R�}���h�͊O���ǂ݂��݂Ŏ�Ɏg�p���܂����A�V�X�e�����ł��������X���[�Y�ɂ��邽�߂Ɏ��X�g���܂��B
-
-###  Main/CmdManager.h
-���̃v���O�����̊̂ł��B  
-CmdList����@�R�}���h��ǂݎ�菇�ɏ������܂��B  
-�g�p�����󋵂ɍ��킹�āA�퓬�pCmdManager�A�����ݒ�pCmdManager�Ȃǂ�����܂��B
-
-### Main/TextBox.h
-�e�L�X�g�{�b�N�X��\�����ĕ������`�悵�܂��B  
-�C�x���g���Ƃɕ�������󂯎��A�L�[����ɍ��킹�ď��ɕ\�����Ă����܂��B
-
-### Main/TextWrap.h
-�e�L�X�g�{�b�N�X�̈���ł��B  
-��ʑS�̂��g���ĕ�����\�����܂��B
-
-### Main/TalkName.h
-�e�L�X�g�{�b�N�X�̏�ɕ\������锭���҂̃��x���ł��B
-CTextBox����܂��Ďg���Ă��܂��B
-
-### Main/ScreenChanger.h
-�Q�[�����e���Ŏg���A�l�X�ȉ�ʂ̐؂�ւ����ʂ��g���₷�����邽�߂̃N���X�ł��B  
-���݂͐퓬�J�n���Ɏg���Ă��܂��B
-
-### Main/WorldManager.h
-��q��Field.h��CField�N���X��Battle.h��CBattle�N���X�Ɍp�������Ďg���Ă��܂��B  
-���ʂ̏������A���Ԑ����g���Ĉ������߂ɍ��܂����B
+##### Menu.h
+汎用メニュークラスCMenuを定義しています。  
+階層構造を持つメニューを作るときに継承させて使います。  
+現在は戦闘の行動選択メニューで使用中。
 
 -----------------------------------
 
-### Field/Field.h
-�v���C���[�̈ړ��E�}�b�v�̕\���E�C�x���g�̊J�n�ȂǁA  
-�^�C�g���Ɛ퓬�ȊO�̃Q�[�����̂قڂ��ׂẴv���C���[�������������܂��B  
-�l�X�ȃN���X�̎��̂������i��܁j���Ă��܂��B
+##### Main/Main.h
+ゲーム開始時の基点として、タイトル画面からの遷移を管理します。
 
-### Field/Map.h
-�}�b�v�f�[�^��}�b�v�`�b�v�̓ǂݍ��݁E�ێ���A�}�b�v�̕`�ʂ��s���܂��B
+##### Main/CmdList.h
+このプログラムの肝です。  
+独自の@コマンドを文字列として格納します。  
+@コマンドは外部読みこみで主に使用しますが、システム内でも処理をスムーズにするために時々使われます。
 
-### Field/EveObj.h
-�t�B�[���h��Œ��ׂ�ΏۂƂȂ镨�́ANPC�A�ڂɌ����Ȃ����ރC�x���g�X�C�b�`�Ȃǂ͂��ׂāA  
-�u�C�x���g�I�u�W�F�N�g�v�Ƃ���CEveObj�N���X�̃C���X�^���X�Ƃ��Ĉ����܂��B
+#####  Main/CmdManager.h
+このプログラムの肝です。  
+CmdListから@コマンドを読み取り順に処理します。  
+使用される状況に合わせて、戦闘用CmdManager、初期設定用CmdManagerなどがあります。
 
-### Field/EveManger.h
-�C�x���g�I�u�W�F�N�g�̔z�������������Ǘ����s���܂��B  
-�e�C�x���g�I�u�W�F�N�g���烁�b�Z�[�W�����o������A���W���������肷�鏈���́A  
-���ׂăC�x���g�}�l�[�W���[����čs���܂��B
+##### Main/TextBox.h
+テキストボックスを表示して文字列を描画します。  
+イベントごとに文字列を受け取り、キー操作に合わせて順に表示していきます。
 
-### Field/Load.h
-.rpg�t�@�C���̓Ǎ��݂Ȃǂ��Ǘ����܂��B  
-�ǂݍ��񂾓��e��CMap��CEveManager�ɓn����܂��B
+##### Main/TextWrap.h
+テキストボックスの亜種です。  
+画面全体を使って文字を表示します。
+
+##### Main/TalkName.h
+テキストボックスの上に表示される発言者のラベルです。
+CTextBoxが包含して使っています。
+
+##### Main/ScreenChanger.h
+ゲーム内各所で使う、様々な画面の切り替え効果を使いやすくするためのクラスです。  
+現在は戦闘開始時に使われています。
+
+##### Main/WorldManager.h
+後述のField.hのCFieldクラスとBattle.hのCBattleクラスに継承させて使われています。  
+共通の処理を、多態性を使って扱うために作りました。
 
 -----------------------------------
 
-### Battle/Battle.h
-�퓬�S�ʂ��������܂��B  
-�l�X�ȃN���X�̎��̂������i��܁j���Ă��܂��B
+##### Field/Field.h
+プレイヤーの移動・マップの表示・イベントの開始など、  
+タイトルと戦闘以外のゲーム内のほぼすべてのプレイヤー活動を掌握します。  
+様々なクラスの実体を所持（包含）しています。
 
-### Battle/Actor.h
-�퓬�ɎQ������L�����N�^�[��G�������ʊǗ����邽�߂̃N���X�B  
-�퓬�Ŏg����e��X�e�[�^�X�l�⏈���֐��������܂��B  
-CPlayer��CEnemy���p�����܂��B
+##### Field/Map.h
+マップデータやマップチップの読み込み・保持や、マップの描写を行います。
 
-### Battle/Species.h
-CSpecies�ƁA���̎q�N���XCPlayerSpecies��CEnemySpecies���`���Ă��܂��B  
-�v���C���[�L������G�l�~�[�̎�ނ��ƂɃC���X�^���X������A�퓬�Ɋւ���X�e�[�^�X�������܂��B  
-�퓬�J�n����Player��Enemy�ɁA�X�e�[�^�X��n���܂��B
+##### Field/EveObj.h
+フィールド上で調べる対象となる物体、NPC、目に見えない踏むイベントスイッチなどはすべて、  
+「イベントオブジェクト」としてCEveObjクラスのインスタンスとして扱われます。
 
-### Battle/SpeciesManager.h
-�v���C���[�L�������iCPlayerSpecies�j�ƃG�l�~�[���iCEnemySpecies�j�����ꂼ��z��Ƃ��ĊǗ����܂��B  
-CPlayerSpecies��CEnemySpecies�̊e�C���X�^���X�ւ͂��̃}�l�[�W���[����ăA�N�Z�X���܂��B
+##### Field/EveManger.h
+イベントオブジェクトの配列を持ちあらゆる管理を行います。  
+各イベントオブジェクトからメッセージを取り出したり、座標を代入したりする処理は、  
+すべてイベントマネージャーを介して行われます。
 
-### Battle/Player.h
-�퓬�ɎQ������v���C���[�L�����̃N���X�ł��B
-CActor��CPlayerSpeceis���p�����܂��B
+##### Field/Load.h
+.rpgファイルの読込みなどを管理します。  
+読み込んだ内容はCMapやCEveManagerに渡されます。
 
-### Battle/Enemy.h
-�퓬�ɎQ������G�l�~�[�̃N���X�ł��B
-CActor��CEnemySpeceis���p�����܂��B
+-----------------------------------
 
-### Battle/EnemyPlanManager.h
-�G�l�~�[��AI���Ǘ����܂��B
+##### Battle/Battle.h
+戦闘全般を掌握します。  
+様々なクラスの実体を所持（包含）しています。
 
-### Battle/BattleCalculator.h
-�퓬�Ɋւ���e��v�Z���󂯎����܂��B  
-�����I�ɐ퓬�v�Z�͕��G�����邱�Ƃ��\�z�����̂ŁA�v�Z�֐������������Ă����\��ł��B
+##### Battle/Actor.h
+戦闘に参加するキャラクターを敵味方共通管理するためのクラス。  
+戦闘で使われる各種ステータス値や処理関数を持ちます。  
+CPlayerとCEnemyが継承します。
 
-### Battle/BImgBank.h
-�퓬�Ɏg�p����e��摜���Ǘ����܂��B
+##### Battle/Species.h
+CSpeciesと、その子クラスCPlayerSpeciesとCEnemySpeciesを定義しています。  
+プレイヤーキャラやエネミーの種類ごとにインスタンス化され、戦闘に関するステータスを持ちます。  
+戦闘開始時にPlayerやEnemyに、ステータスを渡します。
 
-### Battle/TrickManager.h
-�퓬�Ŏg�p�����Z�̏����Ǘ����܂��B
+##### Battle/SpeciesManager.h
+プレイヤーキャラ情報（CPlayerSpecies）とエネミー情報（CEnemySpecies）をそれぞれ配列として管理します。  
+CPlayerSpeciesやCEnemySpeciesの各インスタンスへはこのマネージャーを介してアクセスします。
+
+##### Battle/Player.h
+戦闘に参加するプレイヤーキャラのクラスです。
+CActorとCPlayerSpeceisを継承します。
+
+##### Battle/Enemy.h
+戦闘に参加するエネミーのクラスです。
+CActorとCEnemySpeceisを継承します。
+
+##### Battle/EnemyPlanManager.h
+エネミーのAIを管理します。
+
+##### Battle/BattleCalculator.h
+戦闘に関する各種計算を受け持ちます。  
+将来的に戦闘計算は複雑化することが予想されるので、計算関数だけ分離していく予定です。
+
+##### Battle/BImgBank.h
+戦闘に使用する各種画像を管理します。
+
+##### Battle/TrickManager.h
+戦闘で使用される技の情報を管理します。
 
 
-### 
-# ���܂�
-## ����
-����̕���́A�C�ɕ����ԓ��A�\�����V�A�B  
-���̓��ł͔��S���̓y���@�������Â��A�����̖������Â��ɕ�炵�Ă���B
+## おまけ
+#### 序幕
+物語の舞台は、海に浮かぶ島、ソラリシア。  
+この島では八百万の土着宗教が息づき、多くの民族が静かに暮らしている。
 
-���N�͍������A�P�����X�������̏ォ�猩�Ă����B  
-���̖��A����~�m�B�܂����E��m��Ȃ��A�����̉p�Y�B
+少年は今日も、輝く星々を屋根の上から見ていた。  
+星の民、風上冬仁。まだ世界を知らない、未来の英雄。
 ***
-���̓��ł͂��āA�����̏��������������������ĂЂ�����ƕ�炵�Ă����B  
-�ނ�͂��ꂼ��Ǝ��̐����l���Ə@���������A���R�ƂƂ��ɐ����𑗂��Ă����B  
-���̂Ȃ��ŕ����̖������́A�������̕����𑩂˂邱�Ƃň�̍��Ƃ𐶂ݏo�����B  
-�\�����V�A�鍑�Ɩ����g�����̋����h���f���邻�̍��͂������\�����n�߂�B  
-���a�z���̌���̂��ƂɁA�鍑�͑��̖��̕�炷�����ɉ�����J�n�����̂��B  
-�i�񂾉Ȋw�Z�p�Ƌ���ȌR���͂�w�i�Ɏ�����̐N�U���n�߂��鍑�ɑ΂��A  
-�����̖��͂Ȃ����ׂ������Ȃ��������A�鍑�Ɛ키���Ƃ�I�񂾎҂����������B  
+この島ではかつて、無数の少数民族が部落をつくってひっそりと暮らしていた。  
+彼らはそれぞれ独自の生活様式と宗教を持ち、自然とともに生活を送っていた。  
+そのなかで平原の民だけは、いくつかの部落を束ねることで一つの国家を生み出した。  
+ソラリシア帝国と名乗り“太平の教え”を掲げるその国はいつしか暴走を始める。  
+平和布教の御旗のもとに、帝国は他の民の暮らす部落に介入を開始したのだ。  
+進んだ科学技術と強大な軍事力を背景に事実上の侵攻を始めた帝国に対し、  
+多くの民はなすすべを持たなかったが、帝国と戦うことを選んだ者たちもいた。  
 
-���ꂩ��20�N�B�鍑�ɂ��ً��k�e�����������A  
-���܂܂���l�̐��̖��̏��N���A���e��D�����鍑�ւ̑�����R�₵�킢�ɐg�𓊂���B  
-�₪�đ����̏o��̒��Ő킢�̐^�̈Ӗ����������ނ́A  
-�Ƒ�����邽�߁A����ς��邽�߁A���Ԃ𗦂��ė����オ�邱�Ƃ����ӂ���B  
-20�N�O�ɎU�����A���̉p�Y�̂悤�ɁB  
+それから20年。帝国による異教徒弾圧が続く中、  
+いままた一人の星の民の少年が、父親を奪った帝国への憎悪を燃やし戦いに身を投じる。  
+やがて多くの出会いの中で戦いの真の意味を見つけた彼は、  
+家族を守るため、国を変えるため、仲間を率いて立ち上がることを決意する。  
+20年前に散った、あの英雄のように。  
 
-<center>_����ꂽ���R���A���߂��B_  
-_���V�̐�����A���߂��B_</center>
+<center>_失われた自由を、取り戻せ。_  
+_満天の星空を、取り戻せ。_</center>
 
