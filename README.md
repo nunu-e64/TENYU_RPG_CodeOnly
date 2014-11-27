@@ -22,6 +22,36 @@
 作品制作者は@コマンドを組み合わせることで、自分の世界観を自由に表現することが出来ます。  
 （詳しくはReleaseフォルダ内の.rpgファイルをご覧ください。.rpgファイルの実体は只のテキストです）
 
+外部読み込みファイルの記述例・・・例：NPC"sister"の作成と会話設定をしたいとき
+
+system.rpg（一部・例）
+````````
+@Load_Pic(tenyu_data/pic/npc00.png, npc_sis, NPC)  \画像読み込み
+@Set_EventObj(0, 0, NPC, npc_sis, sister)　　\NPCの作成
+
+\@Load_Pic(読み込む画像, 画像タグ（自由指定）, 画像の種別)
+\@Set_EventObj(X, Y, イベントオブジェクトの種別, 画像タグ名, 名前（自由指定）)
+````````
+scenario.rpg（一部・例）
+````````
+@NPC_BEGIN(sister)
+  @Anten(500)  \500msかけて画面を暗転
+  @Meiten(500)  \500msかけて画面を明転
+  @TName_Now(left, 妹)  \発言者ラベルの作成
+  @Jump(sister)  \NPCがジャンプ
+  お兄ちゃん、おかえり！
+  @NextPage  /ページ送り
+  @TName_Now(right, 僕)
+  ああ、ただいま
+  @NextPage  /ページ送り
+  @TName_Now(left, 妹)
+  お母さんも待ってるよ、先に家に入ってるから早く来てね！
+  @NextPage  /ページ送り
+  @Anten(500)
+  @Visible_Set(sister, false)  /NPCの退場=画面が暗転している間に姿を消す
+  @Meiten(500)  
+@NPC_END
+````````
 
 ## ソースコードについて
 各ヘッダファイルとその中で定義されているクラスについての簡単な説明を以下に書きます。  
