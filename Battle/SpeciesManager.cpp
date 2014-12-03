@@ -28,14 +28,12 @@ bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
 	}
 	return true;
 }
-bool CPlayerSpeciesManager::SetMemberList(){
+bool CPlayerSpeciesManager::SetMemberList(){	//パーティメンバーリストの初期化。戦闘に出ないであろうメンバーにも番号は振っておく
 	MemberList.clear();
-	int i = 0;
 	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
 	while( it != PlayerBank.end()){
 		MemberList.push_back(&(*it).second);
 		++it;
-		++i;
 	}
 	return true;
 }

@@ -6,6 +6,12 @@
 void CTrickDamageEffect_BOMB::DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const{
 	//‚±‚±‚ÉŽÀÛ‚Ì‚ ‚ê‚±‚ê‚ð‘‚­
 
+
+}
+
+void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const{
+	//‚±‚±‚ÉŽÀÛ‚Ì‚ ‚ê‚±‚ê‚ð‘‚­
+
 	//‹Z”­“®‰‰o//////////////////////////////////////////////////////////////
 	int timecount = 0;
 	CVector ball[8];
@@ -17,7 +23,7 @@ void CTrickDamageEffect_BOMB::DrawDamageEffect(CBattle* _battle, CBImgBank* _bim
 		_battle->Draw();
 		SetDrawBlendMode(DX_BLENDMODE_ADD, timecount*2);
 		for (int i=0; i<8; i++){
-			DrawExtendGraph(ball[i].x-10, ball[i].y-10, ball[i].x+10, ball[i].y+10, _bimgbank->GetImg("EFFECT_BOMB"), false);
+			DrawExtendGraph(ball[i].x-Size1, ball[i].y-Size1, ball[i].x+Size1, ball[i].y+Size1, _bimgbank->GetImg("EFFECT_BOMB"), false);
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -35,7 +41,7 @@ void CTrickDamageEffect_BOMB::DrawDamageEffect(CBattle* _battle, CBImgBank* _bim
 	do{
 		_battle->Draw();
 		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
-		DrawExtendGraph(ball[0].x-15, ball[0].y-15, ball[0].x+15, ball[0].y+15, _bimgbank->GetImg("EFFECT_BOMB"), false);
+		DrawExtendGraph(ball[0].x-Size2, ball[0].y-Size2, ball[0].x+Size2, ball[0].y+Size2, _bimgbank->GetImg("EFFECT_BOMB"), false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		++timecount;

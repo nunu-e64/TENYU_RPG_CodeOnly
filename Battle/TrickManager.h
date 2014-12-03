@@ -20,15 +20,15 @@ public:
 		
 	}
 
-	void Clear();
 	void Add(trick_tag _trick);
 	void Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, int _sideeffectnum, ...);
+	void Clear();
 
 	trick_tag const* GetTrick(const char _name[32]);
 
 
 	//ダメージエフェクト関係
-		void CreateDamageEffect(std::string _typeName);
+		void CreateDamageEffect(std::string _typeName, std::string _effectName, ...);
 		int GetTrickDamageEffectIndex(std::string _name);
 		void DrawEffect(int _effectIndex, CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) {
 			//TrickDamageEffectBank[_effectIndex]->DrawDamageEffect(_battle, );

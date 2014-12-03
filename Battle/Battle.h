@@ -120,7 +120,7 @@ private:
 			CBImgBank BImgBank;
 			CPlayerSpeciesManager PlayerSpeciesManager;
 			CEnemySpeciesManager EnemySpeciesManager;
-			CTrickManager* TrickManager;
+			CTrickManager* TrickManager;	//singleton使う関係上ポインタで保持
 			std::queue <CActor*> ActionQueue;	//行動待機リスト
 
 		//戦闘設定

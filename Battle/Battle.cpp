@@ -53,9 +53,17 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
 	
-	//どこに書くべきか･･･Field?///////
+	//パーティリストの初期化///////
 		PlayerSpeciesManager.SetMemberList();
-	//////////////////
+	//////////////////////////////////
+
+
+	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む////////
+		TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
+		TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
+		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 10, 15);
+		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 20, 25);
+	
 
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
