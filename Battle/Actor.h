@@ -96,7 +96,6 @@ protected:
 	//包含クラス
 		CTextBox** B_TextBox_pp;
 		CCmdList* CmdList;
-		CBImgBank* BImgBank_p;
 
 	//グラフィック
 		CRect Rect;

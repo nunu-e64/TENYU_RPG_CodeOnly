@@ -35,6 +35,13 @@ void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::target
 		Add(tmp);
 	}
 }
+
+void CTrickManager::Clear(){
+	
+
+
+}
+
 trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 	trick_tag* tmp;
 	char256 tmpkey;
@@ -65,12 +72,12 @@ void CTrickManager::CreateDamageEffect(std::string _typeName){
 	}
 }
 
-
-void CTrickDamageEffect_BOMB::DrawDamageEffect(){
-
-	while(){
-		//Ç±Ç±Ç…é¿ç€ÇÃÇ†ÇÍÇ±ÇÍÇèëÇ≠
-		return;
+int CTrickManager::GetTrickDamageEffectIndex(std::string _name){
+	for (unsigned int i=0; i<TrickDamageEffectBank.size(); i++){
+		if (TrickDamageEffectBank[i]->GetName()==_name){
+			return i;
+		}
 	}
-	
+	return -1;
 }
+
