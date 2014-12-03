@@ -31,7 +31,7 @@ public:
 	void LoadPic(const char *_path, const char _key[32], const char _kind[32]=NULL);
 	
 	void CreateMapGraph(int _mapnum = -1);
-
+	
 	int GetMapData(int _mapnum, int _x, int _y, int layer=0);
 	int* GetImgData(const char _key[32]);
 
