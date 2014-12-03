@@ -292,8 +292,8 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
 
 //@NormalTrick_Create
-	}else if (mystrcmp(_command,"@NormalTrick_Create")){		
-		argnum = 3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, true);	//ïKê{
+	}else if (mystrcmp(_command,"@NormalTrick_Create")){
+		argnum = 4;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
 
 		int value[2];
 		for (int i=0; i<2; i++){
@@ -302,7 +302,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				goto finish;
 			}
 		}
-		_trickManager->Add(arg[0], value[0], value[1], trick_tag::SINGLE ,0);	
+		_trickManager->Add(arg[0], value[0], value[1], trick_tag::SINGLE, arg[3], 0);	
 
 //@PlayerTrick_Set
 	}else if (mystrcmp(_command,"@PlayerTrick_Set")){		

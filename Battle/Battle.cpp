@@ -439,7 +439,8 @@ int CBattle::ResultCheck(){
 void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick){
 	int attacker_actorindex = between(0, ACTOR_NUM-1, _attacker_actorindex); 
 	int target_actorindex   = between(0, ACTOR_NUM-1, _target_actorindex); 
-	
+
+/*
 	//技発動演出//////////////////////////////////////////////////////////////
 	int timecount = 0;
 	CVector ball[8];
@@ -476,14 +477,17 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 		ball[0].Add(a*vec.x, a*vec.y);
 	}while(vec.y*(ball[0].y-Actor[target_actorindex]->GetRect().Center().y)<0 && BasicLoop());
 	//////////////////////////////////////////////////////////////////////////
+*/
 
-	timecount=0;
+	TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actorindex]->GetRect(), Actor[target_actorindex]->GetRect());
+
+	int timecount=0;
 	do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
 	
 	//実際のダメージ計算
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
 
-	//ダメージ演出//////////////////////////////////////////////////////////////
+	//ダメージ値表示演出//////////////////////////////////////////////////////////////
 	timecount = 0;
 	bool oldVisible = Actor[target_actorindex]->GetVisible();
 	CVector charPos(Actor[target_actorindex]->GetRect().Center().x, Actor[target_actorindex]->GetRect().Top);

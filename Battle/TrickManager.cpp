@@ -9,12 +9,13 @@ void CTrickManager::Add(trick_tag trick){
 	TrickBank.insert( std::map<char256, trick_tag>::value_type( tmpkey, trick) );
 }
 
-void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, int _sideeffectnum, ...){
+void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, int _sideeffectnum, ...){
 	trick_tag tmp;
 	mystrcpy(tmp.Name, _name);
 	tmp.Power = _power;
 	tmp.Cost = _cost;
 	tmp.TargetType = _targetType;
+	tmp.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
 
 	sideeffect_tag tmpeffect;
 
