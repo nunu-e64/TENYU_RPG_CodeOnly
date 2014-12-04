@@ -456,12 +456,23 @@ void CField::BattleStart(){
 			Battle.Draw(false,true);
 		SetDrawScreen(DX_SCREEN_BACK);
 		int blankGraph =  MakeScreen(WINDOW_WIDTH,WINDOW_HEIGHT);
-		ScreenChanger.ChangeScreen(fieldGraph, blankGraph, ScreenChanger.SCREEN_FADE, 10);
-		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 10);
-		ScreenChanger.ChangeScreen(fieldGraph, blankGraph, ScreenChanger.SCREEN_FADE, 10);
-		ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 10);
-		ScreenChanger.ChangeScreen(fieldGraph, battleGraph, ScreenChanger.SCREEN_BOKASHI, 60);
-	
+		CScreenChanger::ChangeScreen(fieldGraph, blankGraph,  CScreenChanger::SCREEN_FADE, 10);
+		CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 10);
+		CScreenChanger::ChangeScreen(fieldGraph, blankGraph,  CScreenChanger::SCREEN_FADE, 10);
+		CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 10);
+		
+		switch(rand()%3){
+		case 0:
+		case 1:
+			CScreenChanger::ChangeScreen(fieldGraph, blankGraph, CScreenChanger::SCREEN_GURUGURU, 60, true);
+			CScreenChanger::ChangeScreen(blankGraph, battleGraph, CScreenChanger::SCREEN_GURUGURU, 60, false);
+			break;
+		case 2:
+		default:
+			CScreenChanger::ChangeScreen(fieldGraph, battleGraph, CScreenChanger::SCREEN_BOKASHI, 60);
+			break;
+		}
+
 	//戦闘開始
 	Battle.BattleStart(&result, &resultcmdlist);
 	
@@ -469,8 +480,8 @@ void CField::BattleStart(){
 		if (result!=LOSE_NOSCREENCHANGE){
 			GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
 			SetDrawScreen(DX_SCREEN_BACK);
-			ScreenChanger.ChangeScreen(battleGraph, blankGraph, ScreenChanger.SCREEN_FADE, 30);
-			ScreenChanger.ChangeScreen(blankGraph, fieldGraph, ScreenChanger.SCREEN_FADE, 30);
+			CScreenChanger::ChangeScreen(battleGraph, blankGraph, CScreenChanger::SCREEN_FADE, 30);
+			CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 30);
 		}
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);

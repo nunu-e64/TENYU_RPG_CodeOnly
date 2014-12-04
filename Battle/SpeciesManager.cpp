@@ -123,7 +123,7 @@ bool CEnemySpeciesManager::SetMapEncount(int _mapnum, int _chipnum, int _encount
 	}
 
 	MapEncount[_mapnum][_chipnum].encount = _encount;
-	DebugDx("MapEncount[_mapnum][_chipnum].encount:%d", MapEncount[_mapnum][_chipnum].encount);
+	//DebugDx("MapEncount[_mapnum][_chipnum].encount:%d", MapEncount[_mapnum][_chipnum].encount);
 	return true;
 
 }
@@ -162,7 +162,7 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 
 
 	//mapの自動増殖を防止（エンカウント設定がされてない場合、エンカウントしない）/////////
-		std::map <int, std::map<int, encount_tag> >::iterator it=MapEncount.begin();
+		/*std::map <int, std::map<int, encount_tag> >::iterator it=MapEncount.begin();
 		while( it != MapEncount.end()){
 			if ((*it).first==_mapnum) break;
 			++it;
@@ -173,7 +173,11 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 			if ((*it2).first==_chipnum) break;
 			++it2;
 		}
-		if (it2 == MapEncount[_mapnum].end()) return false;
+		if (it2 == MapEncount[_mapnum].end()) return false;*/
+
+		if (MapEncount.find(_mapnum)==MapEncount.end()) return false;
+		if (MapEncount[_mapnum].find(_chipnum)==MapEncount[_mapnum].end()) return false;
+
 	///////////////////////////////////////////////////////////////////////////////////////
 
 	if (MapEncount[_mapnum][_chipnum].encount > rand()%1000){
@@ -187,9 +191,9 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 				partynum = i;
 			}
 		}
-		DebugDx("MapEncount[_mapnum][_chipnum].encount:%d",MapEncount[_mapnum][_chipnum].encount);
-		DebugDx("EnemySpeciesManager:EncountPartySetSize:%d",MapEncount[_mapnum][_chipnum].partyset.size());
-		DebugDx("EnemySpeciesManager:EncountPartyNum:%d",partynum);
+		//DebugDx("MapEncount[_mapnum][_chipnum].encount:%d",MapEncount[_mapnum][_chipnum].encount);
+		//DebugDx("EnemySpeciesManager:EncountPartySetSize:%d",MapEncount[_mapnum][_chipnum].partyset.size());
+		//DebugDx("EnemySpeciesManager:EncountPartyNum:%d",partynum);
 
 		if (partynum!=-1){
 			_party_p = MapEncount[_mapnum][_chipnum].partyset[partynum].party;

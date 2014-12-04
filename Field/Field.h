@@ -97,8 +97,6 @@ private:
 		CCmdList CmdList;
 		CEveManager EveManager;
 
-		CScreenChanger ScreenChanger;
-
 };
 
 
