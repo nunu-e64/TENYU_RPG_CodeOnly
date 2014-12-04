@@ -39,10 +39,12 @@ void CActor::SetRect(int _cx, int _cy){
 	Rect.Bottom = _cy+height/2;
 }
 
+/*
 void CActor::SetImg(int _img){
 	Img = _img;
 	SetRect((int)(Rect.Center().x), (int)(Rect.Center().y));
 }
+*/
 
 bool CActor::SetSystemImg(CBImgBank* _bimgbank){
 	Img_hpbar		= _bimgbank->GetImg("HP_BAR");

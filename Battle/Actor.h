@@ -23,10 +23,10 @@ public:
 	//‰Šúİ’èŠÖ˜A
 		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist);
 		void SetRect(int _cx, int _cy);
-		void SetImg(int _img);
+		//void SetImg(int _img);
 		bool SetSystemImg(CBImgBank* _bimgbank);
 		void AddTrick(trick_tag const* _trick);
-		void ClearTrick(){TrickList.clear();}
+		//void ClearTrick(){TrickList.clear();}
 
 	bool Main();
 	bool Do();
