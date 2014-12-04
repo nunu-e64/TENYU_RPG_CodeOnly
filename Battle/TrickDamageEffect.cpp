@@ -15,7 +15,7 @@ void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bi
 	//‹Z”­“®‰‰o//////////////////////////////////////////////////////////////
 	int timecount = 0;
 	CVector ball[8];
-	int a=60;
+	int a=Radius;
 	for (int i=0; i<8; i++){
 		ball[i].Set(_attackerR.Center().Add(a*cos(i*PI/4),a*sin(i*PI/4)));		
 	}
@@ -30,12 +30,12 @@ void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bi
 		++timecount;
 		a-=1;
 		for (int i=0; i<8; i++){
-			ball[i].Set(_attackerR.Center().Add(a*cos(timecount*PI/(60*2)+i*PI/4),a*sin(timecount*PI/(60*2)+i*PI/4)));
+			ball[i].Set(_attackerR.Center().Add(a*cos(timecount*PI/(Radius*2)+i*PI/4),a*sin(timecount*PI/(Radius*2)+i*PI/4)));
 		}
 	}while(a!=0 && BasicLoop());
 
 	timecount=0;
-	a=20;
+	a=20;	//Œõ‹…‚ÌˆÚ“®‘¬“x
 	CVector vec = _targetR.Center()-_attackerR.Center();
 	vec *= 1/vec.GetLength();
 	do{
@@ -46,7 +46,7 @@ void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bi
 
 		++timecount;
 		ball[0].Add(a*vec.x, a*vec.y);
-	}while(vec.y*(ball[0].y-_targetR.Center().y)<0 && BasicLoop());
+	}while( BasicLoop() && vec.y*(ball[0].y-_targetR.Center().y)<0);
 	//////////////////////////////////////////////////////////////////////////
 
 }

@@ -334,7 +334,7 @@ inline void myprintfDx(const char* format, va_list args, char* filename=NULL, in
 }
 inline void ErrorDx(const char* format, char* filename, int line, ...){
 	va_list args;
-	va_start(args, format);
+	va_start(args, line);
 	myprintfDx(format, args, filename, line);
 	va_end(args);
 }
@@ -347,7 +347,7 @@ inline void ErrorDx(const char* format, ...){
 inline void WarningDx(const char* format, char* filename, int line, ...){
 	#ifndef	WARNINGDX_DISABLE 
 		va_list args;
-		va_start(args, format);
+		va_start(args, line);
 		myprintfDx(format, args, filename, line);
 		va_end(args);
 	#endif
@@ -363,7 +363,7 @@ inline void WarningDx(const char* format, ...){
 inline void DebugDx(const char* format, char* filename, int line, ...){
 	#ifndef	DEBUGDX_DISABLE 
 		va_list args;
-		va_start(args, format);
+		va_start(args, line);
 		myprintfDx(format, args, filename, line);
 		va_end(args);
 	#endif

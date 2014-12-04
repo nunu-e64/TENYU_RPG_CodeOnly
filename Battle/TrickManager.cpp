@@ -5,8 +5,11 @@ void CTrickManager::Add(trick_tag trick){
 	char256 tmpkey;
 	mystrcpy(tmpkey.text, trick.Name);
 	
-	//登録時に技名の重複チェックをしたい。map.findを使えばできるのか？$
-	TrickBank.insert( std::map<char256, trick_tag>::value_type( tmpkey, trick) );
+	if (TrickBank.find(tmpkey)==TrickBank.end()){
+		TrickBank.insert( std::map<char256, trick_tag>::value_type( tmpkey, trick) );
+	}else{
+		ErrorDx("Error->AddNewTrick->Already exist name:%s", tmpkey.text);
+	}
 }
 
 void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, int _sideeffectnum, ...){
@@ -81,7 +84,7 @@ void CTrickManager::CreateDamageEffect(std::string _typeName, std::string _effec
 	
 	
 	}else{
-		ErrorDx("Error->TrickEffectTypeName does't match any Effects. name:%s", _typeName);
+		ErrorDx("Error->TrickEffectTypeName does't match any Effects.\n name:%s", _typeName.c_str());
 		
 	}
 	
@@ -94,6 +97,6 @@ int CTrickManager::GetTrickDamageEffectIndex(std::string _name){
 			return i;
 		}
 	}
+	WarningDx("Warning->CTrickManager::GetTrickDamageEffectIndex\n->Not Found Effect:%s", _name.c_str());
 	return -1;
 }
-

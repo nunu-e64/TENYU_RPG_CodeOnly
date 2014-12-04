@@ -53,8 +53,6 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//CBattleの初期化
 			if (!(Battle.Init())) return false;
-
-	//DebugDx("Battle_Init_End");
 			
 		//外部テキストのロード
 			CLoad SystemLoad;

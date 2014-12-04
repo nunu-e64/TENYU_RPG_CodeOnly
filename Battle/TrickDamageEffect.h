@@ -41,11 +41,13 @@ public:
 	CTrickDamageEffect_PROTO(std::string _name, va_list args):CTrickDamageEffect(_name){
 		Size1 = va_arg(args, int);
 		Size2 = va_arg(args, int);
+		Radius = va_arg(args, int);
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//‹¤’Ê
 private:
 	int Size1;	//Žû‘©Œõ‹…‚Ì‘å‚«‚³
 	int Size2;	//‘Å‚¿‚¾‚³‚ê‚Äƒqƒbƒg‚·‚éŒõ‹…‚Ì‘å‚«‚³
+	int Radius;
 };
 
 

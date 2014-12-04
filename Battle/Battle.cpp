@@ -32,7 +32,15 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	ENEMY_NUM = 0;
 	
 	SetTransColor(255, 0, 255);	//透過色指定	//最終的には統一しないとな…$
+
+
+	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む//////// $
+		TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
+		TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
+		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
+		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
 	
+
 	//Load.cppを通して.rpgの読み込み/////////////////////
 	
 		//外部テキストのロード
@@ -57,13 +65,6 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		PlayerSpeciesManager.SetMemberList();
 	//////////////////////////////////
 
-
-	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む////////
-		TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
-		TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
-		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 10, 15);
-		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 20, 25);
-	
 
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
