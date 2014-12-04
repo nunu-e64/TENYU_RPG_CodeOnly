@@ -19,7 +19,7 @@ void CPlayer::CreateBattleMenu(){
 	}
 
 	//テスト用/////////////////////////////////////$
-	for (int i=0; i<10; i++){
+	for (int i=0; i<7; i++){
 		char tmp[32];	sprintf_s(tmp, "アイテム%d", i);
 		BattleMenu.Add("道具", tmp);
 	}	
@@ -34,10 +34,6 @@ void CPlayer::Draw(int _dx, int _dy){
 		static int timecount = 0;
 		timecount++;
 
-		//ここにプレイヤーが死んだときのエフェクト処理を書く///$
-			/*if (timecount%11<5){
-				SetDrawBright(50,50,50);
-			}*/
 		SetDrawBright(250-(timecount*5),250-(timecount*5),250-(timecount*5));
 		if (timecount==40){
 			timecount=0;
@@ -47,7 +43,7 @@ void CPlayer::Draw(int _dx, int _dy){
 
 	}else if(!Visible){	//死んでる
 		SetDrawBright(50,50,50);
-	}else{
+	}else{ //生きてる
 		SetDrawBright(255,255,255);
 	}
 
@@ -145,7 +141,7 @@ bool CPlayer::Action(){
 	}
 
 	
-	//とりあえずSINGLEの時だけ実装
+	//とりあえずSINGLEの時だけ実装　//ターゲットについてはここで管理。技の種別についてはCmdManagerおよびBattleで管理。
 	switch (NowTrick->TargetType){
 	case NowTrick->SINGLE:
 		char tmpcmd[256];

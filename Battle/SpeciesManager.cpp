@@ -160,21 +160,6 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 		return false;
 	}
 
-
-	//mapの自動増殖を防止（エンカウント設定がされてない場合、エンカウントしない）/////////
-		/*std::map <int, std::map<int, encount_tag> >::iterator it=MapEncount.begin();
-		while( it != MapEncount.end()){
-			if ((*it).first==_mapnum) break;
-			++it;
-		}
-		if (it == MapEncount.end()) return false;
-		std::map <int, encount_tag>::iterator it2 = MapEncount[_mapnum].begin();
-		while( it2 != MapEncount[_mapnum].end()){
-			if ((*it2).first==_chipnum) break;
-			++it2;
-		}
-		if (it2 == MapEncount[_mapnum].end()) return false;*/
-
 		if (MapEncount.find(_mapnum)==MapEncount.end()) return false;
 		if (MapEncount[_mapnum].find(_chipnum)==MapEncount[_mapnum].end()) return false;
 

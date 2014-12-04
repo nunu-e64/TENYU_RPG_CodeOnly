@@ -23,10 +23,10 @@ public:
 	//初期設定関連
 		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist);
 		void SetRect(int _cx, int _cy);
-		//void SetImg(int _img);
+		//void SetImg(int _img); //使ってない
 		bool SetSystemImg(CBImgBank* _bimgbank);
 		void AddTrick(trick_tag const* _trick);
-		//void ClearTrick(){TrickList.clear();}
+		//void ClearTrick(){TrickList.clear();} //使ってない
 
 	bool Main();
 	bool Do();
@@ -93,7 +93,7 @@ protected:
 		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」
 		int Target;
 
-	//包含クラス
+	//インスタンスのポインタ保持用
 		CTextBox** B_TextBox_pp;
 		CCmdList* CmdList;
 

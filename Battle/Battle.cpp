@@ -441,49 +441,13 @@ void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag
 	int attacker_actorindex = between(0, ACTOR_NUM-1, _attacker_actorindex); 
 	int target_actorindex   = between(0, ACTOR_NUM-1, _target_actorindex); 
 
-/*
-	//技発動演出//////////////////////////////////////////////////////////////
-	int timecount = 0;
-	CVector ball[8];
-	int a=60;
-	for (int i=0; i<8; i++){
-		ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(i*PI/4),a*sin(i*PI/4)));		
-	}
-	do{
-		Draw();
-		SetDrawBlendMode(DX_BLENDMODE_ADD, timecount*2);
-		for (int i=0; i<8; i++){
-			DrawExtendGraph(ball[i].x-10, ball[i].y-10, ball[i].x+10, ball[i].y+10, BImgBank.GetImg("EFFECT_BOMB"), false);
-		}
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-		++timecount;
-		a-=1;
-		for (int i=0; i<8; i++){
-			ball[i].Set(Actor[attacker_actorindex]->GetRect().Center().Add(a*cos(timecount*PI/(60*2)+i*PI/4),a*sin(timecount*PI/(60*2)+i*PI/4)));
-		}
-	}while(a!=0 && BasicLoop());
+	//技の種類に応じたエフェクト発動
+		TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actorindex]->GetRect(), Actor[target_actorindex]->GetRect());
 
-	timecount=0;
-	a=20;
-	CVector vec = Actor[target_actorindex]->GetRect().Center()-Actor[attacker_actorindex]->GetRect().Center();
-	vec *= 1/vec.GetLength();
-	do{
-		Draw();
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
-		DrawExtendGraph(ball[0].x-15, ball[0].y-15, ball[0].x+15, ball[0].y+15, BImgBank.GetImg("EFFECT_BOMB"), false);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-		++timecount;
-		ball[0].Add(a*vec.x, a*vec.y);
-	}while(vec.y*(ball[0].y-Actor[target_actorindex]->GetRect().Center().y)<0 && BasicLoop());
-	//////////////////////////////////////////////////////////////////////////
-*/
-
-	TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actorindex]->GetRect(), Actor[target_actorindex]->GetRect());
-
-	int timecount=0;
-	do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
+	//間の調整
+		int timecount=0;
+		do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
 	
 	//実際のダメージ計算
 	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);

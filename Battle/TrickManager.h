@@ -39,10 +39,7 @@ private:
 	std::map <char256, trick_tag> TrickBank;
 	trick_tag Trick_dammy;
 
-	std::vector <const CTrickDamageEffect*> TrickDamageEffectBank;
-	//ポインタにしないと多態性が発動しないよな？
-
-		
+	std::vector <const CTrickDamageEffect*> TrickDamageEffectBank;		
 
 	//単一性を保証(Singleton)////////////////////////////////
 		CTrickManager(){}
@@ -51,21 +48,6 @@ private:
 	/////////////////////////////////////////////////////////
 
 };
-
-
-
-
-//class CTDE_Spread:public CTrickDamageEffect{
-//public:
-//	void DrawDamageEffect();	//Colorとか自由に使用
-//private:
-//	std::string TypeName;
-//	int Color;
-//	int Size;
-//	int Time;
-//};
-//
-
 
 
 ////多重インクルード防止（インクルードガード）//

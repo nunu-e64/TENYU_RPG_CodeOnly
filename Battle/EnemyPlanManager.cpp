@@ -28,6 +28,15 @@ void CEnemyPlanManager::MakePlan(int _enemyIndex, int _borderHp, int _choice1, i
 }
 
 
+int CEnemyPlanManager::GetTarget(CEnemy* _enemy){
+
+	int target=-1;
+
+	target = rand()%PLAYER_NUM;
+	
+	return target;
+}
+
 int CEnemyPlanManager::Plan(CEnemy* _enemy){
 	CEnemyPlanner p =  EnemyPlanner[_enemy->GetIndex()];
 	NowEnemy = _enemy;

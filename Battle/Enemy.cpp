@@ -43,20 +43,11 @@ void CEnemy::MakePlan(){
 
 
 bool CEnemy::Plan(){
-	/*//テスト用////////////////////////////////
-	#ifdef DEBUG_MODE
-		char tmp[64];
-		sprintf_s(tmp, "%sのPlan", Name.c_str());
-		(*B_TextBox_pp)->AddStock(tmp);
-	#endif
-	*///////////////////////////////////////////
-
 	
 	unsigned int action_num = EnemyPlanManager->Plan(this);
 
 	if (action_num<TrickList.size()){
 		NowTrick = TrickList[action_num];
-
 
 		return true;
 	}else{
@@ -69,13 +60,6 @@ bool CEnemy::Plan(){
 }
 
 bool CEnemy::Action(){
-	/*//テスト用////////////////////////////////
-	#ifdef DEBUG_MODE
-		char tmp[64];
-		sprintf_s(tmp, "%sのAction", Name.c_str());
-		(*B_TextBox_pp)->AddStock(tmp);
-	#endif
-	*///////////////////////////////////////////	
 
 	if (NowTrick==NULL){
 		Target = -1;
@@ -83,12 +67,12 @@ bool CEnemy::Action(){
 		return true;
 	}
 
-	char tmpcmd[256];
 
-	//Tatgetの選択にはAttentionを使うこと（じゃないとプレイヤーが戦略を立てにくい）$  Plan時かAction時かどっちでTargetを決めるべき？
+	//Tatgetの選択にはAttentionを使うこと（じゃないとプレイヤーが戦略を立てにくい）$  Plan時かAction時かどっちでTargetを決めるべき？→Actionでしょ！
+	char tmpcmd[256];
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
-		Target = rand()%PLAYER_NUM;
+		Target = EnemyPlanManager->GetTarget(this);  //rand()%PLAYER_NUM;
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
 		CmdList->Add(tmpcmd);
 		break;

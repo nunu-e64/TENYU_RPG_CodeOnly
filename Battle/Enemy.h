@@ -13,12 +13,15 @@ public:
 	
 	CEnemy(){};
 	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){};
+
 	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
 		EnemyPlanManager = _enemyPlanManager;
 	}
 
 	void Draw(int _dx=0, int _dy=0);
-	void MakePlan();	
+	void MakePlan();
+
+	//CEnemyPlannner AI;
 	
 private:
 	//ƒƒ“ƒoŠÖ”

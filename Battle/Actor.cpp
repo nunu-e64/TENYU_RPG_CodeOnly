@@ -161,26 +161,3 @@ bool CActor::TimeGaugeForward(){
 	}
 	return false;
 }
-//
-//void CActor::DamageStep(int _targetnum, ...){
-//	va_list args;
-//	va_start( args, _targetnum );
-//	
-//	for (int i=0; i<_targetnum; i++){
-//		DamageStep(va_arg(args, CActor*));
-//	}
-//
-//	va_end( args );
-//}
-//
-//void CActor::DamageStep(CActor* _target){
-//	int damage=0;
-//
-//	if (strlen(NowTrick->Name)){
-//		damage = NowTrick->Power + Atk - _target->GetDef();
-//	}
-//	damage = max(1,damage);
-//
-//	_target->Damage(damage);
-//	//ダメージメッセージ？
-//}

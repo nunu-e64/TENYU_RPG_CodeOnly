@@ -23,7 +23,12 @@ public:
 	void MakePlan(int _enemyIndex, int _borderHp, int _choice1, int _choice2);
 	int Plan(CEnemy* _enemy);
 
+	int GetTarget(CEnemy* _enemy);
+
 private:
+
+	//std::vector <const CEnemyPlanner*> EnemyPlannerBank;
+	
 	class CEnemyPlanner{
 	public:
 		int PlanType;
@@ -44,10 +49,11 @@ private:
 		int Calc_PlayerNum(int choice_1player, int choice_2player, int choice_3player);
 
 
-	//’Pˆê«‚ğ•ÛØ(Singleton)
+	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
 		CEnemyPlanManager(){}
 		CEnemyPlanManager(const CEnemyPlanManager& hoge);
 		CEnemyPlanManager& operator=(const CEnemyPlanManager& hoge);
+	///////////////////////////////////////////////////////////////////
 };
 
 
