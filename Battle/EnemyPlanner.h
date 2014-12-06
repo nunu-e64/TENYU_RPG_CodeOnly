@@ -52,10 +52,17 @@ public:
 class CEnemyPlanner_MYHP: public CEnemyPlanner{
 public:
 	CEnemyPlanner_MYHP(std::string _name, unsigned int _argnum, va_list args, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+		int first;	int second;
 		for (unsigned int i=0; i<_argnum/2; i++){
-			PlanList.push_back( std::pair<int,int>(va_arg(args,int), va_arg(args,int)) );
+			first = va_arg(args,int);
+			second = va_arg(args,int);
+			PlanList.push_back( std::pair<int,int>(first, second) );
 		}
 		if (_argnum%2==1) PlanList.push_back( std::pair<int,int>(va_arg(args,int), 0) );
+
+		for (unsigned int i=0; i<PlanList.size(); i++){
+			myLog("%s:PlanList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
+		}
 	}
 	int GetPlan(const CEnemy* _enemy); //‹¤’Ê
 private:

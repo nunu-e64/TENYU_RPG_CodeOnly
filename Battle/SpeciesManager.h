@@ -42,6 +42,7 @@ private:
 class CEnemySpeciesManager{
 public:
 	CEnemySpeciesManager(){}
+	~CEnemySpeciesManager(){Clear();}
 	void Clear();
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
@@ -59,9 +60,7 @@ public:
 
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
-	CEnemySpecies Dammy_Enemy;
-	CEnemyPlanner_DAMMY Dammy_AI;
-	
+	std::vector<const CEnemyPlanner* const> EnemyPlannerBank; 
 	struct encount_tag{
 		struct party_tag{
 			int per;
@@ -72,6 +71,10 @@ private:
 		std::vector <party_tag> partyset;
 	};
 	std::map <int, std::map<int, encount_tag> > MapEncount;
+
+	CEnemySpecies Dammy_Enemy;
+	CEnemyPlanner_DAMMY Dammy_AI;
+
 };
 
 

@@ -86,6 +86,10 @@ void CEnemySpeciesManager::Clear(){
 		++it;
 	}
 	MapEncount.clear();
+
+	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){
+		delete EnemyPlannerBank[i];	
+	}
 }
 
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
@@ -123,15 +127,18 @@ bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_ta
 
 bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...){
 	va_list args;
-	va_start(args, _index);
+	va_start(args, _argsetnum);
 	bool for_return = true;
 	
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
 		if (EnemyBank[_name].RandomPlanSet.find(_index)==EnemyBank[_name].RandomPlanSet.end()){
 			
 			std::vector<std::pair<int, int> > tmpRandomPlan;
+			int first;	int second;
 			for (unsigned int i=0; i<_argsetnum; i++){
-				tmpRandomPlan.push_back(std::pair<int, int>(va_arg(args, int), va_arg(args, int)));
+				first = va_arg(args,int);
+				second = va_arg(args,int);
+				tmpRandomPlan.push_back(std::pair<int, int>(first, second));
 			}		
 			EnemyBank[_name].RandomPlanSet[_index] = tmpRandomPlan;
 
@@ -149,23 +156,29 @@ bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _ind
 }
 
 bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _typeName, unsigned int _argnum, ...){	
-	va_list args;
-	va_start(args, _enemyName);
 	bool for_return = true;
 	
 	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
-
+		CEnemyPlanner* newAI;
+		va_list args;
+		va_start(args, _argnum);
+		
 		if (_typeName=="MYHP"){
-			EnemyBank[_enemyName].AI = new CEnemyPlanner_MYHP(_enemyName, _argnum, args, &EnemyBank[_enemyName].RandomPlanSet);
+			newAI = new CEnemyPlanner_MYHP(_enemyName, _argnum, args, &EnemyBank[_enemyName].RandomPlanSet);
 
 		}else if(_typeName=="PLAYER_NUM"){
-			EnemyBank[_enemyName].AI = new CEnemyPlanner_PLAYERNUM(_enemyName, args, &EnemyBank[_enemyName].RandomPlanSet);
+			newAI = new CEnemyPlanner_PLAYERNUM(_enemyName, args, &EnemyBank[_enemyName].RandomPlanSet);
 	
 		}else{
 			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
 			for_return = false;
 		}
 	
+		if(for_return){
+			EnemyBank[_enemyName].AI = newAI;
+			EnemyPlannerBank.push_back(newAI);
+		}
+
 		va_end(args);
 	
 	}else{

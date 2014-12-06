@@ -5,6 +5,7 @@
 
 //#define PRODUCT_MODE  //製品版
 	#ifdef PRODUCT_MODE
+		#define MYLOG_DISABLE
 		#define WARNINGDX_DISABLE	//マクロの有効化/無効化
 		#define DEBUGDX_DISABLE	//マクロの有効化/無効化
 		#define CHECK_TIME_DISABLE	//マクロの有効化/無効化

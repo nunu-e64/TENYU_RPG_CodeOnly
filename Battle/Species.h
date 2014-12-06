@@ -7,9 +7,6 @@
 
 class CSpecies{
 public:
-	/*CSpecies(const CSpecies& obj){
-		*this = obj;
-	}*/
 	CSpecies(){
 		Name="NULL_NAME";
 		Lv=Img=Atk=Def=Spd=-1;
@@ -17,7 +14,7 @@ public:
 	}
 	~CSpecies(){}
 
-	std::string GetName(){return Name;}
+	std::string GetName()const{return Name;}
 
 protected:
 	std::string Name;
@@ -59,15 +56,7 @@ public:
 	CEnemySpecies(){
 		AI = NULL;
 	}
-	~CEnemySpecies(){
-		myLog("%s:%s:Destructed0", typeid(*this).name(), Name.c_str());
-		if (AI!=NULL && AI->GetName()==Name) {
-			myLog("Destructed2");
-			delete AI;
-			myLog("Destructed3");
-		}
-		myLog("Destructed_end");
-	}
+	~CEnemySpecies(){}
 
 protected:
 	CEnemyPlanner* AI;

@@ -7,6 +7,7 @@
 #include "math.h"
 #include <direct.h>
 
+//#define MYLOG_DISABLE
 //#define WARNINGDX_DISABLE	//マクロの無効化
 //#define DEBUGDX_DISABLE	//マクロの無効化
 //#define FPS_DISABLE
@@ -322,25 +323,28 @@ inline int DrawBox(CRect _rect, int _color, bool _fillflag){
 /////////////////////////////////////////////////////////////
 ///エラー&デバッグ出力用関数/////////////////////////////////
 inline void myLog(const char* format, ...){
-	FILE *fp;
-	errno_t error;
-	if(error = fopen_s(&fp, "tenyu_log.txt", "a") != 0){
-		return;
-	}else{
-		va_list args;
-		va_start(args, format);
-		char tmpchar[1024];
-		vsprintf_s(tmpchar, format, args);
-		va_end(args);
-		fprintf_s(fp, "[%s][%s]:%s\n", __TIME__, __DATE__, tmpchar);
-		fclose(fp);
-	}
+	#ifndef MYLOG_DISABLE
+		FILE *fp;
+		errno_t error;
+		if(error = fopen_s(&fp, "tenyu_log.txt", "a") != 0){
+			return;
+		}else{
+			va_list args;
+			va_start(args, format);
+			char tmpchar[1024];
+			vsprintf_s(tmpchar, format, args);
+			va_end(args);
+			fprintf_s(fp, "[%s][%s]:%s\n", __TIME__, __DATE__, tmpchar);
+			fclose(fp);
+		}
+	#endif
 }
 inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
 	char string[1024];
 	vsprintf_s(string, format, args);	//va_startとva_endは呼び出し元でする
 	if (filename!=NULL) sprintf_s(string, "\n->%s(%d)\n", filename, line);
 
+	myLog("PRINT: %s", string);
 	printfDx(string);
 	ScreenFlip();
 	WaitKey();

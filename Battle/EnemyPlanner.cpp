@@ -14,8 +14,8 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
 		return -1;
 	}	
 	
-	if (RandomPlanSet->find(_randomPlan_key)==RandomPlanSet->end()){
-		ErrorDx("Error->Not Found RandomPlan :%d\nPlanner:%s",__FILE__, __LINE__, _randomPlan_key, EnemyName.c_str());
+	if ((*RandomPlanSet).find(_randomPlan_key)==(*RandomPlanSet).end()){
+		ErrorDx("Error->Planner:%s: Not Found RandomPlan :%d",__FILE__, __LINE__, EnemyName.c_str(), _randomPlan_key);
 		plan =  -1;
 
 	}else{
@@ -36,7 +36,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	//ここに実際のあれこれを書く
 	//PlanList･･･[0~n] first:TrickIndex, second:境界線となるHPパーセント
 
-	int ratio = _enemy->GetHp()/_enemy->GetMaxHp();
+	int ratio = 100 * (double)_enemy->GetHp()/_enemy->GetMaxHp();
 	int plan = -1;
 
 	for (unsigned int i=0; i<PlanList.size(); i++){

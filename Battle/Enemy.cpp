@@ -38,9 +38,14 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
-	unsigned int action_num = AI->GetPlan(this);
+	if (AI==NULL){
+		WarningDx("Warning->%s has no AI", Name.c_str());
+		return true;
+	}
 
-	if (action_num<TrickList.size()){
+	int action_num = AI->GetPlan(this);
+
+	if (action_num>=0 && action_num<TrickList.size()){
 		NowTrick = TrickList[action_num];
 
 		return true;
@@ -49,7 +54,6 @@ bool CEnemy::Plan(){
 		return true;
 	}
 
-	//技以外の行動をとるときにはEnemyPlannner.Planが他の値（例えば負数）を返す$
 	
 }
 
