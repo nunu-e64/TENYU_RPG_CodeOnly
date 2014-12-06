@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include "Species.h"
+#include "EnemyPlanner.h"
 
 class CPlayer;
 
@@ -13,7 +14,7 @@ class CPlayerSpeciesManager{
 public:
 	CPlayerSpeciesManager(){
 		Gold = 0;
-	};
+	}
 	void Clear(){Gold = 0; PlayerBank.clear(); MemberList.clear();}
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
@@ -40,12 +41,16 @@ private:
 
 class CEnemySpeciesManager{
 public:
-	CEnemySpeciesManager(){};
+	CEnemySpeciesManager(){}
 	void Clear();
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
-
+	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
+	
+	bool SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...);
+	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, unsigned int _argnum, ...);
+	
 	CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
@@ -55,6 +60,7 @@ public:
 private:
 	std::map <std::string, CEnemySpecies> EnemyBank;
 	CEnemySpecies Dammy_Enemy;
+	CEnemyPlanner_DAMMY Dammy_AI;
 	
 	struct encount_tag{
 		struct party_tag{

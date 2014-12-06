@@ -4,9 +4,8 @@
 ////////////////////////////////////////////////
 
 #include "Actor.h"
+#include "Species.h"
 
-class CEnemyPlanManager;
-class CEnemySpecies;
 
 class CEnemy : public CActor, public CEnemySpecies{
 public:
@@ -14,22 +13,19 @@ public:
 	CEnemy(){};
 	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){};
 
-	void SetEnemyPlanManager(CEnemyPlanManager* _enemyPlanManager){
-		EnemyPlanManager = _enemyPlanManager;
+	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum)const{
+		AI->BattleReady(_actorList, _playerNum, _enemyNum);
 	}
 
 	void Draw(int _dx=0, int _dy=0);
-	void MakePlan();
 
-	//CEnemyPlannner AI;
-	
+
 private:
 	//ƒƒ“ƒoŠÖ”
 		bool Plan();
 		bool Action();
 
 	//ƒƒ“ƒo•Ï”
-		CEnemyPlanManager* EnemyPlanManager;
 		int Attention[MAX_PLAYER_NUM];
 };
 

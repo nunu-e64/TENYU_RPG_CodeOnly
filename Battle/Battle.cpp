@@ -40,7 +40,6 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
 		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
 	
-
 	//Load.cppを通して.rpgの読み込み/////////////////////
 	
 		//外部テキストのロード
@@ -55,6 +54,21 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 				return false;
 			}
 	////////////////////////////////////////////////
+
+	//敵AI[の作成。最終的にはb_system.rpgから読み込む/////////////////////// $
+		EnemySpeciesManager.SetRandomPlanSet("エネミーA", 0, 2, 0, 80, 1, 20);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーA", 1, 2, 0, 20, 1, 80);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーB", 0, 2, 0, 80, 1, 20);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーB", 1, 2, 0, 20, 1, 80);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーC", 0, 2, 0, 80, 1, 20);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーC", 1, 2, 0, 20, 1, 80);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーD", 0, 2, 0, 80, 1, 20);
+		EnemySpeciesManager.SetRandomPlanSet("エネミーD", 1, 2, 0, 20, 1, 80);
+		EnemySpeciesManager.SetEnemyPlanner("エネミーA","MYHP", 3, 1, 95, 0);
+		EnemySpeciesManager.SetEnemyPlanner("エネミーB","MYHP", 3, 1, 95, 0);
+		EnemySpeciesManager.SetEnemyPlanner("エネミーC","MYHP", 3, 1, 95, 0);
+		EnemySpeciesManager.SetEnemyPlanner("エネミーD","MYHP", 3, 1, 95, 0);
+
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -90,12 +104,8 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
 			}
 			
-			CEnemyPlanManager::GetInstance()->SetActor_p(Actor);	//EnemyPlanManagerはすべてのActorへのポインタを握る
-			CEnemyPlanManager::GetInstance()->Init(PLAYER_NUM, ENEMY_NUM);
 			for (int i=0; i<ENEMY_NUM; i++){
-				Enemy[i].SetEnemyPlanManager(CEnemyPlanManager::GetInstance());
-				Enemy[i].MakePlan();
-
+				Enemy[i].BattleReady(Actor, PLAYER_NUM, ENEMY_NUM);
 				Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
 			}
 
@@ -138,11 +148,6 @@ bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 	std::vector <CEnemySpecies*> tmpparty;
 
 	if (EnemySpeciesManager.CheckEncount(_mapnum, _chipnum, tmpparty)){
-
-		for (unsigned int i =0; i<tmpparty.size(); i++){		
-			DebugDx("enemy:%s", tmpparty[i]->GetName().c_str());
-		}
-
 		SetEnemy(tmpparty);
 		SetBackGround(_mapnum, _chipnum);
 		return true;

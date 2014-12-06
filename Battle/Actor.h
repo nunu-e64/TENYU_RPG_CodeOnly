@@ -33,24 +33,24 @@ public:
 	virtual void Draw(int _dx=0, int _dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
 	//基礎情報
-		int GetIndex(){return Index;}
+		int GetIndex()const{return Index;}
 		
 	//戦闘関連
 		void SetVisible(bool _visible){Visible = _visible;}
-		bool GetVisible(){return Visible;}
-		bool GetAlive(){return Alive;}
+		bool GetVisible()const{return Visible;}
+		bool GetAlive()const{return Alive;}
 		//int GetDef(){return Def;}
-		int GetAtk(){return Atk;}
-		int GetHp(){return Hp;}
-		int GetMaxHp(){return MaxHp;}
-		trick_tag const* GetNowTrick(){return NowTrick;}
+		int GetAtk()const{return Atk;}
+		int GetHp()const{return Hp;}
+		int GetMaxHp()const{return MaxHp;}
+		trick_tag const* GetNowTrick()const{return NowTrick;}
 
 		int Damage(CActor* _attacker, trick_tag const* _trick);
 		bool DeadCheck();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){Target=_target;}
 
 	//その他
-		CRect GetRect(){return Rect;}
+		CRect GetRect()const{return Rect;}
 
 protected:
 	//メンバ関数

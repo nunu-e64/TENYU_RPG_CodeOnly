@@ -3,6 +3,7 @@
 #define SPECIES_H							////
 ////////////////////////////////////////////////
 
+#include "EnemyPlanner.h"
 
 class CSpecies{
 public:
@@ -48,17 +49,27 @@ private:
 	int Exp;
 };
 
+
 class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
 public:
 	CEnemySpecies(const CEnemySpecies& obj){
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
-	CEnemySpecies(){};
+	CEnemySpecies(){}
+	~CEnemySpecies(){
+		if (AI->GetName()==Name) delete AI;
+	}
+
+protected:
+	CEnemyPlanner* AI;
 
 private:
 	int GoldGene;
 	int ExpGene;
+	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
+
+
 };
 
 

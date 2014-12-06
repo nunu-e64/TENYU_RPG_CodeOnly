@@ -13,8 +13,13 @@ bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _at
 }
 
 bool CPlayerSpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
-	PlayerBank[_name].TrickList = _trickList;
-	return true;
+	if (PlayerBank.find(_name)!=PlayerBank.end()){
+		PlayerBank[_name].TrickList = _trickList;
+		return true;
+	}else{
+		ErrorDx("Error->Not Found Player. Name:%s", _name);
+		return false;
+	}
 }
 
 bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
@@ -39,12 +44,10 @@ bool CPlayerSpeciesManager::SetMemberList(){	//ƒp[ƒeƒBƒƒ“ƒo[ƒŠƒXƒg‚Ì‰Šú‰»B
 }
 
 CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(const char* _name){
-	CPlayerSpecies* tmp = &PlayerBank[_name];
-
-	if (tmp->GetName()==_name){
-		return tmp;
+	if (PlayerBank.find(_name)!=PlayerBank.end()){
+		return &PlayerBank[_name];
 	}else{
-		ErrorDx("PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
+		ErrorDx("Error->PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
 		return &Dammy_Player;
 	}
 }
@@ -75,7 +78,7 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 //CEnemySpecies//
 //////////////////////////////////////////////////////////////////////////////
 void CEnemySpeciesManager::Clear(){
-	EnemyBank.clear(); 
+	EnemyBank.clear();
 	
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
 	while(it!=MapEncount.end()){
@@ -89,20 +92,95 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newEnemy.Img = _img;
-	EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
-	return true;
+	newEnemy.AI = &Dammy_AI;
+
+	if (EnemyBank.find(_name)==EnemyBank.end()){
+		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
+		return true;
+	}else{
+		ErrorDx("Error->Already existed EnemyName:%s", _name);
+		return false;
+	}
 }
 
 bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
-	EnemyBank[_name].TrickList = _trickList;
-	return true;
+	if (EnemyBank.find(_name)!=EnemyBank.end()){
+		EnemyBank[_name].TrickList = _trickList;
+		return true;
+	}else{
+		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
+		return false;
+	}
 }
 
-CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){
-	CEnemySpecies* tmp = &EnemyBank[_name];
+/*bool CEnemySpeciesManager::SetAI(const char* _name, CEnemyPlanner* _enemyPlanner){
+	if (EnemyBank.find(_name)!=EnemyBank.end()){
+		EnemyBank[_name].AI = _enemyPlanner;
+	}else{
+		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
+		return false;
+	}
+}*/
 
-	if (tmp->GetName()==_name){
-		return tmp;
+bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...){
+	va_list args;
+	va_start(args, _index);
+	bool for_return = true;
+	
+	if (EnemyBank.find(_name)!=EnemyBank.end()){
+		if (EnemyBank[_name].RandomPlanSet.find(_index)==EnemyBank[_name].RandomPlanSet.end()){
+			
+			std::vector<std::pair<int, int> > tmpRandomPlan;
+			for (unsigned int i=0; i<_argsetnum; i++){
+				tmpRandomPlan.push_back(std::pair<int, int>(va_arg(args, int), va_arg(args, int)));
+			}		
+			EnemyBank[_name].RandomPlanSet[_index] = tmpRandomPlan;
+
+		}else{
+			ErrorDx("Error->%s.SetRandomPlanSet->Already Existed Key(don't override) :%d", _name, (int)_index);
+			for_return = false;
+		}
+	}else{
+		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
+		for_return = false;
+	}
+
+	return for_return;
+
+}
+
+bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _typeName, unsigned int _argnum, ...){	
+	va_list args;
+	va_start(args, _enemyName);
+	bool for_return = true;
+	
+	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
+
+		if (_typeName=="MYHP"){
+			EnemyBank[_enemyName].AI = new CEnemyPlanner_MYHP(_enemyName, _argnum, args, &EnemyBank[_enemyName].RandomPlanSet);
+
+		}else if(_typeName=="PLAYER_NUM"){
+			EnemyBank[_enemyName].AI = new CEnemyPlanner_PLAYERNUM(_enemyName, args, &EnemyBank[_enemyName].RandomPlanSet);
+	
+		}else{
+			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
+			for_return = false;
+		}
+	
+		va_end(args);
+	
+	}else{
+		ErrorDx("Error->Not Found Enemy. Name:%s", _enemyName);
+		for_return = false;
+	}
+
+	return for_return;
+}
+
+
+CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){	
+	if (EnemyBank.find(_name)!=EnemyBank.end()){
+		return &EnemyBank[_name];
 	}else{
 		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
 		return &Dammy_Enemy;

@@ -21,6 +21,8 @@
 
 #include "Dxlib.h"
 #include <vector>
+#include <map>
+#include <string>
 
 //#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
 	#if defined(MEMORY_CHECK) && !defined(MEMORY_CHECK_DISABLE)

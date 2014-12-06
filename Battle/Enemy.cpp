@@ -35,16 +35,10 @@ void CEnemy::Draw(int _dx, int _dy){
 	}
 }
 
-void CEnemy::MakePlan(){
-
-	EnemyPlanManager->MakePlan(Index, 50, 0, 1);	//Ž©•ª‚ÌHp50%‚ð‹«ŠE‚ÉA‹Z0¨‹Z1
-
-}
-
 
 bool CEnemy::Plan(){
 	
-	unsigned int action_num = EnemyPlanManager->Plan(this);
+	unsigned int action_num = AI->GetPlan(this);
 
 	if (action_num<TrickList.size()){
 		NowTrick = TrickList[action_num];
@@ -72,7 +66,7 @@ bool CEnemy::Action(){
 	char tmpcmd[256];
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
-		Target = EnemyPlanManager->GetTarget(this);  //rand()%PLAYER_NUM;
+		Target = AI->GetTarget(this);  //rand()%PLAYER_NUM;
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
 		CmdList->Add(tmpcmd);
 		break;
