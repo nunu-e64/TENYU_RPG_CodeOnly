@@ -56,9 +56,17 @@ public:
 	CEnemySpecies(const CEnemySpecies& obj){
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
-	CEnemySpecies(){}
+	CEnemySpecies(){
+		AI = NULL;
+	}
 	~CEnemySpecies(){
-		if (AI->GetName()==Name) delete AI;
+		myLog("%s:%s:Destructed0", typeid(*this).name(), Name.c_str());
+		if (AI!=NULL && AI->GetName()==Name) {
+			myLog("Destructed2");
+			delete AI;
+			myLog("Destructed3");
+		}
+		myLog("Destructed_end");
 	}
 
 protected:

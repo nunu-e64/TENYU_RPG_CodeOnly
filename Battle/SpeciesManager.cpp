@@ -92,7 +92,6 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newEnemy.Img = _img;
-	newEnemy.AI = &Dammy_AI;
 
 	if (EnemyBank.find(_name)==EnemyBank.end()){
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );

@@ -12,6 +12,9 @@ public:
 	
 	CEnemy(){};
 	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){};
+	~CEnemy(){
+		myLog("%s:%s:CEnemy_Destructed", typeid(*this).name(), Name.c_str());
+	}
 
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum)const{
 		AI->BattleReady(_actorList, _playerNum, _enemyNum);
