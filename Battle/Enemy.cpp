@@ -53,7 +53,6 @@ bool CEnemy::Plan(){
 		ErrorDx("Error->CEnemy::Plan->action_num is bigger than TrickList.size (do nothing):%d", __FILE__, __LINE__, action_num);
 		return true;
 	}
-
 	
 }
 

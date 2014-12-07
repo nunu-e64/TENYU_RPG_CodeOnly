@@ -111,48 +111,45 @@ bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_ta
 		EnemyBank[_name].TrickList = _trickList;
 		return true;
 	}else{
-		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
+		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _name);
 		return false;
 	}
 }
 
-/*bool CEnemySpeciesManager::SetAI(const char* _name, CEnemyPlanner* _enemyPlanner){
-	if (EnemyBank.find(_name)!=EnemyBank.end()){
-		EnemyBank[_name].AI = _enemyPlanner;
-	}else{
-		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
-		return false;
-	}
-}*/
-
-bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...){
-	va_list args;
-	va_start(args, _argsetnum);
+bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList){
 	bool for_return = true;
-	
+
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
 		if (EnemyBank[_name].RandomPlanSet.find(_index)==EnemyBank[_name].RandomPlanSet.end()){
 			
-			std::vector<std::pair<int, int> > tmpRandomPlan;
-			int first;	int second;
-			for (unsigned int i=0; i<_argsetnum; i++){
-				first = va_arg(args,int);
-				second = va_arg(args,int);
-				tmpRandomPlan.push_back(std::pair<int, int>(first, second));
-			}		
-			EnemyBank[_name].RandomPlanSet[_index] = tmpRandomPlan;
+			EnemyBank[_name].RandomPlanSet[_index] = _planList;
 
 		}else{
 			ErrorDx("Error->%s.SetRandomPlanSet->Already Existed Key(don't override) :%d", _name, (int)_index);
 			for_return = false;
 		}
 	}else{
-		ErrorDx("Error->Not Found Enemy. Name:%s", _name);
+		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _name);
 		for_return = false;
 	}
 
 	return for_return;
+}
 
+bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...){
+	va_list args;
+	va_start(args, _argsetnum);
+	
+	std::vector<std::pair<int, int> > tmpRandomPlan;
+	int first;	int second;
+	for (unsigned int i=0; i<_argsetnum; i++){
+		first = va_arg(args,int);
+		second = va_arg(args,int);
+		tmpRandomPlan.push_back(std::pair<int, int>(first, second));
+	}		
+	va_end(args);
+	
+	return SetRandomPlanSet(_name, _index, tmpRandomPlan);
 }
 
 bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _typeName, unsigned int _argnum, ...){	
@@ -182,7 +179,7 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 		va_end(args);
 	
 	}else{
-		ErrorDx("Error->Not Found Enemy. Name:%s", _enemyName);
+		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _enemyName);
 		for_return = false;
 	}
 

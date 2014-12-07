@@ -352,6 +352,48 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			_enemySpeciesManager->SetTrickList(arg[0], trickList);
 		}
 
+//@RandomPlan_Set
+	}else if (mystrcmp(_command,"@RandomPlan_Set")){		
+		argnum = 20;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@RandomPlan_Set->arg[index]=NULL", __FILE__, __LINE__);
+			goto finish;
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@RandomPlan_Set->arg[EnemyName]=NULL:arg[0]=%s", __FILE__, __LINE__, arg[0]);
+			goto finish;
+		}
+		
+
+		int index;
+		if(!( mystrtol(arg[0], &index))){
+			ErrorDx("Error->@RandomPlan_Set(%s,%s)->Check argument type[0]->%s", __FILE__, __LINE__, arg[0], arg[1], _argument);
+			goto finish;
+		}else if (index<0){
+			ErrorDx("Error->@RandomPlan_Set(%s,%s)->arg[0] shouldn't be smaller than 0->%d", __FILE__, __LINE__, arg[0], arg[1], index);
+			goto finish;
+		}
+				
+		std::vector <int> numset;
+		for (int i=2; i<argnum && arg[i]!=NULL; i++){
+			int num;
+			if(!( mystrtol(arg[i], &num))){
+				ErrorDx("Error->@RandomPlan_Set(%s,%s)->Check argument type[%d]->%s", __FILE__, __LINE__, arg[0], arg[1], i, _argument);
+				goto finish;
+			}else{
+				numset.push_back(num);
+			}
+		}
+		if (numset.size()%2==1) numset.push_back(0);	//ˆø”‚ªŠï”‚Ìê‡AÅŒã”ö‚É0%‚ğ’Ç‰Á
+
+		std::vector <std::pair<int,int> > planList;
+		for (unsigned int i=0; i<numset.size()/2; i++){
+			planList.push_back(std::pair<int,int>(numset[i*2],numset[i*2+1]));
+		} 
+
+		_enemySpeciesManager->SetRandomPlanSet(arg[1], index, planList);
+
+
 //@Encount_Set
 	}else if (mystrcmp(_command,"@Encount_Set")){		
 		argnum = 3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
