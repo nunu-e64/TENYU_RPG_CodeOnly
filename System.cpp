@@ -31,6 +31,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	
 	myLog("----FINISH-----------------------------------------------------");
     DxLib_End(); // DXƒ‰ƒCƒuƒ‰ƒŠI—¹ˆ—
+
+	#ifdef MEMORY_CHECK
+		_CrtDumpMemoryLeaks();
+	#endif
+
     return 0;
 }  
 

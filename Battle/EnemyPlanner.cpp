@@ -86,10 +86,10 @@ CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<
 	}
 
 	for (unsigned int i=0; i<MAX_PLAYER_NUM; i++){	//MAX_PLAYER_NUM‚æ‚è‚àargList.size()‚ª‘½‚¢‚Æ‚«‚ÍŒx‚µ‚½‚Ù‚¤‚ª‚¢‚¢‚©‚à
-		if (i<numset.size()){
-			PlanList[i] = -1;
-		}else{
+		if (i < numset.size()){
 			PlanList[i] = numset[i];
+		}else{
+			PlanList[i] = -1;
 		}
 	}
 }

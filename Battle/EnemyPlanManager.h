@@ -19,7 +19,7 @@ public:
 
 private:
 
-	std::vector <const CEnemyPlanner*> EnemyPlannerBank;
+	//std::vector <const CEnemyPlanner*> EnemyPlannerBank;
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
 		CEnemyPlanManager(){}

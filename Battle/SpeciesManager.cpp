@@ -78,18 +78,28 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 //CEnemySpecies//
 //////////////////////////////////////////////////////////////////////////////
 void CEnemySpeciesManager::Clear(){
+	myLog("%s::Clear()_start", typeid(*this).name());
+
 	EnemyBank.clear();
 	
+	myLog("EnemyBank.clear()fin");
+	
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
-	while(it!=MapEncount.end()){
+	while(MapEncount.size()>0 && it!=MapEncount.end()){
+		myLog("MapEncount.second.clear");
 		(*it).second.clear();
 		++it;
 	}
 	MapEncount.clear();
+	
+	myLog("MapEncount.clear()fin");
 
-	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){
+	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
+		myLog("delete EnemyPlannerBank[%d]", i);
 		delete EnemyPlannerBank[i];	
 	}
+	myLog("%s::Clear()_fin", typeid(*this).name());
+
 }
 
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
@@ -145,7 +155,7 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 		if (_typeName=="MYHP"){
 			newAI = new CEnemyPlanner_MYHP(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet);
 
-		}else if(_typeName=="PLAYER_NUM"){
+		}else if(_typeName=="PLAYERNUM"){
 			newAI = new CEnemyPlanner_PLAYERNUM(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet);
 	
 		}else{
@@ -156,6 +166,7 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 		if(for_return){
 			EnemyBank[_enemyName].AI = newAI;
 			EnemyPlannerBank.push_back(newAI);
+			myLog("EnemyPlannerBank.push_back(newAI)");
 		}
 
 	}else{
