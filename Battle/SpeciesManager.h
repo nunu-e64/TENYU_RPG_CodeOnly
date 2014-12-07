@@ -41,9 +41,15 @@ private:
 
 class CEnemySpeciesManager{
 public:
+	static CEnemyPlanManager* GetInstance(){
+		static CEnemyPlanManager EnemyManager;
+		return &EnemyManager;
+	}
+
 	CEnemySpeciesManager(){}
 	~CEnemySpeciesManager(){Clear();}
 	void Clear();
+
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);

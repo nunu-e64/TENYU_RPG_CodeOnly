@@ -16,6 +16,10 @@
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
 
 
+//#define new(T)
+
+
+
 //namespace nunuLib{
 
 const double PI = 3.1415926535897932384626433832795f;

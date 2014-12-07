@@ -80,26 +80,21 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 void CEnemySpeciesManager::Clear(){
 	myLog("%s::Clear()_start", typeid(*this).name());
 
+	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
+		myLog("delete EnemyPlannerBank[%d]", i);
+		delete EnemyPlannerBank[i];	
+	}
+
 	EnemyBank.clear();
-	
-	myLog("EnemyBank.clear()fin");
-	
+		
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
 	while(MapEncount.size()>0 && it!=MapEncount.end()){
-		myLog("MapEncount.second.clear");
 		(*it).second.clear();
 		++it;
 	}
 	MapEncount.clear();
 	
-	myLog("MapEncount.clear()fin");
-
-	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
-		myLog("delete EnemyPlannerBank[%d]", i);
-		delete EnemyPlannerBank[i];	
-	}
 	myLog("%s::Clear()_fin", typeid(*this).name());
-
 }
 
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){

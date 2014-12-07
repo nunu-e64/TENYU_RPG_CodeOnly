@@ -25,7 +25,7 @@
 #include <map>
 #include <string>
 
-#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
+//#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
 	#if defined(MEMORY_CHECK) && !defined(MEMORY_CHECK_DISABLE)
 		#define _CRTDBG_MAP_ALLOC
 		#include <stdlib.h>
