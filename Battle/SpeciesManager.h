@@ -50,9 +50,8 @@ public:
 	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
 	
 	bool SetRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList);
-	bool SetRandomPlanSet(const char* _name, unsigned int _index, unsigned int _argsetnum, ...);
-	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, unsigned int _argnum, ...);
-	
+	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
+
 	CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);

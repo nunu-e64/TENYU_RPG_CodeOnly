@@ -51,24 +51,7 @@ public:
 
 class CEnemyPlanner_MYHP: public CEnemyPlanner{
 public:
-	CEnemyPlanner_MYHP(std::string _name, unsigned int _argnum, va_list args, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
-		int first;	int second;
-		for (unsigned int i=0; i<_argnum/2; i++){
-			first = va_arg(args,int);
-			second = va_arg(args,int);
-			PlanList.push_back( std::pair<int,int>(first, second) );
-		}
-		if (_argnum%2==1) PlanList.push_back( std::pair<int,int>(va_arg(args,int), 0) );
-
-		for (unsigned int i=0; i<PlanList.size(); i++){
-			myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
-		}
-		for (unsigned int i=0; i<_randomPlanSet->size(); i++){
-			for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
-				myLog("%s:RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
-			}
-		}
-	}
+	CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet); //:CEnemyPlanner(_name, _randomPlanSet);
 	int GetPlan(const CEnemy* _enemy); //‹¤’Ê
 private:
 	std::vector <std::pair<int, int> > PlanList;
@@ -77,11 +60,7 @@ private:
 
 class CEnemyPlanner_PLAYERNUM: public CEnemyPlanner{
 public:
-	CEnemyPlanner_PLAYERNUM(std::string _name, va_list args, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
-		for (int i=0; i<MAX_PLAYER_NUM; i++){
-			PlanList[i] = va_arg(args, int);
-		}
-	}
+	CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet);
 	int GetPlan(const CEnemy* _enemy); //‹¤’Ê
 private:
 	int PlanList[MAX_PLAYER_NUM];

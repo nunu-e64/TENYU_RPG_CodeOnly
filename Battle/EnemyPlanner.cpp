@@ -32,6 +32,31 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
 	return plan;
 }
 
+CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+	std::vector <int> numset;
+	for (unsigned int i=0; i<_argList.size(); i++){
+		int num;
+		if(!( mystrtol(_argList[i].c_str(), &num))){
+			ErrorDx("Error->CEnemyPlanner_MYHP(%s)->Check argument type[%d]", __FILE__, __LINE__, _name.c_str(), i);
+			num = -1;
+		}
+		numset.push_back(num);
+	}
+	if (numset.size()%2==1) numset.push_back(0);	//引数が奇数の場合、最後尾に0%を追加
+
+	for (unsigned int i=0; i<numset.size()/2; i++){
+		PlanList.push_back( std::pair<int,int>(numset[i*2],numset[i*2+1]));
+	}
+
+	for (unsigned int i=0; i<PlanList.size(); i++){
+		myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
+	}
+	for (unsigned int i=0; i<_randomPlanSet->size(); i++){
+		for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
+			myLog("%s:RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
+		}
+	}
+}
 int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	//ここに実際のあれこれを書く
 	//PlanList･･･[0~n] first:TrickIndex, second:境界線となるHPパーセント
@@ -49,7 +74,25 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	return -1;
 }
 
+CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+	std::vector <int> numset;
+	for (unsigned int i=0; i<_argList.size(); i++){
+		int num;
+		if(!( mystrtol(_argList[i].c_str(), &num))){
+			ErrorDx("Error->CEnemyPlanner_PLAYERNUM(%s)->Check argument type[%d]", __FILE__, __LINE__, _name.c_str(), i);
+			num = -1;
+		}
+		numset.push_back(num);
+	}
 
+	for (unsigned int i=0; i<MAX_PLAYER_NUM; i++){	//MAX_PLAYER_NUMよりもargList.size()が多いときは警告したほうがいいかも
+		if (i<numset.size()){
+			PlanList[i] = -1;
+		}else{
+			PlanList[i] = numset[i];
+		}
+	}
+}
 int CEnemyPlanner_PLAYERNUM::GetPlan(const CEnemy* _enemy){
 	//ここに実際のあれこれを書く
 

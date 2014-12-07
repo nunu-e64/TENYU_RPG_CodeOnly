@@ -36,7 +36,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む//////// $
 		TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
-		TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
+		//TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
 		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
 		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
 	
@@ -54,22 +54,6 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 				return false;
 			}
 	////////////////////////////////////////////////
-
-	//敵AI[の作成。最終的にはb_system.rpgから読み込む/////////////////////// $
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーA", 0, 2, 0, 80, 1, 20);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーA", 1, 2, 0, 20, 1, 80);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーB", 0, 2, 0, 80, 1, 20);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーB", 1, 2, 0, 20, 1, 80);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーC", 0, 2, 0, 80, 1, 20);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーC", 1, 2, 0, 20, 1, 80);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーD", 0, 2, 0, 80, 1, 20);
-		//EnemySpeciesManager.SetRandomPlanSet("エネミーD", 1, 2, 0, 20, 1, 80);
-		EnemySpeciesManager.SetEnemyPlanner("エネミーA","MYHP", 3, 1, 95, 0);
-		EnemySpeciesManager.SetEnemyPlanner("エネミーB","MYHP", 3, 1, 95, 0);
-		EnemySpeciesManager.SetEnemyPlanner("エネミーC","MYHP", 3, 1, 95, 0);
-		EnemySpeciesManager.SetEnemyPlanner("エネミーD","MYHP", 3, 1, 95, 0);
-
-
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった

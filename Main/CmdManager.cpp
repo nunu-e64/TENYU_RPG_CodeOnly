@@ -368,7 +368,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			goto finish;
 		}
 		
-
 		int index;
 		if(!( mystrtol(arg[0], &index))){
 			ErrorDx("Error->@RandomPlan_Set(%s,%s)->Check argument type[0]->%s", __FILE__, __LINE__, arg[0], arg[1], _argument);
@@ -398,6 +397,27 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		} 
 
 		_enemySpeciesManager->SetRandomPlanSet(arg[1], index, planList);
+
+
+//@AI_Set
+	}else if (mystrcmp(_command,"@AI_Set")){		
+		argnum = 20+2+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@AI_Set->arg[EnemyName]=NULL", __FILE__, __LINE__);
+			goto finish;
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@AI_Set('%s')->arg[PLANNER_TYPE]=NULL", __FILE__, __LINE__, arg[0]);
+			goto finish;
+		}
+		if (arg[argnum-1]!=NULL) WarningDx("Warning->@AI_Set(%s)->Number of arg[PLANNER_argument] > MAX:%d (not Register:'%s'...)", __FILE__, __LINE__, _argument, argnum-3, arg[argnum-1]);
+		
+		std::vector <std::string> stringList;
+		for (int i=2; i<argnum-1 && arg[i]!=NULL; i++){
+			stringList.push_back(arg[i]);
+		}
+
+		_enemySpeciesManager->SetEnemyPlanner(arg[0], arg[1], stringList);
 
 
 //@Encount_Set
