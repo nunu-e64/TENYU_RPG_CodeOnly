@@ -316,7 +316,9 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 		}else{
 
-			if (arg[19]!=NULL) WarningDx("Warning->@EnemyTrick_Set->Number of arg[trick] is max :%s", arg[0]);
+			if (arg[argnum-1]!=NULL) {
+				WarningDx("Warning->@PlayerTrick_Set(%s)->Number of arg[trick] > max:%d(not register %s)", __FILE__, __LINE__, arg[0], argnum-3, arg[argnum-1]);
+			}
 
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
@@ -330,7 +332,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@EnemyTrick_Set
 	}else if (mystrcmp(_command,"@EnemyTrick_Set")){		
-		argnum = 20;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+		argnum = 10+2+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		if (arg[0]==NULL){
 			ErrorDx("Error->@EnemyTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
@@ -340,8 +342,10 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 		}else{
 			
-			if (arg[19]!=NULL) WarningDx("Warning->@EnemyTrick_Set->Number of arg[trick] is max :%s", _command);
-			
+			if (arg[argnum-1]!=NULL) {
+				WarningDx("Warning->@EnemyTrick_Set(%s)->Number of arg[trick] > max:%d(not register ""%s"")", __FILE__, __LINE__, arg[0], argnum-3, arg[argnum-1]);
+			}
+
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
 			for (int i=1; arg[i]!=NULL && i<argnum; i++){
@@ -354,7 +358,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@RandomPlan_Set
 	}else if (mystrcmp(_command,"@RandomPlan_Set")){		
-		argnum = 20;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+		argnum = 20+2+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		if (arg[0]==NULL){
 			ErrorDx("Error->@RandomPlan_Set->arg[index]=NULL", __FILE__, __LINE__);
@@ -373,9 +377,11 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			ErrorDx("Error->@RandomPlan_Set(%s,%s)->arg[0] shouldn't be smaller than 0->%d", __FILE__, __LINE__, arg[0], arg[1], index);
 			goto finish;
 		}
-				
+
+		if (arg[argnum-1]!=NULL) WarningDx("Warning->@RandomPlan_Set(%s)->Number of arg[trick&percent] > MAX:%d (not Register:%s)", _argument, argnum-3, arg[argnum-1]);
+
 		std::vector <int> numset;
-		for (int i=2; i<argnum && arg[i]!=NULL; i++){
+		for (int i=2; i<argnum-1 && arg[i]!=NULL; i++){
 			int num;
 			if(!( mystrtol(arg[i], &num))){
 				ErrorDx("Error->@RandomPlan_Set(%s,%s)->Check argument type[%d]->%s", __FILE__, __LINE__, arg[0], arg[1], i, _argument);
@@ -416,7 +422,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@Party_Set
 	}else if (mystrcmp(_command,"@Party_Set")){		
-		argnum = MAX_ENEMY_NUM+3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+		argnum = MAX_ENEMY_NUM+3+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		if (arg[0]==NULL){
 			ErrorDx("Error->@Party_Set->arg[mapnum]=NULL", __FILE__, __LINE__);
@@ -434,11 +440,11 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				}
 			}
 			
-			if (arg[argnum-1]!=NULL) WarningDx("Warning->@Party_Set->Number of arg[enemy] >= max :%s", arg[argnum-1]);
+			if (arg[argnum-1]!=NULL) WarningDx("Warning->@Party_Set(%s)->Number of arg[enemy] > MAX_ENEMY_NUM:%d", __FILE__, __LINE__, _argument, arg[argnum-1], MAX_ENEMY_NUM);
 			
 			std::vector <std::string> enemyList;
 			
-			for (int i=3; arg[i]!=NULL && i<argnum; i++){
+			for (int i=3; arg[i]!=NULL && i<argnum-1; i++){
 				enemyList.push_back(arg[i]);				
 			}
 			_enemySpeciesManager->AddMapEncountParty(num[0], num[1], num[2], enemyList);

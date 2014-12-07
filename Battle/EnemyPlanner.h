@@ -65,7 +65,7 @@ public:
 		}
 		for (unsigned int i=0; i<_randomPlanSet->size(); i++){
 			for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
-				myLog("%s: RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
+				myLog("%s:RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
 			}
 		}
 	}

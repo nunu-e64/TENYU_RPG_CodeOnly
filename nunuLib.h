@@ -342,7 +342,7 @@ inline void myLog(const char* format, ...){
 inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
 	char string[1024];
 	vsprintf_s(string, format, args);	//va_start‚Æva_end‚ÍŒÄ‚Ño‚µŒ³‚Å‚·‚é
-	if (filename!=NULL) sprintf_s(string, "\n->%s(%d)\n", filename, line);
+	if (filename!=NULL) sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line);
 
 	myLog("PRINT: %s", string);
 	printfDx(string);
