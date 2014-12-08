@@ -6,6 +6,7 @@
 #include "DxLib.h"
 #include "math.h"
 #include <direct.h>
+#include <string>
 
 //#define MYLOG_DISABLE
 //#define WARNINGDX_DISABLE	//マクロの無効化
@@ -14,9 +15,6 @@
 #define CHECK_TIME_DISABLE	//時間測定マクロの無効化
 	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
-
-
-//#define new(T)
 
 
 
@@ -76,6 +74,13 @@ const int WINDOW_HEIGHT = 480;	//32px*15cell
 		}	
 	#endif
 /////////////////////////////////////////////////////////////
+
+//現在時刻取得関数///////////////////////////////////////////
+//#include <windows.h>
+SYSTEMTIME GetNowSystemTime();
+std::string GetNowSystemTimeString();
+/////////////////////////////////////////////////////////////
+
 
 
 /////////////////////////////////////////////////////////////
@@ -338,7 +343,7 @@ inline void myLog(const char* format, ...){
 			char tmpchar[1024];
 			vsprintf_s(tmpchar, format, args);
 			va_end(args);
-			fprintf_s(fp, "[%s][%s]:%s\n", __TIME__, __DATE__, tmpchar);
+			fprintf_s(fp, "[%s]:%s\n", GetNowSystemTimeString().c_str(), tmpchar);
 			fclose(fp);
 		}
 	#endif

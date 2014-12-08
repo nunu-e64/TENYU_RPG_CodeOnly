@@ -2,6 +2,26 @@
 
 //using namespace nunuLib;
 
+
+//Œ»İæ“¾ŠÖ”///////////////////////////////////////////
+SYSTEMTIME GetNowSystemTime(){
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	st.wHour+=9; //wHour‚É9ŠÔ‘«‚µ“ú–{ŠÔ‚É‚·‚é  
+	return st;
+}
+std::string GetNowSystemTimeString(){
+	char currentTime[25] = { 0 };
+	SYSTEMTIME st = GetNowSystemTime();
+	wsprintf(currentTime, "%04d/%02d/%02d %02d:%02d:%02d %03d",
+		st.wYear, st.wMonth, st.wDay,
+		st.wHour, st.wMinute, st.wSecond, st.wMilliseconds); 
+	std::string tmp = currentTime;
+	return tmp;
+}
+/////////////////////////////////////////////////////////////
+
+
 ////////////////////////////////////////////////////////////////////////////////////
 ////•¶š—ñŒn///////////////////////////////////////////////////////////////////////
 

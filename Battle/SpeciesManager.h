@@ -41,10 +41,10 @@ private:
 
 class CEnemySpeciesManager{
 public:
-	static CEnemyPlanManager* GetInstance(){
+/*	static CEnemyPlanManager* GetInstance(){
 		static CEnemyPlanManager EnemyManager;
 		return &EnemyManager;
-	}
+	}*/
 
 	CEnemySpeciesManager(){}
 	~CEnemySpeciesManager(){Clear();}
