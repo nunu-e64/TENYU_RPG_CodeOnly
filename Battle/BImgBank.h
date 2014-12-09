@@ -35,8 +35,8 @@ private:
 		int chipnum;
 		int gragh;
 	};
-	std::vector <bbg_tag> BattleBackGround[MAP_MAX];
-		//mapで実装すると存在しないキー[chipnum]で検索かけたときに自動生成してどんどんメモリを食ってしまうので、構造体で実装→find使えばOK。mapに戻そう$
+	//std::vector <bbg_tag> BattleBackGround[MAP_MAX];
+	std::map <int,int> BattleBackGround[MAP_MAX];
 };
 
 
