@@ -10,9 +10,14 @@
 class CEnemy : public CActor, public CEnemySpecies{
 public:
 	
-	CEnemy(){};
-	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){};
+	CEnemy(){
+		CONSTRUCTED
+	};
+	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){
+		CONSTRUCTED
+	};
 	~CEnemy(){
+		DESTRUCTED
 		myLog("%s:%s:CEnemy_Destructed", typeid(*this).name(), Name.c_str());
 	}
 

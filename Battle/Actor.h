@@ -15,10 +15,16 @@ class CBImgBank;
 
 class CActor : public virtual CSpecies{
 public:
-	CActor(const CSpecies &obj) : CSpecies(obj){}
+	CActor(const CSpecies &obj) : CSpecies(obj){
+		CONSTRUCTED
+	}
 
-	CActor(){}
-	~CActor(){}
+	CActor(){
+		CONSTRUCTED
+	}
+	~CActor(){
+		DESTRUCTED
+	}
 
 	//èâä˙ê›íËä÷òA
 		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist);

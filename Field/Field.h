@@ -20,6 +20,9 @@
 
 class CField : public CWorldManager{
 public:
+	CField(){
+		CONSTRUCTED	
+	}
 	~CField();
 	
 	bool Init(playdata_tag* _playdata_p, const int _dnum);

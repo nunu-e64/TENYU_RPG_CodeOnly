@@ -13,8 +13,13 @@ class CPlayer;
 class CPlayerSpeciesManager{
 public:
 	CPlayerSpeciesManager(){
+		CONSTRUCTED	
 		Gold = 0;
 	}
+	~CPlayerSpeciesManager(){
+		DESTRUCTED		
+	}
+
 	void Clear(){Gold = 0; PlayerBank.clear(); MemberList.clear();}
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
@@ -46,8 +51,13 @@ public:
 		return &EnemyManager;
 	}*/
 
-	CEnemySpeciesManager(){}
-	~CEnemySpeciesManager(){Clear();}
+	CEnemySpeciesManager(){
+		CONSTRUCTED	
+	}
+	~CEnemySpeciesManager(){
+		DESTRUCTED			
+		Clear();
+	}
 	void Clear();
 
 

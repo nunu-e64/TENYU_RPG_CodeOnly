@@ -10,8 +10,8 @@ static CBattle Battle;
 
 
 CField::~CField(){
-	DebugDx("Field_Destruct");
-	
+	DESTRUCTED	
+
 	Map.Init();
 	EveManager.Init();
 	Battle.Term();
@@ -60,9 +60,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			CFirstSetCmdManager FirstSetCmdManager;
 			CCmdList SystemCmdList;
 			
-			if ((SystemLoad.LoadAddText("tenyu_data/system.rpg"))
-				&&(ScenarioLoad.LoadAddText("tenyu_data/scenario.rpg"))
-				&&(ScenarioLoad.LoadAddText("tenyu_data/event.rpg"))){
+			if ((SystemLoad.LoadAddText(FILE_SYSTEM))
+				&&(ScenarioLoad.LoadAddText(FILE_SCENARIO))
+				&&(ScenarioLoad.LoadAddText(FILE_EVENT))){
 			
 				SystemLoad.CommandCopy(&SystemCmdList);
 				FirstSetCmdManager.Main(&SystemCmdList, this, &Map, &EveManager);
@@ -598,8 +598,8 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 		char olddirname[256];
 		char newdirname[256];
 		if (strlen(_dataname) > 0){
-			sprintf_s(olddirname, "tenyu_data/save/%s", PlayData_p[_dnum].DataName);
-			sprintf_s(newdirname, "tenyu_data/save/%s", _dataname); 
+			sprintf_s(olddirname, "%s/%s", DIR_SAVE, PlayData_p[_dnum].DataName);
+			sprintf_s(newdirname, "%s/%s", DIR_SAVE, _dataname); 
 
 			//セーブフォルダをリネーム
 			if (rename(olddirname, newdirname) != 0){
@@ -611,12 +611,12 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 			}
 			strcpy_s(PlayData_p[_dnum].DataName, _dataname);
 		}else{
-			sprintf_s(newdirname, "tenyu_data/save/%s", PlayData_p[_dnum].DataName);
+			sprintf_s(newdirname, "%s/%s", DIR_SAVE, PlayData_p[_dnum].DataName);
 			_mkdir(newdirname);
 		}
 		
 	//セーブデータ名一覧の保存（既存のものもすべて上書き）
-		fopen_s(&fp, "tenyu_data/save/dataname.rpg", "w" );
+		fopen_s(&fp, FILE_DATANAME, "w" );
 		for (int i = 0; i < PLAYDATA_NUM; i++){
 			fputs(PlayData_p[i].DataName, fp);		
 			fputs("\n", fp);
@@ -628,13 +628,13 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 		for (int i=0; i<3; i++){
 			switch(i){
 			case 0:
-				sprintf_s(filename, "tenyu_data/save/%s/pos.dat", PlayData_p[_dnum].DataName);
+				sprintf_s(filename, "%s/%s/pos.dat", DIR_SAVE, PlayData_p[_dnum].DataName);
 				break;
 			case 1:
-				sprintf_s(filename, "tenyu_data/save/%s/flg.dat", PlayData_p[_dnum].DataName);
+				sprintf_s(filename, "%s/%s/flg.dat", DIR_SAVE, PlayData_p[_dnum].DataName);
 				break;
 			case 2:
-				sprintf_s(filename, "tenyu_data/save/%s/eve.dat", PlayData_p[_dnum].DataName);
+				sprintf_s(filename, "%s/%s/eve.dat", DIR_SAVE, PlayData_p[_dnum].DataName);
 				break;
 			default:
 				//あとはアイテム、キャラステータス、金、と？ $

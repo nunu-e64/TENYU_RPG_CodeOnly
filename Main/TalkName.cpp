@@ -4,9 +4,9 @@
 
 void CTalkName::Init(){
 
-	ImgLabel[0] = LoadGraph("tenyu_data/pic/talkname00.png", true); 
-	ImgLabel[1] = LoadGraph("tenyu_data/pic/talkname01.png", true);
-	ImgLabel[2] = LoadGraph("tenyu_data/pic/talkname02.png", true);
+	ImgLabel[0] = LoadGraph(IMAGE_TALKNAMELABEL[0], true); 
+	ImgLabel[1] = LoadGraph(IMAGE_TALKNAMELABEL[1], true);
+	ImgLabel[2] = LoadGraph(IMAGE_TALKNAMELABEL[2], true);
 
 }
 

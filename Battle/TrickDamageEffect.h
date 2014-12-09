@@ -12,7 +12,11 @@ class CBImgBank;
 class CTrickDamageEffect{ //戦闘ダメージエフェクト用のインターフェース
 public: 
 	CTrickDamageEffect(std::string _name){
+		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
 		Name = _name;
+	}
+	~CTrickDamageEffect(){
+		DESTRUCTED
 	}
 	virtual void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const =0;
 	std::string GetName() const {return Name;}
@@ -25,9 +29,13 @@ protected:
 class CTrickDamageEffect_BOMB: public CTrickDamageEffect{
 public:
 	CTrickDamageEffect_BOMB(std::string _name, va_list args):CTrickDamageEffect(_name){
+		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
 		Color = va_arg(args, int);
 		Size = va_arg(args, int);
 		Time = va_arg(args, int);
+	}
+	~CTrickDamageEffect_BOMB(){
+		DESTRUCTED
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:
@@ -39,9 +47,13 @@ private:
 class CTrickDamageEffect_PROTO: public CTrickDamageEffect{
 public:
 	CTrickDamageEffect_PROTO(std::string _name, va_list args):CTrickDamageEffect(_name){
+		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
 		Size1 = va_arg(args, int);
 		Size2 = va_arg(args, int);
 		Radius = va_arg(args, int);
+	}
+	~CTrickDamageEffect_PROTO(){
+		DESTRUCTED
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:

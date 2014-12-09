@@ -9,10 +9,12 @@ class CCmdList{
 public:
 	
 	CCmdList(){
+		CONSTRUCTED
 		front = NULL;
 		tail = NULL;
 	}
 	~CCmdList(){
+		DESTRUCTED
 		Clear();
 	}
 

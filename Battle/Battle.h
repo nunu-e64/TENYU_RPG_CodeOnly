@@ -29,7 +29,7 @@ public:
 
 	CBattle();
 	~CBattle(){
-		//DebugDx("CBattle::~CBattle()");	//デストラクタでDxLib読んだらあぶな～い
+		DESTRUCTED	
 	}
 	bool Init();
 	void Term();
@@ -60,6 +60,13 @@ public:
 	//ターゲット選択マーカー
 		class CTargetMarker{
 		public:
+			CTargetMarker(){
+				CONSTRUCTED	
+			}
+			~CTargetMarker(){
+				DESTRUCTED	
+			}
+
 			void Init(int _actornum, int _playernum, int _enemynum, int _img);
 
 			void SetVisible(bool _visible){Visible = _visible;}

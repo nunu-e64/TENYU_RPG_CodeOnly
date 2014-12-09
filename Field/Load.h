@@ -13,10 +13,16 @@ class CEveManager;
 
 class CLoad{
 public:
-	CLoad(){FileLineNum=0;};
-	bool LoadAddText(char *_path);
+	CLoad(){
+		CONSTRUCTED
+		FileLineNum=0;
+	}
+	~CLoad(){
+		DESTRUCTED
+	}
+	bool LoadAddText(const char *_path);
 	void LoadMap(const char *_path, unsigned int _mapnum, CMap* _map, CEveManager* _evemanager, bool _event=false);
-	void LoadPlayData(char *_path, playdata_tag _playdata[]);
+	void LoadPlayData(playdata_tag _playdata[]);
 	void CommandCopy(CCmdList* _cmdlist);
 	void EventTextCopy(CEveManager* _evemanager);
 

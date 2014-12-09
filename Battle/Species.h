@@ -8,11 +8,12 @@
 class CSpecies{
 public:
 	CSpecies(){
+		CONSTRUCTED
 		Name="NULL_NAME";
 		Lv=Img=Atk=Def=Spd=-1;
 		Hp=MaxHp = 1;
 	}
-	~CSpecies(){}
+	~CSpecies(){DESTRUCTED}
 
 	std::string GetName()const{return Name;}
 
@@ -38,9 +39,16 @@ class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
 public:
 	CPlayerSpecies(const CPlayerSpecies& obj){
+		CONSTRUCTED
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
-	CPlayerSpecies(){Exp=0;};
+	CPlayerSpecies(){
+		CONSTRUCTED
+		Exp=0;
+	}
+	~CPlayerSpecies(){
+		DESTRUCTED
+	}
 
 private:
 	int Exp;
@@ -51,12 +59,16 @@ class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
 public:
 	CEnemySpecies(const CEnemySpecies& obj){
+		CONSTRUCTED	
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
 	CEnemySpecies(){
+		CONSTRUCTED	
 		AI = NULL;
 	}
-	~CEnemySpecies(){}
+	~CEnemySpecies(){
+		DESTRUCTED		
+	}
 
 protected:
 	CEnemyPlanner* AI;
@@ -65,8 +77,6 @@ private:
 	int GoldGene;
 	int ExpGene;
 	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
-
-
 };
 
 

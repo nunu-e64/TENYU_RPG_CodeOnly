@@ -6,6 +6,8 @@
 #include "../Field/Load.h"
 
 CBattle::CBattle(){
+	CONSTRUCTED	
+
 	Ready = false;
 
 	ACTOR_NUM = 0;
@@ -47,7 +49,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			CBattleFirstSetCmdManager  bfsCmdManager;
 			CCmdList bfsCmdList;
 			
-			if (bfsLoad.LoadAddText("tenyu_data/b_system.rpg")){			
+			if (bfsLoad.LoadAddText(FILE_B_SYSTEM)){			
 				bfsLoad.CommandCopy(&bfsCmdList);
 				bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, TrickManager);
 			}else{
@@ -96,7 +98,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 
 		//ターゲット選択マーカー初期化
 			SetTransColor(255, 0, 255);	//透過色指定
-			TargetMarker.Init(ACTOR_NUM, PLAYER_NUM, ENEMY_NUM, LoadGraph("tenyu_data/pic/sys/battle/target.png", true));
+			TargetMarker.Init(ACTOR_NUM, PLAYER_NUM, ENEMY_NUM, LoadGraph(IMAGE_TARGETCURSOR, true));
 			SetTransColor(0, 0, 0);	//透過色指定
 
 		EveManager_p = _evemanager_p;

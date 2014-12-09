@@ -5,6 +5,12 @@
 
 class CBattleCalculator{
 public:
+	CBattleCalculator(){
+		CONSTRUCTED	
+	}
+	~CBattleCalculator(){
+		DESTRUCTED	
+	}
 	static int CalcGold(int _lv, int _goldgene);
 	static int CalcExp(int _lv, int _expgene);
 }typedef BattleCalc;

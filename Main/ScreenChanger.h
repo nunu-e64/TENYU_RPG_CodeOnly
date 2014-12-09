@@ -5,6 +5,12 @@
 
 class CScreenChanger{
 public:
+	CScreenChanger(){
+		CONSTRUCTED
+	}
+	~CScreenChanger(){
+		DESTRUCTED
+	}
 	static enum screenchange_tag{
 		SCREEN_FADE,
 		SCREEN_BOKASHI,

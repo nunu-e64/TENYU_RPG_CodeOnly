@@ -10,11 +10,12 @@ bool CMain::Init(){
 	srand((unsigned int)GetNowCount());
 	//ChangeFont("ＭＳ Ｐゴシック") ;	$
 	
-	if (_mkdir("tenyu_data")==0){
-		_rmdir("tenyu_data");
+	/*
+	if (_mkdir("tenyu_data")==0){	//ディレクトリを作れるかどうかで存在有無を判断
+		_rmdir("tenyu_data");	//「作れる＝存在していなかった」の確認が済んだので今作ったディレクトリは削除しておく
 		ErrorDx("Error->NotFound dir\"tenyu_data\" (exit)");
 		return false;
-	}
+	}*/
 
 	return true;
 	//エラー時にはreturn false
@@ -27,8 +28,8 @@ bool CMain::GameLoop(){
 
 	if (PLAYDATA_NUM>0){
 		CLoad PlayDataLoad;
-			char path[256]; strcpy_s(path, "tenyu_data/save");
-			PlayDataLoad.LoadPlayData(path, PlayData);
+			char path[256]; strcpy_s(path, DIR_SAVE);
+			PlayDataLoad.LoadPlayData(PlayData);
 	}
 
 	while(1){

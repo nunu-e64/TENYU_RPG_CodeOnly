@@ -10,6 +10,8 @@ class CField;
 
 class CEveManager{
 public:
+	CEveManager(){CONSTRUCTED}
+	~CEveManager(){DESTRUCTED}
 
 	void Init(){
 		for (int i=0; i<MAP_MAX; i++){

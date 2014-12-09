@@ -14,6 +14,9 @@ public:
 		static CEnemyPlanManager EnemyManager;
 		return &EnemyManager;
 	}
+	~CEnemyPlanManager(){
+		myLog("MyClassLog", "%s.Denstructed", typeid(*this).name());
+	}
 	
 	int GetTarget(CEnemy* _enemy);
 
@@ -22,7 +25,9 @@ private:
 	//std::vector <const CEnemyPlanner*> EnemyPlannerBank;
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
-		CEnemyPlanManager(){}
+		CEnemyPlanManager(){
+			CONSTRUCTED
+		}
 		CEnemyPlanManager(const CEnemyPlanManager& hoge);
 		CEnemyPlanManager& operator=(const CEnemyPlanManager& hoge);
 	///////////////////////////////////////////////////////////////////

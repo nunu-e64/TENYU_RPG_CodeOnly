@@ -18,6 +18,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);  //newをdeleteしていない問題を検出
 	#endif
 
+	myLog("MyLog_Printed", "--------START------------------------------------------------------\n");
+
+	myLog("MyClassLog", "--------START------------------------------------------------------\n");
 	myLog("--------START------------------------------------------------------\n");
 
 		CMain* Main = CMain::GetInstance();		//これ以下をすべてCMain::Mainという静的メンバ関数にするのもあり
@@ -28,7 +31,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 			
 			}
 		}
-	
+
+	myLog("MyLog_Printed", "----FINISH-----------------------------------------------------");	
+	myLog("MyClassLog", "----FINISH-----------------------------------------------------");	
 	myLog("----FINISH-----------------------------------------------------");
     DxLib_End(); // DXライブラリ終了処理
 

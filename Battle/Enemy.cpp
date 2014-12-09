@@ -45,7 +45,7 @@ bool CEnemy::Plan(){
 
 	int action_num = AI->GetPlan(this);
 
-	if (action_num>=0 && action_num<TrickList.size()){
+	if (action_num>=0 && action_num<(int)TrickList.size()){
 		NowTrick = TrickList[action_num];
 
 		return true;

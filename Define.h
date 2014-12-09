@@ -47,6 +47,36 @@
 		ErrorDx("Error mapnum<0: %d",_mapnum);return _return;	\
 	}}
 
+#define CONSTRUCTED ; myLog("MyClassLog", "%s.Constructed", typeid(*this).name());
+#define DESTRUCTED ; myLog("MyClassLog", "%s.Destructed", typeid(*this).name());
+
+
+//戦闘関連///////////////////////////////////////////////
+const int MAX_PLAYER_NUM = 3;
+const int MAX_ENEMY_NUM = 3;
+const int MAX_MP = 10;
+/////////////////////////////////////////////////////////
+
+//rpgファイル名等///////////////////////////////////////////
+const char DIR_ALLDATA[] = "tenyu_data";
+const char FILE_B_SYSTEM[] = "tenyu_data/b_system.rpg";	//戦闘全般（エンカウント・技・敵味方ステータスなど）関するテキストファイル
+const char FILE_SYSTEM[] = "tenyu_data/system.rpg";		//システム全般に関する読み込みテキストファイル
+const char FILE_SCENARIO[] = "tenyu_data/scenario.rpg";	//シナリオ及びイベントに関するテキストファイル
+const char FILE_EVENT[] = "tenyu_data/event.rpg";		//オリジナルイベントに関するテキストファイル
+const char DIR_SAVE[] = "tenyu_data/save";				//セーブデータを保存するディレクトリ
+const char FILE_DATANAME[] = "tenyu_data/save/dataname.rpg";	//セーブデータ名を管理するためのテキストファイル
+
+//システムグラフィック///////////////////////////////////
+const char IMAGE_TARGETCURSOR[] = "tenyu_data/pic/sys/battle/target.png";
+const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.png",
+									     "tenyu_data/pic/sys/talkname01.png",
+									     "tenyu_data/pic/sys/talkname02.png"};
+
+//ゲーム名///////////////////////////////////////////
+const char GAME_TITLE[] = "TENYU";
+const char VERSION[] = "ver0.00";
+
+//ゲーム内//////////////////////////////////////////////////////
 const int PLAYDATA_NUM = 0;	//セーブデータの数(0~3)
 const int MAP_CHIP_SIZE = 32;
 const int MAP_SIZE = 128;		//正方形を想定
@@ -58,15 +88,7 @@ const char EMAP_FILE_TYPE[] = ".eMap";
 const unsigned int MAP_MAX = 2;	//読み込めるマップの最大数	//MAPデータ配列の一次の要素数
 const int CHARA_PIC_NUM = 16;	//キャラの絵が一枚何コマなのか
 
-//戦闘関連///////////////////////////////////////////////
-const int MAX_PLAYER_NUM = 3;
-const int MAX_ENEMY_NUM = 3;
-const int MAX_MP = 10;
-/////////////////////////////////////////////////////////
-const char GAME_TITLE[] = "TENYU";
-const char VERSION[] = "ver0.00";
-
-////////////////////////////////////////////////////////
+//プログラム内//////////////////////////////////////////////////////
 const char CMD_SEPARATOR[] = " ,	";
 const char EOP[] = "EOP";	//EndOfParagraph
 
@@ -178,7 +200,12 @@ struct flag_tag{
 
 class CFlagSet{
 public:
-	CFlagSet(){}
+	CFlagSet(){
+		CONSTRUCTED
+	}
+	~CFlagSet(){
+		DESTRUCTED
+	}
 
 	bool CreateNewFlag(const char* _key){
 		for(unsigned int i=0; i<Flag.size(); i++){

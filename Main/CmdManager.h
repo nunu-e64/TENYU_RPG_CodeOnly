@@ -18,7 +18,8 @@ class CTrickManager;
 
 class CCmdManager{
 public:
-	~CCmdManager(){};
+	CCmdManager(){myLog("MyClassLog", "%s.Contructed", typeid(*this).name());}
+	~CCmdManager(){DESTRUCTED	};
 	
 protected:
 
@@ -38,17 +39,25 @@ protected:
 
 class CFirstSetCmdManager : public CCmdManager{
 public:
+	CFirstSetCmdManager(){myLog("MyClassLog", "%s.Contructed", typeid(*this).name());}
+	~CFirstSetCmdManager(){DESTRUCTED}
 	void Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CEveManager* _evemanager);
 };
 
 class CFieldCmdManager : public CCmdManager{
 public:
+	CFieldCmdManager(){myLog("MyClassLog", "%s.Contructed", typeid(*this).name());}
+	~CFieldCmdManager(){DESTRUCTED}
 	void Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);
 };
 
 class CBattleCmdManager : public CCmdManager{
 public:
-	CBattleCmdManager(){Map_p=NULL;}
+	CBattleCmdManager(){
+		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
+		Map_p=NULL;
+	}
+	~CBattleCmdManager(){DESTRUCTED}
 	void Main(CCmdList* _cmdlist, CBattle* _battle, CTextBox* _textbox);
 	void Init(CMap* _map){Map_p=_map;}
 
@@ -58,6 +67,8 @@ private:
 
 class CBattleFirstSetCmdManager : public CCmdManager{
 public:
+	CBattleFirstSetCmdManager(){myLog("MyClassLog", "%s.Contructed", typeid(*this).name());}
+	~CBattleFirstSetCmdManager(){DESTRUCTED}
 	void Main(CCmdList* _cmdlist, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 };
 

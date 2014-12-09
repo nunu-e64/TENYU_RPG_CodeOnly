@@ -17,7 +17,7 @@ public:
 	}
 
 	~CTrickManager(){
-		
+		DESTRUCTED	
 	}
 
 	void Add(trick_tag _trick);
@@ -42,7 +42,9 @@ private:
 	std::vector <const CTrickDamageEffect*> TrickDamageEffectBank;		
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)////////////////////////////////
-		CTrickManager(){}
+		CTrickManager(){
+			CONSTRUCTED	
+		}
 		CTrickManager(const CTrickManager& hoge);
 		CTrickManager& operator=(const CTrickManager& hoge);
 	/////////////////////////////////////////////////////////

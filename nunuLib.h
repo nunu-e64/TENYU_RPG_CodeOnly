@@ -331,29 +331,40 @@ inline int DrawBox(CRect _rect, int _color, bool _fillflag){
 
 /////////////////////////////////////////////////////////////
 ///エラー&デバッグ出力用関数/////////////////////////////////
-inline void myLog(const char* format, ...){
+inline void myprintLog(const char* filename, const char* format, va_list args){
 	#ifndef MYLOG_DISABLE
 		FILE *fp;
 		errno_t error;
-		if(error = fopen_s(&fp, "tenyu_log.txt", "a") != 0){
+		char txtfilename[1024];
+		sprintf_s(txtfilename, "%s.txt", filename);
+		if(error = fopen_s(&fp, txtfilename, "a") != 0){
 			return;
 		}else{
-			va_list args;
-			va_start(args, format);
 			char tmpchar[1024];
 			vsprintf_s(tmpchar, format, args);
-			va_end(args);
 			fprintf_s(fp, "[%s]:%s\n", GetNowSystemTimeString().c_str(), tmpchar);
 			fclose(fp);
 		}
 	#endif
+}
+inline void myLog(const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	myprintLog("MyLog", format, args);
+	va_end(args);
+}
+inline void myLog(const char* filename, const char* format, ...){
+	va_list args;
+	va_start(args, format);
+	myprintLog(filename, format, args);
+	va_end(args);
 }
 inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
 	char string[1024];
 	vsprintf_s(string, format, args);	//va_startとva_endは呼び出し元でする
 	if (filename!=NULL) sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line);
 
-	myLog("PRINT: %s", string);
+	myLog("MyLog_Printed", "PRINT: %s", string);
 	printfDx(string);
 	ScreenFlip();
 	WaitKey();

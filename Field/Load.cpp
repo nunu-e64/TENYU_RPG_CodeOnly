@@ -6,7 +6,7 @@
 #include "EveManager.h"
 
 
-bool CLoad::LoadAddText(char *_path){
+bool CLoad::LoadAddText(const char *_path){
 	int FileHandle;
 	int OldFileLineNum = FileLineNum;
 	
@@ -80,7 +80,7 @@ void CLoad::LoadMap(const char *_path, unsigned int _mapnum, CMap* _map, CEveMan
     delete [] buf;
 }
 
-void CLoad::LoadPlayData(char *_path, playdata_tag _playdata[]){
+void CLoad::LoadPlayData(playdata_tag _playdata[]){
 	int FileHandle;
 	FILE *fp;
 	char filename[256];
@@ -91,10 +91,9 @@ void CLoad::LoadPlayData(char *_path, playdata_tag _playdata[]){
 			_playdata[i].DataName[0] = '\0';
 		}
 
-	//saveフォルダの存在確認と生成＆dataname.rpgの存在確認と生成
-		_mkdir(_path);
-		sprintf_s(filename, "%s/dataname.rpg", _path);
-		FileHandle = FileRead_open(filename) ;
+	//saveフォルダの存在確認＆生成　と　dataname.rpgの存在確認＆生成
+		_mkdir(DIR_SAVE);
+		FileHandle = FileRead_open(FILE_DATANAME) ;
 		if (FileHandle==0) {
 			fopen_s(&fp, filename, "w");
 			fclose(fp);
@@ -103,10 +102,10 @@ void CLoad::LoadPlayData(char *_path, playdata_tag _playdata[]){
 
 	for( int h = 0; FileRead_eof( FileHandle ) == 0 && h < PLAYDATA_NUM; h++){
         // セーブデータ名を一行ずつ読み込み
-			if (FileRead_gets( _playdata[h].DataName, ARRAY_SIZE(_playdata[h].DataName), FileHandle ) == ARRAY_SIZE(_playdata[h].DataName)-1){	
+			if (FileRead_gets( _playdata[h].DataName, ARRAY_SIZE(_playdata[h].DataName), FileHandle ) == ARRAY_SIZE(_playdata[h].DataName)-1){
 				//ファイルがShift-JISじゃない場合ここでフリーズ
 				//31文字ちょうどのときに次のFileRead_getsではNULL文字しか代入されない仕様があるためファイルポインタの位置をずらしてやる必要がある。なぜ2文字分動かさないといけないのかは不明
-				if (FileRead_seek(FileHandle, +2, SEEK_CUR)==-1) ErrorDx("Error") ;
+				if (FileRead_seek(FileHandle, +2, SEEK_CUR)==-1) ErrorDx("Error->LoadPlayData") ;
 			}
 
 			if (strlen(_playdata[h].DataName)==0) continue;
@@ -116,13 +115,13 @@ void CLoad::LoadPlayData(char *_path, playdata_tag _playdata[]){
 		for (int i=0; i<3; i++){
 			switch(i){
 			case 0:
-				sprintf_s(filename, "%s/%s/%s", _path, _playdata[h].DataName,"pos.dat");
+				sprintf_s(filename, "%s/%s/%s", DIR_SAVE, _playdata[h].DataName,"pos.dat");
 				break;
 			case 1:
-				sprintf_s(filename, "%s/%s/%s", _path, _playdata[h].DataName,"flg.dat");
+				sprintf_s(filename, "%s/%s/%s", DIR_SAVE, _playdata[h].DataName,"flg.dat");
 				break;
 			case 2:
-				sprintf_s(filename, "%s/%s/%s", _path, _playdata[h].DataName,"eve.dat");
+				sprintf_s(filename, "%s/%s/%s", DIR_SAVE, _playdata[h].DataName,"eve.dat");
 				break;
 			}
 

@@ -33,6 +33,7 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
 }
 
 CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+	CONSTRUCTED
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
 		int num;
@@ -48,14 +49,15 @@ CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::stri
 		PlanList.push_back( std::pair<int,int>(numset[i*2],numset[i*2+1]));
 	}
 
-	for (unsigned int i=0; i<PlanList.size(); i++){
-		myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
-	}
-	for (unsigned int i=0; i<_randomPlanSet->size(); i++){
-		for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
-			myLog("%s:RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
-		}
-	}
+	//ƒƒOo—Í
+	//for (unsigned int i=0; i<PlanList.size(); i++){
+	//	myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
+	//}
+	//for (unsigned int i=0; i<_randomPlanSet->size(); i++){
+	//	for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
+	//		myLog("%s:RandomPlan[%d][%d]=(%d,%d)", _name.c_str(),i,j,(*_randomPlanSet)[i][j].first, (*_randomPlanSet)[i][j].second);
+	//	}
+	//}
 }
 int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	//‚±‚±‚ÉŽÀÛ‚Ì‚ ‚ê‚±‚ê‚ð‘‚­
@@ -75,6 +77,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 }
 
 CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+	CONSTRUCTED
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
 		int num;

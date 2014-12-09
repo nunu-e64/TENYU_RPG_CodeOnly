@@ -9,7 +9,11 @@
 
 class CBImgBank{
 public:
+	CBImgBank(){
+		CONSTRUCTED
+	}
 	~CBImgBank(){
+		DESTRUCTED
 		ImgBank.clear();
 		for (int i=0; i<MAP_MAX; i++){
 			BattleBackGround[i].clear();
