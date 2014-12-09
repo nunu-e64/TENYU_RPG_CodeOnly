@@ -1,4 +1,4 @@
-////多重インクルード防止（インクルードガード）//	//pragmaonceと同じ意味だがこちらはコンパイラに依存しない
+////多重インクルード防止（インクルードガード）//	//pragmaonceと同じ意味だがこちらはコンパイラに依存しない→ところがコード内で__FUNCTION__を使っているので一貫性を破壊している→別環境では__FUNCTION__を#defineで書き換える必要がある
 #ifndef NUNULIB_H							////
 #define NUNULIB_H							////
 ////////////////////////////////////////////////
@@ -15,8 +15,6 @@
 #define CHECK_TIME_DISABLE	//時間測定マクロの無効化
 	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
-
-
 
 //namespace nunuLib{
 
@@ -331,6 +329,11 @@ inline int DrawBox(CRect _rect, int _color, bool _fillflag){
 
 /////////////////////////////////////////////////////////////
 ///エラー&デバッグ出力用関数/////////////////////////////////
+#define ERRORDX(...)	 ErrorDx(__LINE__, __FUNCTION__, __FILE__,  __VA_ARGS__)
+#define WARNINGDX(...) WarningDx(__LINE__, __FUNCTION__, __FILE__,  __VA_ARGS__)
+#define DEBUGDX(...)	 DebugDx(__LINE__, __FUNCTION__, __FILE__,  __VA_ARGS__)
+
+
 inline void myprintLog(const char* filename, const char* format, va_list args){
 	#ifndef MYLOG_DISABLE
 		FILE *fp;
@@ -359,7 +362,7 @@ inline void myLog(const char* filename, const char* format, ...){
 	myprintLog(filename, format, args);
 	va_end(args);
 }
-inline void myprintfDx(const char* format, va_list args, char* filename=NULL, int line=0){
+inline void myprintfDx(const char* format, va_list args, const char* filename=NULL, int line=0){
 	char string[1024];
 	vsprintf_s(string, format, args);	//va_startとva_endは呼び出し元でする
 	if (filename!=NULL) sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line);
@@ -370,6 +373,13 @@ inline void myprintfDx(const char* format, va_list args, char* filename=NULL, in
 	WaitKey();
 	clsDx();
 	ClearDrawScreen();
+}
+inline void ErrorDx(int line, const char* func, const char* filename, const char* format, ...){
+	char tmpchar[256];
+	va_list args;	va_start(args, format);
+	sprintf_s(tmpchar, "Error->%s\n->%s", format, func);
+	myprintfDx(tmpchar, args, filename, line);
+	va_end(args);
 }
 inline void ErrorDx(const char* format, char* filename, int line, ...){
 	va_list args;
@@ -382,6 +392,15 @@ inline void ErrorDx(const char* format, ...){
 	va_start(args, format);
 	myprintfDx(format, args);
 	va_end(args);
+}
+inline void WarningDx(int line, const char* func, const char* filename, const char* format, ...){
+	#ifndef	WARNINGDX_DISABLE 
+		char tmpchar[256];
+		va_list args;	va_start(args, format);
+		sprintf_s(tmpchar, "Warning->%s\n->%s", format, func);
+		myprintfDx(tmpchar, args, filename, line);
+		va_end(args);
+	#endif
 }
 inline void WarningDx(const char* format, char* filename, int line, ...){
 	#ifndef	WARNINGDX_DISABLE 
@@ -396,6 +415,15 @@ inline void WarningDx(const char* format, ...){
 		va_list args;
 		va_start(args, format);
 		myprintfDx(format, args);
+		va_end(args);
+	#endif
+}
+inline void DebugDx(int line, const char* func, const char* filename, const char* format, ...){
+	#ifndef	DEBUGDX_DISABLE 
+		char tmpchar[256];
+		va_list args;	va_start(args, format);
+		sprintf_s(tmpchar, "Debug->%s\n->%s", format, func);
+		myprintfDx(tmpchar, args, filename, line);
 		va_end(args);
 	#endif
 }

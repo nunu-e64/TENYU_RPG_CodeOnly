@@ -391,14 +391,21 @@ nunuLibKey::CKeyManager::CKeyManager(){
 bool nunuLibKey::CKeyManager::CheckDown(const int KEY_CODE){		//押した瞬間だけtrueを返す
 	//決定キー･･･Z,Enter  キャンセルキー･･･X,BackSpace  それぞれどちらでも可
 	switch (KEY_CODE){
-		case KEY_INPUT_OK:
-			return (CheckDown(KEY_INPUT_RETURN) || CheckDown(KEY_INPUT_Z));			
+		case KEY_INPUT_OK:  {
+			bool tmp0 = CheckDown(KEY_INPUT_RETURN);
+			bool tmp1 = CheckDown(KEY_INPUT_Z);
+			return (tmp0||tmp1);			
 			break;
-		case KEY_INPUT_CANCEL:
-			return (CheckDown(KEY_INPUT_BACK) || CheckDown(KEY_INPUT_X));
+		}
+		case KEY_INPUT_CANCEL:  {
+			bool tmp0 = CheckDown(KEY_INPUT_BACK);
+			bool tmp1 = CheckDown(KEY_INPUT_X);
+			return (tmp0||tmp1);			
 			break;
-		default:
+		}
+		default:{
 			break;
+		}
 	}
 
 	//判定のメイン
