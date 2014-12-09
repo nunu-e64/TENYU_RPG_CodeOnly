@@ -25,12 +25,12 @@
 #include <map>
 #include <string>
 
-//#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
+#define MEMORY_CHECK	//メモリの解放し忘れをチェック。Debugビルドで使用可能。
 	#if defined(MEMORY_CHECK) && !defined(MEMORY_CHECK_DISABLE)
 		#define _CRTDBG_MAP_ALLOC
 		#include <stdlib.h>
 		#include <crtdbg.h>
-		//#define new  ::new( _NORMAL_BLOCK, __FILE__, __LINE__ )  
+		#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
 	#endif
 
 #include "nunuLib.h"

@@ -4,6 +4,10 @@
 
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
+	#ifdef MEMORY_CHECK
+		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);  //newをdeleteしていない問題を検出
+	#endif
+
 	
 	SetMainWindowText(GAME_TITLE);
 	ChangeWindowMode( TRUE );			// ウインドウモードに変更
@@ -13,11 +17,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	SetDrawScreen( DX_SCREEN_BACK ); //描画先を画面裏に
 	SetTransColor(0, 0, 0);	//透過色指定
 	SetMouseDispFlag( false );	//マウスカーソルを表示しない
-
-	#ifdef MEMORY_CHECK
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);  //newをdeleteしていない問題を検出
-	#endif
-
+		
 	myLog("MyLog_Printed", "--------START------------------------------------------------------\n");
 	myLog("MyClassLog", "--------START------------------------------------------------------\n");
 	myLog("--------START------------------------------------------------------\n");
@@ -31,15 +31,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 			}
 		}
 
+	DxLib_End(); // DXライブラリ終了処理
+
 	myLog("MyLog_Printed", "----FINISH-----------------------------------------------------");	
 	myLog("MyClassLog", "----FINISH-----------------------------------------------------");	
 	myLog("----FINISH-----------------------------------------------------");
-
-	DxLib_End(); // DXライブラリ終了処理
-
-	#ifdef MEMORY_CHECK
-		_CrtDumpMemoryLeaks();
-	#endif
 
     return 0;
 }  
