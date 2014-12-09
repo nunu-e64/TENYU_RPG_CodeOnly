@@ -12,7 +12,7 @@ class CBImgBank;
 class CTrickDamageEffect{ //戦闘ダメージエフェクト用のインターフェース
 public: 
 	CTrickDamageEffect(std::string _name){
-		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
+		CONSTRUCTED;
 		Name = _name;
 	}
 	~CTrickDamageEffect(){
@@ -29,7 +29,7 @@ protected:
 class CTrickDamageEffect_BOMB: public CTrickDamageEffect{
 public:
 	CTrickDamageEffect_BOMB(std::string _name, va_list args):CTrickDamageEffect(_name){
-		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
+		CONSTRUCTED;
 		Color = va_arg(args, int);
 		Size = va_arg(args, int);
 		Time = va_arg(args, int);
@@ -47,7 +47,7 @@ private:
 class CTrickDamageEffect_PROTO: public CTrickDamageEffect{
 public:
 	CTrickDamageEffect_PROTO(std::string _name, va_list args):CTrickDamageEffect(_name){
-		myLog("MyClassLog", "%s.Contructed", typeid(*this).name());
+		CONSTRUCTED
 		Size1 = va_arg(args, int);
 		Size2 = va_arg(args, int);
 		Radius = va_arg(args, int);

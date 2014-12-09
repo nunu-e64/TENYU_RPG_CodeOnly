@@ -15,7 +15,7 @@ public:
 		return &EnemyManager;
 	}
 	~CEnemyPlanManager(){
-		myLog("MyClassLog", "%s.Denstructed", typeid(*this).name());
+		DESTRUCTED
 	}
 	
 	int GetTarget(CEnemy* _enemy);

@@ -19,7 +19,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	#endif
 
 	myLog("MyLog_Printed", "--------START------------------------------------------------------\n");
-
 	myLog("MyClassLog", "--------START------------------------------------------------------\n");
 	myLog("--------START------------------------------------------------------\n");
 
@@ -35,7 +34,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	myLog("MyLog_Printed", "----FINISH-----------------------------------------------------");	
 	myLog("MyClassLog", "----FINISH-----------------------------------------------------");	
 	myLog("----FINISH-----------------------------------------------------");
-    DxLib_End(); // DXライブラリ終了処理
+
+	DxLib_End(); // DXライブラリ終了処理
 
 	#ifdef MEMORY_CHECK
 		_CrtDumpMemoryLeaks();

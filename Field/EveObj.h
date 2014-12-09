@@ -7,7 +7,7 @@
 class CEveObj{
 public:
 	CEveObj(unsigned char _datanum=0){
-		CONSTRUCTED
+		//CONSTRUCTED
 		Mapnum = 0;
 		Datanum = _datanum;
 		Visible = false;
@@ -27,12 +27,10 @@ public:
 	}
 	
 	~CEveObj(){
-		DESTRUCTED
+		//DESTRUCTED
 	}
 
 	//変数
-		//int X, Y;	//座標での特定は非推奨
-
 		//MapnumとDatanumの組み合わせで特定できる
 		unsigned int Mapnum;	
 		unsigned char Datanum;	//イベントマップデータ内のバイナリ番号
