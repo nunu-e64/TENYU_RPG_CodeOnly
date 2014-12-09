@@ -37,10 +37,10 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 
 	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む//////// $
-		TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
+		//TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
 		//TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
-		TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
-		TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
+		//TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
+		//TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
 	
 	//Load.cppを通して.rpgの読み込み/////////////////////
 	

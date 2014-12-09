@@ -26,40 +26,33 @@ protected:
 };
 
 
-class CTrickDamageEffect_BOMB: public CTrickDamageEffect{
+class CTrickDamageEffect_BOMB: public CTrickDamageEffect{	//未作成
 public:
-	CTrickDamageEffect_BOMB(std::string _name, va_list args):CTrickDamageEffect(_name){
-		CONSTRUCTED;
-		Color = va_arg(args, int);
-		Size = va_arg(args, int);
-		Time = va_arg(args, int);
-	}
+	CTrickDamageEffect_BOMB(std::string _name, std::vector<std::string>_argList);
 	~CTrickDamageEffect_BOMB(){
 		DESTRUCTED
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:
+	enum{ ARG_NUM=5 };
 	int Color;
 	int Size;
 	int Time;
 };
 
 class CTrickDamageEffect_PROTO: public CTrickDamageEffect{
+	/*螺旋状に8つの光球が集まって、一つの光球となって相手めがけて飛んでいく	*/
 public:
-	CTrickDamageEffect_PROTO(std::string _name, va_list args):CTrickDamageEffect(_name){
-		CONSTRUCTED
-		Size1 = va_arg(args, int);
-		Size2 = va_arg(args, int);
-		Radius = va_arg(args, int);
-	}
+	CTrickDamageEffect_PROTO(std::string _name, std::vector<std::string>_argList);
 	~CTrickDamageEffect_PROTO(){
 		DESTRUCTED
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:
+	enum{ ARG_NUM=3 };
 	int Size1;	//収束光球の大きさ
 	int Size2;	//打ちだされてヒットする光球の大きさ
-	int Radius;
+	int Radius;  //収束光球の初期配置半径（キャラの中心座標からの距離）
 };
 
 

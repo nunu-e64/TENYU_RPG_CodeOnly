@@ -291,6 +291,25 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		}
 		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
 
+//@TrickEffect_Create
+	}else if (mystrcmp(_command,"@TrickEffect_Create")){
+		argnum = 2+10;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
+
+		if (arg[0]==NULL){
+			ErrorDx("Error->@TrickEffect_Create->arg[EffectName]=NULL", __FILE__, __LINE__);
+			goto finish;
+		}else if (arg[1]==NULL){
+			ErrorDx("Error->@TrickEffect_Create('%s')->arg[EFFECT_TYPE]=NULL", __FILE__, __LINE__, arg[0]);
+			goto finish;
+		}
+
+		std::vector <std::string> stringList;
+		for (int i=2; i<argnum && arg[i]!=NULL; i++){
+			stringList.push_back(arg[i]);
+		}
+
+		_trickManager->CreateDamageEffect(arg[1], arg[0], stringList);
+
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
 		argnum = 4;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{

@@ -30,14 +30,13 @@ public:
 
 private:
     std::map <std::string, int> ImgBank;
-		//存在しないキーを渡したときにデフォルトコンストラクタで勝手に作るmapの仕様はやはり使いにくい。継承で自分用にカスタマイズできるならすべし。$
 
 	struct bbg_tag{
 		int chipnum;
 		int gragh;
 	};
 	std::vector <bbg_tag> BattleBackGround[MAP_MAX];
-		//mapで実装すると存在しないキー[chipnum]で検索かけたときに自動生成してどんどんメモリを食ってしまうので、構造体で実装
+		//mapで実装すると存在しないキー[chipnum]で検索かけたときに自動生成してどんどんメモリを食ってしまうので、構造体で実装→find使えばOK。mapに戻そう$
 };
 
 

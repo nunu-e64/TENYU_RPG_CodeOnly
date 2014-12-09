@@ -70,25 +70,28 @@ trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 	//mapでは存在しないキーでアクセスしようとした場合、値をデフォルトコンストラクタで初期化し登録してくれやがる
 }
 
-void CTrickManager::CreateDamageEffect(std::string _typeName, std::string _effectName, ...){
-	va_list args;
-	va_start(args, _effectName);
+void CTrickManager::CreateDamageEffect(std::string _typeName, std::string _effectName, std::vector<std::string>_argList){
+
+	for (unsigned int i=0; i<TrickDamageEffectBank.size(); i++){
+		if (TrickDamageEffectBank[i]->GetName()==_effectName){
+			ErrorDx("Error->CreateDamageEffect->Already Existed Name""%s"":Type""""", _effectName.c_str(), _typeName.c_str());
+			return;
+		}
+	}
 
 	if (_typeName=="BOMB"){
-		TrickDamageEffectBank.push_back(new CTrickDamageEffect_BOMB(_effectName, args));
+		TrickDamageEffectBank.push_back(new CTrickDamageEffect_BOMB(_effectName, _argList));
 		
-	//}else if(_typeName=="SPREAD"){
-
 	}else if(_typeName=="PROTO"){
-		TrickDamageEffectBank.push_back(new CTrickDamageEffect_PROTO(_effectName, args));
-	
+		TrickDamageEffectBank.push_back(new CTrickDamageEffect_PROTO(_effectName, _argList));
+
+	//}else if(_typeName=="SPREAD"){
 	
 	}else{
 		ErrorDx("Error->TrickEffectTypeName does't match any Effects.\n name:%s", _typeName.c_str());
 		
 	}
 	
-	va_end(args);
 }
 
 int CTrickManager::GetTrickDamageEffectIndex(std::string _name){

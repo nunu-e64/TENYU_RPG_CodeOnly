@@ -28,7 +28,7 @@ public:
 
 
 	//ダメージエフェクト関係
-		void CreateDamageEffect(std::string _typeName, std::string _effectName, ...);
+		void CreateDamageEffect(std::string _typeName, std::string _effectName, std::vector<std::string>_argList);
 		int GetTrickDamageEffectIndex(std::string _name);
 		void DrawEffect(int _effectIndex, CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) {
 			if (_effectIndex>=0) TrickDamageEffectBank[_effectIndex]->DrawDamageEffect(_battle, _bimgbank, _attackerR, _targetR);

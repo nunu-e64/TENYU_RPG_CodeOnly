@@ -2,12 +2,60 @@
 #include "TrickDamageEffect.h"
 #include "Battle.h"
 
+CTrickDamageEffect_BOMB::CTrickDamageEffect_BOMB(std::string _name, std::vector<std::string>_argList):CTrickDamageEffect(_name){
+	CONSTRUCTED
+	int numset[ARG_NUM] = {200,200,200, 10, 60};	//ìKìñ
+
+	for (unsigned int i=0; i<_argList.size() && i<ARG_NUM; i++){
+		int num;
+		if(!( mystrtol(_argList[i].c_str(), &num))){
+			ErrorDx("Error->CTriickDamageEffect_BOMB(%s)->Check argument type[%d]", __FILE__, __LINE__, _name.c_str(), i);
+		}else{
+			numset[i] = num;
+		}
+	}
+
+	if (_argList.size() < ARG_NUM){
+		WarningDx("Warning->TrickEffect_'BOMB'('%s')->ArgumentNum is smaller than needed('%d').", _name.c_str(), ARG_NUM);
+	}else if(_argList.size() > ARG_NUM){
+		WarningDx("Warning->TrickEffect_'BOMB'('%s')->ArgumentNum is larger than needed('%d').", _name.c_str(), ARG_NUM);
+	}
+
+	Color = GetColor(numset[0],numset[1],numset[2]);
+	Size = numset[3];
+	Time = numset[4];
+}
 
 void CTrickDamageEffect_BOMB::DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const{
 	//Ç±Ç±Ç…é¿ç€ÇÃÇ†ÇÍÇ±ÇÍÇèëÇ≠
 
 
 }
+
+CTrickDamageEffect_PROTO::CTrickDamageEffect_PROTO(std::string _name, std::vector<std::string>_argList):CTrickDamageEffect(_name){
+	CONSTRUCTED
+	int numset[ARG_NUM] = {10, 15, 60};	//ìKìñ
+
+	for (unsigned int i=0; i<_argList.size() && i<ARG_NUM; i++){
+		int num;
+		if(!( mystrtol(_argList[i].c_str(), &num))){
+			ERRORDX("'%s':Check argument type[%d]", _name.c_str(), i);
+		}else{
+			numset[i] = num;
+		}
+	}
+
+	if (_argList.size() < ARG_NUM){
+		WarningDx("Warning->TrickEffect_'PROTO'('%s')->ArgumentNum is smaller than needed('%d').", _name.c_str(), ARG_NUM);
+	}else if(_argList.size() > ARG_NUM){
+		WarningDx("Warning->TrickEffect_'PROTO'('%s')->ArgumentNum is larger than needed('%d').", _name.c_str(), ARG_NUM);
+	}
+
+	Size1 = numset[0];
+	Size2 = numset[1];
+	Radius = numset[2];
+}
+
 
 void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const{
 	//Ç±Ç±Ç…é¿ç€ÇÃÇ†ÇÍÇ±ÇÍÇèëÇ≠
