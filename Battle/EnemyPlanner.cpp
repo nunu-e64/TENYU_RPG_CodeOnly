@@ -94,7 +94,7 @@ CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<
 		WarningDx("Warning->AI_'PLAYERNUM'('%s')->ArgumentNum is bigger than MAX_PLAYER_NUM", _name.c_str());
 	}
 
-	for (unsigned int i=0; i<MAX_PLAYER_NUM; i++){	//MAX_PLAYER_NUM‚æ‚è‚àargList.size()‚ª‘½‚¢‚Æ‚«‚ÍŒx‚µ‚½‚Ù‚¤‚ª‚¢‚¢‚©‚à
+	for (unsigned int i=0; i<MAX_PLAYER_NUM; i++){
 		if (i < numset.size()){
 			PlanList[i] = numset[i];
 		}else{

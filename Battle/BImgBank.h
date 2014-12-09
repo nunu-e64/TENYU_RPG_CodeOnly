@@ -25,8 +25,8 @@ public:
 	void Init();
 
 	int GetImg(const char* _key);
-	int GetBattleBackGround(int _mapnum, int _chipnum=-1);
 	void SetBattleBackGround(const char* _key,int _mapnum, int _chipnum=-1);
+	int GetBattleBackGround(int _mapnum, int _chipnum=-1);
 
 private:
     std::map <std::string, int> ImgBank;
