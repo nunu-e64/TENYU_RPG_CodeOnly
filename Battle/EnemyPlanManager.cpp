@@ -4,9 +4,7 @@
 
 int CEnemyPlanManager::GetTarget(CEnemy* _enemy){
 
-	int target=-1;
-
-	target = rand()%3;
+	int target = rand()%3;
 	
 	return target;
 }

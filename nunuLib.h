@@ -482,7 +482,11 @@ template<class T>inline T between(const T& min_border, const T& max_border, cons
 {	return max((min_border), min((max_border), (num)));
 }
 inline int mod(int a, int b){	//VB6のように必ず非負のあまりを返す関数。%演算子は負の数を取りうるので不便。
-	return ((b)+((a)%(b)))%(b);
+	if (b!=0) {
+		return ((b)+((a)%(b)))%(b);
+	} else {
+		return a;
+	}
 }
 inline bool BasicLoop(){
 	#ifndef FPS_DISABLE

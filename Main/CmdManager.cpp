@@ -315,7 +315,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
-			for (int i=1; arg[i]!=NULL && i<argnum; i++){
+			for (int i=1; i<argnum && arg[i]!=NULL; i++){
 				if ((tmpTrick = _trickManager->GetTrick(arg[i])) != NULL){
 					trickList.push_back(tmpTrick);
 				}				
@@ -341,7 +341,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
-			for (int i=1; arg[i]!=NULL && i<argnum; i++){
+			for (int i=1; i<argnum && arg[i]!=NULL; i++){
 				if ((tmpTrick = _trickManager->GetTrick(arg[i])) != NULL){
 					trickList.push_back(tmpTrick);
 				}				
@@ -457,7 +457,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			
 			std::vector <std::string> enemyList;
 			
-			for (int i=3; arg[i]!=NULL && i<argnum-1; i++){
+			for (int i=3; i<argnum-1 && arg[i]!=NULL; i++){
 				enemyList.push_back(arg[i]);				
 			}
 			_enemySpeciesManager->AddMapEncountParty(num[0], num[1], num[2], enemyList);

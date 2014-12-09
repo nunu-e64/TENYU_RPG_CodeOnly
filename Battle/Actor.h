@@ -31,7 +31,7 @@ public:
 		void SetRect(int _cx, int _cy);
 		//void SetImg(int _img); //Žg‚Á‚Ä‚È‚¢
 		bool SetSystemImg(CBImgBank* _bimgbank);
-		void AddTrick(trick_tag const* _trick);
+		//void AddTrick(trick_tag const* _trick);	//Žg‚Á‚Ä‚È‚¢
 		//void ClearTrick(){TrickList.clear();} //Žg‚Á‚Ä‚È‚¢
 
 	bool Main();

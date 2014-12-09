@@ -88,7 +88,7 @@ void CEnemySpeciesManager::Clear(){
 	EnemyBank.clear();
 		
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
-	while(MapEncount.size()>0 && it!=MapEncount.end()){
+	while(!MapEncount.empty() && it!=MapEncount.end()){
 		(*it).second.clear();
 		++it;
 	}

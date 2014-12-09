@@ -49,7 +49,6 @@ void CMenu::Add(const char _parentlabel[32], const char _newlabel[32]){
 
 void CMenu::Clear(CMenuNode* _top){
 	CMenuNode* tmp = _top;
-	CMenuNode* deletenode = NULL;
 
 	if (tmp==NULL) return;
 	if (tmp->prev!=NULL) {
@@ -61,7 +60,7 @@ void CMenu::Clear(CMenuNode* _top){
 
 	while (tmp != NULL){
 		if (tmp->child!=NULL) Clear(tmp->child);
-		deletenode = tmp;
+		CMenuNode* deletenode = tmp;
 		tmp = tmp->next;
 		if (tmp!=NULL) tmp->prev = NULL;
 		delete deletenode;

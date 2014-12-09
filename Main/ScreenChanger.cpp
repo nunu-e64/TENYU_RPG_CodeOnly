@@ -39,7 +39,6 @@ void CScreenChanger::Fade(const int _pGraph, const int _nGraph, int _count, int 
 
 void CScreenChanger::Bokashi(const int _pGraph, const int _nGraph, int _count, int _option){
 	int dGraph = MakeScreen( WINDOW_WIDTH, WINDOW_HEIGHT, FALSE ) ;
-	int dGraph2 = MakeScreen( WINDOW_WIDTH, WINDOW_HEIGHT, FALSE ) ;
 	int i = 0;
 	
 	if (_count%2==1) ++_count;
@@ -70,10 +69,9 @@ void CScreenChanger::Bokashi(const int _pGraph, const int _nGraph, int _count, i
 }
 
 void CScreenChanger::GuruGuru(const int _pGraph, const int _nGraph, int _count, int _option){
-	int i = 0;
 	
-	int column = 8; //WINDOW_WIDTH/80;	
-	int row = 6;	// WINDOW_HEIGHT/80;
+	//int column = 8; //WINDOW_WIDTH/80;	
+	//int row = 6;	// WINDOW_HEIGHT/80;
 	int size = 80;
 
 	CRect box[6*8];
@@ -116,7 +114,7 @@ void CScreenChanger::GuruGuru(const int _pGraph, const int _nGraph, int _count, 
 		}
 
 
-	int k=0;
+	int i=0;
 	do{
 		DrawGraph(0,0,_pGraph,false);
 

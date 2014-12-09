@@ -347,7 +347,6 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 		break;
 	}
 
-	int i=0;
 	while(BasicLoop()){
 		if( !TextBox->Main(&B_CmdList, FlagSet_p)) break;
 		B_CmdManager.Main(&B_CmdList, this, TextBox);

@@ -198,11 +198,11 @@ bool CEveManager::GetPos(const int _mapnum, const int _datanum, int* _x, int*  _
 
 bool CEveManager::GetText(char** &_text, int &_count, int _mapnum, int _x, int _y, int _mydir, int _kind){
 	CEveObj *eveobj_p = &EveObj_dammy;
-	unsigned int i;
 
 	if (GetEveObj(&eveobj_p, _mapnum, _x, _y, _kind) && eveobj_p->Visible && !eveobj_p->Text.empty()){
-		
+		unsigned int i;
 		_text = new char*[eveobj_p->Text.size()+1];
+
 		for (i=0; i < eveobj_p->Text.size(); i++){
 			_text[i] = new char[strlen(eveobj_p->Text[i].text)+1];
 			mystrcpy(_text[i], eveobj_p->Text[i].text);
@@ -487,7 +487,7 @@ bool CEveManager::GetEveObj(CEveObj** _eveobj_p, const char* _name, const int _k
 bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char* _eventtext, int _count){
 	char *cntx, *cntx2;		//strtok_s—p‚ÌŽG—p
 	char* string_copy = new char[strlen(_eventtext)+1];
-	char *eventname, *chtimes, *args, *p;
+	char *eventname, *chtimes, *args;
 	std::vector <char256> arg;
 	long int times = 1;
 	eventset_tag *originalevent_p = &OriginalEvent_dammy;
@@ -501,7 +501,7 @@ bool CEveManager::CopyOriginalEvent(std::vector<char256> *vectext_p, const char*
 		args++;
 		mystrsmt(args, " )]");
 		char256 newarg;
-		p = strtok_s(args, CMD_SEPARATOR, &cntx2);
+		char* p = strtok_s(args, CMD_SEPARATOR, &cntx2);
 		while(p!=NULL){
 			strcpy_s(newarg.text, p);
 			arg.push_back(newarg);

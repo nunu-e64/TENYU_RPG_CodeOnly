@@ -106,6 +106,7 @@ bool mystrcmp(const char *String, const char Option, const int arg_num, ...){
 	
 	for (int i=0; i<arg_num; i++){
 		if (mystrcmp(String, va_arg(args, char*), Option)){
+			va_end(args);
 			return true;
 		}
 	}
@@ -220,7 +221,7 @@ bool mystrcat(char *string, const char* source){
 	
 	for (unsigned int i=0; i<strlen(source)+1; i++){
 		*p = source[i];
-		*p++;
+		++p;
 	}
 	
 	return true;
@@ -366,12 +367,14 @@ int choose(const int target, ...){
 	
 	if (target<=0){
 		ErrorDx("Error->arg[target] should >=1: target=%d", __FILE__, __LINE__, target);
-		return va_arg(args, int);
+		choice = va_arg(args, int);
+
+	} else {
+		for (int i=1; i<=target; i++){
+			choice = va_arg(args, int);		//target=1の時、一個目を返す（Not target=0）
+		}
 	}
 
-	for (int i=1; i<=target; i++){
-		choice = va_arg(args, int);		//target=1の時、一個目を返す（Not target=0）
-	}
 	va_end(args);
 	return choice;
 }
@@ -394,14 +397,12 @@ bool nunuLibKey::CKeyManager::CheckDown(const int KEY_CODE){		//押した瞬間だけtr
 		case KEY_INPUT_OK:  {
 			bool tmp0 = CheckDown(KEY_INPUT_RETURN);
 			bool tmp1 = CheckDown(KEY_INPUT_Z);
-			return (tmp0||tmp1);			
-			break;
+			return (tmp0||tmp1);	
 		}
 		case KEY_INPUT_CANCEL:  {
 			bool tmp0 = CheckDown(KEY_INPUT_BACK);
 			bool tmp1 = CheckDown(KEY_INPUT_X);
-			return (tmp0||tmp1);			
-			break;
+			return (tmp0||tmp1);
 		}
 		default:{
 			break;

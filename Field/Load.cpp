@@ -203,7 +203,7 @@ void CLoad::Punctuate(CEveManager* _evemanager, const char* _command, int _kind)
 	char combegin[256], comend[256];
 		strcpy_s(combegin, _command);	strcat_s(combegin, "_BEGIN");
 		strcpy_s(comend, _command);		strcat_s(comend, "_END");
-	int i = 0;	int j = 0;
+	int j = 0;
 	
 	for(int i = 0; i < FileLineNum; i++){
 		if (mystrcmp(LoadText[i], combegin, 'l')){

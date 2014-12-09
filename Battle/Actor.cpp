@@ -53,9 +53,11 @@ bool CActor::SetSystemImg(CBImgBank* _bimgbank){
 	return true;
 }
 
+/*
 void CActor::AddTrick(trick_tag const* _trick){
 	TrickList.push_back(_trick);
 }
+*/
 
 bool CActor::Main(){
 

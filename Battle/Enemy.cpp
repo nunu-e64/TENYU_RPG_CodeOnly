@@ -70,7 +70,7 @@ bool CEnemy::Action(){
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
 		Target = AI->GetTarget(this);  //rand()%PLAYER_NUM;
-		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？
 		CmdList->Add(tmpcmd);
 		break;
 	//case NowTrick->ALL:$

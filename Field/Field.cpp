@@ -318,8 +318,7 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 
 		if (_fade==1)  Alpha = between(0, 255, (int)(alpha*(double)abs(d)/MAP_CHIP_SIZE));
 		if (_fade==-1) Alpha = between(0, 255, (int)(alpha*(1-(double)abs(d)/MAP_CHIP_SIZE)));
-
-	};
+	}
 
 	if (_fade==-1) {
 		Visible = false;
@@ -538,7 +537,6 @@ finish:
 
 bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデータを各変数に振り分けて代入
 	CCmdList PlayDataCmdList;
-	char bufcmd[256];
 
 	if (_dnum<-1 || _dnum>=PLAYDATA_NUM) {
 		ErrorDx("GameStartError->dnum:%d", __FILE__, __LINE__, _dnum);
@@ -546,7 +544,7 @@ bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデー
 	}
 
 	if (_dnum!=-1 && PlayData_p[_dnum].Exist){
-		
+		char bufcmd[256];	
 		sprintf_s(bufcmd, "@Position_Set(me, %d,%d,%d,%s)", PlayData_p[_dnum].NowMap, PlayData_p[_dnum].X, PlayData_p[_dnum].Y, PlayData_p[_dnum].PlayerPicKey);		PlayDataCmdList.Add(bufcmd);
 		sprintf_s(bufcmd, "@Dir_Set(me,%d)", PlayData_p[_dnum].Dir);																						PlayDataCmdList.Add(bufcmd);
 		FieldCmdManager.Main(&PlayDataCmdList, this, &Map, TextBox, &EveManager);
@@ -595,9 +593,9 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 		}
 	
 	//セーブフォルダをリネーム又は新規作成（_datanameが空文字列のときはセーブ番号だけを頼りに上書き保存する）
-		char olddirname[256];
 		char newdirname[256];
 		if (strlen(_dataname) > 0){
+			char olddirname[256];
 			sprintf_s(olddirname, "%s/%s", DIR_SAVE, PlayData_p[_dnum].DataName);
 			sprintf_s(newdirname, "%s/%s", DIR_SAVE, _dataname); 
 

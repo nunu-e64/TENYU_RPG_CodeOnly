@@ -14,16 +14,23 @@ public:
 		strcpy_s(Name, "");
 		Count = 0;
 		Dir = DOWN;
+		Kind = KIND_NUM;
 
 		for (int i=0; i<ARRAY_SIZE(Img); i++){
 			Img[i]=-1;
 		}
+		strcpy_s(PicKey, "");
+
 		Step=0;
 		Dx=0;
 		Dy=0;
 		Alpha=255;
 
 		Effect=NONE;
+		for(int i=0; i<ARRAY_SIZE(EffectNum); i++){
+			EffectNum[i] = -1;
+			EffectNumCmd[i] = -1;
+		}
 	}
 	
 	~CEveObj(){
