@@ -253,6 +253,13 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	do{		
 		if( !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
 
+			if ((result=ResultCheck())!=-1){
+				B_CmdManager.Main(&B_CmdList, this, TextBox);
+				Draw();
+				return result;
+			}
+
+
 			if (ActionQueue.empty()){	//行動待機リストが空かチェック
 			
 				for (int i=0; i<ACTOR_NUM; i++){
@@ -265,12 +272,6 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 				}else{
 					//行動待機リスト戦闘のキャラの行動が完了しなかったときにはなにもしない
 				}
-			}
-
-			if ((result=ResultCheck())!=-1){
-				B_CmdManager.Main(&B_CmdList, this, TextBox);
-				Draw();
-				return result;
 			}
 
 		}
@@ -428,44 +429,50 @@ int CBattle::ResultCheck(){
 	return -1;
 }
 
-void CBattle::Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick){
-	int attacker_actorindex = between(0, ACTOR_NUM-1, _attacker_actorindex); 
-	int target_actorindex   = between(0, ACTOR_NUM-1, _target_actorindex); 
+void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_tag const* _trick){
+	int attacker_actor_index = between(0, ACTOR_NUM-1, _attacker_actor_index); 
+	int target_actor_index   = between(0, ACTOR_NUM-1, _target_actor_index); 
 
 
 	//技の種類に応じたエフェクト発動
-		TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actorindex]->GetRect(), Actor[target_actorindex]->GetRect());
+		TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actor_index]->GetRect(), Actor[target_actor_index]->GetRect());
 
 	//間の調整
 		int timecount=0;
 		do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
 	
 	//実際のダメージ計算
-	int damage = Actor[target_actorindex]->Damage(Actor[attacker_actorindex], _trick);
+	int damage = Actor[target_actor_index]->Damage(Actor[attacker_actor_index], _trick);
 
 	//ダメージ値表示演出//////////////////////////////////////////////////////////////
 	timecount = 0;
-	bool oldVisible = Actor[target_actorindex]->GetVisible();
-	CVector charPos(Actor[target_actorindex]->GetRect().Center().x, Actor[target_actorindex]->GetRect().Top);
+	bool oldVisible = Actor[target_actor_index]->GetVisible();
+	CVector charPos(Actor[target_actor_index]->GetRect().Center().x, Actor[target_actor_index]->GetRect().Top);
 	do{
 		Draw();
 		DrawCenterString((int)(charPos.x), (int)(charPos.y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage); 
 		
-		if (timecount%6==0) Actor[target_actorindex]->SetVisible(oldVisible&&true);
-		if (timecount%6==3) Actor[target_actorindex]->SetVisible(oldVisible&&false);
+		if (timecount%6==0) Actor[target_actor_index]->SetVisible(oldVisible&&true);
+		if (timecount%6==3) Actor[target_actor_index]->SetVisible(oldVisible&&false);
 
 		if (++timecount>40){
-			Actor[target_actorindex]->SetVisible(oldVisible);
+			Actor[target_actor_index]->SetVisible(oldVisible);
 			break;
 		}
 	}while(BasicLoop());
 	////////////////////////////////////////////////////////////////////////////
 
+	//ログウィンドウ作成までのつなぎ$
+	char tmpmessage[256];
+	sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attacker_actor_index]->GetName().c_str(), _trick->Name, Actor[target_actor_index]->GetName().c_str(), damage);
+	TextBox->AddStock(tmpmessage);
+	TextBox->NextPage(&B_CmdList, FlagSet_p);
+
 
 	//HPバー減少を待つ///////////////
 	while(true){
 		Draw();
-		if (!BasicLoop() || Actor[target_actorindex]->DeadCheck()) break;
+		if (!BasicLoop() || Actor[target_actor_index]->DeadCheck()) break;
 	}
 	/////////////////////////////////
 }

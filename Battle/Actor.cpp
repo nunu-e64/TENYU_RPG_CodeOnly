@@ -123,7 +123,12 @@ bool CActor::DeadCheck(){	//死亡判定
 		//Hpバー減少中
 		return false;
 	}else{
-		if (Hp==0) Alive = false;
+		if (Hp==0) {
+			Alive = false;
+			char tmp[256];
+			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
+			(*B_TextBox_pp)->AddStock(tmp);
+		}
 		return true;
 	}
 }

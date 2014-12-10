@@ -58,7 +58,7 @@ public:
 	
 
 	//戦闘用
-		void Damage(int _attacker_actorindex, int _target_actorindex, trick_tag const* _trick);
+		void Damage(int _attacker_actor_index, int _target_actor_index, trick_tag const* _trick);
 
 	//ターゲット選択マーカー
 		class CTargetMarker{
