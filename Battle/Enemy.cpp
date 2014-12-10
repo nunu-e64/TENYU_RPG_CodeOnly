@@ -38,12 +38,12 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
-	if (AI==NULL){
-		WarningDx("Warning->%s has no AI", Name.c_str());
-		return true;
-	}
+	//if (AI==NULL){
+	//	WarningDx("Warning->%s has no AI", Name.c_str());
+	//	return true;
+	//}
 
-	int action_num = AI->GetPlan(this);
+	int action_num = AI.GetPlan(this);
 
 	if (action_num>=0 && action_num<(int)TrickList.size()){
 		NowTrick = TrickList[action_num];
@@ -69,7 +69,7 @@ bool CEnemy::Action(){
 	char tmpcmd[256];
 	switch(NowTrick->TargetType){
 	case NowTrick->SINGLE:
-		Target = AI->GetTarget(this);  //rand()%PLAYER_NUM;
+		Target = AI.GetTarget(this); 
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？
 		CmdList->Add(tmpcmd);
 		break;

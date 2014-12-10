@@ -28,9 +28,6 @@ public:
 
 	std::string GetName() const{return EnemyName;}
 	virtual int GetPlan(const CEnemy* _enemy)=0;
-	int GetTarget(const CEnemy* _enemy){
-		return rand()%PLAYER_NUM;
-	}
 
 protected:
 	int CalcRandomPlan(int _randomPlan_key);

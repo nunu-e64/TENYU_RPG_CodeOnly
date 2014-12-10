@@ -3,15 +3,14 @@
 #define SPECIES_H							////
 ////////////////////////////////////////////////
 
-#include "EnemyPlanner.h"
 
 class CSpecies{
 public:
 	CSpecies(){
 		CONSTRUCTED;
-		Name="NULL_NAME";
-		Lv=Img=Atk=Def=Spd=-1;
-		Hp=MaxHp = 1;
+		Name = "NULL_NAME";
+		Lv = Img = Atk = Def = Spd = -1;
+		Hp = MaxHp = 1;
 	}
 	~CSpecies(){DESTRUCTED;}
 
@@ -55,6 +54,8 @@ private:
 };
 
 
+#include "EnemyAI.h"
+
 class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
 public:
@@ -63,15 +64,14 @@ public:
 		*this = obj;	//これが必須なのが不思議。何故かデフォルトコピーコンストラクタが仕事してくれない。
 	}
 	CEnemySpecies(){
-		CONSTRUCTED;	
-		AI = NULL;
+		CONSTRUCTED;
 	}
 	~CEnemySpecies(){
 		DESTRUCTED;	
 	}
 
 protected:
-	CEnemyPlanner* AI;
+	CEnemyAI AI;
 
 private:
 	int GoldGene;

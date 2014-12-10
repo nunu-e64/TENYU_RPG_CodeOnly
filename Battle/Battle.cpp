@@ -1,7 +1,10 @@
 #include "../Define.h"
 #include "Battle.h"
+#include "PlayerSpeciesManager.h"
+#include "EnemySpeciesManager.h"
 #include "EnemyPlanManager.h"
 #include "BattleCalculator.h"
+
 
 #include "../Field/Load.h"
 
@@ -432,6 +435,18 @@ int CBattle::ResultCheck(){
 void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_tag const* _trick){
 	int attacker_actor_index = between(0, ACTOR_NUM-1, _attacker_actor_index); 
 	int target_actor_index   = between(0, ACTOR_NUM-1, _target_actor_index); 
+
+	if (!Actor[target_actor_index]->GetAlive()) {	//既に攻撃対象が死亡している場合
+		char tmp[3][256];
+		sprintf_s(tmp[0], "%sの%s！", Actor[attacker_actor_index]->GetName().c_str(), _trick->Name);
+		mystrcpy(tmp[1], "@NextPage");
+		mystrcpy(tmp[2], "しかし攻撃は外れた！");
+		TextBox->AddStock(tmp[0]);
+		TextBox->AddStock(tmp[1]);
+		TextBox->AddStock(tmp[2]);
+		TextBox->NextPage(&B_CmdList, FlagSet_p);	
+		return;
+	}
 
 
 	//技の種類に応じたエフェクト発動

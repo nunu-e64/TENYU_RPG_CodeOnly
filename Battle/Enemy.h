@@ -20,8 +20,8 @@ public:
 		DESTRUCTED;
 	}
 
-	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum)const{
-		AI->BattleReady(_actorList, _playerNum, _enemyNum);
+	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum) {
+		AI.BattleReady(_actorList, _playerNum, _enemyNum);
 	}
 
 	void Draw(int _dx=0, int _dy=0);

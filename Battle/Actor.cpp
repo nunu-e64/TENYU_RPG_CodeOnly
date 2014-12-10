@@ -1,9 +1,8 @@
 #include "../Define.h"
 #include "Actor.h"
-#include "Battle.h"
+#include "BImgBank.h"
 #include "../Main/TextBox.h"
 //#include "../Main/TextWrap.h"
-
 
 
 void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist){

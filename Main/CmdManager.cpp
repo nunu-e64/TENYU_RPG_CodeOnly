@@ -9,6 +9,8 @@
 #include "../Field/EveManager.h"
 
 #include "../Battle/Battle.h"
+#include "../Battle/PlayerSpeciesManager.h"
+#include "../Battle/EnemySpeciesManager.h"
 
 void CFirstSetCmdManager::Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CEveManager* _evemanager){
 

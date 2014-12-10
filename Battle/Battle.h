@@ -7,7 +7,6 @@
 #include "TrickManager.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "SpeciesManager.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
@@ -22,6 +21,9 @@
 #include <string>
 #include <queue>
 #include <map>
+
+class PlayerSpeciesManager;
+class EnemySpeciesManager;
 
 
 class CBattle : public CWorldManager{
