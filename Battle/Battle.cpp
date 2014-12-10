@@ -16,6 +16,8 @@ CBattle::CBattle(){
 	TextBox = &TextBox1;
 	Img_BattleBackGround = NULL;
 
+	PlayerSpeciesManager = CPlayerSpeciesManager::GetInstance();
+	EnemySpeciesManager = CEnemySpeciesManager::GetInstance();
 	TrickManager = CTrickManager::GetInstance();
 
 	WinCommand[0] = '\0';
@@ -24,8 +26,8 @@ CBattle::CBattle(){
 
 
 bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
-	PlayerSpeciesManager.Clear();
-	EnemySpeciesManager.Clear();
+	PlayerSpeciesManager->Clear();
+	EnemySpeciesManager->Clear();
 	BImgBank.Init();
 	TrickManager->Clear();
 	
@@ -51,7 +53,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			
 			if (bfsLoad.LoadAddText(FILE_B_SYSTEM)){			
 				bfsLoad.CommandCopy(&bfsCmdList);
-				bfsCmdManager.Main(&bfsCmdList, &BImgBank, &PlayerSpeciesManager, &EnemySpeciesManager, TrickManager);
+				bfsCmdManager.Main(&bfsCmdList, &BImgBank, PlayerSpeciesManager, EnemySpeciesManager, TrickManager);
 			}else{
 				return false;
 			}
@@ -63,7 +65,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 	
 	//パーティリストの初期化///////
-		PlayerSpeciesManager.SetMemberList();
+		PlayerSpeciesManager->SetMemberList();
 	//////////////////////////////////
 
 
@@ -134,7 +136,7 @@ void CBattle::BattleSetting(const char* _wincommand, const char* _losecommand){
 bool CBattle::CheckEncount(int _mapnum, int _chipnum){
 	std::vector <CEnemySpecies*> tmpparty;
 
-	if (EnemySpeciesManager.CheckEncount(_mapnum, _chipnum, tmpparty)){
+	if (EnemySpeciesManager->CheckEncount(_mapnum, _chipnum, tmpparty)){
 		SetEnemy(tmpparty);
 		SetBackGround(_mapnum, _chipnum);
 		return true;
@@ -150,14 +152,14 @@ void CBattle::SetBackGround(int _mapnum, int _chipnum){
 	Img_BattleBackGround = BImgBank.GetBattleBackGround(_mapnum, _chipnum);
 }
 void CBattle::SetPlayer(){	//隊列に基づいて選出
-	PLAYER_NUM = min(PlayerSpeciesManager.GetMemberListSize(), MAX_PLAYER_NUM);
+	PLAYER_NUM = min(PlayerSpeciesManager->GetMemberListSize(), MAX_PLAYER_NUM);
 	if (PLAYER_NUM==0){
 		ErrorDx("Error->Battle::SetPlayer->PLAYER_NUM=0.  SetPartyBattleMember!", __FILE__, __LINE__);
 		return;
 	}
 	Player = new CPlayer[PLAYER_NUM];
 	for (int i=0; i<PLAYER_NUM; i++){
-		Player[i] = CPlayer(*(PlayerSpeciesManager.GetSpecies(i)));
+		Player[i] = CPlayer(*(PlayerSpeciesManager->GetSpecies(i)));
 	}
 }
 void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
@@ -171,7 +173,7 @@ void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベン
 		PLAYER_NUM = _playerNum;
 		Player = new CPlayer[PLAYER_NUM];
 		for (int i=0; i<PLAYER_NUM; i++){
-			Player[i] = CPlayer(*(PlayerSpeciesManager.GetSpecies(va_arg(args, char*))));
+			Player[i] = CPlayer(*(PlayerSpeciesManager->GetSpecies(va_arg(args, char*))));
 		}
 		va_end(args);
 	}
@@ -196,7 +198,7 @@ void CBattle::SetEnemy(std::vector<std::string> _enemyList){
 	ENEMY_NUM = _enemyList.size();
 	Enemy = new CEnemy[ENEMY_NUM];
 	for (int i=0; i<ENEMY_NUM; i++){
-		Enemy[i] = CEnemy(*(EnemySpeciesManager.GetSpecies(_enemyList[i].c_str())));
+		Enemy[i] = CEnemy(*(EnemySpeciesManager->GetSpecies(_enemyList[i].c_str())));
 	}
 }
 void CBattle::SetEnemy(std::vector<CEnemySpecies*> _enemyParty){
@@ -301,11 +303,11 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 		//金と経験値計算
 			int gold = BattleCalc::CalcGold(1, 2);
 			int exp = BattleCalc::CalcExp(1, 2);
-			PlayerSpeciesManager.AddGold(gold);
-			//PlayerSpeciesManager.AddExp(exp);
+			PlayerSpeciesManager->AddGold(gold);
+			//PlayerSpeciesManager->AddExp(exp);
 		
 		//Player元データに保存
-			PlayerSpeciesManager.CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
+			PlayerSpeciesManager->CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
 
 		//リザルト画面出力
 			char resultMessage[2][256];

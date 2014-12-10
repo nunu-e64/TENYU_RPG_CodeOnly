@@ -125,8 +125,8 @@ private:
 			
 		//重要な所持インスタンス
 			CBImgBank BImgBank;
-			CPlayerSpeciesManager PlayerSpeciesManager;
-			CEnemySpeciesManager EnemySpeciesManager;
+			CPlayerSpeciesManager* PlayerSpeciesManager;
+			CEnemySpeciesManager* EnemySpeciesManager;
 			CTrickManager* TrickManager;	//singleton使う関係上ポインタで保持
 			std::queue <CActor*> ActionQueue;	//行動待機リスト
 
