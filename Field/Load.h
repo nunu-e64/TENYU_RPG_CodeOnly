@@ -28,7 +28,7 @@ public:
 
 private:
 	//定数
-		static const int TEXT_SIZE = 1000;
+		enum{ TEXT_SIZE = 1000};
 	
 	//メンバ変数
 		char LoadText[TEXT_SIZE][256];		//近いうちに別のクラスに持たせた方がいいかも（コマンド判定系など）←当分はこのままでいい

@@ -5,7 +5,6 @@
 ///ƒƒ“ƒo•Ï”‚É‚·‚é‚ÆƒoƒO‚é////////////////
 static CTextBox TextBox1;
 static CTextWrap TextWrap1;
-//static CBattle Battle;
 ///////////////////////////////////////////
 
 CField::CField(){
