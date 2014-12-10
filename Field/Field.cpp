@@ -2,11 +2,6 @@
 #include "Field.h"
 #include "Load.h"
 
-///ƒƒ“ƒo•Ï”‚É‚·‚é‚ÆƒoƒO‚é////////////////
-static CTextBox TextBox1;
-static CTextWrap TextWrap1;
-///////////////////////////////////////////
-
 CField::CField(){
 	CONSTRUCTED;
 	Battle = CBattle::GetInstance();
