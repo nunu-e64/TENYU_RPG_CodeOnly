@@ -12,8 +12,8 @@ class CTrickManager{
 public:
 
 	static CTrickManager* GetInstance(){
-		static CTrickManager TrickManager;
-		return &TrickManager;
+		static CTrickManager instance;
+		return &instance;
 	}
 
 	~CTrickManager(){
@@ -37,13 +37,16 @@ public:
 
 private:
 	std::map <char256, trick_tag> TrickBank;
+	bool TrickBankLock;
+
 	trick_tag Trick_dammy;
 
 	std::vector <const CTrickDamageEffect*> TrickDamageEffectBank;		
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)////////////////////////////////
 		CTrickManager(){
-			CONSTRUCTED;	
+			CONSTRUCTED;
+			TrickBankLock = false;
 		}
 		CTrickManager(const CTrickManager& hoge);
 		CTrickManager& operator=(const CTrickManager& hoge);

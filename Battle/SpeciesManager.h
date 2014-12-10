@@ -12,15 +12,15 @@ class CPlayer;
 
 class CPlayerSpeciesManager{
 public:
-	CPlayerSpeciesManager(){
-		CONSTRUCTED;	
-		Gold = 0;
+	static CPlayerSpeciesManager* GetInstance(){
+		static CPlayerSpeciesManager instance;
+		return &instance;
 	}
 	~CPlayerSpeciesManager(){
 		DESTRUCTED;		
 	}
 
-	void Clear(){Gold = 0; PlayerBank.clear(); MemberList.clear();}
+	void Clear();
 
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
@@ -35,31 +35,37 @@ public:
 	void CopyValue(int PLAYER_NUM, CPlayer* _player); 
 
 private:
+	bool PlayerBankLock;
 	std::map <std::string, CPlayerSpecies> PlayerBank;
 	CPlayerSpecies Dammy_Player;
 
 	int Gold;	//所持金
 	std::vector <CPlayerSpecies*> MemberList;		//プレイヤーリスト。0~MAX_PLAYER_NUM-1	が戦闘に出る
 
+	//単一性を保証(Singleton)//////////////////////////////////////////
+		CPlayerSpeciesManager(){
+			CONSTRUCTED;
+			PlayerBankLock = false;
+			Gold = 0;
+		}
+		CPlayerSpeciesManager(const CPlayerSpeciesManager& hoge);
+		CPlayerSpeciesManager& operator=(const CPlayerSpeciesManager& hoge);
+	//////////////////////////////////////////////////////////////////
+
 };
 
 
 class CEnemySpeciesManager{
 public:
-/*	static CEnemyPlanManager* GetInstance(){
-		static CEnemyPlanManager EnemyManager;
-		return &EnemyManager;
-	}*/
-
-	CEnemySpeciesManager(){
-		CONSTRUCTED;	
-		EnemyBankLock = false;	//書き換え可能
-		EnemyPlannerBankLock = false;	
+	static CEnemySpeciesManager* GetInstance(){
+		static CEnemySpeciesManager instance;
+		return &instance;
 	}
 	~CEnemySpeciesManager(){
 		DESTRUCTED;			
 		Clear();
 	}
+
 	void Clear();
 
 
@@ -77,8 +83,7 @@ public:
 	bool CheckEncount(int _mapnum, int _chipnum, std::vector<CEnemySpecies*> &_party_p);
 
 private:
-	bool EnemyBankLock;		//金庫番。vectorからアドレスをコピーしたあとに要素を変化させることの無いように監視
-	bool EnemyPlannerBankLock;		//金庫番。
+	bool EnemyBankLock;		//金庫番。vectorの要素のアドレスをコピーしたあとにvectorの要素を変化させる（＝アドレスが変わるかもしれない）ことの無いように監視
 	std::map <std::string, CEnemySpecies> EnemyBank;
 	std::vector<const CEnemyPlanner* const> EnemyPlannerBank; 
 	struct encount_tag{
@@ -95,6 +100,14 @@ private:
 	CEnemySpecies Dammy_Enemy;
 	CEnemyPlanner_DAMMY Dammy_AI;
 
+	//単一性を保証(Singleton)//////////////////////////////////////////
+		CEnemySpeciesManager(){
+			CONSTRUCTED;
+			EnemyBankLock = false;
+		}
+		CEnemySpeciesManager(const CEnemySpeciesManager& hoge);
+		CEnemySpeciesManager& operator=(const CEnemySpeciesManager& hoge);
+	//////////////////////////////////////////////////////////////////
 };
 
 

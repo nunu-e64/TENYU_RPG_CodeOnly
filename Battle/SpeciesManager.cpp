@@ -3,13 +3,31 @@
 #include "Player.h"
 
 
+void CPlayerSpeciesManager::Clear(){
+	Gold = 0; 
+	PlayerBank.clear(); 
+	PlayerBankLock = false;
+	MemberList.clear();
+
+}
+
 bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
 	CPlayerSpecies newPlayer;
 	newPlayer.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newPlayer.Img = _img;
-	PlayerBank.insert( std::map<std::string, CPlayerSpecies>::value_type( _name, newPlayer) );
 
-	return true;
+	if (PlayerBankLock) {
+		WARNINGDX("'%s':PlayerBank is Locked!", _name);
+		return false;
+	}
+
+	if (PlayerBank.find(_name)==PlayerBank.end()){
+		PlayerBank.insert( std::map<std::string, CPlayerSpecies>::value_type( _name, newPlayer) );
+		return true;
+	}else{
+		ErrorDx("Error->Already existed PlayerName:%s", _name);
+		return false;
+	}
 }
 
 bool CPlayerSpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
@@ -36,6 +54,7 @@ bool CPlayerSpeciesManager::SetMemberList(int _index, const char* _name){
 bool CPlayerSpeciesManager::SetMemberList(){	//ƒp[ƒeƒBƒƒ“ƒo[ƒŠƒXƒg‚Ì‰Šú‰»Bí“¬‚Éo‚È‚¢‚Å‚ ‚ë‚¤ƒƒ“ƒo[‚É‚à”Ô†‚ÍU‚Á‚Ä‚¨‚­
 	MemberList.clear();
 	std::map<std::string, CPlayerSpecies>::iterator it=PlayerBank.begin();
+	if (it!=PlayerBank.end()) PlayerBankLock = true;
 	while( it != PlayerBank.end()){
 		MemberList.push_back(&(*it).second);
 		++it;
@@ -45,6 +64,7 @@ bool CPlayerSpeciesManager::SetMemberList(){	//ƒp[ƒeƒBƒƒ“ƒo[ƒŠƒXƒg‚Ì‰Šú‰»B
 
 CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(const char* _name){
 	if (PlayerBank.find(_name)!=PlayerBank.end()){
+		PlayerBankLock = true;	//ˆÈŒãPlayerBank‚Ì—v‘fƒAƒhƒŒƒX‚ª•Ï‚í‚ç‚È‚¢‚æ‚¤‚É—v‘f‚Ì’Ç‰Á‚ğ‹Ö‚¶‚é
 		return &PlayerBank[_name];
 	}else{
 		ErrorDx("Error->PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
@@ -56,8 +76,10 @@ CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(int _index){
 		ErrorDx("Error->MemberList size error:%d", _index);
 		return &Dammy_Player;
 	}else{
+		PlayerBankLock = true;
 		return MemberList[_index];
 	}
+
 }
 
 
@@ -86,6 +108,7 @@ void CEnemySpeciesManager::Clear(){
 	}
 
 	EnemyBank.clear();
+	EnemyBankLock = false;
 		
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
 	while(!MapEncount.empty() && it!=MapEncount.end()){
@@ -181,6 +204,7 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 
 CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){	
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
+		EnemyBankLock = true;
 		return &EnemyBank[_name];
 	}else{
 		ErrorDx("EnemySpeciesManager->GetEnemySpecies->NotFound:%s", __FILE__, __LINE__, _name);
