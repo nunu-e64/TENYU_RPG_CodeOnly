@@ -9,8 +9,7 @@
 class CMain{	//Singletonパターンを使い単独存在を保証
 public:
     // 唯一のアクセス経路
-    static CMain* GetInstance()
-    {
+    static CMain* GetInstance() {
     	static CMain instance;  // 唯一のインスタンス（静的メンバ関数･･･インスタンス生成前から存在しておりCMain::GetInstanceの形でどこからでも呼び出せる）
     	return &instance;
     }

@@ -20,9 +20,7 @@
 
 class CField : public CWorldManager{
 public:
-	CField(){
-		CONSTRUCTED;	
-	}
+	CField();
 	~CField();
 	
 	bool Init(playdata_tag* _playdata_p, const int _dnum);
@@ -99,6 +97,8 @@ private:
 		CFirstSetCmdManager FirstSetCmdManager;
 		CCmdList CmdList;
 		CEveManager EveManager;
+
+		CBattle* Battle;
 
 };
 

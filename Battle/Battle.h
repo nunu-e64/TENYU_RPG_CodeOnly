@@ -26,13 +26,16 @@
 
 class CBattle : public CWorldManager{
 public:
+	static CBattle* GetInstance(){
+		static CBattle instance;
+		return &instance;
+	}
 
-	CBattle();
 	~CBattle(){
 		DESTRUCTED;	
 	}
+
 	bool Init();
-	void Term();
 	void BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void BattleStart(int* _result, CCmdList* _fieldcmdlist_p);
 	void BattleSetting(const char* _wincommand, const char* _losecommand);
@@ -133,6 +136,12 @@ private:
 		//í“¬İ’è
 			char WinCommand[256];
 			char LoseCommand[256];
+
+	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
+		CBattle();
+		CBattle(const CBattle& hoge);
+		CBattle& operator=(const CBattle& hoge);
+	//////////////////////////////////////////////////////////////////
 
 };
 

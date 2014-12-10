@@ -72,9 +72,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
 }
-void CBattle::Term(){	//タイトルに戻るときに~CField()から呼び出し
 
-}
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//戦闘ごとに行う開始内部準備処理///////////////////////////////////////////////////	
 		

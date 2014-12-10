@@ -5,16 +5,19 @@
 ///メンバ変数にするとバグる////////////////
 static CTextBox TextBox1;
 static CTextWrap TextWrap1;
-static CBattle Battle;
+//static CBattle Battle;
 ///////////////////////////////////////////
 
+CField::CField(){
+	CONSTRUCTED;
+	Battle = CBattle::GetInstance();
+}
 
 CField::~CField(){
 	DESTRUCTED;	
 
 	Map.Init();
 	EveManager.Init();
-	Battle.Term();
 }
 
 bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
@@ -52,7 +55,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	
 
 		//CBattleの初期化
-			if (!(Battle.Init())) return false;
+			if (!(Battle->Init())) return false;
 			
 		//外部テキストのロード
 			CLoad SystemLoad;
@@ -124,7 +127,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 						TextBox->NextPage(&CmdList, &FlagSet);		//足元にテキストが設定してあれば表示
 					}else{
 						//戦闘エンカウント判定
-						if (Battle.CheckEncount(NowMap, Map.GetMapData(NowMap, X, Y))){
+						if (Battle->CheckEncount(NowMap, Map.GetMapData(NowMap, X, Y))){
 							CmdList.Add("@BattleEncount");
 						}
 					}
@@ -434,8 +437,8 @@ reset:
 
 void CField::BattleStart(const char* _pic_bg, std::vector<std::string> _enemyList){	
 	//イベントバトル用（背景画像と出現敵を指定した戦闘）
-	Battle.SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
-	Battle.SetEnemy(_enemyList);
+	Battle->SetBackGround(_pic_bg);	//増えてきたらまるごとB_CmdListに投げる
+	Battle->SetEnemy(_enemyList);
 	BattleStart();
 }
 
@@ -443,8 +446,8 @@ void CField::BattleStart(){
 	int result;
 	CCmdList resultcmdlist;
 
-	Battle.SetPlayer();
-	Battle.BattleReady(&FlagSet, &Map, &EveManager);
+	Battle->SetPlayer();
+	Battle->BattleReady(&FlagSet, &Map, &EveManager);
 	
 	//画面切り替え効果（戦闘開始）
 		int fieldGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -452,7 +455,7 @@ void CField::BattleStart(){
 			Draw(false,true);
 		int battleGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
 			SetDrawScreen(battleGraph);
-			Battle.Draw(false,true);
+			Battle->Draw(false,true);
 		SetDrawScreen(DX_SCREEN_BACK);
 		int blankGraph =  MakeScreen(WINDOW_WIDTH,WINDOW_HEIGHT);
 		CScreenChanger::ChangeScreen(fieldGraph, blankGraph,  CScreenChanger::SCREEN_FADE, 10);
@@ -473,7 +476,7 @@ void CField::BattleStart(){
 		}
 
 	//戦闘開始
-	Battle.BattleStart(&result, &resultcmdlist);
+	Battle->BattleStart(&result, &resultcmdlist);
 	
 	//画面切り替え効果（戦闘終了）
 		if (result!=LOSE_NOSCREENCHANGE){
@@ -487,7 +490,7 @@ void CField::BattleStart(){
 }
 
 void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
-	Battle.BattleSetting(_winmessage, _losemessage);
+	Battle->BattleSetting(_winmessage, _losemessage);
 }
 
 
