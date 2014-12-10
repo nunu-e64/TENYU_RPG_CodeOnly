@@ -3,22 +3,22 @@
 #include "Enemy.h"
 
 
-int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
+int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 	int plan = -1;
 
-	if (typeid(*this) == typeid(CEnemyPlanner_DAMMY)){
-		WarningDx("Warning->CEnemyPlanner(%s)::CalcRandomPlan->DammyPlanner!", __FILE__, __LINE__, EnemyName.c_str());
+	if (typeid(*this) == typeid(CEnemyPlanner_DAMMY)) {
+		WARNINGDX("'%s':DammyPlanner!(return -1)", _enemy->GetName().c_str());
 		return -1;
-	}else if(RandomPlanSet==NULL){
-		WarningDx("Error->CEnemyPlanner(%s)::CalcRandomPlan->RandomPlanSet == NULL!", __FILE__, __LINE__, EnemyName.c_str());
+	} else if(RandomPlanSet==NULL) {
+		WARNINGDX("'%s':RandomPlanSet == NULL!(return -1)", __FILE__, __LINE__, _enemy->GetName().c_str());
 		return -1;
 	}	
 	
-	if ((*RandomPlanSet).find(_randomPlan_key)==(*RandomPlanSet).end()){
-		ErrorDx("Error->Planner:%s: Not Found RandomPlan :%d",__FILE__, __LINE__, EnemyName.c_str(), _randomPlan_key);
-		plan =  -1;
+	if ((*RandomPlanSet).find(_randomPlan_key)==(*RandomPlanSet).end()) {
+		ERRORDX("'%s':Not Found RandomPlan :%d (return -1)", _enemy->GetName().c_str(), _randomPlan_key);
+		return -1;
 
-	}else{
+	} else {
 		int probability=0;
 
 		for (unsigned int i=0; i<(*RandomPlanSet)[_randomPlan_key].size(); i++){
@@ -31,6 +31,11 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
 
 	return plan;
 }
+
+int CEnemyPlanner_DAMMY::GetPlan(const CEnemy* _enemy){
+	WARNINGDX("'%s':This Planner is DAMMY!(return -1)", _enemy->GetName().c_str());
+	return -1;
+} 
 
 CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
 	CONSTRUCTED;
@@ -68,7 +73,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 
 	for (unsigned int i=0; i<PlanList.size(); i++){
 		if (ratio > PlanList[i].second || i == PlanList.size()-1){
-			plan = CalcRandomPlan(PlanList[i].first);
+			plan = CalcRandomPlan(PlanList[i].first, _enemy);
 			return plan;
 		}
 	}
@@ -114,7 +119,7 @@ int CEnemyPlanner_PLAYERNUM::GetPlan(const CEnemy* _enemy){
 	if(alivePlayerNum == 0){
 		plan = -1;
 	}else{
-		plan = CalcRandomPlan(PlanList[alivePlayerNum-1]);
+		plan = CalcRandomPlan(PlanList[alivePlayerNum-1], _enemy);
 	}
 
 	return plan;

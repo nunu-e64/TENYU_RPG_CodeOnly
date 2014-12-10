@@ -10,7 +10,7 @@ class CEnemyPlanner{ //EnemySpeciesのAI用のインターフェース
 public: 
 	CEnemyPlanner(std::string _enemyname, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet = NULL){
 		CONSTRUCTED;
-		EnemyName = _enemyname;
+		//EnemyName = _enemyname;
 		RandomPlanSet = _randomPlanSet;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
@@ -26,11 +26,11 @@ public:
 		ENEMY_NUM = _enemyNum;
 	}
 
-	std::string GetName() const{return EnemyName;}
+	//std::string GetName() const{return EnemyName;}
 	virtual int GetPlan(const CEnemy* _enemy)=0;
 
 protected:
-	int CalcRandomPlan(int _randomPlan_key);
+	int CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy);
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）
 		const CActor* const* Actor;
@@ -38,18 +38,25 @@ protected:
 		int ENEMY_NUM;
 
 private:
-	std::string EnemyName;
+	//std::string EnemyName;
 	std::map <int, std::vector<std::pair<int, int> > > *RandomPlanSet;
 };
+
 
 class CEnemyPlanner_DAMMY: public CEnemyPlanner{
 public:
 	CEnemyPlanner_DAMMY():CEnemyPlanner("Dammy_AI"){CONSTRUCTED;}
 	~CEnemyPlanner_DAMMY(){DESTRUCTED;}
 
-	int GetPlan(const CEnemy* _enemy){	//共通
-		return -1;
-	} 
+	int GetPlan(const CEnemy* _enemy);	//共通
+};
+
+class CEnemyPlanner_DEFAULT: public CEnemyPlanner{
+public:
+	CEnemyPlanner_DEFAULT():CEnemyPlanner("Dammy_AI"){CONSTRUCTED;}
+	~CEnemyPlanner_DEFAULT(){DESTRUCTED;}
+
+	int GetPlan(const CEnemy* _enemy){}	//共通
 };
 
 class CEnemyPlanner_MYHP: public CEnemyPlanner{
