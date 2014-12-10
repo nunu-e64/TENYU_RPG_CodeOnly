@@ -7,13 +7,13 @@
 class CTalkName{
 public:
 	CTalkName(){
-		CONSTRUCTED
+		CONSTRUCTED;
 		Clear(true);
 		Clear(false);
 		NowLeft = true;
 	}
 	~CTalkName(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	void Init();
 

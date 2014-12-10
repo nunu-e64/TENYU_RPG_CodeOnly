@@ -16,14 +16,14 @@ class CBImgBank;
 class CActor : public virtual CSpecies{
 public:
 	CActor(const CSpecies &obj) : CSpecies(obj){
-		CONSTRUCTED
+		CONSTRUCTED;
 	}
 
 	CActor(){
-		CONSTRUCTED
+		CONSTRUCTED;
 	}
 	~CActor(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 
 	//èâä˙ê›íËä÷òA

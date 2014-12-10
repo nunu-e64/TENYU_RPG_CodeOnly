@@ -14,7 +14,7 @@ public:
     	static CMain instance;  // 唯一のインスタンス（静的メンバ関数･･･インスタンス生成前から存在しておりCMain::GetInstanceの形でどこからでも呼び出せる）
     	return &instance;
     }
-	~CMain(){DESTRUCTED}
+	~CMain(){DESTRUCTED;}
 	
 	//メンバ//////////////////////////////////////////////////
 	bool Init();
@@ -22,7 +22,7 @@ public:
 
 private:
     // 生成やコピーを禁止する
-    CMain(){CONSTRUCTED}
+    CMain(){CONSTRUCTED;}
     CMain(const CMain& rhs);
     CMain& operator=(const CMain& rhs);
 
@@ -36,7 +36,9 @@ private:
 	bool GameClear();
 	void Setting();
 	
-	playdata_tag PlayData[PLAYDATA_NUM];
+	//playdata_tag PlayData[PLAYDATA_NUM];
+	playdata_tag PlayData[1];
+
 };
 
 ////多重インクルード防止（インクルードガード）//

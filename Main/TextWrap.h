@@ -8,10 +8,10 @@
 class CTextWrap : public CTextBox{	//privateな継承では親クラスのpublicメンバに直接（インスタンス.関数()の形で）アクセスできず、インスタンスを親クラスとして扱うこともできない
 public:
 	CTextWrap(){
-		CONSTRUCTED
+		CONSTRUCTED;
 	}
 	~CTextWrap(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	void Term(CCmdList* _cmdlist);	//Terminate
 	void Draw(bool _showingstop=false);

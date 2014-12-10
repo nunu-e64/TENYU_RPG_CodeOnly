@@ -13,11 +13,11 @@ class CPlayer;
 class CPlayerSpeciesManager{
 public:
 	CPlayerSpeciesManager(){
-		CONSTRUCTED	
+		CONSTRUCTED;	
 		Gold = 0;
 	}
 	~CPlayerSpeciesManager(){
-		DESTRUCTED		
+		DESTRUCTED;		
 	}
 
 	void Clear(){Gold = 0; PlayerBank.clear(); MemberList.clear();}
@@ -52,10 +52,12 @@ public:
 	}*/
 
 	CEnemySpeciesManager(){
-		CONSTRUCTED	
+		CONSTRUCTED;	
+		EnemyBankLock = false;	//書き換え可能
+		EnemyPlannerBankLock = false;	
 	}
 	~CEnemySpeciesManager(){
-		DESTRUCTED			
+		DESTRUCTED;			
 		Clear();
 	}
 	void Clear();
@@ -75,6 +77,8 @@ public:
 	bool CheckEncount(int _mapnum, int _chipnum, std::vector<CEnemySpecies*> &_party_p);
 
 private:
+	bool EnemyBankLock;		//金庫番。vectorからアドレスをコピーしたあとに要素を変化させることの無いように監視
+	bool EnemyPlannerBankLock;		//金庫番。
 	std::map <std::string, CEnemySpecies> EnemyBank;
 	std::vector<const CEnemyPlanner* const> EnemyPlannerBank; 
 	struct encount_tag{

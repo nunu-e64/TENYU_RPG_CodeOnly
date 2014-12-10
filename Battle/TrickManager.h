@@ -17,7 +17,7 @@ public:
 	}
 
 	~CTrickManager(){
-		DESTRUCTED	
+		DESTRUCTED;	
 	}
 
 	void Add(trick_tag _trick);
@@ -43,7 +43,7 @@ private:
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)////////////////////////////////
 		CTrickManager(){
-			CONSTRUCTED	
+			CONSTRUCTED;	
 		}
 		CTrickManager(const CTrickManager& hoge);
 		CTrickManager& operator=(const CTrickManager& hoge);

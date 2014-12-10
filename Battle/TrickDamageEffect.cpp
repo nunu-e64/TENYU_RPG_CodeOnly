@@ -3,7 +3,7 @@
 #include "Battle.h"
 
 CTrickDamageEffect_BOMB::CTrickDamageEffect_BOMB(std::string _name, std::vector<std::string>_argList):CTrickDamageEffect(_name){
-	CONSTRUCTED
+	CONSTRUCTED;
 	int numset[ARG_NUM] = {200,200,200, 10, 60};	//“K“–
 
 	for (unsigned int i=0; i<_argList.size() && i<ARG_NUM; i++){
@@ -33,7 +33,7 @@ void CTrickDamageEffect_BOMB::DrawDamageEffect(CBattle* _battle, CBImgBank* _bim
 }
 
 CTrickDamageEffect_PROTO::CTrickDamageEffect_PROTO(std::string _name, std::vector<std::string>_argList):CTrickDamageEffect(_name){
-	CONSTRUCTED
+	CONSTRUCTED;
 	int numset[ARG_NUM] = {10, 15, 60};	//“K“–
 
 	for (unsigned int i=0; i<_argList.size() && i<ARG_NUM; i++){

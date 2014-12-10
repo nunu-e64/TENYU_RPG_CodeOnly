@@ -14,8 +14,8 @@
 
 class CWorldManager{
 public:
-	CWorldManager(){CONSTRUCTED; ImgBackGround = NULL;}
-	~CWorldManager(){DESTRUCTED;};
+	CWorldManager(){CONSTRUCTED;; ImgBackGround = NULL;}
+	~CWorldManager(){DESTRUCTED;;};
 
 	virtual void Draw(bool _screenflip=false, bool _textshowingstop=false, int dx=0, int dy=0, bool _playeralsoshake=false)=0;
 	void FadeDraw(int _time, int _img, bool _changeahead, bool _color);

@@ -9,9 +9,9 @@
 
 class CPlayer : public CActor, public CPlayerSpecies{
 public:
-	CPlayer(){CONSTRUCTED Mc=0;}
-	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){CONSTRUCTED Mc=0;};
-	~CPlayer(){DESTRUCTED}
+	CPlayer(){CONSTRUCTED; Mc=0;}
+	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){CONSTRUCTED; Mc=0;};
+	~CPlayer(){DESTRUCTED;}
 	
 	void CreateBattleMenu();
 	void Draw(int _dx=0, int _dy=0);

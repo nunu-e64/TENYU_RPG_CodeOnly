@@ -9,7 +9,7 @@ class CEnemy;
 class CEnemyPlanner{ //EnemySpeciesのAI用のインターフェース
 public: 
 	CEnemyPlanner(std::string _enemyname, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet = NULL){
-		CONSTRUCTED
+		CONSTRUCTED;
 		EnemyName = _enemyname;
 		RandomPlanSet = _randomPlanSet;
 		PLAYER_NUM = 0;
@@ -17,7 +17,7 @@ public:
 	}
 
 	~CEnemyPlanner(){
-		DESTRUCTED	
+		DESTRUCTED;	
 	}
 
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum){
@@ -47,8 +47,8 @@ private:
 
 class CEnemyPlanner_DAMMY: public CEnemyPlanner{
 public:
-	CEnemyPlanner_DAMMY():CEnemyPlanner("Dammy_AI"){CONSTRUCTED}
-	~CEnemyPlanner_DAMMY(){DESTRUCTED}
+	CEnemyPlanner_DAMMY():CEnemyPlanner("Dammy_AI"){CONSTRUCTED;}
+	~CEnemyPlanner_DAMMY(){DESTRUCTED;}
 
 	int GetPlan(const CEnemy* _enemy){	//共通
 		return -1;
@@ -58,7 +58,7 @@ public:
 class CEnemyPlanner_MYHP: public CEnemyPlanner{
 public:
 	CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet); //:CEnemyPlanner(_name, _randomPlanSet);
-	~CEnemyPlanner_MYHP(){DESTRUCTED}
+	~CEnemyPlanner_MYHP(){DESTRUCTED;}
 	int GetPlan(const CEnemy* _enemy); //共通
 private:
 	std::vector <std::pair<int, int> > PlanList;
@@ -68,7 +68,7 @@ private:
 class CEnemyPlanner_PLAYERNUM: public CEnemyPlanner{
 public:
 	CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet);
-	~CEnemyPlanner_PLAYERNUM(){DESTRUCTED}
+	~CEnemyPlanner_PLAYERNUM(){DESTRUCTED;}
 	int GetPlan(const CEnemy* _enemy); //共通
 private:
 	int PlanList[MAX_PLAYER_NUM];

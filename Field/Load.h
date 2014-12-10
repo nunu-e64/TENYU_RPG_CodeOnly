@@ -14,11 +14,11 @@ class CEveManager;
 class CLoad{
 public:
 	CLoad(){
-		CONSTRUCTED
+		CONSTRUCTED;
 		FileLineNum=0;
 	}
 	~CLoad(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	bool LoadAddText(const char *_path);
 	void LoadMap(const char *_path, unsigned int _mapnum, CMap* _map, CEveManager* _evemanager, bool _event=false);

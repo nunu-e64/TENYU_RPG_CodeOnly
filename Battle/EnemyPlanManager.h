@@ -15,7 +15,7 @@ public:
 		return &EnemyManager;
 	}
 	~CEnemyPlanManager(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	
 	int GetTarget(CEnemy* _enemy);
@@ -26,7 +26,7 @@ private:
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
 		CEnemyPlanManager(){
-			CONSTRUCTED
+			CONSTRUCTED;
 		}
 		CEnemyPlanManager(const CEnemyPlanManager& hoge);
 		CEnemyPlanManager& operator=(const CEnemyPlanManager& hoge);

@@ -18,8 +18,8 @@ class CTrickManager;
 
 class CCmdManager{
 public:
-	CCmdManager(){CONSTRUCTED}
-	~CCmdManager(){DESTRUCTED	};
+	CCmdManager(){CONSTRUCTED;}
+	~CCmdManager(){DESTRUCTED;	};
 	
 protected:
 
@@ -39,25 +39,25 @@ protected:
 
 class CFirstSetCmdManager : public CCmdManager{
 public:
-	CFirstSetCmdManager(){CONSTRUCTED}
-	~CFirstSetCmdManager(){DESTRUCTED}
+	CFirstSetCmdManager(){CONSTRUCTED;}
+	~CFirstSetCmdManager(){DESTRUCTED;}
 	void Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CEveManager* _evemanager);
 };
 
 class CFieldCmdManager : public CCmdManager{
 public:
-	CFieldCmdManager(){CONSTRUCTED}
-	~CFieldCmdManager(){DESTRUCTED}
+	CFieldCmdManager(){CONSTRUCTED;}
+	~CFieldCmdManager(){DESTRUCTED;}
 	void Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);
 };
 
 class CBattleCmdManager : public CCmdManager{
 public:
 	CBattleCmdManager(){
-		CONSTRUCTED
+		CONSTRUCTED;
 		Map_p=NULL;
 	}
-	~CBattleCmdManager(){DESTRUCTED}
+	~CBattleCmdManager(){DESTRUCTED;}
 	void Main(CCmdList* _cmdlist, CBattle* _battle, CTextBox* _textbox);
 	void Init(CMap* _map){Map_p=_map;}
 
@@ -67,8 +67,8 @@ private:
 
 class CBattleFirstSetCmdManager : public CCmdManager{
 public:
-	CBattleFirstSetCmdManager(){CONSTRUCTED}
-	~CBattleFirstSetCmdManager(){DESTRUCTED}
+	CBattleFirstSetCmdManager(){CONSTRUCTED;}
+	~CBattleFirstSetCmdManager(){DESTRUCTED;}
 	void Main(CCmdList* _cmdlist, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 };
 

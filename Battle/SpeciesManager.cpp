@@ -78,7 +78,7 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 //CEnemySpecies//
 //////////////////////////////////////////////////////////////////////////////
 void CEnemySpeciesManager::Clear(){
-	myLog("%s::Clear()_start", typeid(*this).name());
+	//myLog("%s::Clear()_start", typeid(*this).name());
 
 	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
 		myLog("delete EnemyPlannerBank[%d]", i);
@@ -94,7 +94,7 @@ void CEnemySpeciesManager::Clear(){
 	}
 	MapEncount.clear();
 	
-	myLog("%s::Clear()_fin", typeid(*this).name());
+	//myLog("%s::Clear()_fin", typeid(*this).name());
 }
 
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){

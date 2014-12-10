@@ -6,7 +6,7 @@
 #include "../Field/Load.h"
 
 CBattle::CBattle(){
-	CONSTRUCTED	
+	CONSTRUCTED;	
 
 	Ready = false;
 

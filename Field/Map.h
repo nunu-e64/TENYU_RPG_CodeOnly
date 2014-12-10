@@ -7,7 +7,7 @@
 class CMap{
 public:
 	CMap(){
-		CONSTRUCTED
+		CONSTRUCTED;
 		ImgData.clear();
 		for (int i=0; i<CHARA_PIC_NUM; i++){
 			dammyimg.Img[i]=NULL;
@@ -20,7 +20,7 @@ public:
 		}
 	};
 	~CMap(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	
 	void Init(){ImgData.clear();}

@@ -33,7 +33,7 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key){
 }
 
 CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
-	CONSTRUCTED
+	CONSTRUCTED;
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
 		int num;
@@ -63,7 +63,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	//ここに実際のあれこれを書く
 	//PlanList･･･[0~n] first:TrickIndex, second:境界線となるHPパーセント
 
-	int ratio = 100 * (double)_enemy->GetHp()/_enemy->GetMaxHp();
+	int ratio = (int)(100 * (double)_enemy->GetHp()/_enemy->GetMaxHp());
 	int plan = -1;
 
 	for (unsigned int i=0; i<PlanList.size(); i++){
@@ -77,7 +77,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 }
 
 CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
-	CONSTRUCTED
+	CONSTRUCTED;
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
 		int num;

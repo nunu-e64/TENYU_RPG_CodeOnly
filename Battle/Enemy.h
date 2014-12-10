@@ -11,14 +11,13 @@ class CEnemy : public CActor, public CEnemySpecies{
 public:
 	
 	CEnemy(){
-		CONSTRUCTED
+		CONSTRUCTED;
 	};
 	CEnemy(const CEnemySpecies& obj) : CEnemySpecies(obj){
-		CONSTRUCTED
+		CONSTRUCTED;
 	};
 	~CEnemy(){
-		DESTRUCTED
-		myLog("%s:%s:CEnemy_Destructed", typeid(*this).name(), Name.c_str());
+		DESTRUCTED;
 	}
 
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum)const{

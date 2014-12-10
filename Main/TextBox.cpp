@@ -3,7 +3,7 @@
 #include "CmdList.h"
 
 CTextBox::CTextBox(){
-	CONSTRUCTED
+	CONSTRUCTED;
 
 	NowStock = 0;
 	NowTarget = 0;

@@ -7,7 +7,7 @@
 class CEveObj{
 public:
 	CEveObj(unsigned char _datanum=0){
-		//CONSTRUCTED
+		//CONSTRUCTED;
 		Mapnum = 0;
 		Datanum = _datanum;
 		Visible = false;
@@ -34,7 +34,7 @@ public:
 	}
 	
 	~CEveObj(){
-		//DESTRUCTED
+		//DESTRUCTED;
 	}
 
 	//ïœêî

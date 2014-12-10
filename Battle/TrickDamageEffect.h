@@ -12,11 +12,11 @@ class CBImgBank;
 class CTrickDamageEffect{ //戦闘ダメージエフェクト用のインターフェース
 public: 
 	CTrickDamageEffect(std::string _name){
-		CONSTRUCTED;
+		CONSTRUCTED;;
 		Name = _name;
 	}
 	~CTrickDamageEffect(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	virtual void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const =0;
 	std::string GetName() const {return Name;}
@@ -30,7 +30,7 @@ class CTrickDamageEffect_BOMB: public CTrickDamageEffect{	//未作成
 public:
 	CTrickDamageEffect_BOMB(std::string _name, std::vector<std::string>_argList);
 	~CTrickDamageEffect_BOMB(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:
@@ -45,7 +45,7 @@ class CTrickDamageEffect_PROTO: public CTrickDamageEffect{
 public:
 	CTrickDamageEffect_PROTO(std::string _name, std::vector<std::string>_argList);
 	~CTrickDamageEffect_PROTO(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const;	//共通
 private:

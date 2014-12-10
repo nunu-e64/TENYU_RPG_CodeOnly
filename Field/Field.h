@@ -21,7 +21,7 @@
 class CField : public CWorldManager{
 public:
 	CField(){
-		CONSTRUCTED	
+		CONSTRUCTED;	
 	}
 	~CField();
 	

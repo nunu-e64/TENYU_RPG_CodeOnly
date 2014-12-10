@@ -6,10 +6,10 @@
 class CBattleCalculator{
 public:
 	CBattleCalculator(){
-		CONSTRUCTED	
+		CONSTRUCTED;	
 	}
 	~CBattleCalculator(){
-		DESTRUCTED	
+		DESTRUCTED;	
 	}
 	static int CalcGold(int _lv, int _goldgene);
 	static int CalcExp(int _lv, int _expgene);

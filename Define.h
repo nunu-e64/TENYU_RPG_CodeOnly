@@ -47,8 +47,8 @@
 		ErrorDx("Error mapnum<0: %d",_mapnum);return _return;	\
 	}}
 
-#define CONSTRUCTED ; myLog("MyClassLog", "%s.Constructed", typeid(*this).name());
-#define DESTRUCTED ; myLog("MyClassLog", "%s.Destructed", typeid(*this).name());
+#define CONSTRUCTED //myLog("MyClassLog", "%s.Constructed", typeid(*this).name())
+#define DESTRUCTED //myLog("MyClassLog", "%s.Destructed", typeid(*this).name())
 
 
 //í“¬ŠÖ˜A///////////////////////////////////////////////
@@ -201,10 +201,10 @@ struct flag_tag{
 class CFlagSet{
 public:
 	CFlagSet(){
-		CONSTRUCTED
+		CONSTRUCTED;
 	}
 	~CFlagSet(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 
 	bool CreateNewFlag(const char* _key){

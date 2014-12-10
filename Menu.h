@@ -6,7 +6,7 @@
 class CMenuNode{	//CMenuÇÃíÜÇ…íËã`Ç∑ÇÈÅH
 public:
 	CMenuNode(const char _label[32]){
-		CONSTRUCTED
+		CONSTRUCTED;
 		strcpy_s(label, _label);
 		parent = NULL;
 		child  = NULL;
@@ -14,7 +14,7 @@ public:
 		next   = NULL;
 	}
 	~CMenuNode(){
-		DESTRUCTED
+		DESTRUCTED;
 	}
 	
 	char label[32];
@@ -27,12 +27,12 @@ public:
 class CMenu{
 public:	
 	CMenu(){
-		CONSTRUCTED
+		CONSTRUCTED;
 		Cursor = front = NULL;
 		Alive = false;
 	}
 	~CMenu(){
-		DESTRUCTED
+		DESTRUCTED;
 		Clear(front);
 	};
 
@@ -60,8 +60,8 @@ protected:
 
 class CBattleMenu : public CMenu{
 public:
-	CBattleMenu(){CONSTRUCTED}
-	~CBattleMenu(){DESTRUCTED}
+	CBattleMenu(){CONSTRUCTED;}
+	~CBattleMenu(){DESTRUCTED;}
 
 	void Draw();
 };

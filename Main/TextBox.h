@@ -15,7 +15,7 @@ class CTextBox{
 public:
 	CTextBox();
 	~CTextBox(){
-		DESTRUCTED
+		DESTRUCTED;
 	};
 
 	void Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed);

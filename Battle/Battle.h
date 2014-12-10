@@ -29,7 +29,7 @@ public:
 
 	CBattle();
 	~CBattle(){
-		DESTRUCTED	
+		DESTRUCTED;	
 	}
 	bool Init();
 	void Term();
@@ -61,10 +61,10 @@ public:
 		class CTargetMarker{
 		public:
 			CTargetMarker(){
-				CONSTRUCTED	
+				CONSTRUCTED;	
 			}
 			~CTargetMarker(){
-				DESTRUCTED	
+				DESTRUCTED;	
 			}
 
 			void Init(int _actornum, int _playernum, int _enemynum, int _img);

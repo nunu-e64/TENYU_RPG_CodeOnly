@@ -10,7 +10,7 @@ static CBattle Battle;
 
 
 CField::~CField(){
-	DESTRUCTED	
+	DESTRUCTED;	
 
 	Map.Init();
 	EveManager.Init();
