@@ -102,6 +102,11 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newEnemy.Img = _img;
 
+	if (EnemyBankLock) {
+		WARNINGDX("'%s':EnemyBank is Locked!", _name);
+		return false;
+	}
+
 	if (EnemyBank.find(_name)==EnemyBank.end()){
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
 		return true;
