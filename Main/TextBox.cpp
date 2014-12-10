@@ -5,22 +5,44 @@
 CTextBox::CTextBox(){
 	CONSTRUCTED;
 
-	NowStock = 0;
-	NowTarget = 0;
+	for (int i=0; i<STOCK_LINE_NUM; i++){ 
+		chStock[i][0] = '\0';
+	}
+	for (int i=0; i<LINE_MAX; i++){ 
+		chText[i][0] = '\0';
+		chOldText[i][0] = '\0';
+		chDrawText[i][0] = '\0';
+	}
 
-	NewText = -1;
-	Showing = false;
-	StockClear();
 	Alive = false;
 	Visible = false;
 	ReturnVisible = true;
-	AutoPlay = false;
 
+	AutoPlay = false;
 	AutoPlayMode = PAGE;
+	AutoPlaySpeed = DefaultAutoPlaySpeed = -1;
+
+	PosX = PosY = Width = Height = -1;
+	LineNum = WordNum = -1;
+	FontSize = RubyFontSize = -1;
+	Color1 = Color2 = -1;
+	WordWidth = -1;
+	
+	StockLine = -1;
+
+	NowStock = 0;
+	NowTarget = 0;
+	PageChange = false;
+
+	NewText = -1;
+	Showing = false;
+	ShowingTime = -1;
+
 	OriginalDir = DOWN;
 }
 
 void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed){
+	TalkName.Init();
 	
 	PosX = _posx;
 	PosY = _posy;
@@ -42,6 +64,7 @@ void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , i
 	NewText = -1;
 	Showing = false;
 
+
 	Ruby.clear();
 
 	//AddStockでの半角文字オーバーを解決するために横幅制限を付ける
@@ -50,8 +73,6 @@ void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , i
 			sprintf_s(tmp, "%sあ", tmp);
 		}
 		WordWidth = GetDrawStringWidth(tmp, strlen(tmp));
-
-	TalkName.Init();
 }
 
 void CTextBox::Term(CCmdList* _cmdlist){

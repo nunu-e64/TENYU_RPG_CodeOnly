@@ -28,7 +28,7 @@ public:
 	bool AddStock(char **String, int dir=DOWN, int count=-1);
 	void NextPage(CCmdList* _cmdlist, CFlagSet *_flagset);
 
-	direction_tag GetOriginalDir(){return OriginalDir;}
+	direction_tag GetOriginalDir()const{ return OriginalDir; }
 
 	void SetVisible(bool _visible){Visible = _visible;}
 	void SetReturnVisible(bool _visible){ReturnVisible = _visible;}

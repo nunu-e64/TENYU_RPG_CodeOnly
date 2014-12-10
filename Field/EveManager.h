@@ -10,7 +10,11 @@ class CField;
 
 class CEveManager{
 public:
-	CEveManager(){CONSTRUCTED;}
+	static CEveManager* GetInstance(){
+		static CEveManager instance;
+		return &instance;
+	}
+
 	~CEveManager(){DESTRUCTED;}
 
 	void Init(){
@@ -51,14 +55,21 @@ public:
 	void Walk(CField* _field, char* _name, int _dir, int _walkspeed, bool _walk=true, int _fade=0);
 
 private:
+	struct eventset_tag{
+		char Name[32];
+		std::vector<char256> Text;
+	};
+
+
+	//メンバ関数	
+		bool GetEveObj(CEveObj** _eveobj_p, int _mapnum, int _x, int _y, int _kind=-1, bool _forcheck=true);
+		bool GetEveObj(CEveObj** _eveobj_p, const char* _name, const int _kind=-1, int _mapnum=-1);
+		bool GetOriginalEvent(eventset_tag** _originalevent_p, const char* _name);
+
 	//メンバ変数
 		std::vector<CEveObj> EveObj[MAP_MAX];
 		CEveObj EveObj_dammy;
 
-		struct eventset_tag{
-			char Name[32];
-			std::vector<char256> Text;
-		};
 		std::vector<eventset_tag> OriginalEvent;
 		eventset_tag OriginalEvent_dammy;
 
@@ -67,11 +78,13 @@ private:
 
 		unsigned char EveMap[MAP_MAX][MAP_SIZE][MAP_SIZE];
 		
-	//メンバ関数	
-		bool GetEveObj(CEveObj** _eveobj_p, int _mapnum, int _x, int _y, int _kind=-1, bool _forcheck=true);
-		bool GetEveObj(CEveObj** _eveobj_p, const char* _name, const int _kind=-1, int _mapnum=-1);
-		bool GetOriginalEvent(eventset_tag** _originalevent_p, const char* _name);
-
+	//単一性を保証(Singleton)//////////////////////////////////////////
+		CEveManager(){
+			CONSTRUCTED;
+		}
+		CEveManager(const CEveManager& hoge);
+		CEveManager& operator=(const CEveManager& hoge);
+	//////////////////////////////////////////////////////////////////
 };
 
 

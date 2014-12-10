@@ -10,13 +10,14 @@ static CTextWrap TextWrap1;
 CField::CField(){
 	CONSTRUCTED;
 	Battle = CBattle::GetInstance();
+	EveManager = CEveManager::GetInstance();
 }
 
 CField::~CField(){
 	DESTRUCTED;	
 
 	Map.Init();
-	EveManager.Init();
+	EveManager->Init();
 }
 
 bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
@@ -67,9 +68,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 				&&(ScenarioLoad.LoadAddText(FILE_EVENT))){
 			
 				SystemLoad.CommandCopy(&SystemCmdList);
-				FirstSetCmdManager.Main(&SystemCmdList, this, &Map, &EveManager);
+				FirstSetCmdManager.Main(&SystemCmdList, this, &Map, EveManager);
 
-				ScenarioLoad.EventTextCopy(&EveManager);	//順序に注意（CmdManager.Mainの後）	
+				ScenarioLoad.EventTextCopy(EveManager);	//順序に注意（CmdManager.Mainの後）	
 			
 			}else{
 				return false;
@@ -190,7 +191,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 									if( !TextBox->Main(&CmdList, &FlagSet)) {
 										break;	//テキストボックスが消されたら再入力画面へ
 									}else{
-										FieldCmdManager.Main(&CmdList, this, &Map, TextBox, &EveManager);
+										FieldCmdManager.Main(&CmdList, this, &Map, TextBox, EveManager);
 										Draw();
 									}
 								}
@@ -224,7 +225,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 			#endif
 
 		////TextBoxなどによってCmdListに蓄積されたコマンドを処理////////////////////////////////////////
-			CHECK_TIME_START	FieldCmdManager.Main(&CmdList, this, &Map, TextBox, &EveManager);	CHECK_TIME_END("Command.Main")
+			CHECK_TIME_START	FieldCmdManager.Main(&CmdList, this, &Map, TextBox, EveManager);	CHECK_TIME_END("Command.Main")
 			if (Mode != MODE_PLAYING)	return Mode;
 
 
@@ -253,7 +254,7 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 
 		//マップ描画////////////////////////////////////////////////////////////////////////////
 		CHECK_TIME_START2	Map.Draw(NowMap, X, Y, dx, dy);			CHECK_TIME_END2("Map.Draw")
-		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, false, dx, dy);	CHECK_TIME_END2("EveManager.Draw_under")
+		CHECK_TIME_START2	EveManager->Draw(NowMap, X, Y, false, dx, dy);	CHECK_TIME_END2("EveManager->Draw_under")
 
 		//プレイヤー////////////////////////////////////////////////////////////////////////////
 			switch(Effect){
@@ -275,7 +276,7 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 			SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 );
 		//////////////////////////////////////////////////////////////////////////////////////////
 	
-		CHECK_TIME_START2	EveManager.Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager.Draw_over")
+		CHECK_TIME_START2	EveManager->Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager->Draw_over")
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -295,7 +296,7 @@ bool CField::Walk(int _dir, int _walkspeed, bool _eventwalk, bool _walk, int _fa
 
 	if (Map.GetMapData(NowMap, (X+((_dir==RIGHT)? 1: ((_dir==LEFT)? -1: 0)))%MAP_SIZE, (Y+((_dir==DOWN)? 1: ((_dir==UP)? -1: 0)))%MAP_SIZE, 1)) return false;	//障害物の有無を確認
 	if (!_eventwalk) if (CheckEvent(false, true)) return true;	//押せるブロック（PUSH_BLOCK）のイベント有無をチェック		//_eventwalkの時は通らないようにした方がいいかも
-	if (!EveManager.CheckWalkable(NowMap, (X+((_dir==RIGHT)? 1: ((_dir==LEFT)? -1: 0)))%MAP_SIZE, (Y+((_dir==DOWN)? 1: ((_dir==UP)? -1: 0)))%MAP_SIZE)) return false;	//NPCorBLOCKの有無を確認
+	if (!EveManager->CheckWalkable(NowMap, (X+((_dir==RIGHT)? 1: ((_dir==LEFT)? -1: 0)))%MAP_SIZE, (Y+((_dir==DOWN)? 1: ((_dir==UP)? -1: 0)))%MAP_SIZE)) return false;	//NPCorBLOCKの有無を確認
 
 	int d=0, oldd=0;	//delta;
 	int dx=0, dy=0;
@@ -375,7 +376,7 @@ void CField::ChangeTextMode(bool _box, const char* _eventtext){
 
 		if (_eventtext!=NULL){	//EveManager::CopyOriginalEventを汎用性を上げて改善。これでTextWrap1に@EventWrapの内容を渡せた
 			std::vector<char256> tmptext;
-			EveManager.CopyOriginalEvent(&tmptext, _eventtext);
+			EveManager->CopyOriginalEvent(&tmptext, _eventtext);
 			for (unsigned int i=0; i<tmptext.size(); i++){
 				TextWrap1.AddStock(tmptext[i].text);
 			}
@@ -446,7 +447,7 @@ void CField::BattleStart(){
 	CCmdList resultcmdlist;
 
 	Battle->SetPlayer();
-	Battle->BattleReady(&FlagSet, &Map, &EveManager);
+	Battle->BattleReady(&FlagSet, &Map, EveManager);
 	
 	//画面切り替え効果（戦闘開始）
 		int fieldGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -485,7 +486,7 @@ void CField::BattleStart(){
 			CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 30);
 		}
 	//戦闘結果コマンドの処理
-	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, &EveManager);
+	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, EveManager);
 }
 
 void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
@@ -497,23 +498,23 @@ void CField::SetBattleResult(const char* _winmessage, const char* _losemessage){
 bool CField::CheckEvent(bool _foot, bool _push){
 	char** addtext = NULL;
 	bool event_happened=false;
-	int count;		//EveManagerからEveObjのCountを受け取るが変更はできない（Count加算はEveManager.GetTextで行われる）
+	int count;		//EveManagerからEveObjのCountを受け取るが変更はできない（Count加算はEveManager->GetTextで行われる）
 
 	if (_push){
-			if (EveManager.GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, PUSHBLOCK)){
+			if (EveManager->GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, PUSHBLOCK)){
 				event_happened = true;
 			}
 	}else if (!_foot){
 		for (int k = WALKABLE_NUM+1; k < UNDERDRAW_NUM; k++){
 			if (k==PUSHBLOCK) continue;
-			if (EveManager.GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, k)){
+			if (EveManager->GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, k)){
 				event_happened = true;
 				break;
 			}
 		}
 	}else{
 		for (int k = 0; k < WALKABLE_NUM; k++){
-			if (EveManager.GetText(addtext, count, NowMap, X, Y, Dir, k)){
+			if (EveManager->GetText(addtext, count, NowMap, X, Y, Dir, k)){
 				event_happened = true;
 				break;
 			}
@@ -549,7 +550,7 @@ bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデー
 		char bufcmd[256];	
 		sprintf_s(bufcmd, "@Position_Set(me, %d,%d,%d,%s)", PlayData_p[_dnum].NowMap, PlayData_p[_dnum].X, PlayData_p[_dnum].Y, PlayData_p[_dnum].PlayerPicKey);		PlayDataCmdList.Add(bufcmd);
 		sprintf_s(bufcmd, "@Dir_Set(me,%d)", PlayData_p[_dnum].Dir);																						PlayDataCmdList.Add(bufcmd);
-		FieldCmdManager.Main(&PlayDataCmdList, this, &Map, TextBox, &EveManager);
+		FieldCmdManager.Main(&PlayDataCmdList, this, &Map, TextBox, EveManager);
 		
 		for (unsigned int i = 0; i < PlayData_p[_dnum].EveObj.size(); i++){
 			sprintf_s(bufcmd, "@Position_Set(%s,%d,%d)", PlayData_p[_dnum].EveObj[i].Name, PlayData_p[_dnum].EveObj[i].Dx/MAP_CHIP_SIZE, PlayData_p[_dnum].EveObj[i].Dy/MAP_CHIP_SIZE);	PlayDataCmdList.Add(bufcmd);
@@ -568,7 +569,7 @@ bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデー
 			}
 			sprintf_s(bufcmd, "@Effect_Set(%s,%d,%s)", PlayData_p[_dnum].EveObj[i].Name, PlayData_p[_dnum].EveObj[i].Effect, tmp);													PlayDataCmdList.Add(bufcmd);
 
-			FieldCmdManager.Main(&PlayDataCmdList, this, &Map, TextBox, &EveManager);
+			FieldCmdManager.Main(&PlayDataCmdList, this, &Map, TextBox, EveManager);
 		}
 
 		FlagSet = PlayData_p[_dnum].FlagSet;
@@ -660,7 +661,7 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 				}
 				break;
 			case 2:
-				EveManager.Save(fp);
+				EveManager->Save(fp);
 				break;
 			}
 			/////////////////////////////////////////////////////////////////////////////////

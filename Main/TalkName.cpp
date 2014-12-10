@@ -3,10 +3,14 @@
 
 
 void CTalkName::Init(){
+	//左右のテキストネームラベルをすべて削除
+		Clear(true);
+		Clear(false);
 
-	ImgLabel[0] = LoadGraph(IMAGE_TALKNAMELABEL[0], true); 
-	ImgLabel[1] = LoadGraph(IMAGE_TALKNAMELABEL[1], true);
-	ImgLabel[2] = LoadGraph(IMAGE_TALKNAMELABEL[2], true);
+	//テキストネームラベル用画像の読み込み
+		ImgLabel[0] = LoadGraph(IMAGE_TALKNAMELABEL[0], true); 
+		ImgLabel[1] = LoadGraph(IMAGE_TALKNAMELABEL[1], true);
+		ImgLabel[2] = LoadGraph(IMAGE_TALKNAMELABEL[2], true);
 
 }
 
