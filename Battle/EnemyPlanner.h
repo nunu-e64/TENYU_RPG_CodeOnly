@@ -10,7 +10,6 @@ class CEnemyPlanner{ //EnemySpeciesのAI用のインターフェース
 public: 
 	CEnemyPlanner(std::string _enemyname, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet = NULL){
 		CONSTRUCTED;
-		//EnemyName = _enemyname;
 		RandomPlanSet = _randomPlanSet;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
@@ -26,7 +25,7 @@ public:
 		ENEMY_NUM = _enemyNum;
 	}
 
-	//std::string GetName() const{return EnemyName;}
+	std::string GetName() const{return EnemyName;}
 	virtual int GetPlan(const CEnemy* _enemy)=0;
 
 protected:
@@ -38,7 +37,7 @@ protected:
 		int ENEMY_NUM;
 
 private:
-	//std::string EnemyName;
+	std::string EnemyName;	//主の名前。エラー出力用でしかない。アクセスはEnemySpeciesからなされるし呼び出し元情報が必要な時はthisを渡せば済む。
 	std::map <int, std::vector<std::pair<int, int> > > *RandomPlanSet;
 };
 
@@ -53,15 +52,19 @@ public:
 
 class CEnemyPlanner_DEFAULT: public CEnemyPlanner{
 public:
-	CEnemyPlanner_DEFAULT():CEnemyPlanner("Dammy_AI"){CONSTRUCTED;}
+	CEnemyPlanner_DEFAULT(std::string _name, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+		CONSTRUCTED;
+	}
 	~CEnemyPlanner_DEFAULT(){DESTRUCTED;}
 
-	int GetPlan(const CEnemy* _enemy){}	//共通
+	int GetPlan(const CEnemy* _enemy){
+		return CalcRandomPlan(0, _enemy);
+	}	//共通
 };
 
 class CEnemyPlanner_MYHP: public CEnemyPlanner{
 public:
-	CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet); //:CEnemyPlanner(_name, _randomPlanSet);
+	CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet);
 	~CEnemyPlanner_MYHP(){DESTRUCTED;}
 	int GetPlan(const CEnemy* _enemy); //共通
 private:

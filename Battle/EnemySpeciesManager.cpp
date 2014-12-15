@@ -27,7 +27,7 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	CEnemySpecies newEnemy;
 	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newEnemy.Img = _img;
-
+	
 	if (EnemyBankLock) {
 		WARNINGDX("'%s':EnemyBank is Locked!", _name);
 		return false;
@@ -35,6 +35,9 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 
 	if (EnemyBank.find(_name)==EnemyBank.end()){
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
+		EnemyPlannerBank.push_back( EnemyBank[_name].AI.SetPlanner(
+			new CEnemyPlanner_DEFAULT(_name, &EnemyBank[_name].RandomPlanSet) ) );
+
 		return true;
 	}else{
 		ErrorDx("Error->Already existed EnemyName:%s", _name);
@@ -76,24 +79,21 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 	bool for_return = true;
 	
 	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
-		CEnemyPlanner* newAI;
 		
 		if (_typeName=="MYHP"){
-			newAI = new CEnemyPlanner_MYHP(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet);
+			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
+				new CEnemyPlanner_MYHP(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet) ) );
 
 		}else if(_typeName=="PLAYERNUM"){
-			newAI = new CEnemyPlanner_PLAYERNUM(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet);
-	
+			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
+				new CEnemyPlanner_PLAYERNUM(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet) ) );
+
 		}else{
 			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
 			for_return = false;
 		}
 	
-		if(for_return){
-			EnemyBank[_enemyName].AI.SetPlanner(newAI);
-			EnemyPlannerBank.push_back(newAI);
-			myLog("EnemyPlannerBank.push_back(newAI)");
-		}
+		if (for_return) myLog("EnemyPlannerBank.push_back(newPlanner)");
 
 	}else{
 		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _enemyName);

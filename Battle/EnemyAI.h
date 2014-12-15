@@ -28,8 +28,9 @@ public:
 		ENEMY_NUM = _enemyNum;
 	}
 
-	void SetPlanner(CEnemyPlanner* _planner){
+	CEnemyPlanner* SetPlanner(CEnemyPlanner* _planner){
 		Planner = _planner;
+		return _planner;
 	}
 
 	int GetPlan(const CEnemy* _enemy) { return Planner->GetPlan(_enemy); }

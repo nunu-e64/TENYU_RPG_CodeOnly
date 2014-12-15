@@ -8,15 +8,20 @@ class CSpecies{
 public:
 	CSpecies(){
 		CONSTRUCTED;
-		Name = "NULL_NAME";
-		Lv = Img = Atk = Def = Spd = -1;
+		Name = "UNDEFINED_NAME";
+		Img = -1;
+		Lv = -1;
+		
 		Hp = MaxHp = 1;
+		Atk = Def = Spd = -1;
 	}
 	~CSpecies(){DESTRUCTED;}
 
 	std::string GetName()const{return Name;}
 
 protected:
+	void SetValue(const char* _name, int _maxhp, int _atk, int _def, int _spd);
+
 	std::string Name;
 	int Img;
 
@@ -28,11 +33,12 @@ protected:
 	int Spd;		//%→相対値
 	
 	std::vector <trick_tag const*> TrickList;		//技リスト
-
-	void SetValue(const char* _name, int _maxhp, int _atk, int _def, int _spd);
-
+	
+	//＠コマンドの順番管理
+		bool TrickSet;
+		bool FirstRandomPlanSet;
+		bool AISet;
 };
-
 
 class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
@@ -55,6 +61,7 @@ private:
 
 
 #include "EnemyAI.h"
+#include <vector>
 
 class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;
@@ -65,6 +72,9 @@ public:
 	}
 	CEnemySpecies(){
 		CONSTRUCTED;
+		GoldGene = -1;
+		ExpGene = -1;
+		//RandomPlanSetの初期化はEnemySpeciesManagerのCreateで
 	}
 	~CEnemySpecies(){
 		DESTRUCTED;	
@@ -74,9 +84,15 @@ protected:
 	CEnemyAI AI;
 
 private:
+
 	int GoldGene;
 	int ExpGene;
+
 	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
+		//RandomPlanSet[index] = (choice, probability)
+		//行動選択肢とその発動比を並べたリスト。
+		//行動計算の為にAI.PlannerとAI.Targetにポインタを渡しておく
+
 };
 
 
