@@ -288,7 +288,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
-		argnum = 4;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//ïKê{
+		argnum = 4;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{
 
 		int value[2];
 		for (int i=0; i<2; i++){

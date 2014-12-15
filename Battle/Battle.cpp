@@ -450,7 +450,7 @@ void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_t
 
 
 	//技の種類に応じたエフェクト発動
-		TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actor_index]->GetRect(), Actor[target_actor_index]->GetRect());
+		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actor_index]->GetRect(), Actor[target_actor_index]->GetRect());
 
 	//間の調整
 		int timecount=0;
@@ -506,7 +506,7 @@ void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, 
 }
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 200);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 255);
 		static int timecount=0;
 		timecount++;
 

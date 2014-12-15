@@ -162,6 +162,8 @@ namespace sys{
 	bool PlayerName(const char* _str);
 	bool TrueOrFalse(const char* _str, bool _torf);
 	int rank3(const char* _str, int _exception=2);
+	bool CheckStrNULL(const char* _str);
+	bool CheckStrNULL(const std::string _str);
 }
 struct sideeffect_tag{
 	enum{

@@ -103,11 +103,16 @@ void CTrickManager::CreateDamageEffect(std::string _typeName, std::string _effec
 }
 
 int CTrickManager::GetTrickDamageEffectIndex(std::string _name){
-	for (unsigned int i=0; i<TrickDamageEffectBank.size(); i++){
-		if (TrickDamageEffectBank[i]->GetName()==_name){
-			return i;
+	if (sys::CheckStrNULL(_name)) {
+		return -1;
+
+	} else {
+		for (unsigned int i=0; i<TrickDamageEffectBank.size(); i++){
+			if (TrickDamageEffectBank[i]->GetName()==_name){
+				return i;
+			}
 		}
-	}
-	WarningDx("Warning->CTrickManager::GetTrickDamageEffectIndex\n->Not Found Effect:%s", _name.c_str());
-	return -1;
+		WarningDx("Warning->CTrickManager::GetTrickDamageEffectIndex\n->Not Found Effect:%s", _name.c_str());
+		return -1;
+	}	
 }

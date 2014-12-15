@@ -111,15 +111,31 @@ bool sys::TrueOrFalse(const char* _str, bool _torf){
 	}
 }
 
-int sys::rank3(const char* _str, int _exception){
-	if (mystrcmp(_str, 'p', 3, "LOW", "low", "Low")){
+int sys::rank3(const char* _str, int _exception) {
+	if (mystrcmp(_str, 'p', 3, "LOW", "low", "Low")) {
 		return 1;
-	}else if (_str==NULL || mystrcmp(_str, 'p', 3, "MIDDLE", "middle", "Middle")){
+	} else if (_str==NULL || mystrcmp(_str, 'p', 3, "MIDDLE", "middle", "Middle")) {
 		return 2;
-	}else if (mystrcmp(_str, 'p', 3, "HIGH", "high", "High")){
+	} else if (mystrcmp(_str, 'p', 3, "HIGH", "high", "High")) {
 		return 3;
-	}else{
+	} else {
 		WarningDx("Warning->Check _str[low,middle,high]:%s", _str);
 		return _exception;
+	}
+}
+
+bool sys::CheckStrNULL(const char* _str){
+	if (mystrcmp(_str, 'p', 3, "NULL", "null", "Null")) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool sys::CheckStrNULL(const std::string _str){
+	if (_str=="NULL" || _str=="null" || _str=="Null") {
+		return true;
+	} else {
+		return false;
 	}
 }
