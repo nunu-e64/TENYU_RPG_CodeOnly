@@ -36,7 +36,7 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	if (EnemyBank.find(_name)==EnemyBank.end()){
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
 		EnemyPlannerBank.push_back( EnemyBank[_name].AI.SetPlanner(
-			new CEnemyPlanner_DEFAULT(_name, &EnemyBank[_name].RandomPlanSet) ) );
+			new CEnemyPlanner_DEFAULT(_name) ) );
 
 		return true;
 	}else{
@@ -55,18 +55,14 @@ bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_ta
 	}
 }
 
-bool CEnemySpeciesManager::SetRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList){
+bool CEnemySpeciesManager::AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _plan_list){
 	bool for_return = true;
 
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
-		if (EnemyBank[_name].RandomPlanSet.find(_index)==EnemyBank[_name].RandomPlanSet.end()){
-			
-			EnemyBank[_name].RandomPlanSet[_index] = _planList;
-
-		}else{
-			ErrorDx("Error->%s.SetRandomPlanSet->Already Existed Key(don't override) :%d", _name, (int)_index);
-			for_return = false;
+		if (!(for_return = EnemyBank[_name].AI.AddRandomPlanSet(_index, _plan_list))) {	
+			ErrorDx("Error->%s.AddRandomPlanSet has failed. :%d", _name, (int)_index);
 		}
+
 	}else{
 		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _name);
 		for_return = false;
@@ -82,11 +78,11 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 		
 		if (_typeName=="MYHP"){
 			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
-				new CEnemyPlanner_MYHP(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet) ) );
+				new CEnemyPlanner_MYHP(_enemyName, _argList) ) );
 
 		}else if(_typeName=="PLAYERNUM"){
 			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
-				new CEnemyPlanner_PLAYERNUM(_enemyName, _argList, &EnemyBank[_enemyName].RandomPlanSet) ) );
+				new CEnemyPlanner_PLAYERNUM(_enemyName, _argList) ) );
 
 		}else{
 			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());

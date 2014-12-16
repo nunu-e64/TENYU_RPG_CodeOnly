@@ -8,7 +8,7 @@ class CEnemy;
 
 #include "EnemyPlanner.h"
 
-class CEnemyAI{		//EnemySpeciesが持つ、PlannerやTargeterを束ねる
+class CEnemyAI{		//EnemySpeciesが持つ、plannerやTargeterを束ねる
 public: 
 	CEnemyAI(){
 		CONSTRUCTED;
@@ -22,22 +22,29 @@ public:
 	}
 
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum){
-		Planner->BattleReady(_actorList, _playerNum, _enemyNum);
+		planner->BattleReady(_actorList, _playerNum, _enemyNum);
 		Actor = _actorList;
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
 	}
+	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _plan_list);
 
 	CEnemyPlanner* SetPlanner(CEnemyPlanner* _planner){
-		Planner = _planner;
+		planner = _planner;
+		planner->SetRandomPlanSet(&RandomPlanSet);
 		return _planner;
 	}
 
-	int GetPlan(const CEnemy* _enemy) { return Planner->GetPlan(_enemy); }
+	int GetPlan(const CEnemy* _enemy) { return planner->GetPlan(_enemy); }
 	int GetTarget(const CEnemy* _enemy);
 
 private:
-	CEnemyPlanner* Planner;
+	CEnemyPlanner* planner;
+
+	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
+		//RandomPlanSet[index] = (choice, probability)
+		//行動選択肢とその発動比を並べたリスト。
+		//行動計算の為にAI.plannerとAI.Targetにポインタを渡しておく
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）（EnemyAIは橋渡しなので実際に持つ必要はない）
 		const CActor* const* Actor;

@@ -3,6 +3,21 @@
 #include "Actor.h"
 #include "Enemy.h"
 
+
+bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList){
+
+	if (RandomPlanSet.find(_index)==RandomPlanSet.end()){
+				
+		RandomPlanSet[_index] = _planList;
+		return true;
+
+	}else{
+		ErrorDx("Error->%s.SetRandomPlanSet->Already Existed Key(don't override):%d", (int)_index);
+		return  false;
+	}
+}
+
+
 int CEnemyAI::GetTarget(const CEnemy* _enemy){
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()) break;

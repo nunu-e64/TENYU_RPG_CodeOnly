@@ -391,7 +391,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			planList.push_back(std::pair<int,int>(numset[i*2],numset[i*2+1]));
 		} 
 
-		_enemySpeciesManager->SetRandomPlanSet(arg[1], index, planList);
+		_enemySpeciesManager->AddRandomPlanSet(arg[1], index, planList);
 
 
 //@AI_Set

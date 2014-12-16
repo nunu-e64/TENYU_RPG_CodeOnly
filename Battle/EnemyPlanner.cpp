@@ -37,7 +37,7 @@ int CEnemyPlanner_DAMMY::GetPlan(const CEnemy* _enemy){
 	return -1;
 } 
 
-CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList):CEnemyPlanner(_name){
 	CONSTRUCTED;
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
@@ -51,12 +51,12 @@ CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::stri
 	if (numset.size()%2==1) numset.push_back(0);	//引数が奇数の場合、最後尾に0%を追加
 
 	for (unsigned int i=0; i<numset.size()/2; i++){
-		PlanList.push_back( std::pair<int,int>(numset[i*2],numset[i*2+1]));
+		planList.push_back( std::pair<int,int>(numset[i*2],numset[i*2+1]));
 	}
 
 	//ログ出力
-	//for (unsigned int i=0; i<PlanList.size(); i++){
-	//	myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, PlanList[i].first, PlanList[i].second);
+	//for (unsigned int i=0; i<planList.size(); i++){
+	//	myLog("%s:MYHP_AIList[%d]=(%d,%d)", _name.c_str(), i, planList[i].first, planList[i].second);
 	//}
 	//for (unsigned int i=0; i<_randomPlanSet->size(); i++){
 	//	for (unsigned int j=0; j<(*_randomPlanSet)[i].size(); j++){
@@ -66,14 +66,14 @@ CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector <std::stri
 }
 int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	//ここに実際のあれこれを書く
-	//PlanList･･･[0~n] first:TrickIndex, second:境界線となるHPパーセント
+	//planList･･･[0~n] first:TrickIndex, second:境界線となるHPパーセント
 
 	int ratio = (int)(100 * (double)_enemy->GetHp()/_enemy->GetMaxHp());
 	int plan = -1;
 
-	for (unsigned int i=0; i<PlanList.size(); i++){
-		if (ratio > PlanList[i].second || i == PlanList.size()-1){
-			plan = CalcRandomPlan(PlanList[i].first, _enemy);
+	for (unsigned int i=0; i<planList.size(); i++){
+		if (ratio > planList[i].second || i == planList.size()-1){
+			plan = CalcRandomPlan(planList[i].first, _enemy);
 			return plan;
 		}
 	}
@@ -81,7 +81,7 @@ int CEnemyPlanner_MYHP::GetPlan(const CEnemy* _enemy){
 	return -1;
 }
 
-CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList, std::map<int,std::vector<std::pair<int,int> > > *_randomPlanSet):CEnemyPlanner(_name, _randomPlanSet){
+CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<std::string> _argList):CEnemyPlanner(_name){
 	CONSTRUCTED;
 	std::vector <int> numset;
 	for (unsigned int i=0; i<_argList.size(); i++){
@@ -101,9 +101,9 @@ CEnemyPlanner_PLAYERNUM::CEnemyPlanner_PLAYERNUM(std::string _name, std::vector<
 
 	for (unsigned int i=0; i<MAX_PLAYER_NUM; i++){
 		if (i < numset.size()){
-			PlanList[i] = numset[i];
+			planList[i] = numset[i];
 		}else{
-			PlanList[i] = -1;
+			planList[i] = -1;
 		}
 	}
 }
@@ -119,7 +119,7 @@ int CEnemyPlanner_PLAYERNUM::GetPlan(const CEnemy* _enemy){
 	if(alivePlayerNum == 0){
 		plan = -1;
 	}else{
-		plan = CalcRandomPlan(PlanList[alivePlayerNum-1], _enemy);
+		plan = CalcRandomPlan(planList[alivePlayerNum-1], _enemy);
 	}
 
 	return plan;

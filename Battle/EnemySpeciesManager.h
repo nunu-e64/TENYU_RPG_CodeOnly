@@ -27,7 +27,7 @@ public:
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
 	
-	bool SetRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList);
+	bool AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList);
 	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
 
 	CEnemySpecies* GetSpecies(const char* _name);

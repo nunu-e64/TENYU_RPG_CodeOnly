@@ -88,10 +88,6 @@ private:
 	int GoldGene;
 	int ExpGene;
 
-	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
-		//RandomPlanSet[index] = (choice, probability)
-		//行動選択肢とその発動比を並べたリスト。
-		//行動計算の為にAI.PlannerとAI.Targetにポインタを渡しておく
 
 };
 
