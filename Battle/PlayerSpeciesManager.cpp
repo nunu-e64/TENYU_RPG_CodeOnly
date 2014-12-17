@@ -103,8 +103,6 @@ bool CPlayerSpeciesManager::CheckAfterLoad(){
 		if ((*it).second.TrickList.empty()) {
 			ERRORDX("%s: Set Trick List for All Player!",(*it).second.GetName().c_str());
 			forReturn = false;
-		} else {
-			DEBUGDX("OK:%s", (*it).second.GetName().c_str());
 		}
 		++it;
 	}

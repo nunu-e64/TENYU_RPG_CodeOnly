@@ -57,11 +57,8 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	////////////////////////////////////////////////
 	
 	//読み込みが適切に済んだかチェック//////////
-		myLog("a");
 		PlayerSpeciesManager->CheckAfterLoad();
-		myLog("b");
 		EnemySpeciesManager->CheckAfterLoad();
-		myLog("c");
 	///////////////////////////////////////////
 
 

@@ -3,13 +3,16 @@
 
 
 void CEnemySpeciesManager::Clear(){
-	//myLog("%s::Clear()_start", typeid(*this).name());
 
 	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
-		myLog("delete EnemyPlannerBank[%d]:%s", i, EnemyPlannerBank[i]->GetName().c_str());
+		myLog("deleting EnemyPlannerBank[%d]:%s...", i, EnemyPlannerBank[i]->GetName().c_str());
 		delete EnemyPlannerBank[i];	
 	}
 
+	myLog("clearing EnemyPlannerBank...");
+	EnemyPlannerBank.clear();
+
+	myLog("clearing EnemyBank...");
 	EnemyBank.clear();
 	EnemyBankLock = false;
 		
@@ -19,8 +22,7 @@ void CEnemySpeciesManager::Clear(){
 		++it;
 	}
 	MapEncount.clear();
-	
-	//myLog("%s::Clear()_fin", typeid(*this).name());
+
 }
 
 bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
@@ -225,8 +227,6 @@ bool CEnemySpeciesManager::CheckAfterLoad(){
 		if ((*it).second.TrickList.empty()) {
 			ERRORDX("%s: Set Trick List for All Enemy!",(*it).second.GetName().c_str());
 			forReturn = false;
-		} else {
-			DEBUGDX("OK:%s", (*it).second.GetName().c_str());
 		}
 		++it;
 	}

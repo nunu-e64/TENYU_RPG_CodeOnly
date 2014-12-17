@@ -9,7 +9,10 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 		WARNINGDX("'%s':DammyPlanner!(return -1)", _enemy->GetName().c_str());
 		return -1;
 	} else if(RandomPlanSet==NULL) {
-		WARNINGDX("'%s':RandomPlanSet == NULL!(return -1)", __FILE__, __LINE__, _enemy->GetName().c_str());
+		WARNINGDX("'%s':RandomPlanSet == NULL!(return -1)", _enemy->GetName().c_str());
+		return -1;
+	} else if(RandomPlanSet->empty()) {
+		WARNINGDX("'%s':RandomPlanSet == empty (return -1)", _enemy->GetName().c_str());
 		return -1;
 	}
 
@@ -38,8 +41,14 @@ int CEnemyPlanner_DAMMY::GetPlan(const CEnemy* _enemy){
 } 
 
 int CEnemyPlanner_DEFAULT::GetPlan(const CEnemy* _enemy){
-	if (RandomPlanSet->size()>1) WARNINGDX("%s:RandomPlanSet.size(%d)>1, but EnemyPlanner is still DEFAULT. DEFAULT Planner doesn't use RandomPlan[1~].", _enemy->GetName().c_str(), RandomPlanSet->size());
-	return CalcRandomPlan(0, _enemy);
+	if (RandomPlanSet->size()>1) {
+		WARNINGDX("%s:RandomPlanSet.size(%d)>1, but EnemyPlanner is still DEFAULT. DEFAULT Planner doesn't use RandomPlan[1~].", _enemy->GetName().c_str(), RandomPlanSet->size());
+	} else if(RandomPlanSet->empty()) {
+		WARNINGDX("'%s':RandomPlanSet == empty (return -1)", _enemy->GetName().c_str());
+		return -1;
+	} 
+
+	return CalcRandomPlan(RandomPlanSet->begin()->first, _enemy);
 }
 
 CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList):CEnemyPlanner(_name){
