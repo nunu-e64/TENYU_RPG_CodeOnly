@@ -32,8 +32,6 @@ private:
 		bool Plan();
 		bool Action();
 
-	//ƒƒ“ƒo•Ï”
-		int Attention[MAX_PLAYER_NUM];
 };
 
 

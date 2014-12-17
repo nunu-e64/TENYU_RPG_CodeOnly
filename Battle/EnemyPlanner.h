@@ -49,14 +49,6 @@ private:
 };
 
 
-class CEnemyPlanner_DAMMY: public CEnemyPlanner{
-public:
-	CEnemyPlanner_DAMMY():CEnemyPlanner("Dammy_AI"){CONSTRUCTED;}
-	~CEnemyPlanner_DAMMY(){DESTRUCTED;}
-
-	int GetPlan(const CEnemy* _enemy);	//‹¤’Ê
-};
-
 class CEnemyPlanner_DEFAULT: public CEnemyPlanner{
 public:
 	CEnemyPlanner_DEFAULT(std::string _name):CEnemyPlanner(_name){

@@ -5,10 +5,7 @@
 
 int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 
-	if (typeid(*this) == typeid(CEnemyPlanner_DAMMY)) {
-		WARNINGDX("'%s':DammyPlanner!(return -1)", _enemy->GetName().c_str());
-		return -1;
-	} else if(RandomPlanSet==NULL) {
+	if (RandomPlanSet==NULL) {
 		WARNINGDX("'%s':RandomPlanSet == NULL!(return -1)", _enemy->GetName().c_str());
 		return -1;
 	} else if(RandomPlanSet->empty()) {
@@ -34,11 +31,6 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 		return plan;
 	}
 }
-
-int CEnemyPlanner_DAMMY::GetPlan(const CEnemy* _enemy){
-	WARNINGDX("'%s':This Planner is DAMMY!(return -1)", _enemy->GetName().c_str());
-	return -1;
-} 
 
 int CEnemyPlanner_DEFAULT::GetPlan(const CEnemy* _enemy){
 	if (RandomPlanSet->size()>1) {

@@ -53,7 +53,6 @@ private:
 	std::map <int, std::map<int, encount_tag> > MapEncount;
 
 	CEnemySpecies Dammy_Enemy;
-	CEnemyPlanner_DAMMY Dammy_Planner;
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)//////////////////////////////////////////
 		CEnemySpeciesManager(){

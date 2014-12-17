@@ -15,7 +15,7 @@ void CEnemySpeciesManager::Clear(){
 	myLog("clearing EnemyBank...");
 	EnemyBank.clear();
 	EnemyBankLock = false;
-		
+
 	std::map <int, std::map<int, encount_tag> >::iterator it = MapEncount.begin();
 	while(!MapEncount.empty() && it!=MapEncount.end()){
 		(*it).second.clear();

@@ -35,7 +35,7 @@ public:
 		return _planner;
 	}
 
-	int GetPlan(const CEnemy* _enemy) { return planner->GetPlan(_enemy); }
+	int GetPlan(const CEnemy* _enemy);
 	int GetTarget(const CEnemy* _enemy);
 
 private:
@@ -45,6 +45,12 @@ private:
 		//RandomPlanSet[index] = (choice, probability)
 		//行動選択肢とその発動比を並べたリスト。
 		//行動計算の為にAI.plannerとAI.Targetにポインタを渡しておく
+
+	int Attention[MAX_PLAYER_NUM];
+	enum{
+		ATTENTION_DAMAGE = +2,
+		ATTENIOTN_DEFFENCE = -1
+	};
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）（EnemyAIは橋渡しなので実際に持つ必要はない）
 		const CActor* const* Actor;

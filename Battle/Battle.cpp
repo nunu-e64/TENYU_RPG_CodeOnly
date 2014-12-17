@@ -2,7 +2,6 @@
 #include "Battle.h"
 #include "PlayerSpeciesManager.h"
 #include "EnemySpeciesManager.h"
-#include "EnemyPlanManager.h"
 #include "BattleCalculator.h"
 
 
