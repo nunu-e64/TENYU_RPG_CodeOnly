@@ -356,7 +356,7 @@ inline void myLog(const char* format, ...){
 	myprintLog("MyLog", format, args);
 	va_end(args);
 }
-inline void myLog(const char* filename, const char* format, ...){
+inline void myLogf(const char* filename, const char* format, ...){
 	va_list args;
 	va_start(args, format);
 	myprintLog(filename, format, args);
@@ -367,7 +367,7 @@ inline void myprintfDx(const char* format, va_list args, const char* filename=NU
 	vsprintf_s(string, format, args);	//va_start‚Æva_end‚ÍŒÄ‚Ño‚µŒ³‚Å‚·‚é
 	if (filename!=NULL) sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line);
 
-	myLog("MyLog_Printed", "PRINT: %s", string);
+	myLogf("MyLog_Printed", "PRINT: %s", string);
 	printfDx(string);
 	ScreenFlip();
 	WaitKey();

@@ -27,7 +27,7 @@ public:
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
 	}
-	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _plan_list);
+	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
 
 	CEnemyPlanner* SetPlanner(CEnemyPlanner* _planner){
 		planner = _planner;

@@ -64,9 +64,7 @@ public:
 	}
 	~CEnemyPlanner_DEFAULT(){DESTRUCTED;}
 
-	int GetPlan(const CEnemy* _enemy){
-		return CalcRandomPlan(0, _enemy);
-	}	//‹¤’Ê
+	int GetPlan(const CEnemy* _enemy);	//‹¤’Ê
 };
 
 class CEnemyPlanner_MYHP: public CEnemyPlanner{

@@ -14,6 +14,8 @@ public:
 		
 		Hp = MaxHp = 1;
 		Atk = Def = Spd = -1;
+		
+		TrickList.clear();
 	}
 	~CSpecies(){DESTRUCTED;}
 
@@ -34,10 +36,6 @@ protected:
 	
 	std::vector <trick_tag const*> TrickList;		//技リスト
 	
-	//＠コマンドの順番管理
-		bool TrickSet;
-		bool FirstRandomPlanSet;
-		bool AISet;
 };
 
 class CPlayerSpecies : public virtual CSpecies{
@@ -74,7 +72,8 @@ public:
 		CONSTRUCTED;
 		GoldGene = -1;
 		ExpGene = -1;
-		//RandomPlanSetの初期化はEnemySpeciesManagerのCreateで
+		FirstRandomPlanSettingFlag = false;
+			//RandomPlanSetの初期化はEnemySpeciesManagerのCreateで
 	}
 	~CEnemySpecies(){
 		DESTRUCTED;	
@@ -84,10 +83,10 @@ protected:
 	CEnemyAI AI;
 
 private:
-
 	int GoldGene;
 	int ExpGene;
 
+	bool FirstRandomPlanSettingFlag;
 
 };
 

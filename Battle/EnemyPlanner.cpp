@@ -4,7 +4,6 @@
 
 
 int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
-	int plan = -1;
 
 	if (typeid(*this) == typeid(CEnemyPlanner_DAMMY)) {
 		WARNINGDX("'%s':DammyPlanner!(return -1)", _enemy->GetName().c_str());
@@ -12,14 +11,15 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 	} else if(RandomPlanSet==NULL) {
 		WARNINGDX("'%s':RandomPlanSet == NULL!(return -1)", __FILE__, __LINE__, _enemy->GetName().c_str());
 		return -1;
-	}	
-	
+	}
+
 	if ((*RandomPlanSet).find(_randomPlan_key)==(*RandomPlanSet).end()) {
 		ERRORDX("'%s':Not Found RandomPlan :%d (return -1)", _enemy->GetName().c_str(), _randomPlan_key);
 		return -1;
 
 	} else {
 		int probability=0;
+		int plan = -1;
 
 		for (unsigned int i=0; i<(*RandomPlanSet)[_randomPlan_key].size(); i++){
 			probability += (*RandomPlanSet)[_randomPlan_key][i].second;
@@ -27,15 +27,20 @@ int CEnemyPlanner::CalcRandomPlan(int _randomPlan_key, const CEnemy* _enemy){
 				plan = (*RandomPlanSet)[_randomPlan_key][i].first;
 			}
 		}
+	
+		return plan;
 	}
-
-	return plan;
 }
 
 int CEnemyPlanner_DAMMY::GetPlan(const CEnemy* _enemy){
 	WARNINGDX("'%s':This Planner is DAMMY!(return -1)", _enemy->GetName().c_str());
 	return -1;
 } 
+
+int CEnemyPlanner_DEFAULT::GetPlan(const CEnemy* _enemy){
+	if (RandomPlanSet->size()>1) WARNINGDX("%s:RandomPlanSet.size(%d)>1, but EnemyPlanner is still DEFAULT. DEFAULT Planner doesn't use RandomPlan[1~].", _enemy->GetName().c_str(), RandomPlanSet->size());
+	return CalcRandomPlan(0, _enemy);
+}
 
 CEnemyPlanner_MYHP::CEnemyPlanner_MYHP(std::string _name, std::vector<std::string> _argList):CEnemyPlanner(_name){
 	CONSTRUCTED;

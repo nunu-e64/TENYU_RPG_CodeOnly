@@ -38,11 +38,6 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
-	//if (AI==NULL){
-	//	WarningDx("Warning->%s has no AI", Name.c_str());
-	//	return true;
-	//}
-
 	int action_num = AI.GetPlan(this);
 
 	if (action_num>=0 && action_num<(int)TrickList.size()){
@@ -50,7 +45,7 @@ bool CEnemy::Plan(){
 
 		return true;
 	}else{
-		ErrorDx("Error->CEnemy::Plan->action_num is bigger than TrickList.size (do nothing):%d", __FILE__, __LINE__, action_num);
+		ErrorDx("Error->CEnemy::Plan->action_num<0 OR action_unm > TrickList.size (do nothing):%d", __FILE__, __LINE__, action_num);
 		return true;
 	}
 	

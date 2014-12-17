@@ -6,7 +6,7 @@ void CEnemySpeciesManager::Clear(){
 	//myLog("%s::Clear()_start", typeid(*this).name());
 
 	for(unsigned int i=0; i<EnemyPlannerBank.size(); i++){	
-		myLog("delete EnemyPlannerBank[%d]", i);
+		myLog("delete EnemyPlannerBank[%d]:%s", i, EnemyPlannerBank[i]->GetName().c_str());
 		delete EnemyPlannerBank[i];	
 	}
 
@@ -38,6 +38,8 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 		EnemyPlannerBank.push_back( EnemyBank[_name].AI.SetPlanner(
 			new CEnemyPlanner_DEFAULT(_name) ) );
 
+		myLog("EnemyPlannerBank.push_back(newPlanner_DEFAULT):%s", _name);
+
 		return true;
 	}else{
 		ErrorDx("Error->Already existed EnemyName:%s", _name);
@@ -47,32 +49,53 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 
 bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList){
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
-		EnemyBank[_name].TrickList = _trickList;
-		return true;
+		if (EnemyBank[_name].TrickList.empty()) {
+			EnemyBank[_name].TrickList = _trickList;
+
+			std::vector <std::pair<int,int> > tmpRandomPlan;
+			for (unsigned int i=0; i<_trickList.size(); i++){
+				tmpRandomPlan.push_back(std::pair <int, int> (i, 1));
+			}
+
+			AddRandomPlanSet(_name, 0, tmpRandomPlan, true);	
+
+			return true;
+
+		} else {
+			ERRORDX("%s:Already Set TrickSet", _name);
+			return false;
+		}
+
 	}else{
 		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _name);
 		return false;
 	}
 }
 
-bool CEnemySpeciesManager::AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _plan_list){
-	bool for_return = true;
+bool CEnemySpeciesManager::AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _defaultPlan){
 
 	if (EnemyBank.find(_name)!=EnemyBank.end()){
-		if (!(for_return = EnemyBank[_name].AI.AddRandomPlanSet(_index, _plan_list))) {	
-			ErrorDx("Error->%s.AddRandomPlanSet has failed. :%d", _name, (int)_index);
+		if (EnemyBank[_name].TrickList.empty()) {
+			ERRORDX("%s:Set TrickList before AddRandomPlanSet", _name);
+			return false;
+
+		} else if (EnemyBank[_name].AI.AddRandomPlanSet(_index, _planList, !_defaultPlan && !EnemyBank[_name].FirstRandomPlanSettingFlag)) {
+			if (!_defaultPlan) EnemyBank[_name].FirstRandomPlanSettingFlag = true;
+			return true;
+
+		} else {
+			ErrorDx("Error->%s.AddRandomPlanSet has failed. :%d", _name, (int)_index);	
+			return false;
 		}
 
 	}else{
-		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _name);
-		for_return = false;
+		ERRORDX("Not Found Enemy. Name:%s", _name);
+		return false;
 	}
-
-	return for_return;
 }
 
 bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList){	
-	bool for_return = true;
+	bool forReturn = true;
 	
 	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
 		
@@ -86,17 +109,17 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 
 		}else{
 			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
-			for_return = false;
+			forReturn = false;
 		}
 	
-		if (for_return) myLog("EnemyPlannerBank.push_back(newPlanner)");
+		if (forReturn) myLog("EnemyPlannerBank.push_back(newPlanner_%s):%s", _typeName.c_str(), _enemyName.c_str());
 
 	}else{
-		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _enemyName);
-		for_return = false;
+		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _enemyName.c_str());
+		forReturn = false;
 	}
 
-	return for_return;
+	return forReturn;
 }
 
 
@@ -193,3 +216,22 @@ bool CEnemySpeciesManager::CheckEncount(int _mapnum, int _chipnum, std::vector<C
 		return false;
 	}
 }
+
+bool CEnemySpeciesManager::CheckAfterLoad(){
+	bool forReturn = true;
+
+	std::map <std::string, CEnemySpecies> ::iterator it = EnemyBank.begin();
+	while(it!=EnemyBank.end()){
+		if ((*it).second.TrickList.empty()) {
+			ERRORDX("%s: Set Trick List for All Enemy!",(*it).second.GetName().c_str());
+			forReturn = false;
+		} else {
+			DEBUGDX("OK:%s", (*it).second.GetName().c_str());
+		}
+		++it;
+	}
+
+	return forReturn;
+}
+
+

@@ -94,3 +94,20 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 	}
 
 }
+
+bool CPlayerSpeciesManager::CheckAfterLoad(){
+	bool forReturn = true;
+
+	std::map <std::string, CPlayerSpecies> ::iterator it = PlayerBank.begin();
+	while(it!=PlayerBank.end()){
+		if ((*it).second.TrickList.empty()) {
+			ERRORDX("%s: Set Trick List for All Player!",(*it).second.GetName().c_str());
+			forReturn = false;
+		} else {
+			DEBUGDX("OK:%s", (*it).second.GetName().c_str());
+		}
+		++it;
+	}
+
+	return forReturn;
+}

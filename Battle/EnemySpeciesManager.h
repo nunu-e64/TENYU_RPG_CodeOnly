@@ -22,12 +22,11 @@ public:
 
 	void Clear();
 
-
 	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
 	
-	bool AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList);
+	bool AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _defaultPlan=false);
 	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
 
 	CEnemySpecies* GetSpecies(const char* _name);
@@ -35,6 +34,8 @@ public:
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
 	bool AddMapEncountParty(int _mapnum, int _chipnum, int _encount, std::vector<std::string> _party);
 	bool CheckEncount(int _mapnum, int _chipnum, std::vector<CEnemySpecies*> &_party_p);
+
+	bool CheckAfterLoad();
 
 private:
 	bool EnemyBankLock;		//金庫番。vectorの要素のアドレスをコピーしたあとにvectorの要素を変化させる（＝アドレスが変わるかもしれない）ことの無いように監視

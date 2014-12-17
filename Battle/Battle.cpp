@@ -40,12 +40,6 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	
 	SetTransColor(255, 0, 255);	//透過色指定	//最終的には統一しないとな…$
 
-
-	//技ダメージエフェクトの作成。最終的にはb_system.rpgから読み込む//////// $
-		//TrickManager->CreateDamageEffect("BOMB", "BOMB_A", RED, 10, 10);
-		//TrickManager->CreateDamageEffect("SPREAD", "SPREAD_A");
-		//TrickManager->CreateDamageEffect("PROTO", "PROTO_SMALL", 10, 15, 60);
-		//TrickManager->CreateDamageEffect("PROTO", "PROTO_BIG", 20, 25, 90);
 	
 	//Load.cppを通して.rpgの読み込み/////////////////////
 	
@@ -61,16 +55,24 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 				return false;
 			}
 	////////////////////////////////////////////////
+	
+	//読み込みが適切に済んだかチェック//////////
+		myLog("a");
+		PlayerSpeciesManager->CheckAfterLoad();
+		myLog("b");
+		EnemySpeciesManager->CheckAfterLoad();
+		myLog("c");
+	///////////////////////////////////////////
+
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
 	
-	//パーティリストの初期化///////
+	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
 	//////////////////////////////////
-
 
 	SetTransColor(0, 0, 0);	//透過色指定
 	return true;
