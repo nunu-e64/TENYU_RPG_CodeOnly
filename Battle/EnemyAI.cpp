@@ -19,10 +19,12 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 }
 
 int CEnemyAI::GetPlan(const CEnemy* _enemy) { 
-	return planner->GetPlan(_enemy); 
+	return Planner->GetPlan(_enemy); 
 }
 
 int CEnemyAI::GetTarget(const CEnemy* _enemy){
+	//return Target->GetTarget(_enemy);
+	
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()) break;
 		if (i==PLAYER_NUM-1) {

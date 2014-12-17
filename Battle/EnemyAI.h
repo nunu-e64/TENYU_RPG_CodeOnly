@@ -7,6 +7,7 @@ class CActor;
 class CEnemy;
 
 #include "EnemyPlanner.h"
+#include "EnemyTargetter.h"
 
 class CEnemyAI{		//EnemySpeciesが持つ、plannerやTargeterを束ねる
 public: 
@@ -22,7 +23,8 @@ public:
 	}
 
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum){
-		planner->BattleReady(_actorList, _playerNum, _enemyNum);
+		Planner->BattleReady(_actorList, _playerNum, _enemyNum);
+		Targetter->BattleReady(_actorList, _playerNum, _enemyNum);
 		Actor = _actorList;
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
@@ -30,8 +32,8 @@ public:
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
 
 	CEnemyPlanner* SetPlanner(CEnemyPlanner* _planner){
-		planner = _planner;
-		planner->SetRandomPlanSet(&RandomPlanSet);
+		Planner = _planner;
+		Planner->SetRandomPlanSet(&RandomPlanSet);
 		return _planner;
 	}
 
@@ -39,18 +41,13 @@ public:
 	int GetTarget(const CEnemy* _enemy);
 
 private:
-	CEnemyPlanner* planner;
+	CEnemyPlanner* Planner;
+	CEnemyTargetter* Targetter;
 
 	std::map <int, std::vector<std::pair<int, int> > > RandomPlanSet;
 		//RandomPlanSet[index] = (choice, probability)
 		//行動選択肢とその発動比を並べたリスト。
 		//行動計算の為にAI.plannerとAI.Targetにポインタを渡しておく
-
-	int Attention[MAX_PLAYER_NUM];
-	enum{
-		ATTENTION_DAMAGE = +2,
-		ATTENIOTN_DEFFENCE = -1
-	};
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）（EnemyAIは橋渡しなので実際に持つ必要はない）
 		const CActor* const* Actor;

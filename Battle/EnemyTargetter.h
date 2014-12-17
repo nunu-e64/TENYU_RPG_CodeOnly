@@ -15,6 +15,10 @@ public:
 		Actor = NULL;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
+
+		Attention[0] = 10;
+		Attention[1] = 8;
+		Attention[2] = 5;
 	}
 
 	~CEnemyTargetter(){
@@ -31,7 +35,14 @@ public:
 	virtual int GetTarget(const CEnemy* _enemy)=0;
 
 protected:
-	//Atention
+	int Attention[MAX_PLAYER_NUM];
+
+	enum{
+		ATTENTION_DAMAGE = 2,
+		ATTENIOTN_DEFFENCE = -1
+	};
+
+	static const int ATTENTION_RATIO[MAX_PLAYER_NUM];
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）
 		const CActor* const* Actor;
@@ -54,12 +65,15 @@ public:
 	int GetTarget(const CEnemy* _enemy);	//共通
 };
 
+
+
 class CEnemyTargetter_REVERSE: public CEnemyTargetter{
 public:
 	CEnemyTargetter_REVERSE(std::string _name):CEnemyTargetter(_name){
 		CONSTRUCTED;
 	};
 	~CEnemyTargetter_REVERSE(){DESTRUCTED;}
+
 	int GetTarget(const CEnemy* _enemy); //共通
 };
 

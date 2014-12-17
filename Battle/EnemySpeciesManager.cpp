@@ -99,6 +99,7 @@ bool CEnemySpeciesManager::AddRandomPlanSet(const char* _name, unsigned int _ind
 bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList){	
 	bool forReturn = true;
 	
+	//SetEnemyPlanner‚Íã‘‚«‰Â”\
 	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
 		
 		if (_typeName=="MYHP"){
