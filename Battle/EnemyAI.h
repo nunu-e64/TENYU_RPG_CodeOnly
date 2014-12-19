@@ -36,6 +36,10 @@ public:
 		Planner->SetRandomPlanSet(&RandomPlanSet);
 		return _planner;
 	}
+	CEnemyTargetter* SetTargetter(CEnemyTargetter* _targetter){
+		Targetter = _targetter;
+		return _targetter;
+	}
 
 	int GetPlan(const CEnemy* _enemy);
 	int GetTarget(const CEnemy* _enemy);

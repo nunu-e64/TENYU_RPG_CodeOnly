@@ -6,7 +6,7 @@
 class CActor;
 class CEnemy;
 
-class CEnemyPlanner{ //EnemySpeciesのAI用のインターフェース
+class CEnemyPlanner{ //EnemySpeciesの行動選択AI用のインターフェース
 public: 
 	CEnemyPlanner(std::string _enemyname){
 		CONSTRUCTED;

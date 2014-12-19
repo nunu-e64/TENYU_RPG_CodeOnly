@@ -19,7 +19,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	SetMouseDispFlag( false );	//マウスカーソルを表示しない
 		
 	myLogf("MyLog_Printed", "--------START------------------------------------------------------\n");
-	myLogf("MyClassLog", "--------START------------------------------------------------------\n");
 	myLog("--------START------------------------------------------------------\n");
 
 		CMain* Main = CMain::GetInstance();		//これ以下をすべてCMain::Mainという静的メンバ関数にするのもあり
@@ -34,7 +33,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	DxLib_End(); // DXライブラリ終了処理
 
 	myLogf("MyLog_Printed", "----FINISH-----------------------------------------------------");	
-	myLogf("MyClassLog", "----FINISH-----------------------------------------------------");	
 	myLog("----FINISH-----------------------------------------------------");
 
     return 0;

@@ -23,7 +23,7 @@ int CEnemyAI::GetPlan(const CEnemy* _enemy) {
 }
 
 int CEnemyAI::GetTarget(const CEnemy* _enemy){
-	//return Target->GetTarget(_enemy);
+	return Targetter->GetTarget(_enemy);
 	
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()) break;

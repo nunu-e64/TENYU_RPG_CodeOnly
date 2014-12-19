@@ -28,7 +28,8 @@ public:
 	
 	bool AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _defaultPlan=false);
 	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
-
+	bool SetEnemyTargetter(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
+	
 	CEnemySpecies* GetSpecies(const char* _name);
 
 	bool SetMapEncount(int _mapnum, int _chipnum, int _encount);
@@ -40,7 +41,10 @@ public:
 private:
 	bool EnemyBankLock;		//金庫番。vectorの要素のアドレスをコピーしたあとにvectorの要素を変化させる（＝アドレスが変わるかもしれない）ことの無いように監視
 	std::map <std::string, CEnemySpecies> EnemyBank;
+
 	std::vector<const CEnemyPlanner* const> EnemyPlannerBank; 
+	std::vector<const CEnemyTargetter* const> EnemyTargetterBank; 
+
 	struct encount_tag{
 		struct party_tag{
 			int per;

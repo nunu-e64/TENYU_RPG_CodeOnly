@@ -8,9 +8,16 @@ void CEnemySpeciesManager::Clear(){
 		myLog("deleting EnemyPlannerBank[%d]:%s...", i, EnemyPlannerBank[i]->GetName().c_str());
 		delete EnemyPlannerBank[i];	
 	}
+	for(unsigned int i=0; i<EnemyTargetterBank.size(); i++){	
+		myLog("deleting EnemyTargetterBank[%d]:%s...", i, EnemyTargetterBank[i]->GetName().c_str());
+		delete EnemyTargetterBank[i];	
+	}
 
 	myLog("clearing EnemyPlannerBank...");
 	EnemyPlannerBank.clear();
+
+	myLog("clearing EnemyTargetterBank...");
+	EnemyTargetterBank.clear();
 
 	myLog("clearing EnemyBank...");
 	EnemyBank.clear();
@@ -39,8 +46,10 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
 		EnemyPlannerBank.push_back( EnemyBank[_name].AI.SetPlanner(
 			new CEnemyPlanner_DEFAULT(_name) ) );
-
 		myLog("EnemyPlannerBank.push_back(newPlanner_DEFAULT):%s", _name);
+		EnemyTargetterBank.push_back( EnemyBank[_name].AI.SetTargetter(
+			new CEnemyTargetter_DEFAULT(_name) ) );
+		myLog("EnemyTergetterBank.push_back(newTergetter_DEFAULT):%s", _name);
 
 		return true;
 	}else{
@@ -110,6 +119,10 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
 				new CEnemyPlanner_PLAYERNUM(_enemyName, _argList) ) );
 
+		}else if (_typeName=="DEFAULT"){
+			EnemyPlannerBank.push_back( EnemyBank[_enemyName].AI.SetPlanner(
+				new CEnemyPlanner_DEFAULT(_enemyName) ) );
+
 		}else{
 			ErrorDx("Error->PlannerTypeName does't match any PlanTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
 			forReturn = false;
@@ -125,6 +138,34 @@ bool CEnemySpeciesManager::SetEnemyPlanner(std::string _enemyName, std::string _
 	return forReturn;
 }
 
+bool CEnemySpeciesManager::SetEnemyTargetter(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList){	
+	bool forReturn = true;
+	
+	//SetEnemyTargetter‚Íã‘‚«‰Â”\
+	if (EnemyBank.find(_enemyName)!=EnemyBank.end()){
+		
+		if (_typeName=="REVERSE"){
+			EnemyTargetterBank.push_back( EnemyBank[_enemyName].AI.SetTargetter(
+				new CEnemyTargetter_REVERSE(_enemyName) ) );
+
+		}else if (_typeName=="DEFAULT"){
+			EnemyTargetterBank.push_back( EnemyBank[_enemyName].AI.SetTargetter(
+				new CEnemyTargetter_DEFAULT(_enemyName) ) );
+
+		}else{
+			ErrorDx("Error->TargetterTypeName does't match any TargetTypes :%s:%s", _typeName.c_str(), _enemyName.c_str());
+			forReturn = false;
+		}
+	
+		if (forReturn) myLog("EnemyTargetterBank.push_back(newTargetter_%s):%s", _typeName.c_str(), _enemyName.c_str());
+
+	}else{
+		ErrorDx("Error->%s->Not Found Enemy. Name:%s", __FUNCTION__, _enemyName.c_str());
+		forReturn = false;
+	}
+
+	return forReturn;
+}
 
 
 CEnemySpecies* CEnemySpeciesManager::GetSpecies(const char* _name){	
