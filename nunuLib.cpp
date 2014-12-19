@@ -7,7 +7,21 @@
 SYSTEMTIME GetNowSystemTime(){
 	SYSTEMTIME st;
 	GetSystemTime(&st);
-	st.wHour+=9; //wHourに9時間足し日本時間にする  
+	
+	FILETIME ft1;
+	FILETIME ft2;
+    SystemTimeToFileTime(&st, &ft1);
+	
+	//a こちらでもOK。動作は確認済み。
+	//long long int t = (long long int)(ft1.dwHighDateTime)<<32 | ft1.dwLowDateTime;
+	//t += (long long int)9*60*60*1000*1000*10;	//1日・・・24*60*60*1000*1000*10 
+	//ft2.dwHighDateTime = t>>32;	// & 0xFFFFFFFF;
+	//ft2.dwLowDateTime = (int)t;	
+	
+	//b
+	FileTimeToLocalFileTime(&ft1, &ft2);
+
+	FileTimeToSystemTime(&ft2, &st);
 	return st;
 }
 std::string GetNowSystemTimeString(){
