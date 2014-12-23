@@ -81,7 +81,6 @@ protected:
 	//í“¬ŠÖ˜A
 		bool Alive;
 		bool Visible;
-		//int Hp;
 		int OldHp;	//•`‰æ—p
 		double SpdPer;
 		double TimeGauge;	//0~100%

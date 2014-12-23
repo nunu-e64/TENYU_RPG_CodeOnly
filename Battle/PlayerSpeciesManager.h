@@ -30,7 +30,7 @@ public:
 
 	bool SetMemberList(int _index, const char* _name);
 	bool SetMemberList();
-	int GetMemberListSize(){return MemberList.size();}
+	int GetMemberListSize()const{return MemberList.size();}
 
 	void AddGold(int _gold){Gold+=_gold;}
 	void CopyValue(int PLAYER_NUM, CPlayer* _player); 

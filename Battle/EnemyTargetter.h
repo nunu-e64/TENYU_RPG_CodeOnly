@@ -15,10 +15,6 @@ public:
 		Actor = NULL;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
-
-		Attention[0] = 5;
-		Attention[1] = 8;
-		Attention[2] = 10;
 	}
 
 	~CEnemyTargetter(){
@@ -30,19 +26,18 @@ public:
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
 	}
+	void SetAttention(int* _attention){
+		Attention = _attention;
+	}
 
 	std::string GetName() const{return EnemyName;}
 	virtual int GetTarget(const CEnemy* _enemy)=0;
 
 protected:
-	int Attention[MAX_PLAYER_NUM];
 
-	enum{
-		ATTENTION_DAMAGE = 2,
-		ATTENIOTN_DEFFENCE = -1
-	};
+	static const int ATTENTION_RATIO[MAX_PLAYER_NUM];	//EnemyTargetter.cppで定義してます
 
-	static const int ATTENTION_RATIO[MAX_PLAYER_NUM];
+	int* Attention;
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）
 		const CActor* const* Actor;

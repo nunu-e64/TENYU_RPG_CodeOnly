@@ -45,12 +45,14 @@ bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk
 	if (EnemyBank.find(_name)==EnemyBank.end()){
 		
 		EnemyBank.insert( std::map<std::string, CEnemySpecies>::value_type( _name, newEnemy) );
+
 		EnemyPlannerBank.push_back( EnemyBank[_name].AI.SetPlanner(
 			new CEnemyPlanner_DEFAULT(_name) ) );
 		myLog("EnemyPlannerBank.push_back(newPlanner_DEFAULT):%s", _name);
 
 		EnemyTargetterBank.push_back( EnemyBank[_name].AI.SetTargetter(
 			new CEnemyTargetter_DEFAULT(_name) ) );
+
 		myLog("EnemyTergetterBank.push_back(newTergetter_DEFAULT):%s", _name);
 
 		return true;

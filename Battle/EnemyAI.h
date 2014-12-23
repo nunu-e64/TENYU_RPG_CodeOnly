@@ -16,6 +16,16 @@ public:
 		Actor = NULL;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
+
+		for (int i = 0; i<MAX_PLAYER_NUM; i++){
+			Attention[i] = 0;
+		}
+
+		//For Test$
+		    Attention[0] = 5;
+			Attention[1] = 8;
+			Attention[2] = 10;
+	
 	}
 
 	~CEnemyAI(){
@@ -29,8 +39,6 @@ public:
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
 	}
-	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
-
 	CEnemyPlanner* SetPlanner(CEnemyPlanner* _planner){
 		Planner = _planner;
 		Planner->SetRandomPlanSet(&RandomPlanSet);
@@ -38,11 +46,18 @@ public:
 	}
 	CEnemyTargetter* SetTargetter(CEnemyTargetter* _targetter){
 		Targetter = _targetter;
+		Targetter->SetAttention(&Attention[0]);
 		return _targetter;
 	}
 
 	int GetPlan(const CEnemy* _enemy);
 	int GetTarget(const CEnemy* _enemy);
+
+	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
+	
+	//void AddAttention(int _playerNum, attention_tag _value);
+
+
 
 private:
 	CEnemyPlanner* Planner;
@@ -52,6 +67,9 @@ private:
 		//RandomPlanSet[index] = (choice, probability)
 		//行動選択肢とその発動比を並べたリスト。
 		//行動計算の為にAI.plannerとAI.Targetにポインタを渡しておく
+
+	int Attention[MAX_PLAYER_NUM];
+		//Enemyの各プレイヤーに対する注目度を示す
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）（EnemyAIは橋渡しなので実際に持つ必要はない）
 		const CActor* const* Actor;

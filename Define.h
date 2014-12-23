@@ -145,6 +145,12 @@ enum btlresult_tag{
 	LOSE,
 	LOSE_NOSCREENCHANGE
 };
+enum attention_tag{
+	ATTENTION_DAMAGE = 2,
+	ATTENIOTN_DEFFENCE = -1
+};
+
+
 struct char256{
 	char text[256];
 	bool operator<(const char256& obj)const{
