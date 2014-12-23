@@ -16,9 +16,9 @@ public:
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
 
-		Attention[0] = 10;
+		Attention[0] = 5;
 		Attention[1] = 8;
-		Attention[2] = 5;
+		Attention[2] = 10;
 	}
 
 	~CEnemyTargetter(){

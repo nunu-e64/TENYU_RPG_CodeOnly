@@ -18,34 +18,31 @@ int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 		}
 	}
 
-	int* rank = new int[PLAYER_NUM];	//h”Ô–Ú‚ÉAttention‚Ì‚‚¢PlayerIndex
-	int tmp;
-	for (int h=0; h<PLAYER_NUM; h++) {	
-		rank[h] = h;
-	}
-	for (int h=0; h<PLAYER_NUM-1; h++) {
-		for (int i=h+1; i<PLAYER_NUM; i++) {
-			if ((!Actor[i]->GetAlive()) || (Attention[i] > Attention[rank[h]] && Actor[i]->GetAlive())) {
-				tmp = rank[h];
-				rank[h] = rank[i];
-				rank[i] = tmp;
+	int* attentionIndex = new int[PLAYER_NUM];	//Attention‚Ì‡ˆÊ0~
+
+	for (int i=0; i<PLAYER_NUM; i++) {
+		if (!Actor[i]->GetAlive()) continue;
+		attentionIndex[i] = 0;
+		for (int j=0; j<PLAYER_NUM; j++) {
+			if (i != j && Actor[j]->GetAlive() && Attention[i] <= Attention[j]) {
+				++attentionIndex[i];
 			}
 		} 
 	}
 
 	int probability = 0;
 	int target = -1;
-	int tmpRatio;
 
-	for (unsigned int i=0; i<PLAYER_NUM; i++){
-		tmpRatio = (Actor[i]->GetAlive()? ATTENTION_RATIO[rank[i]]: 0);
-		probability += tmpRatio;
-		if ((rand()%100)/(double)100 * probability < tmpRatio){
+	for (int i=0; i<PLAYER_NUM; i++){
+		if (!Actor[i]->GetAlive()) continue;
+		myLog("AttentionIndex[%d]:%d", i, attentionIndex[i]);
+		probability += ATTENTION_RATIO[attentionIndex[i]];
+		if ((rand()%100)/(double)100 * probability < ATTENTION_RATIO[attentionIndex[i]]){
 			target = i;
 		}
 	}
 	
-	delete [] rank;
+	delete [] attentionIndex;
 
 	if (target < 0) {
 		ERRORDX("%s:Target < 0 :%d", _enemy->GetName().c_str(), target);
