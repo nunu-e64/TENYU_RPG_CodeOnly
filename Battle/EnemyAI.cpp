@@ -54,18 +54,18 @@ void CEnemyAI::SetAttentionCursorImage(int _index, int _img){
 
 void CEnemyAI::Draw(const CEnemy* _enemy){
 	
-	CVector center = _enemy->GetRect().Center();
+	//アテンションマーカーの描画//////////////////////////////////////////////////
+
 
 	int* attentionRank = new int[PLAYER_NUM];	//Attentionの順位
 	Targetter->CalcAttentionRank(attentionRank);
 
-	////////////////////////////////////////////////////
-
+	CVector center = _enemy->GetRect().Center();
 	const int KANKAKU = 35;
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()){
 			double x = center.x + (i - (PLAYER_NUM-1)/(double)2) * KANKAKU;
-			if (DrawRotaGraph((int)x, (int)center.y, ExtRate[attentionRank[i]], atan2(Actor[i]->GetRect().Center().y-center.y, Actor[i]->GetRect().Center().x-center.x), AttentionCursor[i], true, false) == -1){
+			if (DrawRotaGraph((int)x, (int)center.y, ExtRate[attentionRank[i]], atan2(Actor[i]->GetRect().Center().y-center.y, Actor[i]->GetRect().Center().x-x), AttentionCursor[i], true, false) == -1){
 				ERRORDX("DrawError");
 			}
 		}
