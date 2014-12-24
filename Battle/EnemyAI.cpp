@@ -56,7 +56,6 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 	
 	//アテンションマーカーの描画//////////////////////////////////////////////////
 
-
 	int* attentionRank = new int[PLAYER_NUM];	//Attentionの順位
 	Targetter->CalcAttentionRank(attentionRank);
 
