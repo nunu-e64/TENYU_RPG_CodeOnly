@@ -30,7 +30,12 @@ void CEnemy::Draw(int _dx, int _dy){
 		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
-		Draw_Sub(_dx, _dy);
+		//HPBar‚âTimeGauge‚Ì•`‰æ
+			Draw_Sub(_dx, _dy);
+
+		//AttentionCursor‚Ì•`‰æ
+			AI.Draw(this);
+
 	}
 }
 

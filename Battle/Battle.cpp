@@ -53,13 +53,23 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			}else{
 				return false;
 			}
-	////////////////////////////////////////////////
+	////////////////////////////////////////////////	
 	
 	//読み込みが適切に済んだかチェック//////////
 		PlayerSpeciesManager->CheckAfterLoad();
 		EnemySpeciesManager->CheckAfterLoad();
 	///////////////////////////////////////////
 
+
+	//戦闘システム用画像の読み込み////////////////
+		TargetMarker.SetImage(BImgBank.GetImg(TARGET_CURSOR));
+
+		for (int i = 0; i < MAX_PLAYER_NUM; i++){
+			char* tmp = new char[strlen(ATTENTION_CURSOR) + 2];
+			sprintf_s(tmp, strlen(ATTENTION_CURSOR) + 2, "%s%d", ATTENTION_CURSOR, i);
+			CEnemyAI::SetAttentionCursorImage(i, BImgBank.GetImg(tmp));
+			delete [] tmp;
+		}
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -80,7 +90,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 		//ActorへのﾅﾝﾊﾞﾘﾝｸﾞとTextBoxへの紐付け
 			ACTOR_NUM = PLAYER_NUM + ENEMY_NUM;
 			Actor = new CActor*[ACTOR_NUM];
-			for (int i=0; i<ACTOR_NUM; i++){
+			for (int i=0; i<ACTOR_NUM; i++){ 
 				Actor[i] = ((i<PLAYER_NUM)? (CActor*)&Player[i]: (CActor*)&Enemy[i-PLAYER_NUM]);
 				Actor[i]->FirstSet(PLAYER_NUM, ENEMY_NUM, i, &TextBox, &B_CmdList);
 				Actor[i]->SetSystemImg(&BImgBank);
@@ -99,7 +109,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 
 		//ターゲット選択マーカー初期化
 			SetTransColor(255, 0, 255);	//透過色指定
-			TargetMarker.Init(ACTOR_NUM, PLAYER_NUM, ENEMY_NUM, LoadGraph(IMAGE_TARGETCURSOR, true));
+			TargetMarker.Init(ACTOR_NUM, PLAYER_NUM, ENEMY_NUM);
 			SetTransColor(0, 0, 0);	//透過色指定
 
 		EveManager_p = _evemanager_p;
@@ -492,11 +502,13 @@ void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_t
 
 
 //////////////////////////////////////////////////////////////
-void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum, int _img){
+void CBattle::CTargetMarker::SetImage(int _img){
+	Img = _img;
+}
+void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum){
 	ACTOR_NUM = _actornum;
 	PLAYER_NUM = _playernum;
 	ENEMY_NUM = _enemynum;
-	Img = _img;
 	Visible = false;
 	EnemySide = true;
 	Index = 0;

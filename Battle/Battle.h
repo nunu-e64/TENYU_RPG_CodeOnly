@@ -72,7 +72,8 @@ public:
 				DESTRUCTED;	
 			}
 
-			void Init(int _actornum, int _playernum, int _enemynum, int _img);
+			void SetImage(int _img);
+			void Init(int _actornum, int _playernum, int _enemynum);
 
 			void SetVisible(bool _visible){Visible = _visible;}
 			void SetSide(bool _enemy){EnemySide = _enemy;}

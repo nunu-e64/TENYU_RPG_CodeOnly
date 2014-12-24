@@ -7,6 +7,20 @@
 const int CEnemyTargetter::ATTENTION_RATIO[MAX_PLAYER_NUM] = {4, 2, 1};
 
 
+void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
+
+	for (int i=0; i<PLAYER_NUM; i++) {
+		if (!Actor[i]->GetAlive()) continue;
+		_attentionRank[i] = 0;
+		for (int j=0; j<PLAYER_NUM; j++) {
+			if (i != j && Actor[j]->GetAlive() && Attention[i] <= Attention[j]) {
+				++_attentionRank[i];
+			}
+		} 
+	}
+
+}
+
 int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 
 	for (int i=0; i<PLAYER_NUM; i++){
@@ -18,31 +32,22 @@ int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 		}
 	}
 
-	int* attentionIndex = new int[PLAYER_NUM];	//Attention‚Ì‡ˆÊ0~
-
-	for (int i=0; i<PLAYER_NUM; i++) {
-		if (!Actor[i]->GetAlive()) continue;
-		attentionIndex[i] = 0;
-		for (int j=0; j<PLAYER_NUM; j++) {
-			if (i != j && Actor[j]->GetAlive() && Attention[i] <= Attention[j]) {
-				++attentionIndex[i];
-			}
-		} 
-	}
+	int* attentionRank = new int[PLAYER_NUM];	//Attention‚Ì‡ˆÊ0~
+	CalcAttentionRank(attentionRank);
 
 	int probability = 0;
 	int target = -1;
 
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (!Actor[i]->GetAlive()) continue;
-		myLog("AttentionIndex[%d]:%d", i, attentionIndex[i]);
-		probability += ATTENTION_RATIO[attentionIndex[i]];
-		if ((rand()%100)/(double)100 * probability < ATTENTION_RATIO[attentionIndex[i]]){
+		myLog("AttentionRank[%d]:%d", i, attentionRank[i]);
+		probability += ATTENTION_RATIO[attentionRank[i]];
+		if ((rand()%100)/(double)100 * probability < ATTENTION_RATIO[attentionRank[i]]){
 			target = i;
 		}
 	}
 	
-	delete [] attentionIndex;
+	delete [] attentionRank;
 
 	if (target < 0) {
 		ERRORDX("%s:Target < 0 :%d", _enemy->GetName().c_str(), target);

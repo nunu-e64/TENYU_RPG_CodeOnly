@@ -4,19 +4,8 @@
 #include "Enemy.h"
 
 
-bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear){
+int CEnemyAI::AttentionCursor[MAX_PLAYER_NUM] = {0};
 
-	if (_clear) RandomPlanSet.clear();
-
-	if (RandomPlanSet.find(_index)==RandomPlanSet.end()){
-		RandomPlanSet[_index] = _planList;
-		return true;
-
-	}else{
-		ErrorDx("Error->SetRandomPlanSet->Already Existed Key(don't override):%d", (int)_index);
-		return  false;
-	}
-}
 
 int CEnemyAI::GetPlan(const CEnemy* _enemy) { 
 	return Planner->GetPlan(_enemy); 
@@ -38,4 +27,50 @@ int CEnemyAI::GetTarget(const CEnemy* _enemy){
 		target = rand()%PLAYER_NUM;
 	}
 	return target;
+}
+
+bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear){
+
+	if (_clear) RandomPlanSet.clear();
+
+	if (RandomPlanSet.find(_index)==RandomPlanSet.end()){
+		RandomPlanSet[_index] = _planList;
+		return true;
+
+	}else{
+		ErrorDx("Error->SetRandomPlanSet->Already Existed Key(don't override):%d", (int)_index);
+		return  false;
+	}
+}
+
+void CEnemyAI::SetAttentionCursorImage(int _index, int _img){
+	if (_index<MAX_PLAYER_NUM && _index>=0) {
+		CEnemyAI::AttentionCursor[_index] = _img;
+	} else {
+		ErrorDx("_index Error:%d cf:MAX_PLAYER_NUM:%d", _index, MAX_PLAYER_NUM);
+	}
+}
+
+
+void CEnemyAI::Draw(const CEnemy* _enemy){
+	
+	CVector center = _enemy->GetRect().Center();
+
+	int* attentionRank = new int[PLAYER_NUM];	//Attention‚Ì‡ˆÊ
+	Targetter->CalcAttentionRank(attentionRank);
+
+	////////////////////////////////////////////////////
+
+	const int KANKAKU = 35;
+	for (int i=0; i<PLAYER_NUM; i++){
+		if (Actor[i]->GetAlive()){
+			double x = center.x + (i - (PLAYER_NUM-1)/(double)2) * KANKAKU;
+			if (DrawRotaGraph((int)x, (int)center.y, ExtRate[attentionRank[i]], atan2(Actor[i]->GetRect().Center().y-center.y, Actor[i]->GetRect().Center().x-center.x), AttentionCursor[i], true, false) == -1){
+				ERRORDX("DrawError");
+			}
+		}
+	}
+
+	delete [] attentionRank;
+
 }

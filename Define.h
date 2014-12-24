@@ -55,10 +55,10 @@
 const int MAX_PLAYER_NUM = 3;
 const int MAX_ENEMY_NUM = 3;
 const int MAX_MP = 10;
+const int MAX_ATTENTION = 10;
 /////////////////////////////////////////////////////////
 
 //rpgファイル名等///////////////////////////////////////////
-const char DIR_ALLDATA[] = "tenyu_data";
 const char FILE_B_SYSTEM[] = "tenyu_data/b_system.rpg";	//戦闘全般（エンカウント・技・敵味方ステータスなど）関するテキストファイル
 const char FILE_SYSTEM[] = "tenyu_data/system.rpg";		//システム全般に関する読み込みテキストファイル
 const char FILE_SCENARIO[] = "tenyu_data/scenario.rpg";	//シナリオ及びイベントに関するテキストファイル
@@ -67,10 +67,17 @@ const char DIR_SAVE[] = "tenyu_data/save";				//セーブデータを保存するディレクト
 const char FILE_DATANAME[] = "tenyu_data/save/dataname.rpg";	//セーブデータ名を管理するためのテキストファイル
 
 //システムグラフィック///////////////////////////////////
-const char IMAGE_TARGETCURSOR[] = "tenyu_data/pic/sys/battle/target.png";
 const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.png",
 									     "tenyu_data/pic/sys/talkname01.png",
 									     "tenyu_data/pic/sys/talkname02.png"};
+
+
+//システムグラフィックのPicKey/////////////////////////
+const char TARGET_CURSOR[] = "TARGET_CURSOR";
+const char HP_BAR[] = "HP_BAR";
+const char TIME_BAR1[] = "TIME_BAR1";
+const char TIME_BAR2[] = "TIME_BAR2";
+const char ATTENTION_CURSOR[] = "ATTENTION_CURSOR_";
 
 //ゲーム名///////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";

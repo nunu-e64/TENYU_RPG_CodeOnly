@@ -22,10 +22,13 @@ public:
 		}
 
 		//For Test$
-		    Attention[0] = 5;
-			Attention[1] = 8;
-			Attention[2] = 10;
-	
+		    Attention[0] = 10;
+			Attention[1] = 5;
+			Attention[2] = 8;
+
+		for (int i=0; i<MAX_PLAYER_NUM; i++){
+			ExtRate[i] = max(0, (i==0? 1.0: ExtRate[i-1]-0.25));
+		}
 	}
 
 	~CEnemyAI(){
@@ -49,15 +52,17 @@ public:
 		Targetter->SetAttention(&Attention[0]);
 		return _targetter;
 	}
-
 	int GetPlan(const CEnemy* _enemy);
 	int GetTarget(const CEnemy* _enemy);
 
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
+	void AddAttention(int _playerNum, attention_tag _value){
+		Attention[_playerNum] = between(0, MAX_ATTENTION, Attention[_playerNum]+_value); 
+	}
+
+	static void SetAttentionCursorImage(int _index, int _img);
+	void Draw(const CEnemy* _enemy);
 	
-	//void AddAttention(int _playerNum, attention_tag _value);
-
-
 
 private:
 	CEnemyPlanner* Planner;
@@ -75,6 +80,9 @@ private:
 		const CActor* const* Actor;
 		int PLAYER_NUM;
 		int ENEMY_NUM;
+
+	static int AttentionCursor[MAX_PLAYER_NUM];
+	double ExtRate[MAX_PLAYER_NUM];
 
 };
 

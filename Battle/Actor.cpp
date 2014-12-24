@@ -44,9 +44,9 @@ void CActor::SetImg(int _img){
 */
 
 bool CActor::SetSystemImg(CBImgBank* _bimgbank){
-	Img_hpbar		= _bimgbank->GetImg("HP_BAR");
-	Img_timebar[0]	= _bimgbank->GetImg("TIME_BAR1");
-	Img_timebar[1]	= _bimgbank->GetImg("TIME_BAR2");
+	Img_hpbar		= _bimgbank->GetImg(HP_BAR);
+	Img_timebar[0]	= _bimgbank->GetImg(TIME_BAR1);
+	Img_timebar[1]	= _bimgbank->GetImg(TIME_BAR2);
 	return true;
 }
 

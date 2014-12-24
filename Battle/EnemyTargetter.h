@@ -33,6 +33,8 @@ public:
 	std::string GetName() const{return EnemyName;}
 	virtual int GetTarget(const CEnemy* _enemy)=0;
 
+	void CalcAttentionRank(int _attentionRank[]);
+
 protected:
 
 	static const int ATTENTION_RATIO[MAX_PLAYER_NUM];	//EnemyTargetter.cpp‚Å’è‹`‚µ‚Ä‚Ü‚·
