@@ -60,7 +60,13 @@ public:
 		Attention[_playerNum] = between(0, MAX_ATTENTION, Attention[_playerNum]+_value); 
 	}
 
-	static void SetAttentionCursorImage(int _index, int _img);
+	static void SetAttentionMarkerImage(int _img){
+		AttentionMarkerImg = _img;
+		int x; int y;
+		GetGraphSize(AttentionMarkerImg, &x, &y); 
+		AttentionMarkerImgSize = CVector(x/(MAX_ATTENTION+2), y/MAX_PLAYER_NUM);
+	}
+	
 	void Draw(const CEnemy* _enemy);
 	
 
@@ -81,7 +87,9 @@ private:
 		int PLAYER_NUM;
 		int ENEMY_NUM;
 
-	static int AttentionCursor[MAX_PLAYER_NUM];
+	static int AttentionMarkerImg;
+	static CVector AttentionMarkerImgSize;
+
 	double ExtRate[MAX_PLAYER_NUM];
 
 };

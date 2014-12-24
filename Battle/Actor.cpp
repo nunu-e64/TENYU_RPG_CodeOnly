@@ -136,12 +136,12 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	
 	//HpBar
-	DrawBox(-1+Rect.Center().x-25+_dx, -1+Rect.Bottom+5+_dy, 1+Rect.Center().x+25+_dx, 1+Rect.Bottom+15+_dy, BLUE, true);
+	DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+5+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+15+_dy), BLUE, true);
 	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+5+_dy), 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
 
 	//TimeBar
 	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-	DrawBox(-1+Rect.Center().x-25+_dx, -1+Rect.Bottom+20+_dy, 1+Rect.Center().x+25+_dx, 1+Rect.Bottom+30+_dy, BLUE, true);
+	DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+20+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+30+_dy), BLUE, true);
 	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+20+_dy), 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
 	
 	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é

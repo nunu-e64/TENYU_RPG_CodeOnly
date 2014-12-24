@@ -4,7 +4,8 @@
 #include "Enemy.h"
 
 
-int CEnemyAI::AttentionCursor[MAX_PLAYER_NUM] = {0};
+int CEnemyAI::AttentionMarkerImg = 0;
+CVector CEnemyAI::AttentionMarkerImgSize;
 
 
 int CEnemyAI::GetPlan(const CEnemy* _enemy) { 
@@ -43,34 +44,18 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 	}
 }
 
-void CEnemyAI::SetAttentionCursorImage(int _index, int _img){
-	if (_index<MAX_PLAYER_NUM && _index>=0) {
-		CEnemyAI::AttentionCursor[_index] = _img;
-	} else {
-		ErrorDx("_index Error:%d cf:MAX_PLAYER_NUM:%d", _index, MAX_PLAYER_NUM);
-	}
-}
-
-
 void CEnemyAI::Draw(const CEnemy* _enemy){
 	
 	//アテンションマーカーの描画//////////////////////////////////////////////////
 
-
-	int* attentionRank = new int[PLAYER_NUM];	//Attentionの順位
-	Targetter->CalcAttentionRank(attentionRank);
-
-	CVector center = _enemy->GetRect().Center();
+	CVector pos(_enemy->GetRect().Center().x - AttentionMarkerImgSize.x / 2, _enemy->GetRect().Top - AttentionMarkerImgSize.y / 2);
 	const int KANKAKU = 35;
+	
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()){
-			double x = center.x + (i - (PLAYER_NUM-1)/(double)2) * KANKAKU;
-			if (DrawRotaGraph((int)x, (int)center.y, ExtRate[attentionRank[i]], atan2(Actor[i]->GetRect().Center().y-center.y, Actor[i]->GetRect().Center().x-x), AttentionCursor[i], true, false) == -1){
-				ERRORDX("DrawError");
-			}
+			double x = pos.x + (i - (PLAYER_NUM-1)/(double)2) * KANKAKU;
+			DrawRectGraph((int)x, (int)pos.y, (int)(Attention[i] * AttentionMarkerImgSize.x), (int)(i * AttentionMarkerImgSize.y), (int)AttentionMarkerImgSize.x, (int)AttentionMarkerImgSize.y, AttentionMarkerImg, true, false);
 		}
 	}
-
-	delete [] attentionRank;
 
 }

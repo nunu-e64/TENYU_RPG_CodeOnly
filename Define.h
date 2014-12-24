@@ -77,7 +77,7 @@ const char TARGET_CURSOR[] = "TARGET_CURSOR";
 const char HP_BAR[] = "HP_BAR";
 const char TIME_BAR1[] = "TIME_BAR1";
 const char TIME_BAR2[] = "TIME_BAR2";
-const char ATTENTION_CURSOR[] = "ATTENTION_CURSOR_";
+const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
 
 //ÉQÅ[ÉÄñº///////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";

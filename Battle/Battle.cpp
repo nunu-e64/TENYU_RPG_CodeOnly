@@ -63,13 +63,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 	//戦闘システム用画像の読み込み////////////////
 		TargetMarker.SetImage(BImgBank.GetImg(TARGET_CURSOR));
-
-		for (int i = 0; i < MAX_PLAYER_NUM; i++){
-			char* tmp = new char[strlen(ATTENTION_CURSOR) + 2];
-			sprintf_s(tmp, strlen(ATTENTION_CURSOR) + 2, "%s%d", ATTENTION_CURSOR, i);
-			CEnemyAI::SetAttentionCursorImage(i, BImgBank.GetImg(tmp));
-			delete [] tmp;
-		}
+		CEnemyAI::SetAttentionMarkerImage(BImgBank.GetImg(ATTENTION_MARKER));
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -412,7 +406,7 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 	
 
 	///テスト用//////////////////////////////////////////////////////////////////////////
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA , 150+60*sin(2*PI*GetNowCount()/((double)2000)));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA , (int)(150+60*sin(2*PI*GetNowCount()/((double)2000))));
 	DrawCenterString(WINDOW_WIDTH/2,WINDOW_HEIGHT/2,"戦闘中---WまたはLで終了",RED);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	///////////////////////////////////////////////////////////////////////////////////////
