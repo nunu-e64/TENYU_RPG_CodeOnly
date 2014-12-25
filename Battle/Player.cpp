@@ -136,26 +136,35 @@ bool CPlayer::Action(){
 	
 	if (NowTrick==NULL){
 		Target = -1;
-		DebugDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
+		//DebugDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
+	
+		for (int i=0; i<ENEMY_NUM; i++) {
+			char tmpcmd[256];
+			sprintf_s(tmpcmd, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
+			CmdList->Add(tmpcmd);
+		}
+
 		return true;
 	}
 
 	
 	//とりあえずSINGLEの時だけ実装　//ターゲットについてはここで管理。技の種別についてはCmdManagerおよびBattleで管理。
-	switch (NowTrick->TargetType){
-	case NowTrick->SINGLE:
-		char tmpcmd[256];
-		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
-		CmdList->Add(tmpcmd);
-		break;
+		switch (NowTrick->TargetType){
+		case NowTrick->SINGLE:
+			char tmpcmd[256];
+			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+			CmdList->Add(tmpcmd);
+			break;
 
-	//case ALL:
-	default:
-		break;
-	}
+		//case ALL:
+		default:
+			break;
+		}
 
-	NowTrick = NULL;	//使用後は空に
-	Target = -1;
+	//行動後処理
+		NowTrick = NULL;
+		Target = -1;
+
 	return true;
 }
 

@@ -27,10 +27,9 @@ public:
 		AI.BattleReady(_actorList, _playerNum, _enemyNum);
 	}
 
-	void AddAttention(int _playerIndex, attention_tag _value){
+	void AddAttention(int _playerIndex, int _value){
 		AI.AddAttention(_playerIndex, _value);
 	}
-
 	void SetAttention(int _playerIndex, int _value){
 		AI.SetAttention(_playerIndex, _value);
 	}

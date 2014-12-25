@@ -47,6 +47,13 @@
 		ErrorDx("Error mapnum<0: %d",_mapnum);return _return;	\
 	}}
 
+#define NUM_MAX_CHECK(_num, _max, _return) {	\
+	if (!(_num<_max)){							\
+		ERRORDX("'%s=%d' must < %d", #_num, _num, _max); return _return;	\
+	}else if(_num<0){					\
+		ERRORDX("'%s=%d' must >= 0", #_num, _num); return _return;	\
+	}}
+
 #define CONSTRUCTED //myLog("MyClassLog", "%s.Constructed", typeid(*this).name())
 #define DESTRUCTED //myLog("MyClassLog", "%s.Destructed", typeid(*this).name())
 

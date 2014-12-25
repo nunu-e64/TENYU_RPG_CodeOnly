@@ -256,6 +256,8 @@ bool mystrcmp(const char *String, const char Option, const int arg_num, ...);		/
 	//	'p'	：完全一致：	Wordsが""の時、False
 	//	'l'	：左方一致：	Wordsが""の時、True
 	//	'm'	：部分一致：	Wordsが""の時、True
+bool mystrcmp2(const char *String, const char *Words, const char Option='p');
+bool mystrcmp2(const char *String, const char Option, const int arg_num, ...);		//複数キーワードをOR判定
 /////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////

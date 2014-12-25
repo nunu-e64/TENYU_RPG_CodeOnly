@@ -64,7 +64,7 @@ public:
 
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
 	
-	void AddAttention(int _playerIndex, attention_tag _value);
+	void AddAttention(int _playerIndex, int _value);
 	void SetAttention(int _playerIndex, int _value);
 
 	static void SetAttentionMarkerImage(int _img);	
@@ -72,7 +72,6 @@ public:
 	
 
 private:
-	void AddAttention(int _playerIndex, int _value);
 
 	CEnemyPlanner* Planner;
 	CEnemyTargetter* Targetter;

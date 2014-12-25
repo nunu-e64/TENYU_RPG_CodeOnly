@@ -44,9 +44,6 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 	}
 }
 
-void CEnemyAI::AddAttention(int _playerIndex, attention_tag _value){
-	AddAttention(_playerIndex, (int)_value); 
-}
 void CEnemyAI::AddAttention(int _playerIndex, int _value){
 	Attention[_playerIndex] = between(0, MAX_ATTENTION, Attention[_playerIndex]+_value); 
 

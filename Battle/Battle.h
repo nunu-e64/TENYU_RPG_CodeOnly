@@ -47,7 +47,7 @@ public:
 
 	void ChangeTextMode(bool _box, const char* _eventtext = NULL);
 
-	int GetActorNum(){return ACTOR_NUM;}
+	int GetActorNum()const{ return ACTOR_NUM; }
 
 	void SetBackGround(const char* _pickey);
 	void SetBackGround(int _mapnum, int _chipnum=-1);
@@ -62,6 +62,19 @@ public:
 	//戦闘用
 		void Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick);
 
+		//アテンション関係
+			void AddAttention(int _enemyIndex, int _playerIndex, int _value){
+				NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM,);
+				NUM_MAX_CHECK(_playerIndex, PLAYER_NUM,);
+				Enemy[_enemyIndex].AddAttention(_playerIndex, _value);
+			}
+			void SetAttention(int _enemyIndex, int _playerIndex, int _value){
+				NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM,);
+				NUM_MAX_CHECK(_playerIndex, PLAYER_NUM,);
+				Enemy[_enemyIndex].SetAttention(_playerIndex, _value);
+			}
+
+	
 	//ターゲット選択マーカー
 		class CTargetMarker{
 		public:

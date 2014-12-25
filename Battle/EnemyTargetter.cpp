@@ -22,16 +22,13 @@ void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
 		} 
 	}
 
-	return;//$
-
-	//上に詰める
+	//上に詰める	//条件が合えば毎ループ発生するのも効率悪い。できれば改善。
 	int i = 0;
 	while(_attentionRank[i] != 0){
 		if (i == PLAYER_NUM-1) {
-			myLog("うえつめ");
 			i = 0;
 			for (int j=0; j<PLAYER_NUM; j++) {
-				++_attentionRank[j];
+				--_attentionRank[j];
 			}
 		} else {
 			++i;

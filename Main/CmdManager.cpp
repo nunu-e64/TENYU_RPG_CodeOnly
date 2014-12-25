@@ -1339,17 +1339,21 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 	}else if (mystrcmp(_command, "@Damage",'l')){
 		argnum = 4;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
 
-		int attacker_actorindex = -1;
-		if (!mystrtol(arg[0], &attacker_actorindex)) ErrorDx("Error->@Damage->Check type arg[attacker_actorindex]->%s", __FILE__, __LINE__, arg[0]);
-		if (attacker_actorindex<0 || attacker_actorindex>_battle->GetActorNum()){
-			ErrorDx("Error->@Damage-> 0<=arg[attacker_actorindex]<ACTOR_NUM :%d", attacker_actorindex);
+		int attackerActorIndex = -1;
+		if (!mystrtol(arg[0], &attackerActorIndex)) {
+			ErrorDx("Error->@Damage->Check type arg[attackerActorIndex]->%s", __FILE__, __LINE__, arg[0]);
+			goto finish;
+		} else if (attackerActorIndex<0 || attackerActorIndex>_battle->GetActorNum()){
+			ErrorDx("Error->@Damage-> 0<=arg[attackerActorIndex]<ACTOR_NUM :%d", attackerActorIndex);
 			goto finish;
 		}
 
-		int target_actorindex = -1;
-		if (!mystrtol(arg[1], &target_actorindex)) ErrorDx("Error->@Damage->Check type arg[target_actorindex]->%s", __FILE__, __LINE__, arg[1]);
-		if (target_actorindex<0 || target_actorindex>_battle->GetActorNum()){
-			ErrorDx("Error->@Damage-> 0<=arg[target_actorindex]<ACTOR_NUM :%d", target_actorindex);
+		int targetActorIndex = -1;
+		if (!mystrtol(arg[1], &targetActorIndex)) {
+			ErrorDx("Error->@Damage->Check type arg[targetActorIndex]->%s", __FILE__, __LINE__, arg[1]);
+			goto finish;
+		} else if (targetActorIndex<0 || targetActorIndex>_battle->GetActorNum()){
+			ErrorDx("Error->@Damage-> 0<=arg[targetActorIndex]<ACTOR_NUM :%d", targetActorIndex);
 			goto finish;
 		}
 
@@ -1361,7 +1365,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 
 		//•Ï”‚Ì€”õ‚ª‚Å‚«‚½‚ç‚¢‚´ˆ—‚Ö
 		if (mystrcmp(arg[3], "NORMAL")){
-			_battle->Damage(attacker_actorindex, target_actorindex, (trick_tag const*)trick);
+			_battle->Damage(attackerActorIndex, targetActorIndex, (trick_tag const*)trick);
 
 		//}else if (mystrcmp(arg[3], "STABLE")){ 
 		}else{
@@ -1369,7 +1373,32 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 		}
 
 		//NORMAL, STABLE, PERCENT, NPDEF$
+
 	
+//@Attention_Add
+	}else if (mystrcmp(_command, "@Attention_Add",'l')){
+		argnum = 3;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
+
+		int enemyIndex = -1;
+		if (!mystrtol(arg[0], &enemyIndex)) {
+			ERRORDX("@Attention_Add->Check type arg[enemyIndex]->%s", arg[0]);
+			goto finish;
+		}
+
+		int playerIndex = -1;
+		if (!mystrtol(arg[1], &playerIndex)) {
+			ERRORDX("@Attention_Add->Check type arg[playerIndex]->%s", arg[1]);
+			goto finish;
+		}
+
+		int addValue = -1;
+		if (!mystrtol(arg[2], &addValue)) {
+			ERRORDX("@Attention_Add->Check type arg[addValue]->%s", arg[2]);
+			goto finish;
+		}
+
+		_battle->AddAttention(enemyIndex, playerIndex, addValue);		
+
 
 //ƒRƒ}ƒ“ƒh•sˆê’v
 	}else{
