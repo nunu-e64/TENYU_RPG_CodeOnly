@@ -2,7 +2,6 @@
 #include "Enemy.h"
 #include "Species.h"
 #include "../Main/TextBox.h"
-//#include "../Main/TextWrap.h"
 #include "../Main/CmdList.h"
 
 
@@ -41,44 +40,45 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
-	int action_num = AI.GetPlan(this);
+	//すべてActionに移動
+	return true;
 
-	if (action_num>=0 && action_num<(int)TrickList.size()){
-		NowTrick = TrickList[action_num];
-
-		return true;
-	}else{
-		ErrorDx("Error->CEnemy::Plan->action_num<0 OR action_unm > TrickList.size (do nothing):%d", __FILE__, __LINE__, action_num);
-		return true;
-	}
-	
 }
 
 bool CEnemy::Action(){
+	
+	//行動の決定
+		int actionNum = AI.GetPlan(this);
+		if (actionNum>=0 && actionNum<(int)TrickList.size()){
+			NowTrick = TrickList[actionNum];
+		}else{
+			ERRORDX("%s:actionNum<0 OR actionNum >= TrickList.size (do nothing):%d", GetName().c_str(), actionNum);
+			return true;
+		}
 
-	if (NowTrick==NULL){
+		if (NowTrick==NULL){
+			Target = -1;
+			ERRORDX("%s:NowTrick=NULL(do nothing)", GetName().c_str());
+			return true;
+		}
+
+	//Tatgetの選択と行動
+		char tmpcmd[256];
+		switch(NowTrick->TargetType){
+		case NowTrick->SINGLE:
+			Target = AI.GetTarget(this); 
+			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
+			CmdList->Add(tmpcmd);
+			break;
+		//case NowTrick->ALL:$
+		default:	
+			break;
+
+		}
+
+	//行動後処理
+		NowTrick = NULL;
 		Target = -1;
-		ErrorDx("Error->CEnemey::Action->NowTrick=NULL(do nothing)");
-		return true;
-	}
-
-
-	//Tatgetの選択にはAttentionを使うこと（じゃないとプレイヤーが戦略を立てにくい）$  Plan時かAction時かどっちでTargetを決めるべき？→Actionでしょ！
-	char tmpcmd[256];
-	switch(NowTrick->TargetType){
-	case NowTrick->SINGLE:
-		Target = AI.GetTarget(this); 
-		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？
-		CmdList->Add(tmpcmd);
-		break;
-	//case NowTrick->ALL:$
-	default:	
-		break;
-
-	}
-
-	NowTrick = NULL;	//使用後は空に
-	Target = -1;
 	
 	return true;
 }
