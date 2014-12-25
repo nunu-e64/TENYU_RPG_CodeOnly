@@ -35,7 +35,6 @@ void CEnemy::Draw(int _dx, int _dy){
 
 		//AttentionCursor‚Ì•`‰æ
 			AI.Draw(this);
-
 	}
 }
 

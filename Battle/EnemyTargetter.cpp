@@ -9,16 +9,34 @@ const int CEnemyTargetter::ATTENTION_RATIO[MAX_PLAYER_NUM] = {4, 2, 1};
 
 void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
 
+	//myLogf("attention", "[0]%d, [1]%d, [2]%d", Attention[0], Attention[1], Attention[2]);
+
+
 	for (int i=0; i<PLAYER_NUM; i++) {
-		if (!Actor[i]->GetAlive()) continue;
 		_attentionRank[i] = 0;
+
 		for (int j=0; j<PLAYER_NUM; j++) {
-			if (i != j && Actor[j]->GetAlive() && Attention[i] <= Attention[j]) {
+			if ((i != j) && (Attention[i] <= Attention[j])) {
 				++_attentionRank[i];
 			}
 		} 
 	}
 
+	return;//$
+
+	//ã‚É‹l‚ß‚é
+	int i = 0;
+	while(_attentionRank[i] != 0){
+		if (i == PLAYER_NUM-1) {
+			myLog("‚¤‚¦‚Â‚ß");
+			i = 0;
+			for (int j=0; j<PLAYER_NUM; j++) {
+				++_attentionRank[j];
+			}
+		} else {
+			++i;
+		}
+	}
 }
 
 int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){

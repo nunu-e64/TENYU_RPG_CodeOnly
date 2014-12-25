@@ -38,6 +38,10 @@ public:
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum){
 		Planner->BattleReady(_actorList, _playerNum, _enemyNum);
 		Targetter->BattleReady(_actorList, _playerNum, _enemyNum);
+
+		Targetter->SetAttention(Attention);
+		myLogf("Attention_P", "EnemyAI:%d", Attention);
+
 		Actor = _actorList;
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
@@ -49,7 +53,10 @@ public:
 	}
 	CEnemyTargetter* SetTargetter(CEnemyTargetter* _targetter){
 		Targetter = _targetter;
-		Targetter->SetAttention(&Attention[0]);
+
+		//Targetter->SetAttention(Attention);	ここでアドレスを渡してしまうと戦闘開始時にEnemy生成の際に配列がコピーされてアドレスが変わるため同期が取れなくなる
+		//myLogf("Attention_P", "EnemyAI:%d", Attention);
+
 		return _targetter;
 	}
 	int GetPlan(const CEnemy* _enemy);
@@ -57,15 +64,15 @@ public:
 
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
 	
-	void AddAttention(int _playerNum, attention_tag _value);
-	void SetAttention(int _playerNum, int _value);
+	void AddAttention(int _playerIndex, attention_tag _value);
+	void SetAttention(int _playerIndex, int _value);
 
 	static void SetAttentionMarkerImage(int _img);	
 	void Draw(const CEnemy* _enemy);
 	
 
 private:
-	void AddAttention(int _playerNum, int _value);
+	void AddAttention(int _playerIndex, int _value);
 
 	CEnemyPlanner* Planner;
 	CEnemyTargetter* Targetter;

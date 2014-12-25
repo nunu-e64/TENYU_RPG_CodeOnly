@@ -26,8 +26,9 @@ public:
 		PLAYER_NUM = _playerNum;
 		ENEMY_NUM = _enemyNum;
 	}
-	void SetAttention(int* _attention){
+	void SetAttention(int _attention[]){
 		Attention = _attention;
+		myLogf("Attention_P", "Targetter:%d", Attention);
 	}
 
 	std::string GetName() const{return EnemyName;}
