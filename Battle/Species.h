@@ -32,7 +32,7 @@ protected:
 	int MaxHp;
 	int Atk;
 	int Def;
-	int Spd;		//%¨‘Š‘Î’l
+	int Spd;		//%
 	
 	std::vector <trick_tag const*> TrickList;		//‹ZƒŠƒXƒg
 	
