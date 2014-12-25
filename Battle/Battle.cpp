@@ -98,7 +98,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 			
 			for (int i=0; i<ENEMY_NUM; i++){
 				Enemy[i].BattleReady(Actor, PLAYER_NUM, ENEMY_NUM);
-				Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 70);
+				Enemy[i].SetRect(WINDOW_WIDTH/4*(i+1), 90);
 			}
 
 		//ターゲット選択マーカー初期化

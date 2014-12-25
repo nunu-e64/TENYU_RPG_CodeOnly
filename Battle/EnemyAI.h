@@ -56,21 +56,17 @@ public:
 	int GetTarget(const CEnemy* _enemy);
 
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
-	void AddAttention(int _playerNum, attention_tag _value){
-		Attention[_playerNum] = between(0, MAX_ATTENTION, Attention[_playerNum]+_value); 
-	}
-
-	static void SetAttentionMarkerImage(int _img){
-		AttentionMarkerImg = _img;
-		int x; int y;
-		GetGraphSize(AttentionMarkerImg, &x, &y); 
-		AttentionMarkerImgSize = CVector(x/(MAX_ATTENTION+2), y/MAX_PLAYER_NUM);
-	}
 	
+	void AddAttention(int _playerNum, attention_tag _value);
+	void SetAttention(int _playerNum, int _value);
+
+	static void SetAttentionMarkerImage(int _img);	
 	void Draw(const CEnemy* _enemy);
 	
 
 private:
+	void AddAttention(int _playerNum, int _value);
+
 	CEnemyPlanner* Planner;
 	CEnemyTargetter* Targetter;
 

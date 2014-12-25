@@ -23,6 +23,7 @@ void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
 
 int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 
+	//全員死亡してたらエラーを吐いて終了
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (Actor[i]->GetAlive()) break;
 
@@ -32,15 +33,16 @@ int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 		}
 	}
 
+	//アテンションの順位を求める
 	int* attentionRank = new int[PLAYER_NUM];	//Attentionの順位0~
 	CalcAttentionRank(attentionRank);
 
+	//アテンションの順位に応じてターゲット決定
 	int probability = 0;
 	int target = -1;
 
 	for (int i=0; i<PLAYER_NUM; i++){
-		if (!Actor[i]->GetAlive()) continue;
-		myLog("AttentionRank[%d]:%d", i, attentionRank[i]);
+		if (!Actor[i]->GetAlive() || Attention[i]==0) continue;		//既に死亡しているまたはアテンションが0のときはターゲットにしない
 		probability += ATTENTION_RATIO[attentionRank[i]];
 		if ((rand()%100)/(double)100 * probability < ATTENTION_RATIO[attentionRank[i]]){
 			target = i;
@@ -49,6 +51,7 @@ int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 	
 	delete [] attentionRank;
 
+	//エラーチェック
 	if (target < 0) {
 		ERRORDX("%s:Target < 0 :%d", _enemy->GetName().c_str(), target);
 		return -1;

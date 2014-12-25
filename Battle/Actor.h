@@ -42,18 +42,18 @@ public:
 		int GetIndex()const{return Index;}
 		
 	//í“¬ŠÖ˜A
-		void SetVisible(bool _visible){Visible = _visible;}
-		bool GetVisible()const{return Visible;}
-		bool GetAlive()const{return Alive;}
+		void SetVisible(bool _visible){ Visible = _visible; }
+		bool GetVisible()const{ return Visible; }
+		bool GetAlive()const{ return Alive; }
 		//int GetDef(){return Def;}
-		int GetAtk()const{return Atk;}
-		int GetHp()const{return Hp;}
-		int GetMaxHp()const{return MaxHp;}
-		trick_tag const* GetNowTrick()const{return NowTrick;}
+		int GetAtk()const{ return Atk; }
+		int GetHp()const{ return Hp; }
+		int GetMaxHp()const{ return MaxHp; }
+		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
 		int Damage(CActor* _attacker, trick_tag const* _trick);
 		bool DeadCheck();	//€–SŠm”F‚ªÏ‚ñ‚¾‚çTrue
-		void SetTarget(int _target){Target=_target;}
+		void SetTarget(int _target){ Target=_target; }
 
 	//‚»‚Ì‘¼
 		CRect GetRect()const{return Rect;}
