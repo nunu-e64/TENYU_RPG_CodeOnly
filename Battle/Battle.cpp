@@ -434,9 +434,9 @@ int CBattle::ResultCheck(){
 	return -1;
 }
 
-void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_tag const* _trick){
-	int attacker_actor_index = between(0, ACTOR_NUM-1, _attacker_actor_index); 
-	int target_actor_index   = between(0, ACTOR_NUM-1, _target_actor_index); 
+void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
+	int attacker_actor_index = between(0, ACTOR_NUM-1, _attackerActorIndex); 
+	int target_actor_index   = between(0, ACTOR_NUM-1, _targetActorIndex); 
 
 	if (!Actor[target_actor_index]->GetAlive()) {	//Šù‚ÉUŒ‚‘ÎÛ‚ªŽ€–S‚µ‚Ä‚¢‚éê‡
 		char tmp[3][256];
@@ -478,6 +478,13 @@ void CBattle::Damage(int _attacker_actor_index, int _target_actor_index, trick_t
 		}
 	}while(BasicLoop());
 	////////////////////////////////////////////////////////////////////////////
+
+
+	//UŒ‚‘ÎÛ‚ª“G‚¾‚Á‚½ê‡ƒAƒeƒ“ƒVƒ‡ƒ“‚ª•Ï“®
+	if (_targetActorIndex >= PLAYER_NUM && _attackerActorIndex < PLAYER_NUM) {
+		Enemy[_targetActorIndex-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+	}
+
 
 	//ƒƒOƒEƒBƒ“ƒhƒEì¬‚Ü‚Å‚Ì‚Â‚È‚¬$
 	char tmpmessage[256];

@@ -20,12 +20,20 @@ public:
 		DESTRUCTED;
 	}
 
+	void Draw(int _dx=0, int _dy=0);
+
+
 	void BattleReady(const CActor* const* _actorList, const int _playerNum, const int _enemyNum) {
 		AI.BattleReady(_actorList, _playerNum, _enemyNum);
 	}
 
-	void Draw(int _dx=0, int _dy=0);
+	void AddAttention(int _playerIndex, attention_tag _value){
+		AI.AddAttention(_playerIndex, _value);
+	}
 
+	void SetAttention(int _playerIndex, int _value){
+		AI.SetAttention(_playerIndex, _value);
+	}
 
 private:
 	//ƒƒ“ƒoŠÖ”

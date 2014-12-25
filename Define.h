@@ -154,7 +154,8 @@ enum btlresult_tag{
 };
 enum attention_tag{
 	ATTENTION_DAMAGE = 2,
-	ATTENIOTN_DEFFENCE = -1
+	ATTENIOTN_DEFFENCE = -1,
+	ATTENIOTN_WAITING = -1
 };
 
 
