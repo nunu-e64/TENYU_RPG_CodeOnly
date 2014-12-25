@@ -103,7 +103,7 @@ void CTrickManager::CreateDamageEffect(std::string _typeName, std::string _effec
 }
 
 int CTrickManager::GetTrickDamageEffectIndex(std::string _name){
-	if (sys::CheckStrNULL(_name)) {
+	if (sys::CheckStrNULL(_name.c_str())) {
 		return -1;
 
 	} else {

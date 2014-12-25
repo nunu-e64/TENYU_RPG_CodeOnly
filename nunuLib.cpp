@@ -127,6 +127,63 @@ bool mystrcmp(const char *String, const char Option, const int arg_num, ...){
 	va_end(args);
 	return false;
 }
+
+//大文字小文字を区別せずに比較 （strcmpの区別なし版はstristrがある。しかしstrstrの区別なし版は標準で存在しないので一つ一つ手動置換する（strcasestrはwindowsにはないっぽい））
+bool mystrcmp2(const char *String, const char *Words, const char Option){	
+	if (String==NULL) return false;
+	if (Option=='p'){			//Perfect: 完全一致
+		for (unsigned int i=0; i<strlen(String)+1; i++){
+			if (tolower((unsigned char)String[i]) != tolower((unsigned char)Words[i])) {
+				return false;
+			}
+		}
+		return true;
+
+	}else if (Option=='l'){		//Left: Stringの先頭にWordsが含まれている
+		for (unsigned int i=0; i<strlen(String)+1; i++){
+			if (Words[i] == '\0') {
+				return true;
+			}else if (tolower((unsigned char)String[i]) != tolower((unsigned char)Words[i])) {
+				return false;
+			}
+		}
+		return true;
+
+	}else if (Option=='m'){		//Middle: Stringの中にWordsが含まれている
+		char* tmpString = new char[strlen(String)+1]; 
+		char* tmpWords  = new char[strlen(Words)+1]; 
+		for (unsigned int i=0; i<strlen(String)+1; i++){
+			tmpString[i] = tolower((unsigned char)String[i]);
+			//myLogf("mystrcmp2", "%c", tmpString[i]);
+		}
+		for (unsigned int i=0; i<strlen(Words)+1; i++){
+			tmpWords[i] = tolower((unsigned char)Words[i]);
+			//myLogf("mystrcmp2", "%c", tmpWords[i]);
+		}
+		bool forReturn = ((strstr(tmpString, tmpWords)!=NULL)? true: false);
+		delete [] tmpString;
+		delete [] tmpWords;
+
+		return forReturn;
+
+	}else{
+		return mystrcmp2(String, Words, 'p');
+	}
+}
+//大文字小文字を気にせずに複数のキーワードでOR判定
+bool mystrcmp2(const char *String, const char Option, const int arg_num, ...){
+	va_list args;
+	va_start( args, arg_num);	//arg_numが大きすぎたときの処置方法はないのか？
+	
+	for (int i=0; i<arg_num; i++){
+		if (mystrcmp2(String, va_arg(args, char*), Option)){
+			va_end(args);
+			return true;
+		}
+	}
+	va_end(args);
+	return false;
+}
 /////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////

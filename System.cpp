@@ -78,15 +78,15 @@ direction_tag sys::StrtoDir(const char* _str, int _originaldir){	//CCmdManager‚Ì
 		*p = '\0';
 	}
 
-	if( mystrcmp(str, 'p', 6, "Right","RIGHT","right","¨","0","‰E") ){
+	if( mystrcmp2(str, "right") || mystrcmp(str, 'p', 3,"¨","0","‰E") ){
 		dir = RIGHT;
-	}else if( mystrcmp(str, 'p', 6, "Left","LEFT","left","©","1","¶") ){
+	}else if( mystrcmp2(str, "left") || mystrcmp(str, 'p', 3,"©","1","¶") ){
 		dir = LEFT;
-	}else if( mystrcmp(str, 'p', 6, "Down","DOWN","down","«","2","‰º") ){
+	}else if( mystrcmp2(str, "down") || mystrcmp(str, 'p', 3,"«","2","‰º") ){
 		dir = DOWN;
-	}else if( mystrcmp(str, 'p', 6, "Up","UP","up","ª","3","ã") ){
+	}else if( mystrcmp2(str, "up") || mystrcmp(str, 'p', 3,"ª","3","ã") ){
 		dir = UP;
-	}else if( mystrcmp(str, 'p', 4, "Original", "ORIGINAL","original","-1") ){
+	}else if( mystrcmp2(str, "original") || mystrcmp(str, "-1") ){
 		dir = (direction_tag)_originaldir;
 	}else{
 		WarningDx("Warning->StrtoDir failed:%s", __FILE__, __LINE__, str);
@@ -98,23 +98,23 @@ direction_tag sys::StrtoDir(const char* _str, int _originaldir){	//CCmdManager‚Ì
 }
 
 bool sys::PlayerName(const char* _str){
-	return mystrcmp(_str, 'p', 6, "me", "ME", "Me", "PLAYER", "player", "Player");
+	return (mystrcmp2(_str, "me") || mystrcmp2(_str, "player"));
 }
 
 bool sys::TrueOrFalse(const char* _str, bool _torf){
 	if (_torf){
-		return mystrcmp(_str, 'p', 4, "1", "TRUE", "True", "true");
+		return (mystrcmp(_str, "1") || mystrcmp2(_str, "true"));
 	}else{
-		return mystrcmp(_str, 'p', 4, "0", "FALSE", "False", "false");
+		return (mystrcmp(_str, "0") || mystrcmp2(_str, "false"));
 	}
 }
 
 int sys::rank3(const char* _str, int _exception) {
-	if (mystrcmp(_str, 'p', 3, "LOW", "low", "Low")) {
+	if (mystrcmp2(_str, "low")) {
 		return 1;
-	} else if (_str==NULL || mystrcmp(_str, 'p', 3, "MIDDLE", "middle", "Middle")) {
+	} else if (_str==NULL || mystrcmp2(_str, "middle")) {
 		return 2;
-	} else if (mystrcmp(_str, 'p', 3, "HIGH", "high", "High")) {
+	} else if (mystrcmp2(_str, "high")) {
 		return 3;
 	} else {
 		WarningDx("Warning->Check _str[low,middle,high]:%s", _str);
@@ -123,15 +123,7 @@ int sys::rank3(const char* _str, int _exception) {
 }
 
 bool sys::CheckStrNULL(const char* _str){
-	if (mystrcmp(_str, 'p', 3, "NULL", "null", "Null")) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool sys::CheckStrNULL(const std::string _str){
-	if (_str=="NULL" || _str=="null" || _str=="Null") {
+	if (mystrcmp2(_str, "NULL")) {
 		return true;
 	} else {
 		return false;
