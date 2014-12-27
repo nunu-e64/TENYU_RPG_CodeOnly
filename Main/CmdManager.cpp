@@ -238,8 +238,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 	}else if (mystrcmp(_command, "@Load_Pic")){
 		argnum = 2;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
 
-		_bimgbank->Add(arg[1], LoadGraph(arg[0], true));
-		//_map->LoadPic(arg[0], arg[1], arg[2]);
+		_bimgbank->AddImg(arg[1], LoadGraph(arg[0], true));
 
 //@Player_Create
 	}else if (mystrcmp(_command,"@Player_Create")){	

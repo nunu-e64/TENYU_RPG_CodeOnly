@@ -14,10 +14,15 @@ public:
 	}
 	~CImgBank(){
 		DESTRUCTED;
+		Clear();
+	}
+
+	void Clear(){
 		ImgBank.clear();
 	}
 
 	void LoadPic(const char *_path, const char _key[32], const char _kind[32]);	//CMap‚Æ‚ÌŒİŠ·«Šm•Û
+
 	bool AddImg(const char* _key, const int _img);
 	int GetImg(const char* _key);
 

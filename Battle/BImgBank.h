@@ -3,40 +3,28 @@
 #define BIMGBANK_H						////
 ////////////////////////////////////////////////
 
-#include <map>
-#include <string>
-#include <vector>
+#include "../Main/ImgBank.h"
 
-class CBImgBank{
+class CBImgBank : public CImgBank{
 public:
 	CBImgBank(){
 		CONSTRUCTED;
 	}
 	~CBImgBank(){
 		DESTRUCTED;
-		ImgBank.clear();
-		for (int i=0; i<MAP_MAX; i++){
-			BattleBackGround[i].clear();
-		}
+		Clear();
 	}
 
-	void LoadPic(const char *_path, const char _key[32], const char _kind[32]);	//CMap‚Æ‚ÌŒÝŠ·«Šm•Û
-	bool Add(const char* _key, const int _img);
+	void Clear();
 	void Init();
 
-	int GetImg(const char* _key);
 	void SetBattleBackGround(const char* _key,int _mapnum, int _chipnum=-1);
 	int GetBattleBackGround(int _mapnum, int _chipnum=-1);
 
 private:
-    std::map <std::string, int> ImgBank;
 
-	struct bbg_tag{
-		int chipnum;
-		int gragh;
-	};
-	//std::vector <bbg_tag> BattleBackGround[MAP_MAX];
 	std::map <int,int> BattleBackGround[MAP_MAX];
+
 };
 
 

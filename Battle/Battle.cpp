@@ -30,7 +30,7 @@ CBattle::CBattle(){
 bool CBattle::Init(){	//Field.Init()‚ÅŒÄ‚Ño‚·	//14/06/26
 	PlayerSpeciesManager->Clear();
 	EnemySpeciesManager->Clear();
-	BImgBank.Init();
+	BImgBank.Clear();
 	TrickManager->Clear();
 	
 	ACTOR_NUM = 0;
