@@ -11,23 +11,26 @@ class CImgBank{
 public:
 	CImgBank(){
 		CONSTRUCTED;
+		DammyImg = 0;
 	}
 	~CImgBank(){
 		DESTRUCTED;
 		Clear();
 	}
 
-	void Clear(){
-		ImgBank.clear();
-	}
+	void Clear();
 
 	void LoadPic(const char *_path, const char _key[32], const char _kind[32]);	//CMapÇ∆ÇÃå›ä∑ê´ämï€
 
-	bool AddImg(const char* _key, const int _img);
+	bool AddImg(const char* _key, const int _img, int _size = 1);
+	
 	int GetImg(const char* _key);
+	bool GetImg(const char* _key, int _img[], int _size);
 
 private:
-    std::map <std::string, int> ImgBank;
+    std::map <std::string, int*> ImgBank;
+
+	int DammyImg;
 
 };
 
