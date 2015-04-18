@@ -203,9 +203,9 @@ struct trick_tag{
 	int Power;
 	int Cost;
 	std::vector <sideeffect_tag> SideEffect;
-	int DamageEffectIndex;
+	int DamageEffectIndex;	//描画エフェクトの種別番号
 
-	enum targetType_tag{
+	enum targetType_tag{	//Battleで分岐処理
 		SINGLE,
 		ALL,
 		SINGLE_FRIEND,
@@ -213,7 +213,12 @@ struct trick_tag{
 		TARGETTYPE_NUM,
 	}TargetType;
 
-
+	/*enum specialType_tag{ //Actor個別処理
+		NORMAL,
+		NODEF,
+		即死,
+	  }
+	*/
 };
 
 struct flag_tag{

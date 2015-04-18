@@ -109,6 +109,7 @@ int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
 	}
 	
 	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
+	
 	Hp = between(0, MaxHp, Hp-damage);
 	
 	return damage;

@@ -434,9 +434,18 @@ int CBattle::ResultCheck(){
 	return -1;
 }
 
+//void CBattle::ManageAtacck(int _attackerActorIndex,  trick_tag const* _trick);
+
 void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
 	int attacker_actor_index = between(0, ACTOR_NUM-1, _attackerActorIndex); 
 	int target_actor_index   = between(0, ACTOR_NUM-1, _targetActorIndex); 
+
+
+	//switch でtargetType_tagを判定して分岐
+
+	//発動成否判定
+
+	//if (!AttackManager.CheckHit(...)) はずれ処理;
 
 	if (!Actor[target_actor_index]->GetAlive()) {	//既に攻撃対象が死亡している場合
 		char tmp[3][256];
@@ -449,7 +458,8 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 		TextBox->NextPage(&B_CmdList, FlagSet_p);	
 		return;
 	}
-
+//}
+//{
 
 	//技の種類に応じたエフェクト発動
 		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actor_index]->GetRect(), Actor[target_actor_index]->GetRect());
@@ -459,7 +469,9 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 		do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
 	
 	//実際のダメージ計算
-	int damage = Actor[target_actor_index]->Damage(Actor[attacker_actor_index], _trick);
+		//vector target_list = AttackManager.CheckTargetType(...);
+		//for (int i=0; i<target_list.size(); i++){	
+		    int damage = Actor[target_actor_index]->Damage(Actor[attacker_actor_index], _trick);
 
 	//ダメージ値表示演出//////////////////////////////////////////////////////////////
 	timecount = 0;

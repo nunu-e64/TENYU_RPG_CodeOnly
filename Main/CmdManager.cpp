@@ -1371,7 +1371,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			ErrorDx("Error->@Damange->Check arg[TYPE] :%s", arg[3]);
 		}
 
-		//NORMAL, STABLE, PERCENT, NPDEF$
+		//NORMAL, STABLE, PERCENT...‘¦Ž€‹Z‚É‰ž—p‰Â”\, NPDEF$
 
 	
 //@Attention_Add
