@@ -86,11 +86,13 @@ bool CPlayer::Plan(){
 						NowTrick = TrickList[index];
 						
 						switch(NowTrick->TargetType){	//‘I‚ñ‚¾‹Z‚Ì‘ÎÛl”‚É‚æ‚Á‚Äˆ—‚ð•Ï‚¦‚é$
-						case NowTrick->SINGLE:
+						case trick_tag::SINGLE:
 							char tmpcmd[256]; strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0)");
 							CmdList->Add(tmpcmd);
 							break;
-						//case NowTrick->ALL:
+						case trick_tag::ALL:
+							Target = PLAYER_NUM;
+							break;	
 						default:					
 							return (newplan=true);
 						}

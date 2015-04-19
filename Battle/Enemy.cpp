@@ -64,6 +64,10 @@ bool CEnemy::Action(){
 
 	//Tatgetの選択と行動
 		char tmpcmd[256];
+		Target = AI.GetTarget(this); 
+		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
+		CmdList->Add(tmpcmd);
+		/*
 		switch(NowTrick->TargetType){
 		case NowTrick->SINGLE:
 			Target = AI.GetTarget(this); 
@@ -74,7 +78,7 @@ bool CEnemy::Action(){
 		default:	
 			break;
 
-		}
+		}*/
 
 	//行動後処理
 		NowTrick = NULL;

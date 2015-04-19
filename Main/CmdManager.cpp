@@ -287,7 +287,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
-		argnum = 4;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{
+		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{
 
 		int value[2];
 		for (int i=0; i<2; i++){
@@ -296,7 +296,18 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				goto finish;
 			}
 		}
-		_trickManager->Add(arg[0], value[0], value[1], trick_tag::SINGLE, arg[3], 0);	
+
+		trick_tag::targetType_tag targetType;
+		if (mystrcmp2(arg[4], "SINGLE")) {
+			targetType = trick_tag::SINGLE;
+		} else if (mystrcmp2(arg[4], "ALL")) {
+			targetType = trick_tag::ALL;
+		} else {
+			ERRORDX("@NormalTrick_Create->TargetType is wrong. %s", arg[4]);
+			goto finish;
+		}
+
+		_trickManager->Add(arg[0], value[0], value[1], targetType, arg[3], 0);	
 
 //@PlayerTrick_Set
 	}else if (mystrcmp(_command,"@PlayerTrick_Set")){		

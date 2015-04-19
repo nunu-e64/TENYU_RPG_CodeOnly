@@ -444,22 +444,20 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 	std::vector <int> targetList;	//ターゲットのActor番号
 	
 	switch (_trick->TargetType){
-		case _trick->SINGLE:
-			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
-			break;
-		case _trick->ALL:
-			for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
-				if (Actor[i]->GetAlive()) {	//生存確認
-					targetList.push_back(i);
-				}	
-			}
-			break;
-		default:
-			break;
+	case trick_tag::SINGLE:
+		if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+		break;
+	case trick_tag::ALL:
+		for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+			if (Actor[i]->GetAlive()) {	//生存確認
+				targetList.push_back(i);
+			}	
+		}
+		break;
+	default:
+		break;
 	}
 	
-	//switch でtargetType_tagを判定して分岐
-
 	if (targetList.empty()) {	//既に攻撃対象がいない場合
 		char tmp[3][256];
 		sprintf_s(tmp[0], "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
@@ -473,7 +471,7 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 	}
 
 	//技の種類に応じたエフェクト発動
-		if (_trick->DamageEffectIndex!=-1 && targetList.size()==1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetActorIndex]->GetRect());
+		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
 
 	//間の調整
 		int timecount=0;
@@ -525,10 +523,12 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 
 	//ログウィンドウ作成までのつなぎ$
 	char tmpmessage[256];
-	sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name, Actor[targetList[0]]->GetName().c_str(), damage[0]);
-	TextBox->AddStock(tmpmessage);
+	for (int i=0; i<(int)(targetList.size()); i++){	
+		sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name, Actor[targetList[i]]->GetName().c_str(), damage[i]);
+		TextBox->AddStock(tmpmessage);
+	}
 	TextBox->NextPage(&B_CmdList, FlagSet_p);
-
+	
 
 	//HPバー減少を待つ///////////////
 	while(true){
