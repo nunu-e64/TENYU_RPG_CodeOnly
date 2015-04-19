@@ -147,7 +147,8 @@ bool CPlayer::Action(){
 		return true;
 	}
 
-	
+
+	/*
 	//とりあえずSINGLEの時だけ実装　//ターゲットについてはここで管理。技の種別についてはCmdManagerおよびBattleで管理。
 		switch (NowTrick->TargetType){
 		case NowTrick->SINGLE:
@@ -160,6 +161,12 @@ bool CPlayer::Action(){
 		default:
 			break;
 		}
+	*/
+
+		char tmpcmd[256];
+		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+		CmdList->Add(tmpcmd);
+
 
 	//行動後処理
 		NowTrick = NULL;

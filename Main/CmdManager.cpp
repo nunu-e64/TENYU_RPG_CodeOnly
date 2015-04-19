@@ -1367,11 +1367,10 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			_battle->Damage(attackerActorIndex, targetActorIndex, (trick_tag const*)trick);
 
 		//}else if (mystrcmp(arg[3], "STABLE")){ 
+			//Battleのイベント用別関数に飛ばす
 		}else{
 			ErrorDx("Error->@Damange->Check arg[TYPE] :%s", arg[3]);
 		}
-
-		//NORMAL, STABLE, PERCENT...即死技に応用可能, NPDEF$
 
 	
 //@Attention_Add

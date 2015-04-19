@@ -437,19 +437,32 @@ int CBattle::ResultCheck(){
 //void CBattle::ManageAtacck(int _attackerActorIndex,  trick_tag const* _trick);
 
 void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
-	int attacker_actor_index = between(0, ACTOR_NUM-1, _attackerActorIndex); 
-	int target_actor_index   = between(0, ACTOR_NUM-1, _targetActorIndex); 
+	//エラー防止処理
+		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
+		int targetActorIndex   = between(0, ACTOR_NUM-1, _targetActorIndex); 
 
-
+	std::vector <int> targetList;	//ターゲットのActor番号
+	
+	switch (_trick->TargetType){
+		case _trick->SINGLE:
+			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+			break;
+		case _trick->ALL:
+			for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+				if (Actor[i]->GetAlive()) {	//生存確認
+					targetList.push_back(i);
+				}	
+			}
+			break;
+		default:
+			break;
+	}
+	
 	//switch でtargetType_tagを判定して分岐
 
-	//発動成否判定
-
-	//if (!AttackManager.CheckHit(...)) はずれ処理;
-
-	if (!Actor[target_actor_index]->GetAlive()) {	//既に攻撃対象が死亡している場合
+	if (targetList.empty()) {	//既に攻撃対象がいない場合
 		char tmp[3][256];
-		sprintf_s(tmp[0], "%sの%s！", Actor[attacker_actor_index]->GetName().c_str(), _trick->Name);
+		sprintf_s(tmp[0], "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
 		mystrcpy(tmp[1], "@NextPage");
 		mystrcpy(tmp[2], "しかし攻撃は外れた！");
 		TextBox->AddStock(tmp[0]);
@@ -458,49 +471,61 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 		TextBox->NextPage(&B_CmdList, FlagSet_p);	
 		return;
 	}
-//}
-//{
 
 	//技の種類に応じたエフェクト発動
-		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attacker_actor_index]->GetRect(), Actor[target_actor_index]->GetRect());
+		if (_trick->DamageEffectIndex!=-1 && targetList.size()==1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetActorIndex]->GetRect());
 
 	//間の調整
 		int timecount=0;
 		do{Draw(); if(++timecount==10){break;}}while(BasicLoop());
 	
 	//実際のダメージ計算
-		//vector target_list = AttackManager.CheckTargetType(...);
-		//for (int i=0; i<target_list.size(); i++){	
-		    int damage = Actor[target_actor_index]->Damage(Actor[attacker_actor_index], _trick);
+		int* damage = new int[targetList.size()];
+
+		for (unsigned int i=0; i<targetList.size(); i++){	
+		    damage[i] = Actor[targetList[i]]->Damage(Actor[attackerActorIndex], _trick);
+		}
 
 	//ダメージ値表示演出//////////////////////////////////////////////////////////////
 	timecount = 0;
-	bool oldVisible = Actor[target_actor_index]->GetVisible();
-	CVector charPos(Actor[target_actor_index]->GetRect().Center().x, Actor[target_actor_index]->GetRect().Top);
+	bool* oldVisible = new bool[targetList.size()];
+	CVector* charPos = new CVector[targetList.size()];
+
+	for (unsigned int i=0; i<targetList.size(); i++){	
+		oldVisible[i] = Actor[targetList[i]]->GetVisible();
+		charPos[i] = CVector(Actor[targetList[i]]->GetRect().Center().x, Actor[targetList[i]]->GetRect().Top);
+	}
+
 	do{
 		Draw();
-		DrawCenterString((int)(charPos.x), (int)(charPos.y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage); 
-		
-		if (timecount%6==0) Actor[target_actor_index]->SetVisible(oldVisible&&true);
-		if (timecount%6==3) Actor[target_actor_index]->SetVisible(oldVisible&&false);
 
+		for (unsigned int i=0; i<targetList.size(); i++){	
+			DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage[i]); 
+		
+			if (timecount%6==0) Actor[targetList[i]]->SetVisible(oldVisible[i]&&true);
+			if (timecount%6==3) Actor[targetList[i]]->SetVisible(oldVisible[i]&&false);
+		}
 		if (++timecount>40){
-			Actor[target_actor_index]->SetVisible(oldVisible);
+			for (unsigned int i=0; i<targetList.size(); i++){	
+				Actor[targetList[i]]->SetVisible(oldVisible[i]);
+			}	
 			break;
 		}
+
 	}while(BasicLoop());
 	////////////////////////////////////////////////////////////////////////////
 
 
-	//攻撃対象が敵だった場合アテンションが変動
-	if (_targetActorIndex >= PLAYER_NUM && _attackerActorIndex < PLAYER_NUM) {
-		Enemy[_targetActorIndex-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+	//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動
+	if (_attackerActorIndex < PLAYER_NUM) {
+		for (int i=0; i<(int)(targetList.size()); i++){	
+			if (targetList[i] >= PLAYER_NUM) Enemy[targetList[i]-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+		}
 	}
-
 
 	//ログウィンドウ作成までのつなぎ$
 	char tmpmessage[256];
-	sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attacker_actor_index]->GetName().c_str(), _trick->Name, Actor[target_actor_index]->GetName().c_str(), damage);
+	sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name, Actor[targetList[0]]->GetName().c_str(), damage[0]);
 	TextBox->AddStock(tmpmessage);
 	TextBox->NextPage(&B_CmdList, FlagSet_p);
 
@@ -508,9 +533,23 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 	//HPバー減少を待つ///////////////
 	while(true){
 		Draw();
-		if (!BasicLoop() || Actor[target_actor_index]->DeadCheck()) break;
+		if (!BasicLoop()) break;
+
+		unsigned int i;
+		for (i=0; i<targetList.size(); i++){
+			if (!(Actor[targetList[i]]->DeadCheck())){
+				break;
+			}
+		}
+		if (i==targetList.size()) break;
 	}
 	/////////////////////////////////
+
+
+	delete [] damage;
+	delete [] oldVisible;
+	delete [] charPos;
+
 }
 
 
