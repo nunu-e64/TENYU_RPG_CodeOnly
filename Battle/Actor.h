@@ -86,7 +86,7 @@ protected:
 		int OldHp;	//描画用
 		double SpdPer;
 		double TimeGauge;	//0~100%
-		int Accident;	//状態異常やステータス変動
+		//int Accident;	//状態異常やステータス変動 未使用
 
 		enum mode_tag{
 			STAY,
@@ -95,6 +95,8 @@ protected:
 			ACTION,
 			MODE_NUM
 		}Mode;		//待機や詠唱,行動選択など
+
+		int timeCount[2]; //エフェクト表示等用汎用カウンター
 
 	//技関連
 		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」

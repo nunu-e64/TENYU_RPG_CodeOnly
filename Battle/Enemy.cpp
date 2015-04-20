@@ -12,16 +12,15 @@ void CEnemy::Draw(int _dx, int _dy){
 	if (Visible){
 		if (!Alive){
 
-			static int timecount = 0;
-			timecount++;
+			if (timeCount[0]==-1) timeCount[0] = 0;
+			timeCount[0]++;
 			
 			//ここにエネミー死んだときのエフェクト処理を書く///$
-				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timecount*8)) ;
+				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timeCount[0]*8)) ;
 
-				if (timecount==30){
-					timecount=0;
+				if (timeCount[0]==30){
+					timeCount[0] = -1;
 					Visible = false;
-					DEBUGDX("VisbleFalse:%s", Name.c_str());
 				}
 			//////////////////////////////////////////////////////
 

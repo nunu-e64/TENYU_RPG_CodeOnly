@@ -31,12 +31,12 @@ void CPlayer::Draw(int _dx, int _dy){
 	int dx=_dx+Dx; int dy=_dy+Dy;
 
 	if (!Alive && Visible){
-		static int timecount = 0;
-		timecount++;
+		if (timeCount[0]==-1) timeCount[0] = 0;
+		timeCount[0]++;
 
-		SetDrawBright(250-(timecount*5),250-(timecount*5),250-(timecount*5));
-		if (timecount==40){
-			timecount=0;
+		SetDrawBright(250-(timeCount[0]*5),250-(timeCount[0]*5),250-(timeCount[0]*5));
+		if (timeCount[0] == 40){
+			timeCount[0] = -1;
 			Visible = false;
 		}
 		//////////////////////////////////////////////////////
@@ -49,10 +49,11 @@ void CPlayer::Draw(int _dx, int _dy){
 
 
 	if (BattleMenu.Alive){
-		static int timecount=0;
-		if (timecount==120) timecount=0;
-		DrawGraph(Rect.Left+dx, Rect.Top+dy+(int)(5*sin(++timecount*2*PI/120)), Img, true);
+		if (timeCount[1]==-1) timeCount[1]=0;
+		if (timeCount[1]==120) timeCount[1]=0;
+		DrawGraph(Rect.Left+dx, Rect.Top+dy+(int)(5*sin(++timeCount[1]*2*PI/120)), Img, true);
 	}else{
+		timeCount[1] = -1;
 		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 	}
 
