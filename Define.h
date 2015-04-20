@@ -186,15 +186,22 @@ namespace sys{
 	bool CheckStrNULL(const char* _str);
 	bool CheckStrNULL(const std::string _str);
 }
-struct sideeffect_tag{
+struct sideEffect_tag{
 	enum{
-		ATK_UP,
-		ATK_DOWN,
-		HEAL_ME,
-		HEAL_FRIEND,
-		HEAL_PARTY,
-		TRICKEFFECT_NUM,
-	}; int TrickEffect;
+		ATK,
+		DEF,
+		SPD,
+		HEAL,
+		EFFECTTYPE_NUM,
+	}; int EffectType;
+	enum{
+		ME,
+		SINGLE,
+		ALL_FRIEND,
+		ALL_OPPOSITE,
+		EFFECTTARGET_NUM,
+	}; int EffectTarget;
+
 	int Power;		//効果力
 	int Incidence;	//発生確率
 };
@@ -202,7 +209,7 @@ struct trick_tag{
 	char Name[32];
 	int Power;
 	int Cost;
-	std::vector <sideeffect_tag> SideEffect;
+	std::vector <sideEffect_tag> SideEffect;
 	int DamageEffectIndex;	//描画エフェクトの種別番号
 
 	enum targetType_tag{	//Battleで分岐処理

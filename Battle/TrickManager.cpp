@@ -17,37 +17,21 @@ void CTrickManager::Add(trick_tag trick){
 	}
 }
 
-void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, int _sideeffectnum, ...){
-	trick_tag tmp;
-	mystrcpy(tmp.Name, _name);
-	tmp.Power = _power;
-	tmp.Cost = _cost;
-	tmp.TargetType = _targetType;
-	tmp.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
-
-	sideeffect_tag tmpeffect;
-
+void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList){
 	if (TrickBankLock) {
-		WARNINGDX("'%s':TrickBank is Locked!", _name);
+		WARNINGDX("'%s':TrickBank is Locked!(We don't add this trick.)", _name);
 		return;
 	}
 
-	if (_sideeffectnum%3!=0){
-		ErrorDx("Error->TrickAdd->Number of arg[SideEffect] has something wrong.(Don'tAdd) %s",__FILE__, __LINE__, _name);
-		return;
-	}else{
-		va_list args;
-		va_start( args, _sideeffectnum);	//target‚ª‘å‚«‚·‚¬‚½‚Æ‚«‚Ìˆ’u•û–@‚Í‚È‚¢‚Ì‚©H
-		for (int i=0; i<_sideeffectnum/3; i++){
-			tmpeffect.TrickEffect = va_arg(args, int);
-			tmpeffect.Power = va_arg(args, int);
-			tmpeffect.Incidence = va_arg(args, int);
-			tmp.SideEffect.push_back(tmpeffect);
-		}
-		va_end(args);
-	
-		Add(tmp);
-	}
+	trick_tag tmpTrick;
+	mystrcpy(tmpTrick.Name, _name);
+	tmpTrick.Power = _power;
+	tmpTrick.Cost = _cost;
+	tmpTrick.TargetType = _targetType;
+	tmpTrick.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
+	tmpTrick.SideEffect = sideEffectList;	
+
+	Add(tmpTrick);
 }
 
 void CTrickManager::Clear(){

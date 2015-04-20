@@ -46,14 +46,16 @@ public:
 		bool GetVisible()const{ return Visible; }
 		bool GetAlive()const{ return Alive; }
 		//int GetDef(){return Def;}
-		int GetAtk()const{ return Atk; }
+		int GetAtk()const{ return Atk; }	//構造体作ってGetValueとかでまとめた方がいいかも
 		int GetHp()const{ return Hp; }
 		int GetMaxHp()const{ return MaxHp; }
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
-		int Damage(CActor* _attacker, trick_tag const* _trick);
-		bool DeadCheck();	//死亡確認が済んだらTrue
+		int Damaged(CActor* _attacker, trick_tag const* _trick);
+		bool CheckDead();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){ Target=_target; }
+
+		void ChangeValue(int _kind, int _powerPercent);
 
 	//その他
 		CRect GetRect()const{return Rect;}

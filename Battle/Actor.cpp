@@ -102,7 +102,7 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 
 }
 
-int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
+int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	if (_trick==NULL) {
 		ErrorDx("Error->CActor::Damage->_trick==NULL", __FILE__, __LINE__);
 		return 0;
@@ -115,13 +115,12 @@ int CActor::Damage(CActor* _attacker, trick_tag const* _trick){
 	return damage;
 }
 
-bool CActor::DeadCheck(){	//死亡判定
+bool CActor::CheckDead(){	//死亡判定
 	
-	if (OldHp!=Hp) {
-		//Hpバー減少中
+	if (OldHp!=Hp) { //Hpバー減少中
 		return false;
 	}else{
-		if (Hp==0) {
+		if (Alive && Hp==0) {
 			Alive = false;
 			char tmp[256];
 			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
@@ -130,6 +129,41 @@ bool CActor::DeadCheck(){	//死亡判定
 		return true;
 	}
 }
+
+void CActor::ChangeValue(int _kind, int _powerPercent){
+	char tmp[256];
+	
+	switch(_kind){
+	case sideEffect_tag::ATK:
+		Atk += (int)((double)Atk*_powerPercent/100);
+
+		if (_powerPercent>0){
+			sprintf_s(tmp, "%sの攻撃力が上がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
+			(*B_TextBox_pp)->AddStock(tmp);
+		}else if(_powerPercent<0){
+			sprintf_s(tmp, "%sの攻撃力が下がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
+			(*B_TextBox_pp)->AddStock(tmp);
+		}
+		break;
+
+	case sideEffect_tag::DEF:
+		Def += (int)((double)Def*_powerPercent/100);
+
+		if (_powerPercent>0){
+			sprintf_s(tmp, "%sの防御が上がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
+			(*B_TextBox_pp)->AddStock(tmp);
+		}else if(_powerPercent<0){
+			sprintf_s(tmp, "%sの防御力が下がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
+			(*B_TextBox_pp)->AddStock(tmp);
+		}
+		break;
+
+	default:
+		ERRORDX("StatusKind doesn't match any status. :%s", _kind);
+		return;
+	}
+}
+
 
 void CActor::Draw_Sub(int _dx, int _dy){
 

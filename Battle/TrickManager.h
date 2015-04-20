@@ -21,7 +21,7 @@ public:
 	}
 
 	void Add(trick_tag _trick);
-	void Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, int _sideeffectnum, ...);
+	void Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList);
 	void Clear();
 
 	trick_tag const* GetTrick(const char _name[32]);

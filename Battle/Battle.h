@@ -60,7 +60,7 @@ public:
 	
 
 	//戦闘用
-		void Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick);
+		void ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick);
 
 		//アテンション関係
 			void AddAttention(int _enemyIndex, int _playerIndex, int _value){

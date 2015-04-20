@@ -436,39 +436,45 @@ int CBattle::ResultCheck(){
 
 //void CBattle::ManageAtacck(int _attackerActorIndex,  trick_tag const* _trick);
 
-void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
+void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
+	
 	//エラー防止処理
 		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
 		int targetActorIndex   = between(0, ACTOR_NUM-1, _targetActorIndex); 
 
-	std::vector <int> targetList;	//ターゲットのActor番号
-	
-	switch (_trick->TargetType){
-	case trick_tag::SINGLE:
-		if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
-		break;
-	case trick_tag::ALL:
-		for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
-			if (Actor[i]->GetAlive()) {	//生存確認
-				targetList.push_back(i);
-			}	
+	//ターゲットを確定しActor番号をvectorリスト化
+		std::vector <int> targetList;	//ターゲットのActor番号	
+		switch (_trick->TargetType){
+		case trick_tag::SINGLE:
+			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+			break;
+		case trick_tag::ALL:
+			for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+				if (Actor[i]->GetAlive()) {	 //生存確認	
+					targetList.push_back(i);
+				}	
+			}
+			break;
+		case trick_tag::SINGLE_FRIEND:
+			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+			break;
+		default:
+			WARNINGDX("_trick->TargetType->Not Found. %s", _trick->Name);
+			break;
 		}
-		break;
-	default:
-		break;
-	}
 	
-	if (targetList.empty()) {	//既に攻撃対象がいない場合
-		char tmp[3][256];
-		sprintf_s(tmp[0], "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-		mystrcpy(tmp[1], "@NextPage");
-		mystrcpy(tmp[2], "しかし攻撃は外れた！");
-		TextBox->AddStock(tmp[0]);
-		TextBox->AddStock(tmp[1]);
-		TextBox->AddStock(tmp[2]);
-		TextBox->NextPage(&B_CmdList, FlagSet_p);	
-		return;
-	}
+	//攻撃対象がいない場合
+		if (targetList.empty()) {
+			char tmp[3][256];
+			sprintf_s(tmp[0], "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
+			mystrcpy(tmp[1], "@NextPage");
+			mystrcpy(tmp[2], "しかし攻撃は外れた！");
+			TextBox->AddStock(tmp[0]);
+			TextBox->AddStock(tmp[1]);
+			TextBox->AddStock(tmp[2]);
+			TextBox->NextPage(&B_CmdList, FlagSet_p);	
+			return;
+		}
 
 	//技の種類に応じたエフェクト発動
 		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
@@ -481,36 +487,36 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 		int* damage = new int[targetList.size()];
 
 		for (unsigned int i=0; i<targetList.size(); i++){	
-		    damage[i] = Actor[targetList[i]]->Damage(Actor[attackerActorIndex], _trick);
+		    damage[i] = Actor[targetList[i]]->Damaged(Actor[attackerActorIndex], _trick);
 		}
 
 	//ダメージ値表示演出//////////////////////////////////////////////////////////////
-	timecount = 0;
-	bool* oldVisible = new bool[targetList.size()];
-	CVector* charPos = new CVector[targetList.size()];
-
-	for (unsigned int i=0; i<targetList.size(); i++){	
-		oldVisible[i] = Actor[targetList[i]]->GetVisible();
-		charPos[i] = CVector(Actor[targetList[i]]->GetRect().Center().x, Actor[targetList[i]]->GetRect().Top);
-	}
-
-	do{
-		Draw();
+		timecount = 0;
+		bool* oldVisible = new bool[targetList.size()];
+		CVector* charPos = new CVector[targetList.size()];
 
 		for (unsigned int i=0; i<targetList.size(); i++){	
-			DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage[i]); 
-		
-			if (timecount%6==0) Actor[targetList[i]]->SetVisible(oldVisible[i]&&true);
-			if (timecount%6==3) Actor[targetList[i]]->SetVisible(oldVisible[i]&&false);
-		}
-		if (++timecount>40){
-			for (unsigned int i=0; i<targetList.size(); i++){	
-				Actor[targetList[i]]->SetVisible(oldVisible[i]);
-			}	
-			break;
+			oldVisible[i] = Actor[targetList[i]]->GetVisible();
+			charPos[i] = CVector(Actor[targetList[i]]->GetRect().Center().x, Actor[targetList[i]]->GetRect().Top);
 		}
 
-	}while(BasicLoop());
+		do{
+			Draw();
+
+			for (unsigned int i=0; i<targetList.size(); i++){	
+				DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage[i]); 
+		
+				if (timecount%6==0) Actor[targetList[i]]->SetVisible(oldVisible[i]&&true);
+				if (timecount%6==3) Actor[targetList[i]]->SetVisible(oldVisible[i]&&false);
+			}
+			if (++timecount>40){
+				for (unsigned int i=0; i<targetList.size(); i++){	
+					Actor[targetList[i]]->SetVisible(oldVisible[i]);
+				}	
+				break;
+			}
+
+		}while(BasicLoop());
 	////////////////////////////////////////////////////////////////////////////
 
 
@@ -537,14 +543,67 @@ void CBattle::Damage(int _attackerActorIndex, int _targetActorIndex, trick_tag c
 
 		unsigned int i;
 		for (i=0; i<targetList.size(); i++){
-			if (!(Actor[targetList[i]]->DeadCheck())){
+			if (!(Actor[targetList[i]]->CheckDead())){
 				break;
 			}
 		}
 		if (i==targetList.size()) break;
 	}
+
+	//死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。$
 	/////////////////////////////////
 
+
+	//サイドエフェクトの有無確認と発動//////////////////
+	std::vector <int> effectTargetList;	//ターゲットのActor番号	
+	for (unsigned int i=0; i<_trick->SideEffect.size(); i++){
+		DEBUGDX("特殊効果発動->Name:%s, Type:%d, Power:%d, Incidence:%d", _trick->Name, _trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Incidence);
+		
+		//ターゲットを確定しActor番号をvectorリスト化
+			effectTargetList.clear();
+
+			switch (_trick->SideEffect[i].EffectTarget){
+			case sideEffect_tag::ME:
+				effectTargetList.push_back(_attackerActorIndex);
+				break;
+			case sideEffect_tag::SINGLE:	//カーソル選択したActor
+				effectTargetList.push_back(targetList[0]);
+				break;
+			case sideEffect_tag::ALL_OPPOSITE:	//敵全体
+				for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+					if (Actor[i]->GetAlive()) {
+						effectTargetList.push_back(i);
+					}	
+				}
+				break;
+			case sideEffect_tag::ALL_FRIEND:	//味方全体
+				for (int i=(_attackerActorIndex<PLAYER_NUM? 0: PLAYER_NUM); i<(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: ACTOR_NUM); i++){
+					if (Actor[i]->GetAlive()) {
+						effectTargetList.push_back(i);
+					}	
+				}
+				break;
+			default:
+				WARNINGDX("_trick->SideEffectTargetType->Not Match. %s", _trick->Name);
+				break;
+			}
+		
+		//効果発動判定ののちターゲットごとに処理をさせる
+			if (_trick->SideEffect[i].Incidence > rand()%100) {
+				switch (_trick->SideEffect[i].EffectType){
+				case sideEffect_tag::ATK:
+				case sideEffect_tag::DEF:
+					for (unsigned int j=0; j<effectTargetList.size(); j++){					
+						DEBUGDX("OK->target:%d", effectTargetList[j]);
+						Actor[effectTargetList[j]]->ChangeValue(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power);
+					}
+					break;
+				default:
+					WARNINGDX("_trick->SideEffectType->Not Match. %s", _trick->Name);
+				}
+			}
+	}
+	////////////////////////////////////////////////////
 
 	delete [] damage;
 	delete [] oldVisible;

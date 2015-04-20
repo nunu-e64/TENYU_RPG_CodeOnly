@@ -21,6 +21,7 @@ void CEnemy::Draw(int _dx, int _dy){
 				if (timecount==30){
 					timecount=0;
 					Visible = false;
+					DEBUGDX("VisbleFalse:%s", Name.c_str());
 				}
 			//////////////////////////////////////////////////////
 

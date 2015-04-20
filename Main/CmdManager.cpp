@@ -287,7 +287,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
-		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
+		argnum = 5+4*10+1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false)) goto finish;	//必須
 
 		int value[2];
 		for (int i=0; i<2; i++){
@@ -302,12 +302,59 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			targetType = trick_tag::SINGLE;
 		} else if (mystrcmp2(arg[4], "ALL")) {
 			targetType = trick_tag::ALL;
+		} else if (mystrcmp2(arg[4], "SINGLE_FRIEND")) {
+			targetType = trick_tag::SINGLE_FRIEND;
 		} else {
-			ERRORDX("@NormalTrick_Create->TargetType is wrong. %s", arg[4]);
+			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[4]);
 			goto finish;
 		}
 
-		_trickManager->Add(arg[0], value[0], value[1], targetType, arg[3], 0);	
+		if (arg[argnum-1]!=NULL) WARNINGDX("@NormalTrick_Create: too large number of args:%d (continue)", argnum);
+
+		//サイドエフェクトの読み込みとvectorリスト化
+		std::vector <sideEffect_tag> sideEffectList;
+		sideEffect_tag tmpEffect;
+		int tmpNum[4]; 
+
+
+		for (int i=5; i<argnum && arg[i]!=NULL; i+=4){
+			if (mystrcmp2(arg[i], "ATK")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
+				tmpNum[0] = sideEffect_tag::ATK;
+			} else if (mystrcmp2(arg[i], "DEF")) {
+				tmpNum[0] = sideEffect_tag::DEF;
+			} else if (mystrcmp2(arg[i], "SPD")) {
+				tmpNum[0] = sideEffect_tag::SPD;
+			}else{
+				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
+				continue;
+			}
+
+			if (mystrcmp2(arg[i+1], "ME")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
+				tmpNum[1] = sideEffect_tag::ME;
+			} else if (mystrcmp2(arg[i+1], "SINGLE")) {
+				tmpNum[1] = sideEffect_tag::SINGLE;
+			} else if (mystrcmp2(arg[i+1], "ALL_FRIEND")) {
+				tmpNum[1] = sideEffect_tag::ALL_FRIEND;
+			} else if (mystrcmp2(arg[i+1], "ALL_OPPOSITE")) {
+				tmpNum[1] = sideEffect_tag::ALL_OPPOSITE;
+			}else{
+				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
+				continue;
+			}
+
+			if (!( mystrtol(arg[i+2], &tmpNum[2])) || (!( mystrtol(arg[i+3], &tmpNum[3])))) {
+				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);
+				goto finish;
+			}
+			tmpEffect.EffectType   = tmpNum[0];
+			tmpEffect.EffectTarget = tmpNum[1];
+			tmpEffect.Power		   = tmpNum[2];
+			tmpEffect.Incidence	   = tmpNum[3];
+			sideEffectList.push_back(tmpEffect);
+		}
+
+		_trickManager->Add(arg[0], value[0], value[1], targetType, arg[3], sideEffectList);	
+
 
 //@PlayerTrick_Set
 	}else if (mystrcmp(_command,"@PlayerTrick_Set")){		
@@ -1375,7 +1422,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 
 		//変数の準備ができたらいざ処理へ
 		if (mystrcmp(arg[3], "NORMAL")){
-			_battle->Damage(attackerActorIndex, targetActorIndex, (trick_tag const*)trick);
+			_battle->ManageAttack(attackerActorIndex, targetActorIndex, (trick_tag const*)trick);
 
 		//}else if (mystrcmp(arg[3], "STABLE")){ 
 			//Battleのイベント用別関数に飛ばす

@@ -32,7 +32,7 @@ protected:
 	int MaxHp;
 	int Atk;
 	int Def;
-	int Spd;		//%
+	int Spd;	//パーセント
 	
 	std::vector <trick_tag const*> TrickList;		//技リスト
 	

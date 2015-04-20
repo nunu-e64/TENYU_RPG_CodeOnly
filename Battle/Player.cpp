@@ -84,16 +84,22 @@ bool CPlayer::Plan(){
 				
 					if (index<TrickList.size()){
 						NowTrick = TrickList[index];
-						
+						char tmpcmd[256]; 
+
 						switch(NowTrick->TargetType){	//‘I‚ñ‚¾‹Z‚Ì‘ÎÛl”‚É‚æ‚Á‚Äˆ—‚ð•Ï‚¦‚é$
 						case trick_tag::SINGLE:
-							char tmpcmd[256]; strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0)");
+							strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0)");
 							CmdList->Add(tmpcmd);
 							break;
 						case trick_tag::ALL:
 							Target = PLAYER_NUM;
-							break;	
-						default:					
+							break;
+						case trick_tag::SINGLE_FRIEND:
+							strcpy_s(tmpcmd,"@Target_Appear(PLAYER,0)");
+							CmdList->Add(tmpcmd);
+							break;
+						default:
+							WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
 							return (newplan=true);
 						}
 						BattleMenu.Alive=false;
