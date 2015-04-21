@@ -12,14 +12,15 @@ void CEnemy::Draw(int _dx, int _dy){
 	if (Visible){
 		if (!Alive){
 
-			if (timeCount[0]==-1) timeCount[0] = 0;
-			timeCount[0]++;
+			static std::map<int, int> timeCount;
+			if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
+			timeCount[ActorIndex]++;
 			
 			//ここにエネミー死んだときのエフェクト処理を書く///$
-				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timeCount[0]*8)) ;
+				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timeCount[ActorIndex]*8)) ;
 
-				if (timeCount[0]==30){
-					timeCount[0] = -1;
+				if (timeCount[ActorIndex]==30){
+					timeCount[ActorIndex] = 0;
 					Visible = false;
 				}
 			//////////////////////////////////////////////////////

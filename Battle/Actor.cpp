@@ -21,8 +21,6 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	Mode = STAY;
 	Target = -1;
 
-	timeCount[0] = timeCount[1] = -1;
-
 	NowTrick = NULL;
 
 	Dx=0; Dy=0;
