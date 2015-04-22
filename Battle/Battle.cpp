@@ -69,7 +69,10 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
-	
+
+	//ログウィンドウの初期化
+		LogWindow.Init(WINDOW_WIDTH-100, 10, 90, WINDOW_HEIGHT-20, GetColor(60, 30, 30), 30, 40, 10, GetColor(200, 200, 200), GetColor(50, 50, 50), -1);
+
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
 	//////////////////////////////////
@@ -86,7 +89,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 			Actor = new CActor*[ACTOR_NUM];
 			for (int i=0; i<ACTOR_NUM; i++){ 
 				Actor[i] = ((i<PLAYER_NUM)? (CActor*)&Player[i]: (CActor*)&Enemy[i-PLAYER_NUM]);
-				Actor[i]->FirstSet(PLAYER_NUM, ENEMY_NUM, i, &TextBox, &B_CmdList);
+				Actor[i]->FirstSet(PLAYER_NUM, ENEMY_NUM, i, &TextBox, &B_CmdList, &LogWindow);
 				Actor[i]->SetSystemImg(&BImgBank);
 			}
 
@@ -402,6 +405,11 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 	////////////////////////////////////////////////////////////////////////////////////////
 	//テキストボックス描画//////////////////////////////////////////////////////////////////
 	TextBox->Draw(_textshowingstop);
+	////////////////////////////////////////////////////////////////////////////////////////
+	
+	////////////////////////////////////////////////////////////////////////////////////////
+	//ログウィンドウ描画//////////////////////////////////////////////////////////////////
+	LogWindow.Draw();
 	////////////////////////////////////////////////////////////////////////////////////////
 	
 

@@ -7,6 +7,7 @@
 #include "TrickManager.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "LogWindow.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
@@ -125,6 +126,7 @@ private:
 			CTextBox* TextBox;
 			CTextBox TextBox1;
 			CTextWrap TextWrap1;
+			CLogWindow LogWindow;
 		
 			CEveManager* EveManager_p;	//ラップモード時にオリジナルイベント読み込み用
 			CFlagSet* FlagSet_p;

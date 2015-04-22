@@ -2,14 +2,16 @@
 #include "Actor.h"
 #include "BImgBank.h"
 #include "../Main/TextBox.h"
+#include "LogWindow.h"
 
-void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist){
+void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist, CLogWindow* _logWindow){
 	PLAYER_NUM = _playernum;
 	ENEMY_NUM = _enemynum;
 	
 	ActorIndex = _index;
 	Index = ((_index<PLAYER_NUM)? _index: _index-PLAYER_NUM);
 	B_TextBox_pp = _textbox;
+	LogWindow = _logWindow;
 	CmdList = _cmdlist;
 
 	Alive = Visible = (Hp!=0? true:false);

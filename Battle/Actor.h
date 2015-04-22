@@ -12,6 +12,7 @@
 class CTextBox;		//前方宣言
 class CCmdList;
 class CBImgBank;
+class CLogWindow;
 
 class CActor : public virtual CSpecies{
 public:
@@ -27,7 +28,7 @@ public:
 	}
 
 	//初期設定関連
-		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist);
+		void FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist, CLogWindow* _logWindow);
 		void SetRect(int _cx, int _cy);
 		//void SetImg(int _img); //使ってない
 		bool SetSystemImg(CBImgBank* _bimgbank);
@@ -103,6 +104,7 @@ protected:
 	//インスタンスのポインタ保持用
 		CTextBox** B_TextBox_pp;
 		CCmdList* CmdList;
+		CLogWindow* LogWindow;
 
 	//グラフィック
 		CRect Rect;
