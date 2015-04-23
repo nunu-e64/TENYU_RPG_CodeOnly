@@ -38,6 +38,10 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	Height = _height;
 	BoxColor = _boxColor;
 
+	FullMode = false;
+	PosXFull = 400;
+	WidthFull = WINDOW_WIDTH - PosXFull;
+
 	FontSize = _fontSize;
 	FontColorMain = _fontColorMain;
 	FontColorSub = _fontColorSub;
@@ -95,8 +99,7 @@ bool CLogWindow::Add(char *_newText){		//ÉRÉÅÉìÉgçsÇ‚ãÛîíçsÇÕLoadÇÃíiäKÇ≈îrèúÇ≥Ç
 
 	mystrcpy(Text[NextLine], _newText); 
 	NextLine = (++NextLine) % LineNum;
-	DEBUGDX("Add->%s", _newText);
-
+	
 	Visible = true;
 
 	return true;
@@ -151,14 +154,18 @@ bool CLogWindow::Add(char **_newTextArray){
 void CLogWindow::Draw(){
 
 	if(!Visible) return;
+	
+	if (CheckHitKeyDown(KEY_INPUT_P)) SetWindowMode(!FullMode);
 
 	int oldFontSize = GetFontSize();
 	
 	//É{ÉbÉNÉX
-		DrawBox(PosX, PosY, PosX+Width, PosY+Height, BoxColor, true);
-		DrawBox(PosX+5, PosY+5, PosX+Width-5, PosY+Height-5, GRAY, false);
-
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?200:100));
+		DrawBox((!FullMode?PosX:PosXFull), PosY,     (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
+		DrawBox((!FullMode?PosX:PosXFull)+5, PosY+5, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
+	
 	//ÉeÉLÉXÉg
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 		//ï\é¶ÉAÉjÉÅÅ[ÉVÉáÉìí≤êÆ
 		//Draw_Animation(_showingstop);	
 	
@@ -168,19 +175,20 @@ void CLogWindow::Draw(){
 		for (int i = 0; i < LineNum; i++){
 			line = (i + NextLine) % LineNum;
 			if (strlen(Text[line])) {
-				DrawString(PosX, PosY + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
-				DrawString(PosX, PosY + (FontSize+LINE_SPACE)*line  , Text[line], FontColorMain);
-				//DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
-				//DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
-				//DEBUGDX("line:%d, %s", line, Text[line]);
+				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
+				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*line  , Text[line], FontColorMain);
+				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
+				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
 			}
 		}
 		/*
 		//ë±Ç´Ç™Ç†ÇÈÇ∆Ç´ÇÃÉ}Å[ÉNï\é¶
 		if (!Showing && !AutoPlay && ReturnVisible) {
-			DrawString(PosX+Width/2-10, PosY+Height-10 + (GetNowCount()/100)%5, "Å•", WHITE);
+			DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2-10, PosY+Height-10 + (GetNowCount()/100)%5, "Å•", WHITE);
 		}
 		*/
+
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,-1);
 		SetFontSize(oldFontSize);
 }
 

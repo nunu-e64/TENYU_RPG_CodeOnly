@@ -125,8 +125,8 @@ bool CActor::CheckDead(){	//死亡判定
 		if (Alive && Hp==0) {
 			Alive = false;
 			char tmp[256];
-			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
-			(*B_TextBox_pp)->AddStock(tmp);
+			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());
+			LogWindow->Add(tmp);
 		}
 		return true;
 	}
@@ -140,11 +140,11 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 		Atk += (int)((double)Atk*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "%sの攻撃力が上がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
-			(*B_TextBox_pp)->AddStock(tmp);
+			sprintf_s(tmp, "%sの攻撃力が上がった！", GetName().c_str());
+			LogWindow->Add(tmp);
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "%sの攻撃力が下がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
-			(*B_TextBox_pp)->AddStock(tmp);
+			sprintf_s(tmp, "%sの攻撃力が下がった！", GetName().c_str());
+			LogWindow->Add(tmp);
 		}
 		break;
 
@@ -152,11 +152,11 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 		Def += (int)((double)Def*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "%sの防御が上がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
-			(*B_TextBox_pp)->AddStock(tmp);
+			sprintf_s(tmp, "%sの防御が上がった！", GetName().c_str());
+			LogWindow->Add(tmp);
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "%sの防御力が下がった！", GetName().c_str());	//ログウィンドウ作成までのつなぎ$
-			(*B_TextBox_pp)->AddStock(tmp);
+			sprintf_s(tmp, "%sの防御力が下がった！", GetName().c_str());
+			LogWindow->Add(tmp);
 		}
 		break;
 

@@ -21,6 +21,12 @@ public:
 	
 	bool Add(char *_newText);
 	bool Add(char **_newTextArray);
+	void SetWindowMode(bool _fullMode){
+		FullMode = _fullMode;
+	}
+	bool GetWindowMode(){
+		return FullMode;
+	}
 
 	void SetVisible(bool _visible){Visible = _visible;}
 	
@@ -47,11 +53,13 @@ private:
 		char DrawText[LINE_MAX][WORD_MAX];
 */
 		int PosX, PosY, Width, Height;			//左上の座標、横幅縦幅
+		int PosXFull, WidthFull;			//フルサイズモードのとき
 		int LineNum, WordNum;	//WordNumの単位はバイト　LineNumは行数
 		int FontSize;
 		int FontColorMain, FontColorSub;	//Color2は影
 		int BoxColor;
 		int WordWidth;		//WordNumとFontSizeに基づいて横幅を算出
+		bool FullMode;		//ログウィンドウの大きさを切り替えるスイッチ
 
 		int NextLine;	//次に書き換えられるべきTextの配列インデックス
 

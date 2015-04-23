@@ -71,7 +71,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 
 	//ログウィンドウの初期化
-		LogWindow.Init(WINDOW_WIDTH-380, 10, 380, WINDOW_HEIGHT-20, GetColor(60, 30, 30), 30, 100, 10, GetColor(200, 200, 200), GetColor(50, 50, 50), -1);
+		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 30, 100, 10, GetColor(240, 240, 240), GetColor(20, 20, 20), -1);
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
@@ -259,7 +259,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
 	
 	do{		
-		if( !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
+		if(!LogWindow.GetWindowMode() && !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
 
 			if ((result=ResultCheck())!=-1){
 				B_CmdManager.Main(&B_CmdList, this, TextBox);
@@ -575,7 +575,6 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	//サイドエフェクトの有無確認と発動//////////////////
 	std::vector <int> effectTargetList;	//ターゲットのActor番号	
 	for (unsigned int i=0; i<_trick->SideEffect.size(); i++){
-		DEBUGDX("特殊効果発動->Name:%s, Type:%d, Power:%d, Incidence:%d", _trick->Name, _trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Incidence);
 		
 		//ターゲットを確定しActor番号をvectorリスト化
 			effectTargetList.clear();
@@ -612,7 +611,6 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				case sideEffect_tag::ATK:
 				case sideEffect_tag::DEF:
 					for (unsigned int j=0; j<effectTargetList.size(); j++){					
-						DEBUGDX("OK->target:%d", effectTargetList[j]);
 						Actor[effectTargetList[j]]->ChangeValue(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power);
 					}
 					break;
