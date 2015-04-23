@@ -41,6 +41,9 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	FontSize = _fontSize;
 	FontColorMain = _fontColorMain;
 	FontColorSub = _fontColorSub;
+
+	NextLine = 0;
+
 	//NowStock = 0;
 	//NowTarget = 0;
 
@@ -92,6 +95,7 @@ bool CLogWindow::Add(char *_newText){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”rœ‚³‚
 
 	mystrcpy(Text[NextLine], _newText); 
 	NextLine = (++NextLine) % LineNum;
+	DEBUGDX("Add->%s", _newText);
 
 	Visible = true;
 
@@ -163,12 +167,14 @@ void CLogWindow::Draw(){
 		int line;
 		for (int i = 0; i < LineNum; i++){
 			line = (i + NextLine) % LineNum;
-			if (FontColorSub!=-1) {
-				DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*i+1, Text[line], FontColorSub);
+			if (strlen(Text[line])) {
+				DrawString(PosX, PosY + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
+				DrawString(PosX, PosY + (FontSize+LINE_SPACE)*line  , Text[line], FontColorMain);
+				//DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
+				//DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
+				//DEBUGDX("line:%d, %s", line, Text[line]);
 			}
-				DrawString(PosX+Width/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*i	, Text[line], FontColorMain);
 		}
-
 		/*
 		//‘±‚«‚ª‚ ‚é‚Æ‚«‚Ìƒ}[ƒN•\Ž¦
 		if (!Showing && !AutoPlay && ReturnVisible) {
@@ -183,7 +189,7 @@ void CLogWindow::Clear(){
 	for (int i=0; i<LineNum; i++){
 		Text[i][0] = '\0';
 	}
-
+	NextLine = 0;
 }
 
 /*void CTextBox::Draw_Animation(bool _showingstop){

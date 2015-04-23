@@ -14,9 +14,9 @@ public:
 	};
 
 	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _autoPlaySpeed);
+	void Clear();	//表示テキスト全消去
 	void Term();	//Terminate
-
-	bool Main();	
+	
 	void Draw();
 	
 	bool Add(char *_newText);
@@ -30,12 +30,12 @@ private:
 			//STOCK_LINE_NUM = 1000,
 			LINE_MAX = 255,		//行数最大値		　Initで調整される
 			WORD_MAX = 255,		//一行の文字数最大値　Initで調整される
-			LINE_SPACE = 10,	//行間
+			LINE_SPACE = 5,	//行間
 		};
 
-
 	//メンバ関数
-		void Clear();	//表示テキスト全消去
+
+
 
 	//メンバ変数
 		bool Initialized;	//初期済みか否か
