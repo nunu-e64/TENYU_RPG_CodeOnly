@@ -484,6 +484,9 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		}
 
 	//技の種類に応じたエフェクト発動
+		char tmpMessage[256];
+		sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
+		LogWindow.Add(tmpMessage);
 		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
 
 	//間の調整
@@ -498,9 +501,6 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		}
 
 	//ログウィンドウに出力
-		char tmpMessage[256];
-		sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-		LogWindow.Add(tmpMessage);
 		for (int i=0; i<(int)(targetList.size()); i++){	
 			sprintf_s(tmpMessage, "  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
 			LogWindow.Add(tmpMessage);

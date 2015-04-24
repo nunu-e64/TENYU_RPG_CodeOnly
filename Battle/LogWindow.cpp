@@ -172,9 +172,10 @@ void CLogWindow::Draw(){
 		//テキスト描写
 		SetFontSize(FontSize);
 		int line;
+		int skipCount = 0;	//空行は上詰め
 		char* textForDraw = new char[(FullMode? WordNum: 8)];
-		for (int i = 0; i < LineNum; i++){
-			line = (i + NextLine) % LineNum;
+		for (int i = 0; i+skipCount < LineNum; i++){
+			line = mod ((i + NextLine + skipCount), LineNum);
 			if (strlen(Text[line])) {
 				mystrcpy(textForDraw, Text[line], (FullMode? WordNum: 5));
 				if (!FullMode) sprintf_s(textForDraw, -1, "%s..", textForDraw);
@@ -182,6 +183,9 @@ void CLogWindow::Draw(){
 				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*i  , textForDraw, FontColorMain);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
+			} else {
+				++skipCount;
+				--i;
 			}
 		}
 
