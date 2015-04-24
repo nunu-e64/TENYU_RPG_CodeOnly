@@ -497,6 +497,16 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		    damage[i] = Actor[targetList[i]]->Damaged(Actor[attackerActorIndex], _trick);
 		}
 
+	//ログウィンドウに出力
+		char tmpMessage[256];
+		sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
+		LogWindow.Add(tmpMessage);
+		for (int i=0; i<(int)(targetList.size()); i++){	
+			sprintf_s(tmpMessage, "  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
+			LogWindow.Add(tmpMessage);
+		}
+	
+
 	//ダメージ値表示演出//////////////////////////////////////////////////////////////
 		timecount = 0;
 		bool* oldVisible = new bool[targetList.size()];
@@ -534,15 +544,6 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		}
 	}
 
-	//ログウィンドウに出力
-	char tmpMessage[256];
-	sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-	LogWindow.Add(tmpMessage);
-	for (int i=0; i<(int)(targetList.size()); i++){	
-		sprintf_s(tmpMessage, "  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
-		LogWindow.Add(tmpMessage);
-	}
-	
 
 	//HPバー減少を待つ///////////////
 	std::vector <bool> hpBarMoved(targetList.size());

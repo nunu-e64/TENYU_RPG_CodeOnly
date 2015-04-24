@@ -126,13 +126,14 @@ bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 	if (OldHp!=Hp) { //Hpバー減少中
 		return false;
 	}else{			//Hpバー減少終了
-		if (!Alive) {
+		if (!Alive && VisibleStatus == VISIBLE) {
 			char tmp[256];
 			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());
 			LogWindow->Add(tmp);
 			VisibleStatus = CHANGING;
 		}
-		return true;
+
+		return (VisibleStatus != CHANGING);		//描画状況が安定してからtrueをかえす
 	}
 }
 
