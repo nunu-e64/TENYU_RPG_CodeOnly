@@ -89,19 +89,25 @@ public:
 			void SetImage(int _img);
 			void Init(int _actornum, int _playernum, int _enemynum);
 
-			void SetVisible(bool _visible){Visible = _visible;}
-			void SetSide(bool _enemy){EnemySide = _enemy;}
-			bool GetSide(){return EnemySide;}
-			void SetIndex(int _index){Index = between(0, (EnemySide? ENEMY_NUM: PLAYER_NUM), _index);}
-			void Move(int _dir); 
-			void Decide(CBattle* _battle, int _actorindex, bool _deadok);
+			void SetVisible(bool _visible){	Visible = _visible;}
+			void SetSide(bool _enemy){		EnemySide = _enemy;}
+			bool GetSide(){	return EnemySide;}
+			void SetIndex(int _index){		Index = between(0, (EnemySide? ENEMY_NUM: PLAYER_NUM), _index);}
+			void SetDeadOk(bool _deadok){	DeadOk = _deadok;}
+
+			void CheckNowIndex(CBattle* _battle);
+			void Move(int _dir, CBattle* _battle, int _count=0); 
+			void Decide(CBattle* _battle, int _actorIndex);
 			void Draw(int dx = 0, int dy = 0);
 
 		private:
 			bool Visible;
 			int Img;
+			int ImgSizeX, ImgSizeY;
 			bool EnemySide;	//“G‘¤‚©–¡•û‘¤‚©
 			int Index;		//“G‚²‚Æ–¡•û‚²‚Æ‚Ì’Ê‚µ”Ô†
+			bool DeadOk; //€l‚ğ‘I‘ğ‘ÎÛ‚Æ‚·‚é‚©
+
 			int ACTOR_NUM;
 			int PLAYER_NUM;
 			int ENEMY_NUM;

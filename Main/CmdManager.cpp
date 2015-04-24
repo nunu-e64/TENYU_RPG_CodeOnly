@@ -1343,7 +1343,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 		
 //@Target_Appear
 	}else if (mystrcmp(_command, "@Target_Appear",'l')){
-		argnum = 2;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
+		argnum = 3;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
 
 		bool side;
 		if (mystrcmp(arg[0], 'p', 3, "ENEMY", "enemy", "Enemy")){
@@ -1358,9 +1358,13 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 		int index = 0;
 		if (!mystrtol(arg[1], &index)) ErrorDx("Error->@Target_Appear->Check type arg[index]->%s", __FILE__, __LINE__, arg[1]);		
 
+		bool deadok = sys::TrueOrFalse(arg[2], true);
+
 		_battle->TargetMarker.SetVisible(true);
 		_battle->TargetMarker.SetSide(side);
 		_battle->TargetMarker.SetIndex(index);
+		_battle->TargetMarker.SetDeadOk(deadok);
+		_battle->TargetMarker.CheckNowIndex(_battle);
 		
 //@Target_Disappear
 	}else if (mystrcmp(_command, "@Target_Disappear",'l')){
@@ -1373,12 +1377,12 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 	}else if (mystrcmp(_command, "@Target_Move",'l')){
 		argnum = 1;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
 
-		_battle->TargetMarker.Move(sys::StrtoDir(arg[0]));
+		_battle->TargetMarker.Move(sys::StrtoDir(arg[0]), _battle);
 
 
 //@Target_Decide
 	}else if (mystrcmp(_command, "@Target_Decide",'l')){
-		argnum = 2;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
+		argnum = 1;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
 
 		int actorindex = -1;
 		if (!mystrtol(arg[0], &actorindex)) ErrorDx("Error->@Target_Decode->Check type arg[index]->%s", __FILE__, __LINE__, arg[0]);
@@ -1386,10 +1390,8 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			ErrorDx("Error->@Target_Decide-> 0<=arg[actorindex]<ACTOR_NUM :%d", actorindex);
 			goto finish;
 		}
-
-		bool deadok = sys::TrueOrFalse(arg[1], true);
 		
-		_battle->TargetMarker.Decide(_battle, actorindex, deadok);
+		_battle->TargetMarker.Decide(_battle, actorindex);
 
 
 //@Damage

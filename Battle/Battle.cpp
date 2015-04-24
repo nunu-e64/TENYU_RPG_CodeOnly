@@ -451,7 +451,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
 		int targetActorIndex   = between(0, ACTOR_NUM-1, _targetActorIndex); 
 
-	//ターゲットを確定しActor番号をvectorリスト化
+	//ターゲットを確定しActor番号をvectorリスト化	//死人は除外
 		std::vector <int> targetList;	//ターゲットのActor番号	
 		switch (_trick->TargetType){
 		case trick_tag::SINGLE:
@@ -514,7 +514,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y-5*sin(min(timecount,10)*(PI/2)/10)), WHITE, "%d", damage[i]); 
 		
 				if (timecount%6==0) Actor[targetList[i]]->SetVisible(oldVisible[i]&&true);
-				if (timecount%6==3) Actor[targetList[i]]->SetVisible(oldVisible[i]&&false);
+				if (timecount%6==3) Actor[targetList[i]]->SetVisible(false);
 			}
 			if (++timecount>40){
 				for (unsigned int i=0; i<targetList.size(); i++){	
@@ -545,17 +545,20 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	
 
 	//HPバー減少を待つ///////////////
+	std::vector <bool> hpBarMoved(targetList.size());
+	unsigned int i;
+	bool allOk;
 	while(true){
 		Draw();
 		if (!BasicLoop()) break;
 
-		unsigned int i;
+		allOk = true;
 		for (i=0; i<targetList.size(); i++){
-			if (!(Actor[targetList[i]]->CheckDead())){
-				break;
+			if (!hpBarMoved[i]) {
+				if (!(hpBarMoved[i] = Actor[targetList[i]]->CheckBarMove())) allOk = false;
 			}
 		}
-		if (i==targetList.size()) break;
+		if (allOk) break;
 	}
 
 	//死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。$
@@ -621,6 +624,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 //////////////////////////////////////////////////////////////
 void CBattle::CTargetMarker::SetImage(int _img){
 	Img = _img;
+	GetGraphSize(Img, &ImgSizeX, &ImgSizeY);
 }
 void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum){
 	ACTOR_NUM = _actornum;
@@ -631,6 +635,13 @@ void CBattle::CTargetMarker::Init(int _actornum, int _playernum, int _enemynum){
 	Index = 0;
 	Status = 0;
 }
+
+void CBattle::CTargetMarker::CheckNowIndex(CBattle* _battle){
+	if (!DeadOk && !_battle->Actor[Index+(EnemySide?PLAYER_NUM:0)]->GetAlive()) {
+		Move(RIGHT, _battle);
+	}
+}
+
 void CBattle::CTargetMarker::Draw(int dx, int dy){
 	if (Visible){
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA , 255);
@@ -641,16 +652,20 @@ void CBattle::CTargetMarker::Draw(int dx, int dy){
 			if (timecount==60) timecount=0;
 			dy += (int)(5*sin((timecount)*2*PI/60));
 		}else if(Status==1){
-			timecount=0; Status=2;
+			timecount=0;
+			Status=2;
 		}else if(Status==2){
-			if (timecount>30){ Status=0; Visible=false; timecount=0;}
+			if (timecount>30){ 
+				Status=0; Visible=false; 
+				timecount=0;
+			}
 		}
 		
 		if (!(Status==2 && timecount%10<6)){
 			if(EnemySide){
-				DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  20+dy, Img, true);
+				DrawGraph(WINDOW_WIDTH/4*(Index+1)-ImgSizeX/2+dx, 20+dy, Img, true);
 			}else{
-				DrawGraph(WINDOW_WIDTH/4*(Index+1)+dx,  WINDOW_HEIGHT-290+dy, Img, true);			
+				DrawGraph(WINDOW_WIDTH/4*(Index+1)-ImgSizeX/2+dx, WINDOW_HEIGHT-290+dy, Img, true);			
 			}
 		}
 
@@ -658,7 +673,7 @@ void CBattle::CTargetMarker::Draw(int dx, int dy){
 	}
 }
 
-void CBattle::CTargetMarker::Move(int _dir){
+void CBattle::CTargetMarker::Move(int _dir, CBattle* _battle, int _count){
 	if (Status==1) return;	//バグ予防
 	switch (_dir){
 	case RIGHT:
@@ -671,15 +686,23 @@ void CBattle::CTargetMarker::Move(int _dir){
 		break;
 	}
 
+	if (!DeadOk && !_battle->Actor[Index+(EnemySide?PLAYER_NUM:0)]->GetAlive()) {
+		if (_count >= (EnemySide? ENEMY_NUM: PLAYER_NUM)) {	//無限ループ防止
+			ERRORDX("All targets are Dead. INFINITY LOOP! (MoveCancel)");
+			return;
+		} else {
+			Move(_dir, _battle, ++_count);
+		}
+	}
 }
 
-void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorindex, bool _deadok){
-	int actorindex = between(0, ACTOR_NUM-1, _actorindex); 
+void CBattle::CTargetMarker::Decide(CBattle* _battle, int _actorIndex){
+	int actorIndex = between(0, ACTOR_NUM-1, _actorIndex); 
 
-	if (!_deadok && _battle->Actor[Index + (EnemySide?PLAYER_NUM:0)]->GetHp()==0){
+	if (!DeadOk && !_battle->Actor[Index + (EnemySide?PLAYER_NUM:0)]->GetAlive()){
 		return;
 	}else{
-		_battle->Actor[actorindex]->SetTarget(Index + (EnemySide?PLAYER_NUM:0));
+		_battle->Actor[actorIndex]->SetTarget(Index + (EnemySide?PLAYER_NUM:0));
 		Status = 1;
 		do {
 			_battle->Draw();	//カーソル確定点滅演出

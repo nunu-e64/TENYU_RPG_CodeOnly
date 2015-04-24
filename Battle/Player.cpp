@@ -30,35 +30,40 @@ void CPlayer::CreateBattleMenu(){
 void CPlayer::Draw(int _dx, int _dy){
 	int dx=_dx+Dx; int dy=_dy+Dy;
 
-	if (!Alive && Visible){
-		
-		static std::map<int, int> timeCount;
-		if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
+	if (Visible) {
+		switch(VisibleStatus) {
+		case VISIBLE:
+			SetDrawBright(255,255,255);
+			break;
+		case CHANGING:		
+			{
+			static std::map<int, int> timeCount;
+			if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
 
-		++timeCount[ActorIndex];
+			++timeCount[ActorIndex];
 
-		SetDrawBright(250-(timeCount[ActorIndex]*5),250-(timeCount[ActorIndex]*5),250-(timeCount[ActorIndex]*5));
-		if (timeCount[ActorIndex] == 40){
-			timeCount[ActorIndex] = 0;
-			Visible = false;
+			SetDrawBright(250-(timeCount[ActorIndex]*5),250-(timeCount[ActorIndex]*5),250-(timeCount[ActorIndex]*5));
+			if (timeCount[ActorIndex] == 40){
+				timeCount[ActorIndex] = 0;
+				VisibleStatus = INVISIBLE;
+			}
+			}
+			//////////////////////////////////////////////////////
+			break;
+		case INVISIBLE:
+			SetDrawBright(50,50,50);
+			break;
 		}
-		//////////////////////////////////////////////////////
-
-	}else if(!Visible){	//死んでる
-		SetDrawBright(50,50,50);
-	}else{ //生きてる
-		SetDrawBright(255,255,255);
 	}
-
 
 	if (BattleMenu.Alive){
 		static std::map<int, int> timeCount;
 		if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
 		if (timeCount[ActorIndex]==120) timeCount[ActorIndex] = 0;
 		++timeCount[ActorIndex];
-		DrawGraph(Rect.Left+dx, Rect.Top+dy+(int)(5*sin(timeCount[ActorIndex]*2*PI/120)), Img, true);
+		if (Visible) DrawGraph(Rect.Left+dx, Rect.Top+dy+(int)(5*sin(timeCount[ActorIndex]*2*PI/120)), Img, true);
 	}else{
-		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
+		if (Visible) DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 	}
 
 	Draw_Sub(_dx, _dy);
@@ -66,17 +71,17 @@ void CPlayer::Draw(int _dx, int _dy){
 }
 
 bool CPlayer::Plan(){
-	static bool newplan = true;
+	static bool newPlan = true;
 	
-	if (newplan){
+	if (newPlan){
 		BattleMenu.Alive = true;
 		BattleMenu.Cursor = BattleMenu.front;
-		newplan = false;
+		newPlan = false;
 
 	}else{
 
 		if (Target != -1) {	//Targetが-1じゃない＝TargetMarker.DecideなどでTargetが選択済み
-			return  (newplan=true);
+			return  (newPlan=true);
 		}
 
 		if (BattleMenu.Alive){		
@@ -93,31 +98,31 @@ bool CPlayer::Plan(){
 
 						switch(NowTrick->TargetType){	//選んだ技の対象人数によって処理を変える$
 						case trick_tag::SINGLE:
-							strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0)");
+							strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0,false)");
 							CmdList->Add(tmpcmd);
 							break;
 						case trick_tag::ALL:
 							Target = PLAYER_NUM;
 							break;
 						case trick_tag::SINGLE_FRIEND:
-							strcpy_s(tmpcmd,"@Target_Appear(PLAYER,0)");
+							strcpy_s(tmpcmd,"@Target_Appear(PLAYER,0,false)");
 							CmdList->Add(tmpcmd);
 							break;
 						default:
 							WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
-							return (newplan=true);
+							return (newPlan=true);
 						}
 						BattleMenu.Alive=false;
 
 					}else{
 						ErrorDx("Error->CPlayer::Plan->bigger action_num(do nothing):%d", __FILE__, __LINE__, index);
 						NowTrick = NULL;
-						return (newplan=true);
+						return (newPlan=true);
 					}
 	
 				}else if (mystrcmp(result->label, "待機")){
 					BattleMenu.Alive=false;
-					return  (newplan=true);
+					return  (newPlan=true);
 				//else if("アイテム") ...
 				}
 			}
@@ -130,7 +135,7 @@ bool CPlayer::Plan(){
 				char* tmpcmd = "@Target_Move(LEFT)";
 				CmdList->Add(tmpcmd);
 			}else if (CheckHitKeyDown(KEY_INPUT_OK)){
-				char tmpcmd[256]; sprintf_s(tmpcmd, "@Target_Decide(%d,false)", ActorIndex);
+				char tmpcmd[256]; sprintf_s(tmpcmd, "@Target_Decide(%d)", ActorIndex);
 				CmdList->Add(tmpcmd);
 				return false;
 			}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){

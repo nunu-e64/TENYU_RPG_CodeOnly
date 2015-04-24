@@ -43,9 +43,11 @@ public:
 		int GetIndex()const{return Index;}
 		
 	//戦闘関連
-		void SetVisible(bool _visible){ Visible = _visible; }
-		bool GetVisible()const{ return Visible; }
 		bool GetAlive()const{ return Alive; }
+		int GetVisibleStatus()const{ return VisibleStatus;}
+		bool GetVisible()const{ return Visible; }
+		void SetVisible(bool _visible){ Visible = _visible;}
+		
 		//int GetDef(){return Def;}
 		int GetAtk()const{ return Atk; }	//構造体作ってGetValueとかでまとめた方がいいかも
 		int GetHp()const{ return Hp; }
@@ -53,7 +55,7 @@ public:
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
 		int Damaged(CActor* _attacker, trick_tag const* _trick);
-		bool CheckDead();	//死亡確認が済んだらTrue
+		bool CheckBarMove();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){ Target=_target; }
 
 		void ChangeValue(int _kind, int _powerPercent);
@@ -82,8 +84,13 @@ protected:
 		int Index;	//Player,Enemyごとの通し番号
 
 	//戦闘関連
-		bool Alive;
-		bool Visible;
+		bool Alive;		//生死。死んだら即時に変更
+		bool Visible;	//単純に描画されるか否か。処理は継続。点滅表示に使用。
+		enum{
+			VISIBLE,
+			CHANGING,
+			INVISIBLE
+		}VisibleStatus;	//生→死での描画内容変更を管理
 		int OldHp;	//描画用
 		double SpdPer;
 		double TimeGauge;	//0~100%

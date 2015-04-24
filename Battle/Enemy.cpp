@@ -9,33 +9,38 @@
 void CEnemy::Draw(int _dx, int _dy){
 	int dx=_dx+Dx; int dy=_dy+Dy;
 
-	if (Visible){
-		if (!Alive){
-
-			static std::map<int, int> timeCount;
-			if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
-			timeCount[ActorIndex]++;
-			
-			//ここにエネミー死んだときのエフェクト処理を書く///$
-				SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timeCount[ActorIndex]*8)) ;
-
-				if (timeCount[ActorIndex]==30){
-					timeCount[ActorIndex] = 0;
-					Visible = false;
-				}
-			//////////////////////////////////////////////////////
-
-		}
+	switch(VisibleStatus) {
+	case VISIBLE:
+		SetDrawBright(255,255,255);
+		break;
+	case CHANGING:		
+		//ここにエネミー死んだときのエフェクト処理を書く///
+		{
+		static std::map<int, int> timeCount;
+		if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
+		timeCount[ActorIndex]++;
 		
-		DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
-		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
-
-		//HPBarやTimeGaugeの描画
-			Draw_Sub(_dx, _dy);
-
-		//AttentionCursorの描画
-			AI.Draw(this);
+		SetDrawBlendMode( DX_BLENDMODE_ALPHA , 240-(timeCount[ActorIndex]*8)) ;
+		if (timeCount[ActorIndex]==30){
+			timeCount[ActorIndex] = 0;
+			VisibleStatus = INVISIBLE;
+		}
+		}
+		//////////////////////////////////////////////////////
+		break;
+	case INVISIBLE:
+		return;
 	}
+
+	if (Visible) DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+
+	//HPBarやTimeGaugeの描画
+		Draw_Sub(_dx, _dy);
+
+	//AttentionCursorの描画
+		AI.Draw(this);
+	
 }
 
 

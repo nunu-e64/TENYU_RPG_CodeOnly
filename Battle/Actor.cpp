@@ -14,7 +14,8 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	LogWindow = _logWindow;
 	CmdList = _cmdlist;
 
-	Alive = Visible = (Hp!=0? true:false);
+	Alive = (Hp!=0? true:false);
+	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
 	SpdPer = between(1.0, 100.0, (double)Spd);	//$相対値から絶対値への変換
 	OldHp = Hp;
 
@@ -113,20 +114,23 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
 	
 	Hp = between(0, MaxHp, Hp-damage);
-	
+	//死亡判定はCheckBarMoveではなくここですべきか？
+
 	return damage;
 }
 
-bool CActor::CheckDead(){	//死亡判定
+bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 	
+	if (Alive && Hp==0) Alive = false;
+
 	if (OldHp!=Hp) { //Hpバー減少中
 		return false;
-	}else{
-		if (Alive && Hp==0) {
-			Alive = false;
+	}else{			//Hpバー減少終了
+		if (!Alive) {
 			char tmp[256];
 			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());
 			LogWindow->Add(tmp);
+			VisibleStatus = CHANGING;
 		}
 		return true;
 	}
@@ -173,17 +177,17 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	
 	//HpBar
-	DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+5+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+15+_dy), BLUE, true);
-	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+5+_dy), 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
+		DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+5+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+15+_dy), BLUE, true);
+		DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+5+_dy), 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
 
 	//TimeBar
-	if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-	DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+20+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+30+_dy), BLUE, true);
-	DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+20+_dy), 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+		if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
+		DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+20+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+30+_dy), BLUE, true);
+		DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+20+_dy), 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
 	
 	//OldHpとHpのギャップを埋める
-	if (OldHp>Hp) OldHp--;
-	else if (OldHp<Hp) OldHp++;
+		if (OldHp>Hp) OldHp--;
+		else if (OldHp<Hp) OldHp++;
 	
 	SetDrawBright(255,255,255);
 }

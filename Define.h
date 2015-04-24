@@ -193,14 +193,14 @@ struct sideEffect_tag{
 		SPD,
 		HEAL,
 		EFFECTTYPE_NUM,
-	}; int EffectType;
+	}; int EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
 	enum{
 		ME,
 		SINGLE,
 		ALL_FRIEND,
 		ALL_OPPOSITE,
 		EFFECTTARGET_NUM,
-	}; int EffectTarget;
+	}; int EffectTarget;	//効果対象範囲
 
 	int Power;		//効果力
 	int Incidence;	//発生確率
@@ -217,6 +217,7 @@ struct trick_tag{
 		ALL,
 		SINGLE_FRIEND,
 		ALL_FRIEND,
+		//DEADOK_SINGLE	//死人を対象にするパターン
 		TARGETTYPE_NUM,
 	}TargetType;
 
