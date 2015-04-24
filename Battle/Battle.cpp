@@ -71,7 +71,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 
 	//ログウィンドウの初期化
-		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 30, 100, 10, GetColor(240, 240, 240), GetColor(20, 20, 20), -1);
+		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), -1);
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
@@ -421,7 +421,8 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 	///////////////////////////////////////////////////////////////////////////////////////
 
-	if (_screenflip)	{BasicLoop();}
+	if (_screenflip) BasicLoop();
+
 }
 
 int CBattle::ResultCheck(){
@@ -443,8 +444,6 @@ int CBattle::ResultCheck(){
 
 	return -1;
 }
-
-//void CBattle::ManageAtacck(int _attackerActorIndex,  trick_tag const* _trick);
 
 void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
 	
@@ -480,16 +479,6 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			LogWindow.Add(tmp);
 			mystrcpy(tmp, "しかし攻撃は外れた！");
 			LogWindow.Add(tmp);
-			/*
-			char tmp[3][256];
-			sprintf_s(tmp[0], "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-			mystrcpy(tmp[1], "@NextPage");
-			mystrcpy(tmp[2], "しかし攻撃は外れた！");
-			TextBox->AddStock(tmp[0]);
-			TextBox->AddStock(tmp[1]);
-			TextBox->AddStock(tmp[2]);
-			TextBox->NextPage(&B_CmdList, FlagSet_p);	
-			*/
 
 			return;
 		}
@@ -546,12 +535,13 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	}
 
 	//ログウィンドウに出力
-	char tmpmessage[256];
+	char tmpMessage[256];
+	sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
+	LogWindow.Add(tmpMessage);
 	for (int i=0; i<(int)(targetList.size()); i++){	
-		sprintf_s(tmpmessage, "%sの%s！%sに%dのダメージ！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name, Actor[targetList[i]]->GetName().c_str(), damage[i]);
-		LogWindow.Add(tmpmessage);
+		sprintf_s(tmpMessage, "  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
+		LogWindow.Add(tmpMessage);
 	}
-	//TextBox->NextPage(&B_CmdList, FlagSet_p);
 	
 
 	//HPバー減少を待つ///////////////

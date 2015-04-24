@@ -46,7 +46,8 @@ private:
 	//メンバ変数
 		bool Initialized;	//初期済みか否か
 
-		char** Text;
+		char** Text;	//ログメッセージ本体
+
 		bool Visible;	//コマンドから変更可能
 
 		/*char OldText[LINE_MAX][WORD_MAX];

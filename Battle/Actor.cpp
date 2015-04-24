@@ -140,10 +140,10 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 		Atk += (int)((double)Atk*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "%s‚ÌUŒ‚—Í‚ªã‚ª‚Á‚½I", GetName().c_str());
+			sprintf_s(tmp, "  %s‚ÌUŒ‚—Í‚ªã‚ª‚Á‚½I", GetName().c_str());
 			LogWindow->Add(tmp);
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "%s‚ÌUŒ‚—Í‚ª‰º‚ª‚Á‚½I", GetName().c_str());
+			sprintf_s(tmp, "  %s‚ÌUŒ‚—Í‚ª‰º‚ª‚Á‚½I", GetName().c_str());
 			LogWindow->Add(tmp);
 		}
 		break;
@@ -152,10 +152,10 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 		Def += (int)((double)Def*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "%s‚Ì–hŒä‚ªã‚ª‚Á‚½I", GetName().c_str());
+			sprintf_s(tmp, "  %s‚Ì–hŒä‚ªã‚ª‚Á‚½I", GetName().c_str());
 			LogWindow->Add(tmp);
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "%s‚Ì–hŒä—Í‚ª‰º‚ª‚Á‚½I", GetName().c_str());
+			sprintf_s(tmp, "  %s‚Ì–hŒä—Í‚ª‰º‚ª‚Á‚½I", GetName().c_str());
 			LogWindow->Add(tmp);
 		}
 		break;

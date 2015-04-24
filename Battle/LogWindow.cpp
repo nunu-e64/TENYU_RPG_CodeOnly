@@ -165,29 +165,27 @@ void CLogWindow::Draw(){
 		DrawBox((!FullMode?PosX:PosXFull)+5, PosY+5, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
 	
 	//テキスト
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?220:200));
 		//表示アニメーション調整
 		//Draw_Animation(_showingstop);	
-	
+
 		//テキスト描写
 		SetFontSize(FontSize);
 		int line;
+		char* textForDraw = new char[(FullMode? WordNum: 8)];
 		for (int i = 0; i < LineNum; i++){
 			line = (i + NextLine) % LineNum;
 			if (strlen(Text[line])) {
-				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
-				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*line  , Text[line], FontColorMain);
+				mystrcpy(textForDraw, Text[line], (FullMode? WordNum: 5));
+				if (!FullMode) sprintf_s(textForDraw, -1, "%s..", textForDraw);
+				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*i+1, textForDraw, FontColorSub);
+				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*i  , textForDraw, FontColorMain);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
 			}
 		}
-		/*
-		//続きがあるときのマーク表示
-		if (!Showing && !AutoPlay && ReturnVisible) {
-			DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2-10, PosY+Height-10 + (GetNowCount()/100)%5, "▼", WHITE);
-		}
-		*/
 
+		delete [] textForDraw;
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,-1);
 		SetFontSize(oldFontSize);
 }
