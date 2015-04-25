@@ -68,7 +68,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 
 	//ログウィンドウの初期化
-		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), BImgBank.GetImg(LOG_WINDOW_BUTTON));
+		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), &BImgBank);
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
@@ -165,7 +165,7 @@ void CBattle::SetPlayer(){	//隊列に基づいて選出
 void CBattle::SetPlayer(const int _playerNum, ...){	//パーティ自由指定用（イベント戦闘）
 	PLAYER_NUM=0;
 	va_list args;
-	va_start( args, _playerNum);	//targetが大きすぎたときの処置方法はないのか？
+	va_start( args, _playerNum);
 	
 	if (_playerNum<=0){
 		ErrorDx("Error->arg[playerNum] should >=1: playerNum=%d", __FILE__, __LINE__, _playerNum);
@@ -440,6 +440,7 @@ int CBattle::ResultCheck(){
 }
 
 void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
+	char tmpMessage[256];
 	
 	//エラー防止処理
 		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
@@ -468,19 +469,12 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	
 	//攻撃対象がいない場合
 		if (targetList.empty()) {
-			char tmp[256];
-			sprintf_s(tmp, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-			LogWindow.Add(tmp);
-			mystrcpy(tmp, "しかし攻撃は外れた！");
-			LogWindow.Add(tmp);
-
+			mystrcpy(tmpMessage, "  しかし攻撃は外れた！");
+			LogWindow.Add(tmpMessage);
 			return;
 		}
 
 	//技の種類に応じたエフェクト発動
-		char tmpMessage[256];
-		sprintf_s(tmpMessage, "%sの%s！", Actor[attackerActorIndex]->GetName().c_str(), _trick->Name);
-		LogWindow.Add(tmpMessage);
 		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
 
 	//間の調整

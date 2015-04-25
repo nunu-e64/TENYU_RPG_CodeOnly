@@ -14,7 +14,7 @@
 //#define FPS_DISABLE
 #define CHECK_TIME_DISABLE	//時間測定マクロの無効化
 	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
-#define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))
+#define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))	//newで動的に確保した配列には使用した場合ポインタのメモリサイズ(4)が返されてしまう。これはsizeof()はコンパイル時に評価しているため。
 
 //namespace nunuLib{
 

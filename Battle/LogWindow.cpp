@@ -1,5 +1,6 @@
 #include "../Define.h"
 #include "LogWindow.h"
+#include "BImgBank.h"
 
 CLogWindow::CLogWindow(){
 	CONSTRUCTED;
@@ -21,7 +22,7 @@ CLogWindow::CLogWindow(){
 	//OriginalDir = DOWN;
 }
 
-void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _buttonImg){
+void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank){
 
 	if (Initialized) {
 		ERRORDX("Already Initialized (do nothing)");
@@ -53,8 +54,7 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 
 	NextLine = 0;
 	
-	ButtonImg = _buttonImg;
-	ButtonImgSize = GetGraphSize(_buttonImg) * CVector(0.5, 1);
+	_bImgBank->GetImg(LOG_WINDOW_BUTTON, ButtonImg, ARRAY_SIZE(ButtonImg));
 
 	//NowStock = 0;
 	//NowTarget = 0;
@@ -177,7 +177,8 @@ void CLogWindow::Draw(){
 	
 	//ボタン
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?150:100));
-		DrawRectGraph((!FullMode?PosX:PosXFull)-(int)(ButtonImgSize.x/2), (int)(PosY+Height-ButtonImgSize.y)/2, (int)(!FullMode?0:ButtonImgSize.x), 0, (int)ButtonImgSize.x, (int)ButtonImgSize.y, ButtonImg, true, false);
+		//DrawRectGraph((!FullMode?PosX:PosXFull)-(int)(ButtonImgSize.x/2), (int)(PosY+Height-ButtonImgSize.y)/2, (int)(!FullMode?0:ButtonImgSize.x), 0, (int)ButtonImgSize.x, (int)ButtonImgSize.y, ButtonImg, true, false);
+		DrawCenterGraph((!FullMode?PosX:PosXFull), (PosY+Height)/2, ButtonImg[(!FullMode?0:1)], true);
 
 	//テキスト
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?220:200));
@@ -213,6 +214,8 @@ void CLogWindow::Clear(){
 		Text[i][0] = '\0';
 	}
 	NextLine = 0;
+	FullMode = false;
+	Visible = true;
 }
 
 /*void CTextBox::Draw_Animation(bool _showingstop){

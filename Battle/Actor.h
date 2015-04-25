@@ -65,7 +65,8 @@ public:
 
 protected:
 	//メンバ関数
-		virtual void Init(){}	//Playerのみ必要なので。Enemyの時にはこっちを通る
+		virtual void SetExtraImg(CBImgBank* _bImgBank){}	//SetSystemImgから呼び出す。Playerにのみ必要であるためEnemyの時にはこっちを通る
+		
 		void Draw_Sub(int _dx=0, int _dy=0);
 
 		virtual bool Plan()=0;

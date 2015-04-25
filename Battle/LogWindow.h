@@ -5,6 +5,7 @@
 
 
 class CCmdList;
+class CBImgBank;
 
 class CLogWindow{
 public:
@@ -14,7 +15,7 @@ public:
 		DESTRUCTED;
 	};
 
-	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _buttonImg);
+	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank);
 	void Clear();	//表示テキスト全消去
 	
 	void Draw();
@@ -54,7 +55,7 @@ private:
 		int FontColorMain, FontColorSub;	//Color2は影
 		int BoxColor;
 
-		int ButtonImg;
+		int ButtonImg[2];
 		CVector ButtonImgSize;
 
 		int WordWidth;		//WordNumとFontSizeに基づいて横幅を算出

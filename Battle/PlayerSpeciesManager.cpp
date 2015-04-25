@@ -89,7 +89,7 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 
 	for (int i=0; i<PLAYER_NUM; i++){
 		PlayerBank[_player[i].GetName()].Hp = _player[i].Hp;
-		//PlayerBank[_player[i].GetName()].Mp = _player[i].Mp;
+		PlayerBank[_player[i].GetName()].MagicCount = _player[i].MagicCount;
 		PlayerBank[_player[i].GetName()].Exp = _player[i].Exp;
 	}
 

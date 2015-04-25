@@ -9,10 +9,15 @@
 
 class CPlayer : public CActor, public CPlayerSpecies{
 public:
-	CPlayer(){CONSTRUCTED; Mc=0;}
-	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){CONSTRUCTED; Mc=0;};
+	CPlayer(){
+		CONSTRUCTED;
+	}
+	CPlayer(const CPlayerSpecies& obj) : CPlayerSpecies(obj){
+		CONSTRUCTED;
+	};
 	~CPlayer(){DESTRUCTED;}
 	
+	void SetExtraImg(CBImgBank* _bImgBank);
 	void CreateBattleMenu();
 	void Draw(int _dx=0, int _dy=0);
 
@@ -22,7 +27,7 @@ private:
 		bool Action();
 
 	//ÉÅÉìÉoïœêî
-		int Mc;	//MagicCount?
+		int MagicCounterImg[2];
 
 		CBattleMenu BattleMenu;
 

@@ -61,7 +61,7 @@
 //êÌì¨ä÷òA///////////////////////////////////////////////
 const int MAX_PLAYER_NUM = 3;
 const int MAX_ENEMY_NUM = 3;
-const int MAX_MP = 10;
+const int MAX_MAGIC_COUNT = 10;
 const int MAX_ATTENTION = 10;
 /////////////////////////////////////////////////////////
 
@@ -86,6 +86,7 @@ const char TIME_BAR1[] = "TIME_BAR1";
 const char TIME_BAR2[] = "TIME_BAR2";
 const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
 const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
+const char MAGIC_COUNTER[] = "MAGIC_COUNTER";
 
 //ÉQÅ[ÉÄñº///////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";

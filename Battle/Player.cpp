@@ -3,6 +3,10 @@
 #include "Battle.h"
 
 
+	
+void CPlayer::SetExtraImg(CBImgBank* _bImgBank){
+	_bImgBank->GetImg(MAGIC_COUNTER, MagicCounterImg, ARRAY_SIZE(MagicCounterImg));
+}
 
 void CPlayer::CreateBattleMenu(){
 	
@@ -36,7 +40,7 @@ void CPlayer::Draw(int _dx, int _dy){
 			SetDrawBright(255,255,255);
 			break;
 		case CHANGING:		
-			{
+			{///死亡演出///////////////////////////////////////////////////
 			static std::map<int, int> timeCount;
 			if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
 
@@ -47,8 +51,7 @@ void CPlayer::Draw(int _dx, int _dy){
 				timeCount[ActorIndex] = 0;
 				VisibleStatus = INVISIBLE;
 			}
-			}
-			//////////////////////////////////////////////////////
+			}//////////////////////////////////////////////////////
 			break;
 		case INVISIBLE:
 			SetDrawBright(50,50,50);
@@ -65,6 +68,24 @@ void CPlayer::Draw(int _dx, int _dy){
 	}else{
 		if (Visible) DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
 	}
+
+	//マジックカウンターの描画//////////////////////////////////
+	if (VisibleStatus == VISIBLE){
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
+		int r = 40;
+		double angle = PI/2 + 3*PI/(MAX_MAGIC_COUNT+2);
+		for (int i=0; i<MAX_MAGIC_COUNT; i++) {
+			if (i < MagicCount) SetDrawBright(255,255,255); 
+			else SetDrawBright(100,100,100); 
+			DrawCenterGraph(Rect.Center().x + r*cos(angle), Rect.Center().y + r*sin(angle), MagicCounterImg[(i<MagicCount?0:1)], true);
+			angle += 2*PI/(MAX_MAGIC_COUNT+2);
+		}
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
+	}
+	////////////////////////////////////////////////////////////
+
+	SetDrawBright(255,255,255);
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
 	Draw_Sub(_dx, _dy);
 	BattleMenu.Draw();
@@ -152,9 +173,8 @@ bool CPlayer::Plan(){
 
 bool CPlayer::Action(){
 	
-	if (NowTrick==NULL){
+	if (NowTrick==NULL){	//待機を選択した場合
 		Target = -1;
-		//DebugDx("Error->CPlayer::Action->NowTrick=NULL(do nothing)_Player%d",Index);
 	
 		for (int i=0; i<ENEMY_NUM; i++) {
 			char tmpcmd[256];
@@ -166,24 +186,13 @@ bool CPlayer::Action(){
 	}
 
 
-	/*
-	//とりあえずSINGLEの時だけ実装　//ターゲットについてはここで管理。技の種別についてはCmdManagerおよびBattleで管理。
-		switch (NowTrick->TargetType){
-		case NowTrick->SINGLE:
-			char tmpcmd[256];
-			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
-			CmdList->Add(tmpcmd);
-			break;
+	char tmpcmd[256];
+	sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+	CmdList->Add(tmpcmd);
 
-		//case ALL:
-		default:
-			break;
-		}
-	*/
-
-		char tmpcmd[256];
-		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
-		CmdList->Add(tmpcmd);
+	char tmpMessage[256];
+	sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
+	LogWindow->Add(tmpMessage);
 
 
 	//行動後処理

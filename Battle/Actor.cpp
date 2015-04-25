@@ -46,10 +46,13 @@ void CActor::SetImg(int _img){
 }
 */
 
-bool CActor::SetSystemImg(CBImgBank* _bimgbank){
-	Img_hpbar		= _bimgbank->GetImg(HP_BAR);
-	Img_timebar[0]	= _bimgbank->GetImg(TIME_BAR1);
-	Img_timebar[1]	= _bimgbank->GetImg(TIME_BAR2);
+bool CActor::SetSystemImg(CBImgBank* _bImgBank){
+	Img_hpbar		= _bImgBank->GetImg(HP_BAR);
+	Img_timebar[0]	= _bImgBank->GetImg(TIME_BAR1);
+	Img_timebar[1]	= _bImgBank->GetImg(TIME_BAR2);
+
+	SetExtraImg(_bImgBank);
+
 	return true;
 }
 
@@ -173,9 +176,6 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 
 
 void CActor::Draw_Sub(int _dx, int _dy){
-
-	SetDrawBright(255,255,255);
-	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	
 	//HpBar
 		DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+5+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+15+_dy), BLUE, true);
@@ -189,8 +189,9 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é
 		if (OldHp>Hp) OldHp--;
 		else if (OldHp<Hp) OldHp++;
-	
+
 	SetDrawBright(255,255,255);
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 }
 
 

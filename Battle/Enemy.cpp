@@ -1,6 +1,7 @@
 #include "../Define.h"
 #include "Enemy.h"
 #include "Species.h"
+#include "LogWindow.h"
 #include "../Main/TextBox.h"
 #include "../Main/CmdList.h"
 
@@ -14,8 +15,7 @@ void CEnemy::Draw(int _dx, int _dy){
 		SetDrawBright(255,255,255);
 		break;
 	case CHANGING:		
-		//ここにエネミー死んだときのエフェクト処理を書く///
-		{
+		{/////死亡演出//////////////////////////////////////
 		static std::map<int, int> timeCount;
 		if (timeCount.find(ActorIndex) == timeCount.end()) timeCount[ActorIndex] = 0;	//最初の一度だけ初期値代入
 		timeCount[ActorIndex]++;
@@ -25,21 +25,22 @@ void CEnemy::Draw(int _dx, int _dy){
 			timeCount[ActorIndex] = 0;
 			VisibleStatus = INVISIBLE;
 		}
-		}
-		//////////////////////////////////////////////////////
+		}//////////////////////////////////////////////////////
 		break;
 	case INVISIBLE:
 		return;
 	}
 
 	if (Visible) DrawGraph(Rect.Left+dx, Rect.Top+dy, Img, true);
+
+	SetDrawBright(255,255,255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
 	//HPBarやTimeGaugeの描画
 		Draw_Sub(_dx, _dy);
 
 	//AttentionCursorの描画
-		AI.Draw(this);
+		if (VisibleStatus==VISIBLE) AI.Draw(this);
 	
 }
 
@@ -73,18 +74,10 @@ bool CEnemy::Action(){
 		Target = AI.GetTarget(this); 
 		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
 		CmdList->Add(tmpcmd);
-		/*
-		switch(NowTrick->TargetType){
-		case NowTrick->SINGLE:
-			Target = AI.GetTarget(this); 
-			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
-			CmdList->Add(tmpcmd);
-			break;
-		//case NowTrick->ALL:$
-		default:	
-			break;
 
-		}*/
+		char tmpMessage[256];
+		sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
+		LogWindow->Add(tmpMessage);
 
 	//行動後処理
 		NowTrick = NULL;

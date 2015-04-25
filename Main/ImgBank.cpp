@@ -29,7 +29,18 @@ bool CImgBank::AddImg(const char* _key, const int _img, int _size){
 	}
 
 	int* newImg = new int[_size];
-	newImg[0] = _img; //$
+
+	if (_size > 1){
+
+		CVector imgSize = GetGraphSize(_img); 
+		for (int i=0; i<_size; i++){
+			newImg[i] = DerivationGraph((int)(i*imgSize.x/(double)_size), 0, (int)(imgSize.x/(double)_size), (int)imgSize.y, _img);
+		}
+	
+	} else {
+		newImg[0] = _img;
+	}
+	
 	ImgBank.insert( std::map<std::string, int*>::value_type( _key, newImg) );
 	myLog("new ImgBank:%s...", _key);
 
@@ -58,15 +69,10 @@ bool CImgBank::GetImg(const char* _key, int _img[], int _size){
 
 	if (ImgBank.find(_key)!=ImgBank.end()) {
 		
-		if (_size == ARRAY_SIZE(ImgBank[_key])) {		
-			for (int i = 0; i < _size; i++) {
-				_img[i] = ImgBank[_key][i];
-			}
-			return true;
-		} else {
-			ERRORDX("_key:%s SizeNotMatch: ARRAY:%d, MEM:%d", _key, ARRAY_SIZE(ImgBank[_key]), _size);
-			return false;
+		for (int i = 0; i < _size; i++) {
+			_img[i] = ImgBank[_key][i];
 		}
+		return true;
 
 	} else {
 		ERRORDX("Not Found:%s", _key);		

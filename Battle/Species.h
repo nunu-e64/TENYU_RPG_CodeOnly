@@ -47,11 +47,15 @@ public:
 	}
 	CPlayerSpecies(){
 		CONSTRUCTED;
-		Exp=0;
+		Exp = 0;
+		MagicCount = MAX_MAGIC_COUNT;
 	}
 	~CPlayerSpecies(){
 		DESTRUCTED;
 	}
+
+protected:
+	int MagicCount;	//ñÇóÕÅBè„å¿ÇÕMAX_MAGIC_COUNTÅB
 
 private:
 	int Exp;
