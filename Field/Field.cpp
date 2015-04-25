@@ -51,6 +51,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//CBattleの初期化
 			if (!(Battle->Init())) return false;
+		
+		SetTransColor(0, 0, 0);	//透過色指定 $マゼンダで統一を
 			
 		//外部テキストのロード
 			CLoad SystemLoad;
@@ -70,6 +72,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			}else{
 				return false;
 			}
+	
+		SetTransColor(255, 0, 255);	//透過色指定	
 	
 	//DebugDx("Load_Init_End");
 			

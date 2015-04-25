@@ -15,7 +15,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	if( DxLib_Init() == -1 ) return -1 ; // ＤＸライブラリ初期化
 	
 	SetDrawScreen( DX_SCREEN_BACK ); //描画先を画面裏に
-	SetTransColor(0, 0, 0);	//透過色指定
+	SetTransColor(255, 0, 255);	//透過色指定
 	SetMouseDispFlag( false );	//マウスカーソルを表示しない
 		
 	myLogf("MyLog_Printed", "--------START------------------------------------------------------\n");
