@@ -102,6 +102,7 @@ bool CPlayer::Plan(){
 	}else{
 
 		if (Target != -1) {	//Targetが-1じゃない＝TargetMarker.DecideなどでTargetが選択済み
+			if (NowTrick!=NULL) MagicCount -= NowTrick->Cost;	//魔力消費
 			return  (newPlan=true);
 		}
 
@@ -110,35 +111,44 @@ bool CPlayer::Plan(){
 
 			if (BattleMenu.Move(result)){
 
+
 				if (mystrcmp(result->parent->label, "技")){
 					unsigned int index = BattleMenu.GetIndex(result);
 				
 					if (index<TrickList.size()){
-						NowTrick = TrickList[index];
-						char tmpcmd[256]; 
+						//魔力確認
+							if (TrickList[index]->Cost > MagicCount) {	//魔力は足りているか
+								LogWindow->Add("魔力が足りない！");
+								return false;
+							} else {
+								NowTrick = TrickList[index];
+							}
 
-						switch(NowTrick->TargetType){	//選んだ技の対象人数によって処理を変える$
-						case trick_tag::SINGLE:
-							strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0,false)");
-							CmdList->Add(tmpcmd);
-							break;
-						case trick_tag::ALL:
-							Target = PLAYER_NUM;
-							break;
-						case trick_tag::SINGLE_FRIEND:
-							strcpy_s(tmpcmd,"@Target_Appear(PLAYER,0,false)");
-							CmdList->Add(tmpcmd);
-							break;
-						default:
-							WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
-							return (newPlan=true);
-						}
-						BattleMenu.Alive=false;
+							
+						//選んだ技の対象人数によって処理を変える$
+							char tmpcmd[256]; 
+							switch(NowTrick->TargetType){	
+							case trick_tag::SINGLE:
+								strcpy_s(tmpcmd,"@Target_Appear(ENEMY,0,false)");
+								CmdList->Add(tmpcmd);
+								break;
+							case trick_tag::ALL:
+								Target = PLAYER_NUM;
+								break;
+							case trick_tag::SINGLE_FRIEND:
+								strcpy_s(tmpcmd,"@Target_Appear(PLAYER,0,false)");
+								CmdList->Add(tmpcmd);
+								break;
+							default:
+								WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
+								return false; //(newPlan=true);
+							}
+						BattleMenu.Alive = false;
 
 					}else{
 						ErrorDx("Error->CPlayer::Plan->bigger action_num(do nothing):%d", __FILE__, __LINE__, index);
 						NowTrick = NULL;
-						return (newPlan=true);
+						return false; //(newPlan=true);
 					}
 	
 				}else if (mystrcmp(result->label, "待機")){
@@ -158,7 +168,6 @@ bool CPlayer::Plan(){
 			}else if (CheckHitKeyDown(KEY_INPUT_OK)){
 				char tmpcmd[256]; sprintf_s(tmpcmd, "@Target_Decide(%d)", ActorIndex);
 				CmdList->Add(tmpcmd);
-				return false;
 			}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
 				char* tmpcmd = "@Target_Disappear";
 				CmdList->Add(tmpcmd);
