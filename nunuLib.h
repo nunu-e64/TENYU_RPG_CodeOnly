@@ -471,6 +471,25 @@ inline void DebugDx(const char* format, ...){
 /////////////////////////////////////////////////////////////
 //////自作Choose関数/////////////////////////////////////////
 int choose(const int target, ...);	//int限定	//VB6仕様（一個目を指定したい→target=1）
+template <class T> T chooseT(const int target, T first, ...){
+	T choice = first;
+	
+	if (target<=0){
+		ErrorDx("Error->arg[target] should >=1: target=%d", __FILE__, __LINE__, target);
+
+	} else {
+		va_list args;
+		va_start( args, first);	//targetが大きすぎたときの処置方法はないのか?→0が返される模様。
+		
+		for (int i=2; i<=target; i++){
+			choice = va_arg(args, T);		//target=1の時、一個目を返す（Not target=0）
+		}
+		
+		va_end(args);
+	}
+
+	return choice;
+}
 /////////////////////////////////////////////////////////////
 
 
