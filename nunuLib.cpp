@@ -357,11 +357,7 @@ int LoadGraph(const TCHAR *filename, bool errorcheck)		//Dxƒ‰ƒCƒuƒ‰ƒŠ‚ÌLoadGraph
 //DrawGraph
 //DrawExtendGraph
 //DrawTurnGraph
-template<class T> int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag){
-	CVector imgsize = GetGraphSize(GrHandle);
-	DrawGraph(cx-imgsize.x/2, cy-imgsize.y/2, GrHandle, TransFlag);
-}
-
+//DrawCenterGraph
 
 int DrawString(int x, int y, int color, const TCHAR* format, ...){
 	va_list args;

@@ -125,6 +125,12 @@ public:
 		tmp.y = y + obj.y;
 		return tmp;
 	}
+	CVector operator+(const double _num){
+		CVector tmp;
+		tmp.x = x + _num;
+		tmp.y = y + _num;
+		return tmp;
+	}
 
 	// +=演算子オーバーロード
 	CVector& operator+=(const CVector &obj){
@@ -145,6 +151,12 @@ public:
 		tmp.y = y - obj.y;
 		return tmp;
 	}
+	CVector operator-(const double _num){
+		CVector tmp;
+		tmp.x = x - _num;
+		tmp.y = y - _num;
+		return tmp;
+	}
 	// -=演算子オーバーロード
 	CVector& operator-=(const CVector &obj){
 		x -= obj.x;
@@ -157,6 +169,12 @@ public:
 		return *this;
 	}
 	//*演算子オーバーロード
+	CVector operator*(const CVector &obj){
+		CVector tmp;
+		tmp.x = x * obj.x;
+		tmp.y = y * obj.y;
+		return tmp;
+	}
 	CVector operator*(const double _num){
 		CVector tmp;
 		tmp.x = x * _num;
@@ -164,16 +182,15 @@ public:
 		return tmp;
 	}
 	//*=演算子オーバーロード
+	CVector& operator*=(const CVector &obj){
+		x *= obj.x;
+		y *= obj.y;
+		return *this;
+	}
 	CVector& operator*=(const double _num){
 		x*=_num;
 		y*=_num;
 		return *this;
-	}
-
-	//operator*のオーバーロードによりもはや不要
-	void Multiple(double _num){
-		x = x*_num;
-		y = y*_num;
 	}
 
 	double GetLength(){
@@ -310,7 +327,10 @@ inline int DrawExtendGraph(double x1, double y1, double x2, double y2, int GrHan
 inline int DrawTurnGraph(double x, double y, int GrHandle, int TransFlag){		//DxライブラリのDrawTurnGraphでdoubleをintに自動キャストしてくれるだけ
 	return DrawTurnGraph((int)x, (int)y, GrHandle, TransFlag);
 }
-template<class T> int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag);
+template<class T> inline int DrawCenterGraph(T cx, T cy, int GrHandle, int TransFlag){
+	CVector imgsize = GetGraphSize(GrHandle);
+	return DrawGraph(cx-imgsize.x/2, cy-imgsize.y/2, GrHandle, TransFlag);
+}
 
 int DrawString(int x, int y, int color, const TCHAR* format, ...);	//フォーマット対応
 inline int DrawCenterString(int cx, int y, const TCHAR *String, int color, bool centerY=false){	//xを左右の中心にしてDrawStringで文字描画（※yは上下中心ではなく上辺）
