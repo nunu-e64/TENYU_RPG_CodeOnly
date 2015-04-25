@@ -4,9 +4,9 @@
 #include "Enemy.h"
 
 
-int CEnemyAI::AttentionMarkerImg = 0;
+int CEnemyAI::AttentionMarkerImg[MAX_PLAYER_NUM] = {0};
+int CEnemyAI::AttentionBoardImg = 0;
 CVector CEnemyAI::AttentionMarkerImgSize;
-
 
 int CEnemyAI::GetPlan(const CEnemy* _enemy) { 
 	return Planner->GetPlan(_enemy); 
@@ -57,16 +57,19 @@ void CEnemyAI::SetAttention(int _playerIndex, int _value){
 	AddAttention(_playerIndex, _value - Attention[_playerIndex]); 	
 }
 
-void CEnemyAI::SetAttentionMarkerImage(int _img){
-	AttentionMarkerImg = _img;
-	int x; int y;
-	GetGraphSize(AttentionMarkerImg, &x, &y); 
-	AttentionMarkerImgSize = CVector(x/(MAX_ATTENTION+2), y/MAX_PLAYER_NUM);
+void CEnemyAI::SetAttentionImg(int* _markerImg, int _boardImg){
+	if (_markerImg!=NULL) {
+		for (int i=0; i<MAX_PLAYER_NUM; i++){
+			AttentionMarkerImg[i] = _markerImg[i];
+		}
+	}
+
+	AttentionBoardImg = _boardImg;
 }
 
 void CEnemyAI::Draw(const CEnemy* _enemy){
 
-	//死んでたらアテンションは0に　//この判断処理はここでいいのかは後から要見直し$
+	//死んでたらアテンションは0に
 	for (int i=0; i<PLAYER_NUM; i++){
 		if (!Actor[i]->GetAlive() && Attention[i]!=0){
 			SetAttention(i, 0);
@@ -80,16 +83,22 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 
 	//アテンションマーカーの描画//////////////////////////////////////////////////
 
-	CVector pos(_enemy->GetRect().Center().x-AttentionMarkerImgSize.x/2, max(0, _enemy->GetRect().Top-AttentionMarkerImgSize.y/2));
-	const int KANKAKU = 35;
-	
+	CVector pos(_enemy->GetRect().Center() + CVector(-50, 50));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	DrawCenterGraph(pos.x, pos.y, AttentionBoardImg, false);
+
+	int boardHeight = (int)GetGraphSize(AttentionBoardImg).y;
+	pos.y += boardHeight/2;		//AttentionBoardの中央下端座標を取得
+	CVector markerSize = GetGraphSize(AttentionMarkerImg[0]);
+
 	for (int i=0; i<PLAYER_NUM; i++){
 
 		//アテンションの高い順位に濃くマーカーが描かれる
-		SetDrawBlendMode( DX_BLENDMODE_ALPHA , (Attention[i]==0? 100: choose(attentionRank[i]+1, 200, 140, 100)));
 		
-		double x = pos.x + (i - (PLAYER_NUM-1)/(double)2) * KANKAKU;
-		DrawRectGraph((int)x, (int)pos.y, (int)(Attention[i] * AttentionMarkerImgSize.x), (int)(i * AttentionMarkerImgSize.y), (int)AttentionMarkerImgSize.x, (int)AttentionMarkerImgSize.y, AttentionMarkerImg, true, false);
+		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+		SetDrawBlendMode( DX_BLENDMODE_ALPHA , (Attention[i]==0? 100: choose(attentionRank[i]+1, 220, 160, 100)));
+		double exRate = chooseT(attentionRank[i]+1, 1.0, 0.6, 0.3);
+		DrawRotaGraph3((int)pos.x, (int)(pos.y - Attention[i]*boardHeight/MAX_ATTENTION), (int)markerSize.x/2, (int)markerSize.y/2, exRate, 1, 0, AttentionMarkerImg[i], false);
 	}
 
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;

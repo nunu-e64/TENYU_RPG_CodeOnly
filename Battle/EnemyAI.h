@@ -24,7 +24,7 @@ public:
 		//For Test$
 		    Attention[0] = 10;
 			Attention[1] = 5;
-			Attention[2] = 8;
+			Attention[2] = 0;
 
 		for (int i=0; i<MAX_PLAYER_NUM; i++){
 			ExtRate[i] = max(0, (i==0? 1.0: ExtRate[i-1]-0.25));
@@ -67,7 +67,7 @@ public:
 	void AddAttention(int _playerIndex, int _value);
 	void SetAttention(int _playerIndex, int _value);
 
-	static void SetAttentionMarkerImage(int _img);	
+	static void SetAttentionImg(int* _markerImg, int _boardImg);	
 	void Draw(const CEnemy* _enemy);
 	
 
@@ -89,7 +89,8 @@ private:
 		int PLAYER_NUM;
 		int ENEMY_NUM;
 
-	static int AttentionMarkerImg;
+	static int AttentionMarkerImg[MAX_PLAYER_NUM];
+	static int AttentionBoardImg;
 	static CVector AttentionMarkerImgSize;
 
 	double ExtRate[MAX_PLAYER_NUM];

@@ -85,6 +85,7 @@ const char HP_BAR[] = "HP_BAR";
 const char TIME_BAR1[] = "TIME_BAR1";
 const char TIME_BAR2[] = "TIME_BAR2";
 const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
+const char ATTENTION_BOARD[] = "ATTENTION_BOARD";
 const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
 const char MAGIC_COUNTER[] = "MAGIC_COUNTER";
 

@@ -80,3 +80,15 @@ bool CImgBank::GetImg(const char* _key, int _img[], int _size){
 	}
 
 }
+
+int* CImgBank::GetImg(const char* _key, int _size){
+
+	if (mystrcmp2(_key, "null")) return NULL;
+
+	if (ImgBank.find(_key)!=ImgBank.end()) {
+		return ImgBank[_key];
+	} else {
+		ERRORDX("Not Found:%s", _key);		
+		return NULL;
+	}
+}

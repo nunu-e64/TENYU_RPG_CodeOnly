@@ -26,6 +26,7 @@ public:
 	
 	int GetImg(const char* _key);
 	bool GetImg(const char* _key, int _img[], int _size);
+	int* GetImg(const char* _key, int _size);
 
 private:
     std::map <std::string, int*> ImgBank;
