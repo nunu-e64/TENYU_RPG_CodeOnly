@@ -21,8 +21,13 @@ CLogWindow::CLogWindow(){
 	//OriginalDir = DOWN;
 }
 
-void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _autoPlaySpeed){
+void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _buttonImg){
 
+	if (Initialized) {
+		ERRORDX("Already Initialized (do nothing)");
+		return;
+	}
+	
 	LineNum = between(1, (int)LINE_MAX, _line);
 	WordNum = between(1, (int)WORD_MAX, _word);
 
@@ -47,6 +52,9 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	FontColorSub = _fontColorSub;
 
 	NextLine = 0;
+	
+	ButtonImg = _buttonImg;
+	ButtonImgSize = GetGraphSize(_buttonImg) * CVector(0.5, 1);
 
 	//NowStock = 0;
 	//NowTarget = 0;
@@ -69,11 +77,14 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 }
 
 void CLogWindow::Term(){
-	for (int i=0; i<LineNum; i++){
-		delete [] Text[i];
-	}
-	delete [] Text;
+	if (Initialized){
+		for (int i=0; i<LineNum; i++){
+			delete [] Text[i];
+		}
+		delete [] Text;
 	
+		Initialized = false;
+	}
 	/*	
 	NowStock = 0;
 	NowTarget = 0;
@@ -164,10 +175,12 @@ void CLogWindow::Draw(){
 		DrawBox((!FullMode?PosX:PosXFull), PosY,     (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
 		DrawBox((!FullMode?PosX:PosXFull)+5, PosY+5, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
 	
+	//ボタン
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?150:100));
+		DrawRectGraph((!FullMode?PosX:PosXFull)-(int)(ButtonImgSize.x/2), (int)(PosY+Height-ButtonImgSize.y)/2, (int)(!FullMode?0:ButtonImgSize.x), 0, (int)ButtonImgSize.x, (int)ButtonImgSize.y, ButtonImg, true, false);
+
 	//テキスト
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?220:200));
-		//表示アニメーション調整
-		//Draw_Animation(_showingstop);	
 
 		//テキスト描写
 		SetFontSize(FontSize);

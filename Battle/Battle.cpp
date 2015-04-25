@@ -71,7 +71,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 
 	//ログウィンドウの初期化
-		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), -1);
+		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), BImgBank.GetImg(LOG_WINDOW_BUTTON));
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();

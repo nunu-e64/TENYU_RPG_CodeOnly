@@ -79,12 +79,13 @@ const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.png",
 									     "tenyu_data/pic/sys/talkname02.png"};
 
 
-//システムグラフィックのPicKey/////////////////////////
+//システムグラフィックのPicKey///////////////////////
 const char TARGET_CURSOR[] = "TARGET_CURSOR";
 const char HP_BAR[] = "HP_BAR";
 const char TIME_BAR1[] = "TIME_BAR1";
 const char TIME_BAR2[] = "TIME_BAR2";
 const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
+const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
 
 //ゲーム名///////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";

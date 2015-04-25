@@ -10,12 +10,12 @@ class CLogWindow{
 public:
 	CLogWindow();
 	~CLogWindow(){
+		Term();
 		DESTRUCTED;
 	};
 
-	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _autoPlaySpeed);
+	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, int _buttonImg);
 	void Clear();	//表示テキスト全消去
-	void Term();	//Terminate
 	
 	void Draw();
 	
@@ -39,30 +39,29 @@ private:
 			LINE_SPACE = 5,	//行間
 		};
 
-	//メンバ関数
-
-
+	//メンバ関数	
+		void Term();	//Terminate
 
 	//メンバ変数
 		bool Initialized;	//初期済みか否か
 
 		char** Text;	//ログメッセージ本体
 
-		bool Visible;	//コマンドから変更可能
-
-		/*char OldText[LINE_MAX][WORD_MAX];
-		char DrawText[LINE_MAX][WORD_MAX];
-*/
 		int PosX, PosY, Width, Height;			//左上の座標、横幅縦幅
 		int PosXFull, WidthFull;			//フルサイズモードのとき
 		int LineNum, WordNum;	//WordNumの単位はバイト　LineNumは行数
 		int FontSize;
 		int FontColorMain, FontColorSub;	//Color2は影
 		int BoxColor;
+
+		int ButtonImg;
+		CVector ButtonImgSize;
+
 		int WordWidth;		//WordNumとFontSizeに基づいて横幅を算出
 		bool FullMode;		//ログウィンドウの大きさを切り替えるスイッチ
 
 		int NextLine;	//次に書き換えられるべきTextの配列インデックス
+		bool Visible;	//描画されるか
 
 		/*
 		int StockLine;		//何行目までデータがストックされているか				1~STOCK_LINE_NUM	空：0	//AddTextで初期化するのでNoProblem
