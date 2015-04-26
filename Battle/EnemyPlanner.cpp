@@ -117,8 +117,8 @@ int CEnemyPlanner_PLAYERNUM::GetPlan(const CEnemy* _enemy){
 	//‚±‚±‚ÉÀÛ‚Ì‚ ‚ê‚±‚ê‚ğ‘‚­
 
 	int alivePlayerNum = 0;
-	for (int i=0; i<PLAYER_NUM; i++){
-		if (Actor[i]->GetAlive()) ++alivePlayerNum;
+	for (int i=0; i<PLAYER_NUM+ENEMY_NUM ; i++){
+		if (Actor[i]->IsPlayer() && Actor[i]->GetAlive()) ++alivePlayerNum;
 	}
 
 	int plan = -1;

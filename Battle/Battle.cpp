@@ -453,7 +453,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
 			break;
 		case trick_tag::ALL:
-			for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+			for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
 				if (Actor[i]->GetAlive()) {	 //生存確認	
 					targetList.push_back(i);
 				}	
@@ -526,7 +526,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 
 
 	//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動
-	if (_attackerActorIndex < PLAYER_NUM) {
+	if (Actor[_attackerActorIndex]->IsPlayer()) {
 		for (int i=0; i<(int)(targetList.size()); i++){	
 			if (targetList[i] >= PLAYER_NUM) Enemy[targetList[i]-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
 		}
@@ -569,14 +569,14 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				effectTargetList.push_back(targetList[0]);
 				break;
 			case sideEffect_tag::ALL_OPPOSITE:	//敵全体
-				for (int i=(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: 0); i<(_attackerActorIndex<PLAYER_NUM? ACTOR_NUM: PLAYER_NUM); i++){
+				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
 					if (Actor[i]->GetAlive()) {
 						effectTargetList.push_back(i);
 					}	
 				}
 				break;
 			case sideEffect_tag::ALL_FRIEND:	//味方全体
-				for (int i=(_attackerActorIndex<PLAYER_NUM? 0: PLAYER_NUM); i<(_attackerActorIndex<PLAYER_NUM? PLAYER_NUM: ACTOR_NUM); i++){
+				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? 0: PLAYER_NUM); i<(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: ACTOR_NUM); i++){
 					if (Actor[i]->GetAlive()) {
 						effectTargetList.push_back(i);
 					}	

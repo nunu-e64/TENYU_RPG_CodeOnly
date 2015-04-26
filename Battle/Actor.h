@@ -41,6 +41,9 @@ public:
 
 	//Šî‘bî•ñ
 		int GetIndex()const{return Index;}
+		bool IsPlayer()const{
+			return (ActorIndex<PLAYER_NUM);
+		}
 		
 	//í“¬ŠÖ˜A
 		bool GetAlive()const{ return Alive; }
