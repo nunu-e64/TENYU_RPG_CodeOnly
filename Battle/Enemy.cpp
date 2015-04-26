@@ -40,7 +40,7 @@ void CEnemy::Draw(int _dx, int _dy){
 		Draw_Sub(_dx, _dy);
 
 	//AttentionCursor‚Ì•`‰æ
-		if (VisibleStatus==VISIBLE) AI.Draw(this);
+		AI.Draw(this);
 	
 }
 

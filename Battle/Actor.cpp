@@ -19,8 +19,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	SpdPer = between(1.0, 100.0, (double)Spd);	//$相対値から絶対値への変換
 	OldHp = Hp;
 
-	TimeGauge = 0;//rand()%100;	//ランダムでいいの？$
-	//Accident = NULL;
+	TimeGauge = rand()%100;	//ランダムでいいの？$
 	Mode = STAY;
 	Target = -1;
 

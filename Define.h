@@ -169,7 +169,8 @@ enum btlresult_tag{
 enum attention_tag{
 	ATTENTION_DAMAGE = 2,
 	ATTENIOTN_DEFFENCE = -1,
-	ATTENIOTN_WAITING = -1
+	ATTENIOTN_WAITING = -1,
+	ATTENTION_PRAY = -1
 };
 enum actor_status_tag{
 	MAGIC_DEFFENCE,
