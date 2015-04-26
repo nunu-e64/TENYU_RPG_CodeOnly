@@ -94,10 +94,15 @@ void CPlayer::Draw(int _dx, int _dy){
 
 bool CPlayer::Plan(){
 	static bool newPlan = true;
+	char tmpMessage[256];
 	
 	if (newPlan){
 		BattleMenu.Alive = true;
 		BattleMenu.Cursor = BattleMenu.front;
+		
+		NowTrick = NULL;
+		Target = -1;
+
 		Status[MAGIC_DEFFENCE] = false;		
 		newPlan = false;
 
@@ -120,7 +125,8 @@ bool CPlayer::Plan(){
 					if (index<TrickList.size()){
 						//魔力確認
 							if (TrickList[index]->Cost > MagicCount) {	//魔力は足りているか
-								LogWindow->Add("魔力が足りない！");
+								sprintf_s(tmpMessage, "%s：魔力が足りない！(必要コスト%d)", Name.c_str(), TrickList[index]->Cost);
+								LogWindow->Add(tmpMessage);
 								return false;
 							} else {
 								NowTrick = TrickList[index];
@@ -149,7 +155,6 @@ bool CPlayer::Plan(){
 
 					}else{
 						ErrorDx("Error->CPlayer::Plan->bigger action_num(do nothing):%d", __FILE__, __LINE__, index);
-						NowTrick = NULL;
 						return false; //(newPlan=true);
 					}
 	
@@ -158,17 +163,28 @@ bool CPlayer::Plan(){
 					return  (newPlan=true);
 
 				}else if (mystrcmp(result->label, "祈祷")){
-					BattleMenu.Alive=false;
-					return  (newPlan=true);
-
+					if (MagicCount == MAX_MAGIC_COUNT){
+						sprintf_s(tmpMessage, "%s：魔力回復の必要はないようだ", Name.c_str());
+						LogWindow->Add(tmpMessage);
+						return false;
+					} else {
+						Status[PRAYING] = true;
+						BattleMenu.Alive=false;
+						return  (newPlan=true);
+					}
 				}else if (mystrcmp(result->label, "防御")){
 					if (DEFFENCE_MC > MagicCount) {	//魔力は足りているか
-						LogWindow->Add("魔力が足りない！");
+						sprintf_s(tmpMessage, "%s：魔力が足りない！(必要コスト%d)", Name.c_str(), DEFFENCE_MC);
+						LogWindow->Add(tmpMessage);
 						return false;
 					} else {
 						Status[MAGIC_DEFFENCE] = true;
-						MagicCount-=DEFFENCE_MC;
-						Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる
+						MagicCount-=DEFFENCE_MC;	//魔力消費
+						Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる	//このとき一瞬タイムバーがActionの色になってしまう
+		
+						sprintf_s(tmpMessage, "%sは防御に集中している", Name.c_str());
+						LogWindow->Add(tmpMessage);
+						
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
@@ -200,34 +216,39 @@ bool CPlayer::Plan(){
 }
 
 bool CPlayer::Action(){
+	char tmp[256];	//tmpCmdとtmpMessageを兼ねる
 	
-	if (NowTrick==NULL){	//待機を選択した場合
-		Target = -1;
+	if (GetStatus(PRAYING)) {
+		MagicCount = min(MagicCount+PRAY_MC, MAX_MAGIC_COUNT);
+		Status[PRAYING] = false;
+		sprintf_s(tmp, "%sは祈りを捧げ魔力を回復した！", Name.c_str());
+		LogWindow->Add(tmp);
+
+		return true;
+
+	} else if (NowTrick==NULL){	//待機を選択した場合
+		//Target = -1;
 	
-		for (int i=0; i<ENEMY_NUM; i++) {
-			char tmpcmd[256];
-			sprintf_s(tmpcmd, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
-			CmdList->Add(tmpcmd);
+		for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
+			sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
+			CmdList->Add(tmp);
 		}
 
 		return true;
+	
+	} else {  //技の使用
+		sprintf_s(tmp, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+		CmdList->Add(tmp);
+
+		sprintf_s(tmp, "%sの%s！", Name.c_str(), NowTrick->Name);
+		LogWindow->Add(tmp);
+
+
+		////技使用後処理
+		//	NowTrick = NULL;
+		//	Target = -1;
+
+		return true;
 	}
-
-
-	char tmpcmd[256];
-	sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
-	CmdList->Add(tmpcmd);
-
-	char tmpMessage[256];
-	sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
-	LogWindow->Add(tmpMessage);
-
-
-	//行動後処理
-		NowTrick = NULL;
-		Target = -1;
-
-	return true;
 }
-
 

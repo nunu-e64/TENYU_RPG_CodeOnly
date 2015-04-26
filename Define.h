@@ -66,6 +66,7 @@ const int MAX_ATTENTION = 10;
 
 const int DEFFENCE_MC = 1;	//増えてきたら必要に応じてenumにまとめる
 const double MAGIC_DEFFENCE_RATE = 0.1;
+const int PRAY_MC = 2;
 /////////////////////////////////////////////////////////
 
 //rpgファイル名等///////////////////////////////////////////
