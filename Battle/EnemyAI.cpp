@@ -71,7 +71,7 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 
 	//死んでたらアテンションは0に
 	for (int i=0; i<PLAYER_NUM; i++){
-		if (!Actor[i]->GetAlive() && Attention[i]!=0){
+		if (Attention[i]!=0 && !Actor[i]->GetAlive()){
 			SetAttention(i, 0);
 		}
 	}
@@ -81,26 +81,31 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 	Targetter->CalcAttentionRank(attentionRank);
 
 
-	//アテンションマーカーの描画//////////////////////////////////////////////////
+	//アテンションボードとマーカーの描画//////////////////////////////////////////////////
 
 	CVector pos(_enemy->GetRect().Center() + CVector(-50, 50));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	DrawCenterGraph(pos.x, pos.y, AttentionBoardImg, false);
+	DrawCenterGraph(pos.x, pos.y, AttentionBoardImg, true);
 
-	int boardHeight = (int)GetGraphSize(AttentionBoardImg).y;
-	pos.y += boardHeight/2;		//AttentionBoardの中央下端座標を取得
-	CVector markerSize = GetGraphSize(AttentionMarkerImg[0]);
+	const int YOHAKU_LEFTRIGHT = 21;
+	const int YOHAKU_TOPBOTTOM = 7;
+	CVector boardSize = GetGraphSize(AttentionBoardImg) - CVector(YOHAKU_LEFTRIGHT*2, YOHAKU_TOPBOTTOM*2);
+	pos.x -= boardSize.x*0.5;
+	pos.y += boardSize.y*0.5;		//AttentionBoardの描画領域の左下座標を取得
 
+	/*for (int i=0; i<MAX_ATTENTION+1; i++){
+		DrawLine((int)pos.x-3, (int)(pos.y - (i+0.5)*boardSize.y/(MAX_ATTENTION+1)), (int)(pos.x+boardSize.x+3), (int)(pos.y - (i+0.5)*boardSize.y/(MAX_ATTENTION+1)), GetColor(50,50,50)); 
+	}*/	
+
+	//int bright = 255;
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 230);
+	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	for (int i=0; i<PLAYER_NUM; i++){
-
-		//アテンションの高い順位に濃くマーカーが描かれる
-		
-		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
-		SetDrawBlendMode( DX_BLENDMODE_ALPHA , (Attention[i]==0? 100: choose(attentionRank[i]+1, 220, 160, 100)));
-		double exRate = chooseT(attentionRank[i]+1, 1.0, 0.6, 0.3);
-		DrawRotaGraph3((int)pos.x, (int)(pos.y - Attention[i]*boardHeight/MAX_ATTENTION), (int)markerSize.x/2, (int)markerSize.y/2, exRate, 1, 0, AttentionMarkerImg[i], false);
+		//bright = choose(attentionRank[i]+1, 255, 200, 150);
+		//SetDrawBright(bright, bright, bright);
+		if (Actor[i]->GetAlive()) DrawCenterGraph(pos.x + (i+0.5)*boardSize.x/MAX_PLAYER_NUM, pos.y - (Attention[i]+0.5)*boardSize.y/(MAX_ATTENTION+1), AttentionMarkerImg[i], true);
 	}
-
+	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	delete [] attentionRank;
 }

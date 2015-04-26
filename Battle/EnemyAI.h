@@ -23,7 +23,7 @@ public:
 
 		//For Test$
 		    Attention[0] = 10;
-			Attention[1] = 5;
+			Attention[1] = 1;
 			Attention[2] = 0;
 
 		for (int i=0; i<MAX_PLAYER_NUM; i++){
