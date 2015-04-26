@@ -130,13 +130,14 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 		return 0;
 	}
 	
-	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
-	if (IsPlayer() && GetStatus(MAGIC_DEFFENCE)) damage = (int)(damage*MAGIC_DEFFENCE_RATE);
+	double damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
+	
+	damage = CalcDamage(damage, _attacker, _trick);
 
-	Hp = between(0, MaxHp, Hp-damage);
+	Hp = between(0, MaxHp, Hp-(int)damage);
 	//死亡判定はCheckBarMoveではなくここですべきか？
 
-	return damage;
+	return (int)damage;
 }
 
 bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認

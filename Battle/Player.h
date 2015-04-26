@@ -25,6 +25,8 @@ private:
 	//ƒƒ“ƒoŠÖ”
 		bool Plan();
 		bool Action();
+		
+		double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick);
 
 	//ƒƒ“ƒo•Ï”
 		int MagicCounterImg[2];

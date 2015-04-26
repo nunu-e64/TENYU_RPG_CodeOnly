@@ -128,6 +128,9 @@ private:
 		bool TimeGaugeForward();
 		double TimeGauge;	//0~100(%)
 		
+		virtual double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
+			return _damage;
+		};
 };
 
 

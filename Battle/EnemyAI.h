@@ -21,10 +21,11 @@ public:
 			Attention[i] = 0;
 		}
 
-		//For Test$
-		    Attention[0] = 10;
-			Attention[1] = 1;
-			Attention[2] = 0;
+		//For Test////////////////$
+			Attention[0] = 5;
+			Attention[1] = 5;
+			Attention[2] = 5;
+		//////////////////////////
 
 		for (int i=0; i<MAX_PLAYER_NUM; i++){
 			ExtRate[i] = max(0, (i==0? 1.0: ExtRate[i-1]-0.25));

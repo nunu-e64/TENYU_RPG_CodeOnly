@@ -223,7 +223,7 @@ bool CPlayer::Action(){
 	char tmp[256];	//tmpCmdとtmpMessageを兼ねる
 	
 	if (GetStatus(PRAYING)) {
-		MagicCount = min(MagicCount+PRAY_MC, MAX_MAGIC_COUNT);
+		MagicCount = min(MagicCount+PRAY_RECOVERY_MC, MAX_MAGIC_COUNT);
 		Status[PRAYING] = false;
 		sprintf_s(tmp, "%sは祈りを捧げ魔力を回復した！", Name.c_str());	
 		LogWindow->Add(tmp);
@@ -259,5 +259,15 @@ bool CPlayer::Action(){
 
 		return true;
 	}
+}
+
+double CPlayer::CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
+
+	if (GetStatus(MAGIC_DEFFENCE)) {
+		_damage *= MAGIC_DEFFENCE_RATE;	//魔法防御
+	} else {
+		_damage -= _damage * MagicCount/MAX_MAGIC_COUNT*(1-MAX_MAGIC_COUNTER_DAMAGE_RATE);  //魔力によるダメージ減少
+	}
+	return _damage;
 }
 
