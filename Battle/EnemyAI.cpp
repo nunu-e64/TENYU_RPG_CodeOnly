@@ -83,12 +83,12 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 
 	//アテンションボードとマーカーの描画//////////////////////////////////////////////////
 
-	CVector pos(_enemy->GetRect().Center() + CVector(-50, 50));
+	CVector pos(_enemy->GetRect().Center() + CVector(-60, 50));
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawCenterGraph(pos.x, pos.y, AttentionBoardImg, true);
 
-	const int YOHAKU_LEFTRIGHT = 21;
-	const int YOHAKU_TOPBOTTOM = 7;
+	const int YOHAKU_LEFTRIGHT = 21;	//Boardの左端から描画領域左端までの距離（左右対称）
+	const int YOHAKU_TOPBOTTOM = 7;		//Boardの上端から描画領域上端までの距離（上下対称）
 	CVector boardSize = GetGraphSize(AttentionBoardImg) - CVector(YOHAKU_LEFTRIGHT*2, YOHAKU_TOPBOTTOM*2);
 	pos.x -= boardSize.x*0.5;
 	pos.y += boardSize.y*0.5;		//AttentionBoardの描画領域の左下座標を取得

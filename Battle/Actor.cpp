@@ -176,15 +176,21 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 
 
 void CActor::Draw_Sub(int _dx, int _dy){
-	
+	CVector barTop(Rect.Center().x, Rect.Center().y + (IsPlayer()? 45: 80));
+	CVector barSize;
+
 	//HpBar
-		DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+5+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+15+_dy), BLUE, true);
-		DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+5+_dy), 0, 0, (int)(50*OldHp/MaxHp), 10, Img_hpbar,false,false);
+		barSize = GetGraphSize(Img_hpbar);
+		DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y), BLUE, true);
+		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx), (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, Img_hpbar, false, false);
 
 	//TimeBar
+		barTop.y += barSize.y + 5;
+		barSize = GetGraphSize(Img_timebar[0]);
 		if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-		DrawBox((int)(-1+Rect.Center().x-25+_dx), (int)(-1+Rect.Bottom+20+_dy), (int)(1+Rect.Center().x+25+_dx), (int)(1+Rect.Bottom+30+_dy), BLUE, true);
-		DrawRectGraph((int)(Rect.Center().x-25+_dx), (int)(Rect.Bottom+20+_dy), 0, 0, (int)(50*TimeGauge/100), 10, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]),false,false);
+		
+		DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y), BLUE, true);
+		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx), (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*TimeGauge/100), (int)barSize.y, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]), false, false);
 	
 	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é
 		if (OldHp>Hp) OldHp--;
