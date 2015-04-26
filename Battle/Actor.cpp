@@ -14,7 +14,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	LogWindow = _logWindow;
 	CmdList = _cmdlist;
 
-	Alive = (Hp!=0? true:false);
+	Alive = Visible = (Hp!=0? true:false);
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
 	SpdPer = between(1.0, 100.0, (double)Spd);	//$‘Š‘Î’l‚©‚çâ‘Î’l‚Ö‚Ì•ÏŠ·
 	OldHp = Hp;
