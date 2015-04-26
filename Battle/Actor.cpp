@@ -93,15 +93,22 @@ bool CActor::Main(){
 bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 
 	if (Alive){
+		bool forReturn = false;
 		switch (Mode){
 		case PLAN:
-			return Plan();
+			forReturn = Plan();
+			break;
 		case ACTION:
-			return Action();
+			forReturn = Action();
+			break;
 		default:
 			ErrorDx("Error->CActor::Do->unexpected Mode:%d", __FILE__, __LINE__, Mode);
 			return true;
 		}
+
+		//if (forReturn) TimeGaugeForward(); //同時行動時に行動が済んだキャラからゲージが0に戻る　//同時行動はまず起こらないため削除
+		return forReturn;
+
 	}else{
 		return true;
 	}
@@ -125,6 +132,7 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	}
 	
 	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
+	if (IsPlayer() && GetStatus(MAGIC_DEFFENCE)) damage = (int)(damage*MAGIC_DEFFENCE_RATE);
 
 	Hp = between(0, MaxHp, Hp-damage);
 	//死亡判定はCheckBarMoveではなくここですべきか？

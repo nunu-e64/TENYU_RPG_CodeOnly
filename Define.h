@@ -64,7 +64,8 @@ const int MAX_ENEMY_NUM = 3;
 const int MAX_MAGIC_COUNT = 10;
 const int MAX_ATTENTION = 10;
 
-const int DEFFENCE_MC = 1;
+const int DEFFENCE_MC = 1;	//増えてきたら必要に応じてenumにまとめる
+const double MAGIC_DEFFENCE_RATE = 0.1;
 /////////////////////////////////////////////////////////
 
 //rpgファイル名等///////////////////////////////////////////

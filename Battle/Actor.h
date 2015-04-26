@@ -77,8 +77,6 @@ protected:
 		virtual bool Plan()=0;
 		virtual bool Action()=0;
 
-		bool TimeGaugeForward();
-
 		//void DamageStep(int _targetnum, ...);
 		//void DamageStep(CActor* _target);
 
@@ -99,7 +97,6 @@ protected:
 		}VisibleStatus;	//生→死での描画内容変更を管理
 		int OldHp;	//描画用
 		double SpdPer;
-		double TimeGauge;	//0~100%
 		//int Accident;	//状態異常やステータス変動 未使用
 
 		std::map <int, bool> Status;
@@ -110,7 +107,7 @@ protected:
 			PREPARE,
 			ACTION,
 			MODE_NUM
-		}Mode;		//待機や詠唱,行動選択など
+		}Mode;		//待機や詠唱,行動選択など	//privateにしたいがPlayerの防御処理でアクセスしてる(15/04/26)
 
 	//技関連
 		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」
@@ -126,6 +123,11 @@ protected:
 		int Img_hpbar;
 		int Img_timebar[2];
 		int Dx; int Dy;
+
+private:
+		bool TimeGaugeForward();
+		double TimeGauge;	//0~100(%)
+		
 };
 
 

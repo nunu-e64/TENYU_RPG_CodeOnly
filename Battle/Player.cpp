@@ -98,6 +98,7 @@ bool CPlayer::Plan(){
 	if (newPlan){
 		BattleMenu.Alive = true;
 		BattleMenu.Cursor = BattleMenu.front;
+		Status[MAGIC_DEFFENCE] = false;		
 		newPlan = false;
 
 	}else{
@@ -157,7 +158,7 @@ bool CPlayer::Plan(){
 					return  (newPlan=true);
 
 				}else if (mystrcmp(result->label, "‹F“˜")){
-					//BattleMenu.Alive=false;
+					BattleMenu.Alive=false;
 					return  (newPlan=true);
 
 				}else if (mystrcmp(result->label, "–hŒä")){
@@ -167,7 +168,7 @@ bool CPlayer::Plan(){
 					} else {
 						Status[MAGIC_DEFFENCE] = true;
 						MagicCount-=DEFFENCE_MC;
-						//Mode = STAY;
+						Mode = ACTION;		//ŽŸ‚ÌTimeForward‚ÅACTION+1‚³‚ê‚ÄSTAY‚É•Ï‚í‚é
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
