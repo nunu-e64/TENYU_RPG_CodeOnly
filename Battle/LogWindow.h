@@ -17,6 +17,7 @@ public:
 
 	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank);
 	void Clear();	//表示テキスト全消去
+	void Term();	//Terminate メモリ解放
 	
 	void Draw();
 	
@@ -41,7 +42,6 @@ private:
 		};
 
 	//メンバ関数	
-		void Term();	//Terminate
 
 	//メンバ変数
 		bool Initialized;	//初期済みか否か

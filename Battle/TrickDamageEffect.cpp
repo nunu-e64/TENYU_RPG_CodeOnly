@@ -67,11 +67,13 @@ void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bi
 	for (int i=0; i<8; i++){
 		ball[i].Set(_attackerR.Center().Add(a*cos(i*PI/4),a*sin(i*PI/4)));		
 	}
+	int img = _bimgbank->GetImg("EFFECT_BOMB"); 
+
 	do{
 		_battle->Draw();
 		SetDrawBlendMode(DX_BLENDMODE_ADD, timecount*2);
 		for (int i=0; i<8; i++){
-			DrawExtendGraph(ball[i].x-Size1, ball[i].y-Size1, ball[i].x+Size1, ball[i].y+Size1, _bimgbank->GetImg("EFFECT_BOMB"), false);
+			DrawExtendGraph(ball[i].x-Size1, ball[i].y-Size1, ball[i].x+Size1, ball[i].y+Size1, img, false);
 		}
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -89,7 +91,7 @@ void CTrickDamageEffect_PROTO::DrawDamageEffect(CBattle* _battle, CBImgBank* _bi
 	do{
 		_battle->Draw();
 		SetDrawBlendMode(DX_BLENDMODE_ADD, 120);
-		DrawExtendGraph(ball[0].x-Size2, ball[0].y-Size2, ball[0].x+Size2, ball[0].y+Size2, _bimgbank->GetImg("EFFECT_BOMB"), false);
+		DrawExtendGraph(ball[0].x-Size2, ball[0].y-Size2, ball[0].x+Size2, ball[0].y+Size2, img, false);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		++timecount;

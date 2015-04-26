@@ -32,6 +32,7 @@ bool CBattle::Init(){	//Field.Init()‚ÅŒÄ‚Ño‚·	//14/06/26
 	EnemySpeciesManager->Clear();
 	BImgBank.Clear();
 	TrickManager->Clear();
+	LogWindow.Term();
 	
 	ACTOR_NUM = 0;
 	PLAYER_NUM = 0;

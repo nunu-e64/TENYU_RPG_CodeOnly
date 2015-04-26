@@ -462,13 +462,11 @@ void CField::BattleStart(){
 		CScreenChanger::ChangeScreen(fieldGraph, blankGraph,  CScreenChanger::SCREEN_FADE, 10);
 		CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 10);
 		
-		switch(rand()%3){
+		switch(rand()%5){
 		case 0:
-		case 1:
 			CScreenChanger::ChangeScreen(fieldGraph, blankGraph, CScreenChanger::SCREEN_GURUGURU, 60, true);
 			CScreenChanger::ChangeScreen(blankGraph, battleGraph, CScreenChanger::SCREEN_GURUGURU, 60, false);
 			break;
-		case 2:
 		default:
 			CScreenChanger::ChangeScreen(fieldGraph, battleGraph, CScreenChanger::SCREEN_BOKASHI, 60);
 			break;

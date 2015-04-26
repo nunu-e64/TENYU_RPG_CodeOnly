@@ -32,11 +32,13 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	LineNum = between(1, (int)LINE_MAX, _line);
 	WordNum = between(1, (int)WORD_MAX, _word);
 
+	myLog("new LogWindow.Text[%d][%d]...", LineNum, WordNum);
 	Text = new char* [LineNum];
 	for (int i=0; i<_line; i++){
 		Text[i] = new char[WordNum];	
 		Text[i][0] = '\0';
 	}
+
 
 	PosX = _posx;
 	PosY = _posy;
@@ -78,6 +80,7 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 
 void CLogWindow::Term(){
 	if (Initialized){
+		myLog("deleting LogWindow.Text[%d][%d]...", LineNum, WordNum);
 		for (int i=0; i<LineNum; i++){
 			delete [] Text[i];
 		}
