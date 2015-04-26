@@ -14,7 +14,8 @@ void CPlayer::CreateBattleMenu(){
 
 	BattleMenu.Create("‘Ò‹@");
 	BattleMenu.Add("", "‹Z");
-	BattleMenu.Add("", "‹F‚é");
+	BattleMenu.Add("", "‹F“˜");
+	BattleMenu.Add("", "–hŒä");
 	BattleMenu.Add("", "“¹‹ï");
 	BattleMenu.Add("", "“¦–S");
 	
@@ -154,6 +155,23 @@ bool CPlayer::Plan(){
 				}else if (mystrcmp(result->label, "‘Ò‹@")){
 					BattleMenu.Alive=false;
 					return  (newPlan=true);
+
+				}else if (mystrcmp(result->label, "‹F“˜")){
+					//BattleMenu.Alive=false;
+					return  (newPlan=true);
+
+				}else if (mystrcmp(result->label, "–hŒä")){
+					if (DEFFENCE_MC > MagicCount) {	//–‚—Í‚Í‘«‚è‚Ä‚¢‚é‚©
+						LogWindow->Add("–‚—Í‚ª‘«‚è‚È‚¢I");
+						return false;
+					} else {
+						Status[MAGIC_DEFFENCE] = true;
+						MagicCount-=DEFFENCE_MC;
+						//Mode = STAY;
+						BattleMenu.Alive=false;
+						return  (newPlan=true);
+					}
+				
 				//else if("ƒAƒCƒeƒ€") ...
 				}
 			}

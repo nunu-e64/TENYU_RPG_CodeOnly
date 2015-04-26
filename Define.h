@@ -63,6 +63,8 @@ const int MAX_PLAYER_NUM = 3;
 const int MAX_ENEMY_NUM = 3;
 const int MAX_MAGIC_COUNT = 10;
 const int MAX_ATTENTION = 10;
+
+const int DEFFENCE_MC = 1;
 /////////////////////////////////////////////////////////
 
 //rpgƒtƒ@ƒCƒ‹–¼“™///////////////////////////////////////////
@@ -166,6 +168,10 @@ enum attention_tag{
 	ATTENTION_DAMAGE = 2,
 	ATTENIOTN_DEFFENCE = -1,
 	ATTENIOTN_WAITING = -1
+};
+enum actor_status_tag{
+	MAGIC_DEFFENCE,
+	PRAYING
 };
 
 

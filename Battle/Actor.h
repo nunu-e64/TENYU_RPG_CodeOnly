@@ -57,6 +57,8 @@ public:
 		int GetMaxHp()const{ return MaxHp; }
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
+		bool GetStatus(int _key);
+
 		int Damaged(CActor* _attacker, trick_tag const* _trick);
 		bool CheckBarMove();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){ Target=_target; }
@@ -99,6 +101,8 @@ protected:
 		double SpdPer;
 		double TimeGauge;	//0~100%
 		//int Accident;	//状態異常やステータス変動 未使用
+
+		std::map <int, bool> Status;
 
 		enum mode_tag{
 			STAY,

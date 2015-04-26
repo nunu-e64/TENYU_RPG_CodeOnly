@@ -108,6 +108,16 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 
 }
 
+bool CActor::GetStatus(int _key){
+	if (Status.find(_key) != Status.end()) {
+		return Status[_key];
+	} else {
+		return false;
+		//ERRORDX("NotFound Key:%s", _key);
+	}
+}
+
+
 int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	if (_trick==NULL) {
 		ErrorDx("Error->CActor::Damage->_trick==NULL", __FILE__, __LINE__);
@@ -115,7 +125,7 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	}
 	
 	int damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
-	
+
 	Hp = between(0, MaxHp, Hp-damage);
 	//死亡判定はCheckBarMoveではなくここですべきか？
 
