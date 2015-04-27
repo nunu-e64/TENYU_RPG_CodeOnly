@@ -77,10 +77,6 @@ protected:
 		virtual bool Plan()=0;
 		virtual bool Action()=0;
 
-		//void DamageStep(int _targetnum, ...);
-		//void DamageStep(CActor* _target);
-
-
 	//基礎情報
 		int PLAYER_NUM;
 		int ENEMY_NUM;
@@ -108,6 +104,7 @@ protected:
 			ACTION,
 			MODE_NUM
 		}Mode;		//待機や詠唱,行動選択など	//privateにしたいがPlayerの防御処理でアクセスしてる(15/04/26)
+		int MaxTimeGauge; //0~XXX(%)
 
 	//技関連
 		trick_tag const* NowTrick;		//「const が * よりも前方にあれば、指し示す先の値が書き換えられない。後方にあれば、ポインタ変数自体が書き換えられない」
@@ -125,8 +122,8 @@ protected:
 		int Dx; int Dy;
 
 private:
-		bool TimeGaugeForward();
-		double TimeGauge;	//0~100(%)
+		bool TimeGaugeForward();	//内部的には減少
+		double TimeGauge;	//MaxTimeGauge→0(%)
 		
 		virtual double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
 			return _damage;

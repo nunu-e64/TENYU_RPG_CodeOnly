@@ -109,7 +109,12 @@ bool CPlayer::Plan(){
 	}else{
 
 		if (Target != -1) {	//Targetが-1じゃない＝TargetMarker.DecideなどでTargetが選択済み
-			if (NowTrick!=NULL) MagicCount -= NowTrick->Cost;	//魔力消費
+			if (NowTrick!=NULL) {
+				MagicCount -= NowTrick->Cost;	//魔力消費
+				MaxTimeGauge = NowTrick->Time;
+			} else {
+				ERRORDX("Player[%s]:NowTrick=NULL", Name.c_str());
+			}
 			return  (newPlan=true);
 		}
 
@@ -148,16 +153,17 @@ bool CPlayer::Plan(){
 								break;
 							default:
 								WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
-								return false; //(newPlan=true);
+								return false;
 							}
 						BattleMenu.Alive = false;
 
 					}else{
 						ErrorDx("Error->CPlayer::Plan->bigger action_num(do nothing):%d", __FILE__, __LINE__, index);
-						return false; //(newPlan=true);
+						return false;
 					}
 	
 				}else if (mystrcmp(result->label, "待機")){
+					MaxTimeGauge = 100;
 					BattleMenu.Alive=false;
 					return  (newPlan=true);
 
@@ -168,6 +174,7 @@ bool CPlayer::Plan(){
 						return false;
 					} else {
 						Status[PRAYING] = true;
+						MaxTimeGauge = PRAYING_TIME;
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
@@ -178,6 +185,7 @@ bool CPlayer::Plan(){
 						return false;
 					} else {
 						Status[MAGIC_DEFFENCE] = true;
+						MaxTimeGauge = DEFFENCE_TIME;
 						MagicCount-=DEFFENCE_MC;	//魔力消費
 						Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる	//このとき一瞬タイムバーがActionの色になってしまう
 		

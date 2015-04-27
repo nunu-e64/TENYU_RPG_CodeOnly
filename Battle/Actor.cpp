@@ -19,7 +19,8 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	SpdPer = between(0.001, 100.0, (double)Spd);	//$相対値から絶対値への変換
 	OldHp = Hp;
 
-	TimeGauge = rand()%100;	//ランダムでいいの？$
+	MaxTimeGauge = 100;
+	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？$
 	Mode = STAY;
 	Target = -1;
 
@@ -199,16 +200,19 @@ void CActor::Draw_Sub(int _dx, int _dy){
 
 	//HpBar
 		barSize = GetGraphSize(Img_hpbar);
-		DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y), BLUE, true);
-		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx), (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, Img_hpbar, false, false);
+			  DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y+_dy), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
+		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx)   , (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, Img_hpbar, false, false);
 
 	//TimeBar
+		barTop.x -= barSize.x/2;		//HpBarに左端はそろえる
 		barTop.y += barSize.y + 5;
 		barSize = GetGraphSize(Img_timebar[0]);
 		if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
 		
-		DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y), BLUE, true);
-		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx), (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*TimeGauge/100), (int)barSize.y, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]), false, false);
+	  	DrawBox((int)(-1+barTop.x+_dx), (int)(-1+barTop.y+_dy),(int)(1+barTop.x+50*MaxTimeGauge/100.0+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
+		DrawBox((int)(barTop.x+_dx)   , (int)(barTop.y+_dy)   ,(int)(barTop.x+50*(MaxTimeGauge-TimeGauge)/100.0+_dx)  , (int)(barTop.y+barSize.y+_dy), WHITE, true);
+
+		//DrawRectGraph((int)(barTop.x+_dx)	, (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*(1-TimeGauge/100)), (int)barSize.y, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]), false, false);
 	
 	//OldHpとHpのギャップを埋める
 		if (OldHp>Hp) OldHp--;
@@ -221,13 +225,13 @@ void CActor::Draw_Sub(int _dx, int _dy){
 
 
 bool CActor::TimeGaugeForward(){
-	if (TimeGauge==100)	{
-		TimeGauge = 0;
+	if (TimeGauge==0) {
+		TimeGauge = MaxTimeGauge;
 		Mode = (mode_tag)((Mode+1) % MODE_NUM);
 	}
-	TimeGauge+=SpdPer;
-	if (TimeGauge>=100){
-		TimeGauge = 100;
+	TimeGauge-=SpdPer;
+	if (TimeGauge<=0){
+		TimeGauge = 0;
 		return true;
 	}
 	return false;

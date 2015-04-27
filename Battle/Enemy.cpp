@@ -47,13 +47,6 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
-	//‚·‚×‚ÄAction‚ÉˆÚ“®
-	return true;
-
-}
-
-bool CEnemy::Action(){
-	
 	//s“®‚ÌŒˆ’è
 		int actionNum = AI.GetPlan(this);
 		if (actionNum>=0 && actionNum<(int)TrickList.size()){
@@ -68,6 +61,12 @@ bool CEnemy::Action(){
 			ERRORDX("%s:NowTrick=NULL(do nothing)", GetName().c_str());
 			return true;
 		}
+
+	return true;
+}
+
+bool CEnemy::Action(){
+	
 
 	//Tatget‚Ì‘I‘ð‚Æs“®
 		char tmpcmd[256];

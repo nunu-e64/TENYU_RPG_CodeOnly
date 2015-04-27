@@ -68,6 +68,9 @@ const int DEFFENCE_MC = 1;	//増えてきたら必要に応じてenumにまとめる
 const double MAGIC_DEFFENCE_RATE = 0.1;
 const double MAX_MAGIC_COUNTER_DAMAGE_RATE = 0.3;
 const int PRAY_RECOVERY_MC = 5;
+
+const int DEFFENCE_TIME = 100;
+const int PRAYING_TIME = 100;
 /////////////////////////////////////////////////////////
 
 //rpgファイル名等///////////////////////////////////////////
