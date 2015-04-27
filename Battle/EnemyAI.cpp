@@ -46,12 +46,10 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 
 void CEnemyAI::AddAttention(int _playerIndex, int _value){
 	Attention[_playerIndex] = between(0, MAX_ATTENTION, Attention[_playerIndex]+_value); 
-
+	Targetter->CalcAttentionRank();
 	//演出
 
 	//myLogf("Attention_P", "EnemyAI:%d", Attention);
-
-
 }
 void CEnemyAI::SetAttention(int _playerIndex, int _value){
 	AddAttention(_playerIndex, _value - Attention[_playerIndex]); 	
@@ -76,11 +74,6 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 		}
 	}
 
-	//アテンションの順位を求める
-	int* attentionRank = new int[PLAYER_NUM];	//Attentionの順位0~
-	Targetter->CalcAttentionRank(attentionRank);
-
-
 	//アテンションボードとマーカーの描画//////////////////////////////////////////////////
 
 	CVector pos(_enemy->GetRect().Center() + CVector(-60, 50));
@@ -104,8 +97,10 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 		//bright = choose(attentionRank[i]+1, 255, 200, 150);
 		//SetDrawBright(bright, bright, bright);
 		if (Actor[i]->GetAlive()) DrawCenterGraph(pos.x + (i+0.5)*boardSize.x/MAX_PLAYER_NUM, pos.y - (Attention[i]+0.5)*boardSize.y/(MAX_ATTENTION+1), AttentionMarkerImg[i], true);
+
+		//ランクに応じたエフェクト
+		//Targetter->CalcAttention(i);
 	}
 	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
-	delete [] attentionRank;
 }

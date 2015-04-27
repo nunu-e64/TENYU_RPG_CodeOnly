@@ -15,6 +15,10 @@ public:
 		Actor = NULL;
 		PLAYER_NUM = 0;
 		ENEMY_NUM = 0;
+		
+		for (int i = 0; i<MAX_PLAYER_NUM; i++){
+			AttentionRank[i] = 0;
+		}
 	}
 
 	~CEnemyTargetter(){
@@ -28,19 +32,23 @@ public:
 	}
 	void SetAttention(int _attention[]){
 		Attention = _attention;
+		CalcAttentionRank();
+
 		myLogf("Attention_P", "Targetter:%d", Attention);
 	}
 
 	std::string GetName() const{return EnemyName;}
 	virtual int GetTarget(const CEnemy* _enemy)=0;
-
-	void CalcAttentionRank(int _attentionRank[]);
+	void CalcAttentionRank();
+	int GetAttentionRank(int _key){
+		_key = between(0, MAX_PLAYER_NUM, _key);
+		return AttentionRank[_key];
+	}
 
 protected:
 
 	static const int ATTENTION_RATIO[MAX_PLAYER_NUM];	//EnemyTargetter.cppで定義してます
 
-	int* Attention;
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）
 		const CActor* const* Actor;
@@ -49,6 +57,8 @@ protected:
 
 private:
 	std::string EnemyName;	//主の名前。エラー出力用でしかない。だってアクセスはEnemySpeciesからなされるし呼び出し元情報が必要な時はthisを渡せば済む。
+	int AttentionRank[MAX_PLAYER_NUM];
+	int* Attention;		//本体はCEnemyAIが持つ。SetAttention()でリンクする
 };
 
 
