@@ -13,8 +13,9 @@ public:
 		Lv = -1;
 		
 		Hp = MaxHp = 1;
-		Atk = Def = Spd = -1;
-		
+		Atk = Def = -1;
+		Spd = -1.0;
+
 		TrickList.clear();
 	}
 	~CSpecies(){DESTRUCTED;}
@@ -22,7 +23,7 @@ public:
 	std::string GetName()const{return Name;}
 
 protected:
-	void SetValue(const char* _name, int _maxhp, int _atk, int _def, int _spd);
+	void SetValue(const char* _name, int _maxhp, int _atk, int _def, double _spd);
 
 	std::string Name;
 	int Img;
@@ -32,7 +33,7 @@ protected:
 	int MaxHp;
 	int Atk;
 	int Def;
-	int Spd;	//パーセント
+	double Spd;	//タイムゲージに対するパーセント
 	
 	std::vector <trick_tag const*> TrickList;		//技リスト
 	

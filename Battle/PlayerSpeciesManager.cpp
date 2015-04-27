@@ -11,7 +11,7 @@ void CPlayerSpeciesManager::Clear(){
 
 }
 
-bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, int _spd, int _img){
+bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img){
 	CPlayerSpecies newPlayer;
 	newPlayer.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newPlayer.Img = _img;

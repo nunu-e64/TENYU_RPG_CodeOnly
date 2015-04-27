@@ -222,6 +222,7 @@ struct trick_tag{
 	char Name[32];
 	int Power;
 	int Cost;
+	int Time;
 	std::vector <sideEffect_tag> SideEffect;
 	int DamageEffectIndex;	//描画エフェクトの種別番号
 

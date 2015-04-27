@@ -250,27 +250,38 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 	}else if (mystrcmp(_command,"@Player_Create")){	
 		argnum = 6;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
 
-		int value[4];
-		for (int i=0; i<4; i++){
+		int value[3];
+		for (int i=0; i<3; i++){
 			if(!( mystrtol(arg[i+1], &value[i]))){
-				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				ERRORDX("Check argument type->%s", _command);
 				goto finish;
 			}
 		}
-		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
+		double spd;
+		if (!(mystrtod(arg[4], &spd))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}	
+
+		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], spd, _bimgbank->GetImg(arg[5]));
 
 //@Enemy_Create
 	}else if (mystrcmp(_command,"@Enemy_Create")){		
 		argnum = 6;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
 
-		int value[4];
-		for (int i=0; i<4; i++){
+		int value[3];
+		for (int i=0; i<3; i++){
 			if(!( mystrtol(arg[i+1], &value[i]))){
-				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				ERRORDX("Check argument type->%s", _command);
 				goto finish;
 			}
 		}
-		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], _bimgbank->GetImg(arg[5]));
+		double spd;
+		if (!(mystrtod(arg[4], &spd))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}	
+		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], spd, _bimgbank->GetImg(arg[5]));
 
 //@TrickEffect_Create
 	}else if (mystrcmp(_command,"@TrickEffect_Create")){
@@ -293,25 +304,25 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
-		argnum = 5+4*10+1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false)) goto finish;	//必須
+		argnum = 6+4*10+1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false)) goto finish;	//必須
 
-		int value[2];
-		for (int i=0; i<2; i++){
+		int value[3];
+		for (int i=0; i<3; i++){
 			if(!( mystrtol(arg[i+1], &value[i]))){
-				ErrorDx("Error->@NormalTrick_Create->Check argument type->%s", __FILE__, __LINE__, _command);
+				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);
 				goto finish;
 			}
 		}
 
 		trick_tag::targetType_tag targetType;
-		if (mystrcmp2(arg[4], "SINGLE")) {
+		if (mystrcmp2(arg[5], "SINGLE")) {
 			targetType = trick_tag::SINGLE;
-		} else if (mystrcmp2(arg[4], "ALL")) {
+		} else if (mystrcmp2(arg[5], "ALL")) {
 			targetType = trick_tag::ALL;
-		} else if (mystrcmp2(arg[4], "SINGLE_FRIEND")) {
+		} else if (mystrcmp2(arg[5], "SINGLE_FRIEND")) {
 			targetType = trick_tag::SINGLE_FRIEND;
 		} else {
-			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[4]);
+			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
 			goto finish;
 		}
 
@@ -323,7 +334,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		int tmpNum[4]; 
 
 
-		for (int i=5; i<argnum && arg[i]!=NULL; i+=4){
+		for (int i=6; i<argnum && arg[i]!=NULL; i+=4){
 			if (mystrcmp2(arg[i], "ATK")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
 				tmpNum[0] = sideEffect_tag::ATK;
 			} else if (mystrcmp2(arg[i], "DEF")) {
@@ -359,7 +370,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			sideEffectList.push_back(tmpEffect);
 		}
 
-		_trickManager->Add(arg[0], value[0], value[1], targetType, arg[3], sideEffectList);	
+		_trickManager->Add(arg[0], value[0], value[1], value[2], targetType, arg[4], sideEffectList);	
 
 
 //@PlayerTrick_Set

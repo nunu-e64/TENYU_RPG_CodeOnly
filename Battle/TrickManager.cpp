@@ -17,7 +17,7 @@ void CTrickManager::Add(trick_tag trick){
 	}
 }
 
-void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList){
+void CTrickManager::Add(char _name[32], int _power, int _cost, int _time, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList){
 	if (TrickBankLock) {
 		WARNINGDX("'%s':TrickBank is Locked!(We don't add this trick.)", _name);
 		return;
@@ -27,6 +27,7 @@ void CTrickManager::Add(char _name[32], int _power, int _cost, trick_tag::target
 	mystrcpy(tmpTrick.Name, _name);
 	tmpTrick.Power = _power;
 	tmpTrick.Cost = _cost;
+	tmpTrick.Time = _time;
 	tmpTrick.TargetType = _targetType;
 	tmpTrick.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
 	tmpTrick.SideEffect = sideEffectList;	
