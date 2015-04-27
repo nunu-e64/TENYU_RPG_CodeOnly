@@ -12,12 +12,12 @@ void CPlayer::CreateBattleMenu(){
 	
 	BattleMenu.Init(10, 360, 100, 110);
 
-	BattleMenu.Create("‘Ò‹@");
-	BattleMenu.Add("", "‹Z");
+	BattleMenu.Create("‹Z");
 	BattleMenu.Add("", "‹F“˜");
 	BattleMenu.Add("", "–hŒä");
 	BattleMenu.Add("", "“¹‹ï");
 	BattleMenu.Add("", "“¦–S");
+	BattleMenu.Add("", "‘Ò‹@");
 	
 	for (unsigned int i=0; i<TrickList.size(); i++){
 		BattleMenu.Add("‹Z", TrickList[i]->Name);
@@ -98,7 +98,7 @@ bool CPlayer::Plan(){
 	
 	if (newPlan){
 		BattleMenu.Alive = true;
-		BattleMenu.Cursor = BattleMenu.front;
+		BattleMenu.SetCursor(BattleMenu.GetFront());
 		
 		NowTrick = NULL;
 		Target = -1;

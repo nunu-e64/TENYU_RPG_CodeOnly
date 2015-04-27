@@ -28,34 +28,40 @@ class CMenu{
 public:	
 	CMenu(){
 		CONSTRUCTED;
-		Cursor = front = NULL;
+		Cursor = front = god = NULL;
 		Alive = false;
 	}
 	~CMenu(){
+		Clear();
 		DESTRUCTED;
-		Clear(front);
 	};
 
 	void Init(int _x, int _y, int _width, int _height);
 	void Create(const char _frontlabel[32]);
 	void Add(const char _parentlabel[32], const char _newlabel[32]);
-	void Clear(CMenuNode* _top);
-	
+	void SetCursor(CMenuNode* _node){ Cursor = _node; }
+
 	virtual void Draw()=0;
 
-	CMenuNode* Find(const char _label[32], CMenuNode* _top = NULL);
+	CMenuNode* GetFront(){ return front;}
+	CMenuNode* Find(const char _label[32]);
 	int GetIndex(CMenuNode* _node);
 	bool Move(CMenuNode* &_result);
-
-	CMenuNode* front;
-	CMenuNode* Cursor;
 
 	bool Alive;
 
 protected:
 	int X, Y;
 	int Width, Height;
+	CMenuNode* Cursor;
 
+private:
+	CMenuNode* Find(const char _label[32], CMenuNode* _top);
+	void Clear(CMenuNode* _top);
+	void Clear();
+
+	CMenuNode* god;
+	CMenuNode* front;
 };
 
 class CBattleMenu : public CMenu{
