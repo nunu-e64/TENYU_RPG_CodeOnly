@@ -11,6 +11,12 @@ void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
 
 	//myLogf("attention", "[0]%d, [1]%d, [2]%d", Attention[0], Attention[1], Attention[2]);
 
+	//アテンションの大小とRankの決まり方(14/04/27)///////////////
+	// a>b>c -> 0,1,2
+	// a=b>c -> 0,0,1
+	// a=b=c -> 0,0,0
+	// a>b=c -> 0,2,2
+	////////////////////////////////////////////
 
 	for (int i=0; i<PLAYER_NUM; i++) {
 		_attentionRank[i] = 0;
@@ -34,6 +40,8 @@ void CEnemyTargetter::CalcAttentionRank(int _attentionRank[]){
 			++i;
 		}
 	}
+
+	myLogf("Attention", "Player[0]:%d,rank:%d, Player[1]:%d,rank:%d, Player[2]:%d,rank:%d", Attention[0], _attentionRank[0],  Attention[1], _attentionRank[1], Attention[2], _attentionRank[2]);
 }
 
 int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
@@ -57,7 +65,7 @@ int CEnemyTargetter_DEFAULT::GetTarget(const CEnemy* _enemy){
 	int target = -1;
 
 	for (int i=0; i<PLAYER_NUM; i++){
-		if (!Actor[i]->GetAlive() || Attention[i]==0) continue;		//既に死亡しているまたはアテンションが0のときはターゲットにしない
+		if (!Actor[i]->GetAlive()) continue;		//既に死亡しているときはターゲットにしない
 		probability += ATTENTION_RATIO[attentionRank[i]];
 		if ((rand()%100)/(double)100 * probability < ATTENTION_RATIO[attentionRank[i]]){
 			target = i;

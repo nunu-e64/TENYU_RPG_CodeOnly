@@ -1409,7 +1409,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			ErrorDx("Error->@Damage->Check type arg[attackerActorIndex]->%s", __FILE__, __LINE__, arg[0]);
 			goto finish;
 		} else if (attackerActorIndex<0 || attackerActorIndex>_battle->GetActorNum()){
-			ErrorDx("Error->@Damage-> 0<=arg[attackerActorIndex]<ACTOR_NUM :%d", attackerActorIndex);
+			ERRORDX("@Damage-> 0<=arg[attackerActorIndex]<ACTOR_NUM :%d", attackerActorIndex);
 			goto finish;
 		}
 
@@ -1418,7 +1418,7 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			ErrorDx("Error->@Damage->Check type arg[targetActorIndex]->%s", __FILE__, __LINE__, arg[1]);
 			goto finish;
 		} else if (targetActorIndex<0 || targetActorIndex>_battle->GetActorNum()){
-			ErrorDx("Error->@Damage-> 0<=arg[targetActorIndex]<ACTOR_NUM :%d", targetActorIndex);
+			ERRORDX("@Damage-> 0<=arg[targetActorIndex]<ACTOR_NUM :%d", targetActorIndex);
 			goto finish;
 		}
 
