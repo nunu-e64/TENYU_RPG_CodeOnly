@@ -99,7 +99,10 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 			forReturn = Plan();
 			break;
 		case ACTION:
-			forReturn = Action();
+			if (forReturn = Action()) {
+				Mode = PLAN;
+				forReturn = false;
+			}
 			break;
 		default:
 			ErrorDx("Error->CActor::Do->unexpected Mode:%d", __FILE__, __LINE__, Mode);
@@ -210,7 +213,7 @@ void CActor::Draw_Sub(int _dx, int _dy){
 		if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
 		
 	  	DrawBox((int)(-1+barTop.x+_dx), (int)(-1+barTop.y+_dy),(int)(1+barTop.x+50*MaxTimeGauge/100.0+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
-		DrawBox((int)(barTop.x+_dx)   , (int)(barTop.y+_dy)   ,(int)(barTop.x+50*(MaxTimeGauge-TimeGauge)/100.0+_dx)  , (int)(barTop.y+barSize.y+_dy), WHITE, true);
+		DrawBox((int)(barTop.x+_dx)   , (int)(barTop.y+_dy)   ,(int)(barTop.x+50*(MaxTimeGauge-TimeGauge)/100.0+_dx)  , (int)(barTop.y+barSize.y+_dy), ((Mode==STAY||Mode==PLAN)?WHITE:RED), true);
 
 		//DrawRectGraph((int)(barTop.x+_dx)	, (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*(1-TimeGauge/100)), (int)barSize.y, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]), false, false);
 	

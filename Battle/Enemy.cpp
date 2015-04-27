@@ -82,5 +82,7 @@ bool CEnemy::Action(){
 		NowTrick = NULL;
 		Target = -1;
 	
+		//DEBUGDX("EnemyActionFinished");
+
 	return true;
 }

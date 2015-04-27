@@ -241,8 +241,6 @@ bool CPlayer::Action(){
 			CmdList->Add(tmp);
 		}
 
-		return true;
-
 	} else if (NowTrick==NULL){	//待機を選択した場合
 		//Target = -1;
 	
@@ -250,8 +248,6 @@ bool CPlayer::Action(){
 			sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
 			CmdList->Add(tmp);
 		}
-
-		return true;
 	
 	} else {  //技の使用
 		sprintf_s(tmp, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
@@ -264,9 +260,9 @@ bool CPlayer::Action(){
 		////技使用後処理
 		//	NowTrick = NULL;
 		//	Target = -1;
-
-		return true;
 	}
+
+	return true;
 }
 
 double CPlayer::CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
