@@ -72,7 +72,7 @@ void CPlayer::Draw(int _dx, int _dy){
 
 	//マジックカウンターの描画//////////////////////////////////
 	if (VisibleStatus == VISIBLE){
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
+		SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
 		int r = 40;
 		double angle = PI/2 + 3*PI/(MAX_MAGIC_COUNT+2);
 		for (int i=0; i<MAX_MAGIC_COUNT; i++) {
@@ -81,7 +81,6 @@ void CPlayer::Draw(int _dx, int _dy){
 			DrawCenterGraph(Rect.Center().x + r*cos(angle), Rect.Center().y + r*sin(angle), MagicCounterImg[(i<MagicCount?0:1)], true);
 			angle += 2*PI/(MAX_MAGIC_COUNT+2);
 		}
-		SetDrawBlendMode(DX_BLENDMODE_ADD, 200);
 	}
 	////////////////////////////////////////////////////////////
 
