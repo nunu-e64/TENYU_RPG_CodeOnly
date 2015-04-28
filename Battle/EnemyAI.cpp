@@ -6,7 +6,7 @@
 
 int CEnemyAI::AttentionMarkerImg[MAX_PLAYER_NUM] = {0};
 int CEnemyAI::AttentionBoardImg = 0;
-CVector CEnemyAI::AttentionMarkerImgSize;
+int CEnemyAI::AttentionEffectImg = 0;
 
 int CEnemyAI::GetPlan(const CEnemy* _enemy) { 
 	return Planner->GetPlan(_enemy); 
@@ -47,7 +47,9 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 void CEnemyAI::AddAttention(int _playerIndex, int _value){
 	Attention[_playerIndex] = between(0, MAX_ATTENTION, Attention[_playerIndex]+_value); 
 	Targetter->CalcAttentionRank();
-	//演出
+	
+	//演出  ダサいので一時ボツ//
+		//AttentionEffectCount[_playerIndex] = (_value>0?EFFECT_COUNT:(_value<0?-EFFECT_COUNT:0));
 
 	//myLogf("Attention_P", "EnemyAI:%d", Attention);
 }
@@ -55,7 +57,7 @@ void CEnemyAI::SetAttention(int _playerIndex, int _value){
 	AddAttention(_playerIndex, _value - Attention[_playerIndex]); 	
 }
 
-void CEnemyAI::SetAttentionImg(int* _markerImg, int _boardImg){
+void CEnemyAI::SetAttentionImg(int* _markerImg, int _boardImg, int _effectImg){
 	if (_markerImg!=NULL) {
 		for (int i=0; i<MAX_PLAYER_NUM; i++){
 			AttentionMarkerImg[i] = _markerImg[i];
@@ -63,6 +65,7 @@ void CEnemyAI::SetAttentionImg(int* _markerImg, int _boardImg){
 	}
 
 	AttentionBoardImg = _boardImg;
+	AttentionEffectImg = _effectImg;
 }
 
 void CEnemyAI::Draw(const CEnemy* _enemy){
@@ -90,16 +93,29 @@ void CEnemyAI::Draw(const CEnemy* _enemy){
 		DrawLine((int)pos.x-3, (int)(pos.y - (i+0.5)*boardSize.y/(MAX_ATTENTION+1)), (int)(pos.x+boardSize.x+3), (int)(pos.y - (i+0.5)*boardSize.y/(MAX_ATTENTION+1)), GetColor(50,50,50)); 
 	}*/	
 
-	//int bright = 255;
+	int bright = 255;
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 230);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 	for (int i=0; i<PLAYER_NUM; i++){
-		//bright = choose(attentionRank[i]+1, 255, 200, 150);
-		//SetDrawBright(bright, bright, bright);
-		if (Actor[i]->GetAlive()) DrawCenterGraph(pos.x + (i+0.5)*boardSize.x/MAX_PLAYER_NUM, pos.y - (Attention[i]+0.5)*boardSize.y/(MAX_ATTENTION+1), AttentionMarkerImg[i], true);
-
-		//ランクに応じたエフェクト
-		//Targetter->CalcAttention(i);
+		bright = choose(Targetter->GetAttentionRank(i)+1, 255, 180, 100);
+		SetDrawBright(bright, bright, bright);
+		if (Actor[i]->GetAlive()) {
+			DrawCenterGraph(pos.x + (i+0.5)*boardSize.x/MAX_PLAYER_NUM, pos.y - (Attention[i]+0.5)*boardSize.y/(MAX_ATTENTION+1), AttentionMarkerImg[i], true);
+			
+			if (AttentionEffectCount[i] != 0) {
+				if (AttentionEffectCount[i] > 0) {
+					--AttentionEffectCount[i];
+				} else {
+					++AttentionEffectCount[i];
+				}
+				
+				int d = 4*mod(AttentionEffectCount[i]/5, 11);
+				SetDrawBlendMode( DX_BLENDMODE_ALPHA, 150) ;
+				SetDrawBright(255, 255, 255);
+				DrawRectRotaGraph((int)(pos.x + (i+0.5)*boardSize.x/MAX_PLAYER_NUM), (int)(pos.y - (Attention[i]+0.5)*boardSize.y/(MAX_ATTENTION+1)), d, 0, (int)GetGraphSize(AttentionEffectImg).y, (int)GetGraphSize(AttentionEffectImg).y, 1, 0, AttentionEffectImg, true, false);
+				SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
+			}
+		}
 	}
 	SetDrawBright(255, 255, 255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;

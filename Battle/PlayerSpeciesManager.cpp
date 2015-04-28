@@ -88,7 +88,7 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 	//戦闘終了後、PlayerBankに保存すべき情報をコピーする
 
 	for (int i=0; i<PLAYER_NUM; i++){
-		PlayerBank[_player[i].GetName()].Hp = _player[i].Hp;
+		//PlayerBank[_player[i].GetName()].Hp = _player[i].Hp;
 		PlayerBank[_player[i].GetName()].MagicCount = _player[i].MagicCount;
 		PlayerBank[_player[i].GetName()].Exp = _player[i].Exp;
 	}

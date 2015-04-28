@@ -10,7 +10,7 @@ void CPlayer::SetExtraImg(CBImgBank* _bImgBank){
 
 void CPlayer::CreateBattleMenu(){
 	
-	BattleMenu.Init(10, 360, 100, 110);
+	BattleMenu.Init(10, 360, 100, 130);
 
 	BattleMenu.Create("技");
 	BattleMenu.Add("", "祈祷");
@@ -162,7 +162,11 @@ bool CPlayer::Plan(){
 					}
 	
 				}else if (mystrcmp(result->label, "待機")){
-					MaxTimeGauge = 100;
+					MaxTimeGauge = WAITING_TIME;
+					for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
+						sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
+						CmdList->Add(tmp);
+					}
 					BattleMenu.Alive=false;
 					return  (newPlan=true);
 
@@ -174,6 +178,13 @@ bool CPlayer::Plan(){
 					} else {
 						Status[PRAYING] = true;
 						MaxTimeGauge = PRAYING_TIME;
+
+						sprintf_s(tmp, "%sは祈り始めた", Name.c_str());
+						LogWindow->Add(tmp);
+						for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
+							sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENTION_PRAY);
+							CmdList->Add(tmp);
+						}
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
@@ -186,7 +197,7 @@ bool CPlayer::Plan(){
 						Status[MAGIC_DEFFENCE] = true;
 						MaxTimeGauge = DEFFENCE_TIME;
 						MagicCount-=DEFFENCE_MC;	//魔力消費
-						Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる	//このとき一瞬タイムバーがActionの色になってしまう
+						//Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる	//このとき一瞬タイムバーがActionの色になってしまう
 		
 						sprintf_s(tmp, "%sは防御に集中している", Name.c_str());
 						LogWindow->Add(tmp);
@@ -235,19 +246,10 @@ bool CPlayer::Action(){
 		sprintf_s(tmp, "%sは祈りを捧げ魔力を回復した！", Name.c_str());	
 		LogWindow->Add(tmp);
 
-		for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-			sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENTION_PRAY);
-			CmdList->Add(tmp);
-		}
+	} else if (GetStatus(MAGIC_DEFFENCE)) {
 
 	} else if (NowTrick==NULL){	//待機を選択した場合
-		//Target = -1;
-	
-		for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-			sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
-			CmdList->Add(tmp);
-		}
-	
+		
 	} else {  //技の使用
 		sprintf_s(tmp, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
 		CmdList->Add(tmp);

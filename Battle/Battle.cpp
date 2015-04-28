@@ -61,7 +61,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 	//戦闘システム用画像の読み込み////////////////
 		TargetMarker.SetImage(BImgBank.GetImg(TARGET_CURSOR));
-		CEnemyAI::SetAttentionImg(BImgBank.GetImg(ATTENTION_MARKER, MAX_PLAYER_NUM), BImgBank.GetImg(ATTENTION_BOARD));
+		CEnemyAI::SetAttentionImg(BImgBank.GetImg(ATTENTION_MARKER, MAX_PLAYER_NUM), BImgBank.GetImg(ATTENTION_BOARD), BImgBank.GetImg(ATTENTION_EFFECT));
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
@@ -373,6 +373,8 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 	mystrcpy(LoseCommand, "@GameOver");
 
 	LogWindow.Clear();
+
+	myLogf("BattleResult", "%s", (_result==WIN?"Win":"Lose"));
 }
 
 void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool _playeralsoshake){

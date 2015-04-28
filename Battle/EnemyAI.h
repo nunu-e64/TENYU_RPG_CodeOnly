@@ -19,6 +19,7 @@ public:
 
 		for (int i = 0; i<MAX_PLAYER_NUM; i++){
 			Attention[i] = 0;
+			AttentionEffectCount[i] = 0;
 		}
 
 		//For Test////////////////$
@@ -64,7 +65,7 @@ public:
 	void AddAttention(int _playerIndex, int _value);
 	void SetAttention(int _playerIndex, int _value);
 
-	static void SetAttentionImg(int* _markerImg, int _boardImg);	
+	static void SetAttentionImg(int* _markerImg, int _boardImg, int _effectImg);	
 	void Draw(const CEnemy* _enemy);
 	
 
@@ -78,8 +79,9 @@ private:
 		//行動選択肢とその発動比を並べたリスト。
 		//行動計算の為にAI.plannerとAI.Targetにポインタを渡しておく
 
-	int Attention[MAX_PLAYER_NUM];
-		//Enemyの各プレイヤーに対する注目度を示す
+	int Attention[MAX_PLAYER_NUM];	//Enemyの各プレイヤーに対する注目度を示す
+	int AttentionEffectCount[MAX_PLAYER_NUM];	//アテンションが変化したときのエフェクト用フラグ兼描画カウンタ	変化なし0, UP:+, DOWN:-
+	enum{EFFECT_COUNT = 60};
 
 	//全アクターへのアクセスを持たせておく（戦闘開始ごとに更新）（EnemyAIは橋渡しなので実際に持つ必要はない）
 		const CActor* const* Actor;
@@ -88,7 +90,7 @@ private:
 
 	static int AttentionMarkerImg[MAX_PLAYER_NUM];
 	static int AttentionBoardImg;
-	static CVector AttentionMarkerImgSize;
+	static int AttentionEffectImg;
 
 };
 

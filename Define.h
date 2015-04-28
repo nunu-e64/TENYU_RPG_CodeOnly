@@ -71,6 +71,7 @@ const int PRAY_RECOVERY_MC = 5;
 
 const int DEFFENCE_TIME = 100;
 const int PRAYING_TIME = 100;
+const int WAITING_TIME = 50;
 /////////////////////////////////////////////////////////
 
 //rpgƒtƒ@ƒCƒ‹–¼“™///////////////////////////////////////////
@@ -94,6 +95,7 @@ const char TIME_BAR1[] = "TIME_BAR1";
 const char TIME_BAR2[] = "TIME_BAR2";
 const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
 const char ATTENTION_BOARD[] = "ATTENTION_BOARD";
+const char ATTENTION_EFFECT[] = "ATTENTION_EFFECT";
 const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
 const char MAGIC_COUNTER[] = "MAGIC_COUNTER";
 
