@@ -4,6 +4,8 @@
 #include "../Main/TextBox.h"
 #include "LogWindow.h"
 
+int CActor::HpFontHandle = -1;
+
 void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist, CLogWindow* _logWindow){
 	PLAYER_NUM = _playernum;
 	ENEMY_NUM = _enemynum;
@@ -18,13 +20,14 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
 	SpdPer = between(0.001, 100.0, (double)Spd);	//$相対値から絶対値への変換
 	OldHp = Hp;
+	if (HpFontHandle==-1) HpFontHandle = CreateFontToHandle(NULL , 10, -1) ;	//HpBarに表示するHP用のフォント作成
 
 	MaxTimeGauge = 100;	//%
 	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？
 	Status[WAIT] = true;
 	Mode = PREPARE;
-	Target = -1;
 
+	Target = -1;
 	NowTrick = NULL;
 
 	Dx=0; Dy=0;
@@ -213,18 +216,22 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 
 
 void CActor::Draw_Sub(int _dx, int _dy){
-	CVector barTop(Rect.Center().x, Rect.Center().y + (IsPlayer()? 45: 80));
+	CVector barPos;
 	CVector barSize;
 
 	//HpBar
 		barSize = GetGraphSize(BarImg[HP_BAR]);
-			  DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y+_dy), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
-		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx)   , (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, BarImg[HP_BAR], false, false);
+		barPos = CVector(Rect.Center().x-barSize.x/2, Rect.Center().y + (IsPlayer()? 45: 80));
+			  DrawBox((int)(-1+barPos.x+_dx), (int)(-1+barPos.y+_dy), (int)(1+barPos.x+barSize.x+_dx), (int)(1+barPos.y+barSize.y+_dy), BLUE, true);
+		DrawRectGraph((int)(barPos.x+_dx)   , (int)(barPos.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, BarImg[HP_BAR], false, false);
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+		DrawFormatStringToHandle((int)(2+barPos.x+_dx), (int)(barPos.y+_dy), GetColor(250, 200, 50), HpFontHandle,"%d", Hp);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, -1);
 
 	//TimeBar
 		const CVector TIME_BAR_SIZE(50, 10);
-		barTop.x -= barSize.x/2;		//HpBarに左端はそろえる
-		barTop.y += barSize.y + 5;
+		barPos.y += barSize.y + 5;
 
 		int img;
 		if (Mode == PLAN || GetStatus(WAIT)) {
@@ -237,9 +244,9 @@ void CActor::Draw_Sub(int _dx, int _dy){
 			img = BarImg[TIME_TRICK];
 		}
 
-		if (Mode==PREPARE && !GetStatus(DEFFENCE)) SetDrawBright(150,150,150);		
-	  	DrawBox((int)(-1+barTop.x+_dx), (int)(-1+barTop.y+_dy),(int)(1+barTop.x+TIME_BAR_SIZE.x*MaxTimeGauge/100.0+_dx), (int)(1+barTop.y+TIME_BAR_SIZE.y+_dy), BLUE, true);
-		DrawRectGraph((int)(barTop.x+_dx), (int)(barTop.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
+		if (Mode==PREPARE && !GetStatus(DEFFENCE)) SetDrawBright(180,180,180);		
+	  	DrawBox((int)(-1+barPos.x+_dx), (int)(-1+barPos.y+_dy),(int)(1+barPos.x+TIME_BAR_SIZE.x*MaxTimeGauge/100.0+_dx), (int)(1+barPos.y+TIME_BAR_SIZE.y+_dy), BLUE, true);
+		DrawRectGraph((int)(barPos.x+_dx), (int)(barPos.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
 	
 	//OldHpとHpのギャップを埋める
 		if (OldHp>Hp) OldHp--;

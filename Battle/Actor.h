@@ -121,14 +121,14 @@ protected:
 		int Dx; int Dy;
 
 private:
-		bool TimeGaugeForward();	//“à•”“I‚É‚ÍŒ¸­
-		double TimeGauge;	//MaxTimeGauge¨0(%)
-		
 		virtual double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
 			return _damage;
 		};
 
 		void SetBarImg( CBImgBank* _bImgBank, std::string _key);
+		bool TimeGaugeForward();	//“à•”“I‚É‚ÍŒ¸­
+		double TimeGauge;	//MaxTimeGauge¨0(%)
+		static int HpFontHandle;
 	
 };
 
