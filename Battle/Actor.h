@@ -98,10 +98,10 @@ protected:
 		std::map <int, bool> Status;
 
 		enum mode_tag{
-			STAY,
 			PLAN,
 			PREPARE,
 			ACTION,
+			BEFORE_PLAN,
 			MODE_NUM
 		}Mode;		//待機や詠唱,行動選択など	//privateにしたいがPlayerの防御処理でアクセスしてる(15/04/26)
 		int MaxTimeGauge; //0~XXX(%)
@@ -117,8 +117,7 @@ protected:
 
 	//グラフィック
 		CRect Rect;
-		int Img_hpbar;
-		int Img_timebar[2];
+		std::map <std::string, int> BarImg;
 		int Dx; int Dy;
 
 private:
@@ -128,6 +127,9 @@ private:
 		virtual double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
 			return _damage;
 		};
+
+		void SetBarImg( CBImgBank* _bImgBank, std::string _key);
+	
 };
 
 

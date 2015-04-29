@@ -70,8 +70,8 @@ const double MAX_MAGIC_COUNTER_DAMAGE_RATE = 0.3;
 const int PRAY_RECOVERY_MC = 5;
 
 const int DEFFENCE_TIME = 100;
-const int PRAYING_TIME = 100;
-const int WAITING_TIME = 50;
+const int PRAY_TIME = 100;
+const int WAIT_TIME = 50;
 /////////////////////////////////////////////////////////
 
 //rpgファイル名等///////////////////////////////////////////
@@ -90,11 +90,15 @@ const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.png",
 
 //システムグラフィックのPicKey///////////////////////
 const char TARGET_CURSOR[] = "TARGET_CURSOR";
-const char HP_BAR[] = "HP_BAR";
-const char TIME_BAR1[] = "TIME_BAR1";
-const char TIME_BAR2[] = "TIME_BAR2";
+const char HP_BAR[]			= "HP_BAR";
+const char TIME_BAR1[]		= "TIME_BAR1";
+const char TIME_BAR2[]		= "TIME_BAR2";
+const char TIME_WAIT[]		= "TIME_WAIT";
+const char TIME_TRICK[]		= "TIME_TRICK";
+const char TIME_DEFFENCE[]	= "TIME_DEFFENCE";
+const char TIME_PRAY[]		= "TIME_PRAY";
 const char ATTENTION_MARKER[] = "ATTENTION_MARKER";
-const char ATTENTION_BOARD[] = "ATTENTION_BOARD";
+const char ATTENTION_BOARD[]  = "ATTENTION_BOARD";
 const char ATTENTION_EFFECT[] = "ATTENTION_EFFECT";
 const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
 const char MAGIC_COUNTER[] = "MAGIC_COUNTER";
@@ -175,12 +179,13 @@ enum btlresult_tag{
 enum attention_tag{
 	ATTENTION_DAMAGE = 2,
 	ATTENIOTN_DEFFENCE = -1,
-	ATTENIOTN_WAITING = -1,
+	ATTENIOTN_WAIT = -1,
 	ATTENTION_PRAY = -1
 };
 enum actor_status_tag{
-	MAGIC_DEFFENCE,
-	PRAYING
+	DEFFENCE,
+	PRAY,
+	WAIT
 };
 
 

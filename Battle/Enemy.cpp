@@ -47,10 +47,12 @@ void CEnemy::Draw(int _dx, int _dy){
 
 bool CEnemy::Plan(){
 	
+
 	//行動の決定
 		int actionNum = AI.GetPlan(this);
 		if (actionNum>=0 && actionNum<(int)TrickList.size()){
 			NowTrick = TrickList[actionNum];
+			MaxTimeGauge = NowTrick->Time;
 		}else{
 			ERRORDX("%s:actionNum<0 OR actionNum >= TrickList.size (do nothing):%d", GetName().c_str(), actionNum);
 			return true;
@@ -62,27 +64,31 @@ bool CEnemy::Plan(){
 			return true;
 		}
 
+
 	return true;
 }
 
 bool CEnemy::Action(){
 	
-
-	//Tatgetの選択と行動
-		char tmpcmd[256];
-		Target = AI.GetTarget(this); 
-		sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
-		CmdList->Add(tmpcmd);
-
-		char tmpMessage[256];
-		sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
-		LogWindow->Add(tmpMessage);
-
-	//行動後処理
-		NowTrick = NULL;
-		Target = -1;
 	
-		//DEBUGDX("EnemyActionFinished");
+	if (Status[WAIT] || NowTrick==NULL){	//待機を選択した場合
+		Status[WAIT] = false;
+	} else {
+		//Tatgetの選択と行動
+			char tmpcmd[256];
+			Target = AI.GetTarget(this); 
+			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
+			CmdList->Add(tmpcmd);
+
+			char tmpMessage[256];
+			sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
+			LogWindow->Add(tmpMessage);
+
+		//行動後処理
+			NowTrick = NULL;
+			Target = -1;
+	
+	}
 
 	return true;
 }

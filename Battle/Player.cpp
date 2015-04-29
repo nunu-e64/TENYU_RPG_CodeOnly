@@ -102,7 +102,6 @@ bool CPlayer::Plan(){
 		NowTrick = NULL;
 		Target = -1;
 
-		Status[MAGIC_DEFFENCE] = false;		
 		newPlan = false;
 
 	}else{
@@ -162,11 +161,12 @@ bool CPlayer::Plan(){
 					}
 	
 				}else if (mystrcmp(result->label, "待機")){
-					MaxTimeGauge = WAITING_TIME;
+					MaxTimeGauge = WAIT_TIME;
 					for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-						sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAITING);
+						sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAIT);
 						CmdList->Add(tmp);
 					}
+					Status[WAIT] = true;
 					BattleMenu.Alive=false;
 					return  (newPlan=true);
 
@@ -176,8 +176,8 @@ bool CPlayer::Plan(){
 						LogWindow->Add(tmp);
 						return false;
 					} else {
-						Status[PRAYING] = true;
-						MaxTimeGauge = PRAYING_TIME;
+						Status[PRAY] = true;
+						MaxTimeGauge = PRAY_TIME;
 
 						sprintf_s(tmp, "%sは祈り始めた", Name.c_str());
 						LogWindow->Add(tmp);
@@ -194,10 +194,9 @@ bool CPlayer::Plan(){
 						LogWindow->Add(tmp);
 						return false;
 					} else {
-						Status[MAGIC_DEFFENCE] = true;
+						Status[DEFFENCE] = true;
 						MaxTimeGauge = DEFFENCE_TIME;
 						MagicCount-=DEFFENCE_MC;	//魔力消費
-						//Mode = ACTION;		//次のTimeForwardでACTION+1されてSTAYに変わる	//このとき一瞬タイムバーがActionの色になってしまう
 		
 						sprintf_s(tmp, "%sは防御に集中している", Name.c_str());
 						LogWindow->Add(tmp);
@@ -206,7 +205,6 @@ bool CPlayer::Plan(){
 							CmdList->Add(tmp);
 						}
 
-						
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
@@ -240,15 +238,17 @@ bool CPlayer::Plan(){
 bool CPlayer::Action(){
 	char tmp[256];	//tmpCmdとtmpMessageを兼ねる
 	
-	if (GetStatus(PRAYING)) {
+	if (GetStatus(PRAY)) {
 		MagicCount = min(MagicCount+PRAY_RECOVERY_MC, MAX_MAGIC_COUNT);
-		Status[PRAYING] = false;
+		Status[PRAY] = false;
 		sprintf_s(tmp, "%sは祈りを捧げ魔力を回復した！", Name.c_str());	
 		LogWindow->Add(tmp);
 
-	} else if (GetStatus(MAGIC_DEFFENCE)) {
+	} else if (GetStatus(DEFFENCE)) {
+		Status[DEFFENCE] = false;
 
-	} else if (NowTrick==NULL){	//待機を選択した場合
+	} else if (Status[WAIT] || NowTrick==NULL){	//待機を選択した場合
+		Status[WAIT] = false;
 		
 	} else {  //技の使用
 		sprintf_s(tmp, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
@@ -268,7 +268,7 @@ bool CPlayer::Action(){
 
 double CPlayer::CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick){
 
-	if (GetStatus(MAGIC_DEFFENCE)) {
+	if (GetStatus(DEFFENCE)) {
 		_damage *= MAGIC_DEFFENCE_RATE;	//魔法防御
 	} else {
 		_damage -= _damage * MagicCount/MAX_MAGIC_COUNT*(1-MAX_MAGIC_COUNTER_DAMAGE_RATE);  //魔力によるダメージ減少

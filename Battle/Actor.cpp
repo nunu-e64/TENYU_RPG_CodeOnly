@@ -19,9 +19,10 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	SpdPer = between(0.001, 100.0, (double)Spd);	//$相対値から絶対値への変換
 	OldHp = Hp;
 
-	MaxTimeGauge = 100;
-	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？$
-	Mode = STAY;
+	MaxTimeGauge = 100;	//%
+	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？
+	Status[WAIT] = true;
+	Mode = PREPARE;
 	Target = -1;
 
 	NowTrick = NULL;
@@ -47,13 +48,21 @@ void CActor::SetImg(int _img){
 */
 
 bool CActor::SetSystemImg(CBImgBank* _bImgBank){
-	Img_hpbar		= _bImgBank->GetImg(HP_BAR);
-	Img_timebar[0]	= _bImgBank->GetImg(TIME_BAR1);
-	Img_timebar[1]	= _bImgBank->GetImg(TIME_BAR2);
+	
+	SetBarImg(_bImgBank, HP_BAR);
+	SetBarImg(_bImgBank, TIME_BAR1);
+	SetBarImg(_bImgBank, TIME_BAR2);
+	SetBarImg(_bImgBank, TIME_DEFFENCE);
+	SetBarImg(_bImgBank, TIME_WAIT);
+	SetBarImg(_bImgBank, TIME_PRAY);
+	SetBarImg(_bImgBank, TIME_TRICK);
 
 	SetExtraImg(_bImgBank);
 
 	return true;
+}
+void CActor::SetBarImg(CBImgBank* _bImgBank, std::string _key) {
+	BarImg[_key] = _bImgBank->GetImg(_key.c_str());
 }
 
 /*
@@ -65,7 +74,12 @@ void CActor::AddTrick(trick_tag const* _trick){
 bool CActor::Main(){
 
 	if (Alive){
-		switch(Mode){
+		if (TimeGaugeForward()){
+			Mode = ACTION;
+			return true;
+		}
+	}		
+/*		switch(Mode){
 		case PLAN:
 		case PREPARE:
 			if (TimeGaugeForward()){
@@ -75,7 +89,6 @@ bool CActor::Main(){
 			break;
 
 		case ACTION:
-		case STAY:
 			if (TimeGaugeForward()){
 				Mode = PLAN;
 				return true;
@@ -85,7 +98,7 @@ bool CActor::Main(){
 		default:
 			ErrorDx("Error->CActor::Main->unexpected Mode:%d", __FILE__, __LINE__, Mode);
 		}
-	}
+	}*/
 
 	return false;
 }
@@ -95,12 +108,14 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 	if (Alive){
 		bool forReturn = false;
 		switch (Mode){
+		case BEFORE_PLAN:
+			Mode = PLAN;
 		case PLAN:
 			forReturn = Plan();
 			break;
 		case ACTION:
 			if (forReturn = Action()) {
-				Mode = PLAN;
+				Mode = BEFORE_PLAN;
 				forReturn = false;
 			}
 			break;
@@ -202,24 +217,35 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	CVector barSize;
 
 	//HpBar
-		barSize = GetGraphSize(Img_hpbar);
+		barSize = GetGraphSize(BarImg[HP_BAR]);
 			  DrawBox((int)(-1+barTop.x-barSize.x/2+_dx), (int)(-1+barTop.y+_dy), (int)(1+barTop.x+barSize.x/2+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
-		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx)   , (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, Img_hpbar, false, false);
+		DrawRectGraph((int)(barTop.x-barSize.x/2+_dx)   , (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*OldHp/MaxHp), (int)barSize.y, BarImg[HP_BAR], false, false);
 
 	//TimeBar
+		const CVector TIME_BAR_SIZE(50, 10);
 		barTop.x -= barSize.x/2;		//HpBarに左端はそろえる
 		barTop.y += barSize.y + 5;
-		barSize = GetGraphSize(Img_timebar[0]);
-		if (Mode==STAY||Mode==PREPARE) SetDrawBright(150,150,150);
-		
-	  	DrawBox((int)(-1+barTop.x+_dx), (int)(-1+barTop.y+_dy),(int)(1+barTop.x+50*MaxTimeGauge/100.0+_dx), (int)(1+barTop.y+barSize.y+_dy), BLUE, true);
-		DrawBox((int)(barTop.x+_dx)   , (int)(barTop.y+_dy)   ,(int)(barTop.x+50*(MaxTimeGauge-TimeGauge)/100.0+_dx)  , (int)(barTop.y+barSize.y+_dy), ((Mode==STAY||Mode==PLAN)?WHITE:RED), true);
 
-		//DrawRectGraph((int)(barTop.x+_dx)	, (int)(barTop.y+_dy), 0, 0, (int)(barSize.x*(1-TimeGauge/100)), (int)barSize.y, ((Mode==STAY||Mode==PLAN)?Img_timebar[0]:Img_timebar[1]), false, false);
+		int img;
+		if (Mode == PLAN || GetStatus(WAIT)) {
+			img = BarImg[TIME_WAIT];
+		} else if (GetStatus(DEFFENCE)) {
+			img = BarImg[TIME_DEFFENCE];
+		} else if (GetStatus(PRAY)) {
+			img = BarImg[TIME_PRAY];
+		} else {
+			img = BarImg[TIME_TRICK];
+		}
+
+		if (Mode==PREPARE && !GetStatus(DEFFENCE)) SetDrawBright(150,150,150);		
+	  	DrawBox((int)(-1+barTop.x+_dx), (int)(-1+barTop.y+_dy),(int)(1+barTop.x+TIME_BAR_SIZE.x*MaxTimeGauge/100.0+_dx), (int)(1+barTop.y+TIME_BAR_SIZE.y+_dy), BLUE, true);
+		DrawRectGraph((int)(barTop.x+_dx), (int)(barTop.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
 	
 	//OldHpとHpのギャップを埋める
 		if (OldHp>Hp) OldHp--;
 		else if (OldHp<Hp) OldHp++;
+
+	DrawCenterString((int)(Rect.Center().x), (int)Rect.Center().y, (Mode==PLAN?"PLAN":(Mode==PREPARE?"PREPARE":"ACTION")) , BLACK, true);  
 
 	SetDrawBright(255,255,255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
