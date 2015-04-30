@@ -225,7 +225,7 @@ void CBattle::StartEffect(){	//戦闘開始演出
 		mystrcat(enemyName, " ");
 	}
 
-	LogWindow.Add("%sがあらわれた！", enemyName);
+	LogWindow.Add("【戦闘開始】%s", enemyName);
 
 	int x=WINDOW_WIDTH+20;
 	int timecount=0;
@@ -303,6 +303,8 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 	B_CmdList.Clear();
 	////////////////////////////////////////////////////////////
 	
+	LogWindow.Add("【戦闘終了】%s", (_result==WIN?"Win":"Lose"));
+
 	switch (_result){
 	case WIN:
 		{//コンパイルエラー回避の為にスコープを制限

@@ -139,30 +139,34 @@ bool CLogWindow::Add(char *_format, ...){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”r
 		char chTruestring[WORD_MAX];
 		char tmp[WORD_MAX] = "";
 				
-		int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ tmpnum=\0‚ğŠÜ‚Ü‚È‚¢“K³•¶š”
+		int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ
 		while(GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) <= WordWidth && tmpnum < WORD_MAX){
 			tmp[tmpnum] = newText[tmpnum];
 			tmp[++tmpnum] = '\0';
 		}
-		--tmpnum;
+		--tmpnum;	//tmpnum:\0‚ğŠÜ‚Ü‚È‚¢“K³•¶š” true[tmpnum-1]='\0'‚Æ‚È‚é‚æ‚¤‚É‚·‚é
 
-		if (_ismbblead(newText[tmpnum-1])) {
+		DEBUGDX(tmp);
+		if (_ismbblead(newText[tmpnum])) {
+			DEBUGDX("ok");
 			--tmpnum;		//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
 		}
 				
-		strncpy_s(chTruestring, newText, tmpnum);
+		mystrcpy(chTruestring, newText, tmpnum);
+		DEBUGDX(chTruestring);
 		Add(chTruestring);
-		strcpy_s(chOverstring, newText+tmpnum);
+		mystrcpy(chOverstring, newText+tmpnum-1);
+		DEBUGDX(chOverstring);
 		Add(chOverstring);				//ƒI[ƒo[‚µ‚½•ª‚ğØ‚èæ‚Á‚ÄÄ“x“Ç‚İ‚İ
 
 	}else if (mystrlen(newText) > WordNum){			//š”ƒI[ƒo[ˆ—iÀÛ‚Í•`‰æƒTƒCƒY‚Åˆ—‚·‚é‚æ‚¤‚Éã‹L‚É‘‚«‘«‚µ‚½‚½‚ß‚±‚¿‚ç‚ğg‚¤‚±‚Æ‚Í‚È‚¢‚Æv‚í‚ê‚éj
 		char chOverstring[WORD_MAX];
 		char chTruestring[WORD_MAX];
 		
-		int d = (_ismbblead(newText[WordNum-1])? -1:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
-		strncpy_s(chTruestring, newText, WordNum+d);
+		int d = (_ismbblead(newText[WordNum-1])? --WordNum:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
+		strncpy_s(chTruestring, newText, WordNum);
 		Add(chTruestring);
-		strcpy_s( chOverstring, newText+WordNum+d);
+		strcpy_s( chOverstring, newText+WordNum);
 		Add(chOverstring);	
 
 	} else {
