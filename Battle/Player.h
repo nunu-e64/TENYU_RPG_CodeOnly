@@ -17,12 +17,14 @@ public:
 	};
 	~CPlayer(){DESTRUCTED;}
 	
-	void SetExtraImg(CBImgBank* _bImgBank);
 	void CreateBattleMenu();
 	void Draw(int _dx=0, int _dy=0);
 
 private:
 	//ƒƒ“ƒoŠÖ”
+		void FirstSet2();
+		void SetExtraImg(CBImgBank* _bImgBank);
+
 		bool Plan();
 		bool Action();
 		

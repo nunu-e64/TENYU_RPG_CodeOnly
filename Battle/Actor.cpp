@@ -31,6 +31,8 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	NowTrick = NULL;
 
 	Dx=0; Dy=0;
+
+	FirstSet2();
 }
 
 void CActor::SetRect(int _cx, int _cy){

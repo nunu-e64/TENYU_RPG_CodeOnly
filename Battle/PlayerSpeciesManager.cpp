@@ -11,10 +11,13 @@ void CPlayerSpeciesManager::Clear(){
 
 }
 
-bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img){
+bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img, const trick_tag* _plainTrick){
 	CPlayerSpecies newPlayer;
 	newPlayer.SetValue(_name, _maxhp, _atk, _def, _spd);
 	newPlayer.Img = _img;
+
+	if (_plainTrick != NULL) newPlayer.PlainTrick = *_plainTrick;	//í èÌãZìoò^
+	else newPlayer.PlainTrick.Name[0] = '\0';
 
 	if (PlayerBankLock) {
 		WARNINGDX("'%s':PlayerBank is Locked!", _name);

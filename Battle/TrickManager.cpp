@@ -1,9 +1,9 @@
 #include "../Define.h"
 #include "TrickManager.h"
 
-void CTrickManager::Add(trick_tag trick){
+void CTrickManager::Add(trick_tag trick, const char* _key){
 	char256 tmpkey;
-	mystrcpy(tmpkey.text, trick.Name);
+	mystrcpy(tmpkey.text, _key);
 		
 	if (TrickBankLock) {
 		WARNINGDX("'%s':TrickBank is Locked!", trick.Name);
@@ -13,7 +13,7 @@ void CTrickManager::Add(trick_tag trick){
 	if (TrickBank.find(tmpkey)==TrickBank.end()){
 		TrickBank.insert( std::map<char256, trick_tag>::value_type( tmpkey, trick) );
 	}else{
-		ErrorDx("Error->AddNewTrick->Already exist name:%s", tmpkey.text);
+		ErrorDx("Error->AddNewTrick->Already exist key:%s", tmpkey.text);
 	}
 }
 
@@ -30,9 +30,9 @@ void CTrickManager::Add(char _name[32], int _power, int _cost, int _time, trick_
 	tmpTrick.Time = _time;
 	tmpTrick.TargetType = _targetType;
 	tmpTrick.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
-	tmpTrick.SideEffect = sideEffectList;	
+	tmpTrick.SideEffect = sideEffectList;
 
-	Add(tmpTrick);
+	Add(tmpTrick, tmpTrick.Name);
 }
 
 void CTrickManager::Clear(){
@@ -50,7 +50,7 @@ void CTrickManager::Clear(){
 
 }
 
-trick_tag const* CTrickManager::GetTrick(const char _name[32]){
+trick_tag const* CTrickManager::GetTrick(const char _name[32], bool _errorMessage){
 	char256 tmpkey;
 	mystrcpy(tmpkey.text, _name);
 
@@ -58,7 +58,7 @@ trick_tag const* CTrickManager::GetTrick(const char _name[32]){
 		TrickBankLock = true;
 		return &TrickBank[tmpkey];;
 	} else {
-		ErrorDx("TrickManager->GetTrick->NotFound:%s", _name);
+		if (_errorMessage) ErrorDx("TrickManager->GetTrick->NotFound:%s", _name);
 		return NULL;
 	}
 }

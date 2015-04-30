@@ -3,7 +3,12 @@
 #include "Battle.h"
 
 
-	
+void CPlayer::FirstSet2(){
+	if (strlen(PlainTrick.Name)){
+		PlainTrick.Power = 10;
+	}
+}
+
 void CPlayer::SetExtraImg(CBImgBank* _bImgBank){
 	_bImgBank->GetImg(MAGIC_COUNTER, MagicCounterImg, ARRAY_SIZE(MagicCounterImg));
 }
@@ -12,7 +17,13 @@ void CPlayer::CreateBattleMenu(){
 	
 	BattleMenu.Init(10, 360, 100, 130);
 
-	BattleMenu.Create("‹Z");
+	if (strlen(PlainTrick.Name)) {
+		BattleMenu.Create("UŒ‚");
+		BattleMenu.Add("","‹Z");
+	} else {
+		BattleMenu.Create("‹Z");
+	}
+
 	BattleMenu.Add("", "‹F“˜");
 	BattleMenu.Add("", "–hŒä");
 	BattleMenu.Add("", "“¹‹ï");
@@ -121,7 +132,6 @@ bool CPlayer::Plan(){
 
 			if (BattleMenu.Move(result)){
 
-
 				if (mystrcmp(result->parent->label, "‹Z")){
 					unsigned int index = BattleMenu.GetIndex(result);
 				
@@ -159,6 +169,12 @@ bool CPlayer::Plan(){
 						ErrorDx("Error->CPlayer::Plan->bigger action_num(do nothing):%d", __FILE__, __LINE__, index);
 						return false;
 					}
+
+				}else if (mystrcmp(result->label, "UŒ‚")){
+					strcpy_s(tmp,"@Target_Appear(ENEMY,0,false)");
+					NowTrick = &PlainTrick;
+					CmdList->Add(tmp);
+					BattleMenu.Alive = false;
 	
 				}else if (mystrcmp(result->label, "‘Ò‹@")){
 					MaxTimeGauge = WAIT_TIME;

@@ -57,6 +57,7 @@ public:
 
 protected:
 	int MagicCount;	//–‚—ÍBãŒÀ‚ÍMAX_MAGIC_COUNTB
+	trick_tag PlainTrick; 
 
 private:
 	int Exp;
