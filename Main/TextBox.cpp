@@ -101,8 +101,7 @@ void CTextBox::Term(CCmdList* _cmdlist){
 
 	if (ObjCount!=-1){	//ObjCountが-1じゃない＝イベントを踏んでTextBoxにやってきた（そうじゃない場合：例えばセーブ完了などのシステムメッセージ）
 		//一時的にNONEに変えた（かもしれない）EveObjのEffectを元に戻す
-			char tmp[256];	sprintf_s(tmp, "@Effect_Set(%s, Tmp)", JOKER_NAME);
-			_cmdlist->Add(tmp);
+			_cmdlist->Add("@Effect_Set(%s, Tmp)", JOKER_NAME);
 	}
 }
 

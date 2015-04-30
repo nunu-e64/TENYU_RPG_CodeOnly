@@ -10,7 +10,7 @@ bool CMain::Init(){
 	srand((unsigned int)GetNowCount());
 	//ChangeFont("ＭＳ Ｐゴシック") ;	$
 	
-	/*	//これなんでコメントアウトしてあるのかわからない･･･　15/04/22
+	/*	//これなんでコメントアウトしてあるのかわからない･･･ 15/04/22
 	if (_mkdir("tenyu_data")==0){	//ディレクトリを作れるかどうかで存在有無を判断
 		_rmdir("tenyu_data");	//「作れる＝存在していなかった」の確認が済んだので今作ったディレクトリは削除しておく
 		ErrorDx("Error->NotFound dir\"tenyu_data\" (exit)");
@@ -60,11 +60,11 @@ bool CMain::GameLoop(){
 }
 
 bool CMain::Playing(const int _dnum){
-		//DEBUGDX("PlayingStart");
+		DEBUGDX("PlayingStart");
 	CField Field;
-		//DEBUGDX("Playing_CFieldCreate");
+		DEBUGDX("Playing_CFieldCreate");
 	if (!Field.Init((PLAYDATA_NUM>0?PlayData:NULL), _dnum)) return true;
-		//DEBUGDX("Playing_FieldInit_finish");
+		DEBUGDX("Playing_FieldInit_finish");
 
 	switch (Field.MainLoop()){
 	case MODE_GAMEOVER:

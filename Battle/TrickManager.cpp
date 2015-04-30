@@ -40,7 +40,7 @@ void CTrickManager::Clear(){
 	TrickBank.clear();
 	TrickBankLock = false;
 			
-	//イテレータ使ってすべてdeleteしなくちゃいけない　
+	//イテレータ使ってすべてdeleteしなくちゃいけない 
 	std::vector <const CTrickDamageEffect*>::iterator it = TrickDamageEffectBank.begin();
 	while(it!=TrickDamageEffectBank.end()){
 		delete (*it);	

@@ -6,7 +6,7 @@
 //#include "CmdList.h"
 #include "TalkName.h"
 
-	//static const int TextShowMode = 0;	//0…行送り　1…ページ送り
+	//static const int TextShowMode = 0;	//0…行送り 1…ページ送り
 
 
 class CCmdList;
@@ -41,8 +41,8 @@ protected:
 	//定数
 		enum{
 			STOCK_LINE_NUM = 1000,
-			LINE_MAX = 20,		//行数最大値		　Initで調整される
-			WORD_MAX = 256,		//一行の文字数最大値　Initで調整される
+			LINE_MAX = 20,		//行数最大値		 Initで調整される
+			WORD_MAX = 256,		//一行の文字数最大値 Initで調整される
 			LINE_SPACE = 10,	//行間
 			SHOWING_SPEED = 80	//1秒当たり何文字[全角]
 		};
@@ -79,7 +79,7 @@ protected:
 		char chDrawText[LINE_MAX][WORD_MAX];
 
 		int PosX, PosY, Width, Height;			//左上の座標、横幅縦幅
-		int LineNum, WordNum;	//WordNumの単位はバイト　LineNumは行数
+		int LineNum, WordNum;	//WordNumの単位はバイト LineNumは行数
 		int FontSize;
 		int RubyFontSize;
 		int Color1, Color2;	//Color2は影
@@ -89,12 +89,12 @@ protected:
 		int TextLineNum();		//今、何行目まで表示用テキストがあるか		1~LineNum	空：0
 		
 		int NowStock;	//今、ストックの何行目にいるか	0~	空：-1	(TextBox外においては次調べる行はどこか)
-		int NowTarget;	//今、テキストボックスの何行目について処理しているのか　0~	空：-1
+		int NowTarget;	//今、テキストボックスの何行目について処理しているのか 0~	空：-1
 		bool PageChange;	//次にページリセットするか否か
 
 		////テキストのアニメーション表示関係//////////////
-			int NewText;		//chTextに新たに追加された行　-1･･･変化なし　0~･･･上から何行目以降が追加されたか（空白もカウント）
-			bool Showing;		//テキストアニメーションが現在進行中：True　完了：False
+			int NewText;		//chTextに新たに追加された行 -1･･･変化なし 0~･･･上から何行目以降が追加されたか（空白もカウント）
+			bool Showing;		//テキストアニメーションが現在進行中：True 完了：False
 			int ShowingTime; 
 
 		////AddTextのときに変更

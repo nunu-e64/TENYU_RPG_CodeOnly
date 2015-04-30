@@ -21,8 +21,8 @@ public:
 	virtual void DrawDamageEffect(CBattle* _battle, CBImgBank* _bimgbank, CRect _attackerR, CRect _targetR) const =0;
 	std::string GetName() const {return Name;}
 protected:
-	std::string Name;	//エフェクトの名前　例：RED_BOMB, BLUE_BOMB, BIG_SPREAD,　SMALL_SPREAD
-	//std::string TypeName;	//Typeの名前　例：BOMB, SPREAD
+	std::string Name;	//エフェクトの名前 例：RED_BOMB, BLUE_BOMB, BIG_SPREAD, SMALL_SPREAD
+	//std::string TypeName;	//Typeの名前 例：BOMB, SPREAD
 };
 
 

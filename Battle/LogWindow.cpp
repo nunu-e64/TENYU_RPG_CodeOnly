@@ -121,7 +121,12 @@ void CLogWindow::Term(){
 */
 }
 
-bool CLogWindow::Add(char *_newText){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”rœ‚³‚ê‚Ä‚¢‚é
+bool CLogWindow::Add(char *_format, ...){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”rœ‚³‚ê‚Ä‚¢‚é
+	va_list args;
+	char newText[WORD_MAX];
+	va_start(args, _format);
+	vsprintf_s(newText, _format, args);
+	va_end(args);
 	
 	if (!Initialized) {
 		ERRORDX("LogWindow hasn't Initialized yet.(I'll do nothing.)");
@@ -129,40 +134,40 @@ bool CLogWindow::Add(char *_newText){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”rœ‚³‚
 	}
 
 	////•¶š•`‰æ‚ÌƒTƒCƒY‚Æ•¶š”‚Ì—¼•û‚Å‰üs‚Ì—v•s—v”»’f
-	if (GetDrawStringWidthToHandle(_newText, strlen(_newText), FontHandle) > WordWidth){			//š”ƒI[ƒo[ˆ— WordWidth‚ÍInit()‚Å’è‹`
+	if (GetDrawStringWidthToHandle(newText, strlen(newText), FontHandle) > WordWidth){			//š”ƒI[ƒo[ˆ— WordWidth‚ÍInit()‚Å’è‹`
 		char chOverstring[WORD_MAX];
 		char chTruestring[WORD_MAX];
 		char tmp[WORD_MAX] = "";
 				
-		int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ@tmpnum=\0‚ğŠÜ‚Ü‚È‚¢“K³•¶š”
-		while(GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) <= WordWidth){
-			tmp[tmpnum] = _newText[tmpnum];
+		int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ tmpnum=\0‚ğŠÜ‚Ü‚È‚¢“K³•¶š”
+		while(GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) <= WordWidth && tmpnum < WORD_MAX){
+			tmp[tmpnum] = newText[tmpnum];
 			tmp[++tmpnum] = '\0';
 		}
 		--tmpnum;
 
-		if (_ismbblead(_newText[tmpnum-1])) {
+		if (_ismbblead(newText[tmpnum-1])) {
 			--tmpnum;		//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
 		}
 				
-		strncpy_s(chTruestring, _newText, tmpnum);
+		strncpy_s(chTruestring, newText, tmpnum);
 		Add(chTruestring);
-		strcpy_s(chOverstring, _newText+tmpnum);
+		strcpy_s(chOverstring, newText+tmpnum);
 		Add(chOverstring);				//ƒI[ƒo[‚µ‚½•ª‚ğØ‚èæ‚Á‚ÄÄ“x“Ç‚İ‚İ
 
-	}else if (mystrlen(_newText) > WordNum){			//š”ƒI[ƒo[ˆ—iÀÛ‚Í•`‰æƒTƒCƒY‚Åˆ—‚·‚é‚æ‚¤‚Éã‹L‚É‘‚«‘«‚µ‚½‚½‚ß‚±‚¿‚ç‚ğg‚¤‚±‚Æ‚Í‚È‚¢‚Æv‚í‚ê‚éj
+	}else if (mystrlen(newText) > WordNum){			//š”ƒI[ƒo[ˆ—iÀÛ‚Í•`‰æƒTƒCƒY‚Åˆ—‚·‚é‚æ‚¤‚Éã‹L‚É‘‚«‘«‚µ‚½‚½‚ß‚±‚¿‚ç‚ğg‚¤‚±‚Æ‚Í‚È‚¢‚Æv‚í‚ê‚éj
 		char chOverstring[WORD_MAX];
 		char chTruestring[WORD_MAX];
 		
-		int d = (_ismbblead(_newText[WordNum-1])? -1:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
-		strncpy_s(chTruestring, _newText, WordNum+d);
+		int d = (_ismbblead(newText[WordNum-1])? -1:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
+		strncpy_s(chTruestring, newText, WordNum+d);
 		Add(chTruestring);
-		strcpy_s( chOverstring, _newText+WordNum+d);
+		strcpy_s( chOverstring, newText+WordNum+d);
 		Add(chOverstring);	
 
 	} else {
 
-		mystrcpy(Text[NextLine], _newText); 
+		mystrcpy(Text[NextLine], newText); 
 		NextLine = (++NextLine) % StockLineNum;
 	
 		Visible = true;

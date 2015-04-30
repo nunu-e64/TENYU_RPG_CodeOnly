@@ -17,8 +17,7 @@ public:
 		DESTRUCTED;
 		Clear();
 	}
-
-	void Add(const char* _data);
+	void Add(const char* _format, ...);
 	void Get(char* _cmd);
 	bool Empty();
 	void Clear();

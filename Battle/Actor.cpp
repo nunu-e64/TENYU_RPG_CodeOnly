@@ -129,7 +129,7 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 			return true;
 		}
 
-		//if (forReturn) TimeGaugeForward(); //同時行動時に行動が済んだキャラからゲージが0に戻る　//同時行動はまず起こらないため削除
+		//if (forReturn) TimeGaugeForward(); //同時行動時に行動が済んだキャラからゲージが0に戻る	//同時行動はまず起こらないため削除
 		return forReturn;
 
 	}else{
@@ -172,9 +172,7 @@ bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 		return false;
 	}else{			//Hpバー減少終了
 		if (!Alive && VisibleStatus == VISIBLE) {
-			char tmp[256];
-			sprintf_s(tmp, "%sは倒れた！", GetName().c_str());
-			LogWindow->Add(tmp);
+			LogWindow->Add("%sは倒れた！", GetName().c_str());
 			VisibleStatus = CHANGING;
 		}
 
@@ -183,18 +181,15 @@ bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 }
 
 void CActor::ChangeValue(int _kind, int _powerPercent){
-	char tmp[256];
 	
 	switch(_kind){
 	case sideEffect_tag::ATK:
 		Atk += (int)((double)Atk*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "  %sの攻撃力が上がった！", GetName().c_str());
-			LogWindow->Add(tmp);
+			LogWindow->Add("  %sの攻撃力が上がった！", GetName().c_str());
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "  %sの攻撃力が下がった！", GetName().c_str());
-			LogWindow->Add(tmp);
+			LogWindow->Add("  %sの攻撃力が下がった！", GetName().c_str());
 		}
 		break;
 
@@ -202,11 +197,9 @@ void CActor::ChangeValue(int _kind, int _powerPercent){
 		Def += (int)((double)Def*_powerPercent/100);
 
 		if (_powerPercent>0){
-			sprintf_s(tmp, "  %sの防御が上がった！", GetName().c_str());
-			LogWindow->Add(tmp);
+			LogWindow->Add("  %sの防御が上がった！", GetName().c_str());
 		}else if(_powerPercent<0){
-			sprintf_s(tmp, "  %sの防御力が下がった！", GetName().c_str());
-			LogWindow->Add(tmp);
+			LogWindow->Add("  %sの防御力が下がった！", GetName().c_str());
 		}
 		break;
 

@@ -14,7 +14,7 @@ bool CLoad::LoadAddText(const char *_path){
 	//ファイルを開く
 	FileHandle = FileRead_open(_path) ;
     if (FileHandle==0) {
-		ErrorDx("FileOpenError:%s", __FILE__, __LINE__, _path);
+		ERRORDX("FileOpenError:%s", _path);
 		return false;
 	}
 	
@@ -91,7 +91,7 @@ void CLoad::LoadPlayData(playdata_tag _playdata[]){
 			_playdata[i].DataName[0] = '\0';
 		}
 
-	//saveフォルダの存在確認＆生成　と　dataname.rpgの存在確認＆生成
+	//saveフォルダの存在確認＆生成 と dataname.rpgの存在確認＆生成
 		_mkdir(DIR_SAVE);
 		FileHandle = FileRead_open(FILE_DATANAME) ;
 		if (FileHandle==0) {

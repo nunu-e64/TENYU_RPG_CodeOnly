@@ -7,21 +7,38 @@
 
 
 //最後尾に命令を追加
-void CCmdList::Add(const char* _data){
+void CCmdList::Add(const char* _format, ...){
+	if( strlen(_format)>256 ){
+		ERRORDX("CmdList::Add 字数オーバー[255]：%s", _format);
+		return;
+	}
 
-	if( strlen(_data)>256 ){
-		ErrorDx("Error->CmdList::Add 字数オーバー[255]：%s", __FILE__, __LINE__, _data);
+	DEBUGDX("_format=%s", _format);
+
+	va_list args;
+	char newText[1024];
+	va_start(args, _format);
+	vsprintf_s(newText, _format, args);	
+	//va_end(args);
+
+	DEBUGDX("ok");
+	DEBUGDX("newText=%s", newText);
+
+	if( strlen(newText)>256 ){
+		ERRORDX("CmdList::Add 字数オーバー[255]：%s", newText);
 		return;
 	}
 
 	node_tag* p = new node_tag;
-	mystrcpy(p->command, _data);
+	mystrcpy(p->command, newText);
 	p->next = NULL;
 
 	if (tail!=NULL)	tail->next = p;
 	tail = p;
 
 	if (front==NULL) front = p;
+	
+	va_end(args);
 }
 
 

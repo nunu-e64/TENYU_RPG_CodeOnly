@@ -6,7 +6,7 @@ using namespace mrtlib;		//usingƒfƒBƒŒƒNƒeƒBƒu‚ğg‚¤‚©‚Ç‚¤‚©‚Í‚¨”C‚¹‚µ‚Ü‚·
 
 namespace mrt{		//using‚Æ‚ÌˆÊ’uŠÖŒW‚ª‚±‚ê‚Å‚ ‚Á‚Ä‚é‚Ì‚©‚Í•s–¾
 
-void Opening(){	//•Ô‚è’lF‚È‚µ@ˆø”F‚È‚µ
+void Opening(){	//•Ô‚è’lF‚È‚µ ˆø”F‚È‚µ
 		
 	/*/////////////////////////////////////////////////////////
 	u‚Í‚¶‚ß‚©‚çvƒvƒŒƒC‚·‚é‚Æ‚«‚¾‚¯—¬‚ê‚éƒI[ƒvƒjƒ“ƒO‰‰oB
@@ -103,7 +103,7 @@ int ChooseData(playdata_tag* _playdata){	//•Ô‚è’lFƒ[ƒh‚·‚éƒf[ƒ^”Ô†iƒGƒ‰[
 		sprintf_s(tmpstring, "ƒf[ƒ^”Ô†F%d ƒf[ƒ^–¼F%s", dnum, (_playdata[dnum].Exist?_playdata[dnum].DataName:"No Data")); 
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*1/4), "ƒ[ƒh‚·‚éƒf[ƒ^‚ğ‘I‘ğ", WHITE);
 		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*2/4), tmpstring, (_playdata[dnum].Exist? WHITE:GRAY));
-		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*3/4), "ª«:ƒf[ƒ^‘I‘ğ@Z:Œˆ’è@Esc:ƒ^ƒCƒgƒ‹‚É–ß‚é", WHITE);
+		DrawCenterString(WINDOW_WIDTH/2, (int)(WINDOW_HEIGHT*3/4), "ª«:ƒf[ƒ^‘I‘ğ Z:Œˆ’è Esc:ƒ^ƒCƒgƒ‹‚É–ß‚é", WHITE);
 
 		if (CheckHitKeyDown (KEY_INPUT_DOWN)){
 			dnum = mod(dnum+1, PLAYDATA_NUM);

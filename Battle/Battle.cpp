@@ -39,7 +39,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	ENEMY_NUM = 0;
 	
 	//Load.cppを通して.rpgの読み込み/////////////////////
-	
+		DEBUGDX("BattleLoad_Start");
 		//外部テキストのロード
 			CLoad bfsLoad;
 			CBattleFirstSetCmdManager  bfsCmdManager;
@@ -51,6 +51,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			}else{
 				return false;
 			}
+		DEBUGDX("BattleLoad_End");
 	////////////////////////////////////////////////	
 	
 	//読み込みが適切に済んだかチェック//////////
@@ -58,18 +59,21 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		EnemySpeciesManager->CheckAfterLoad();
 	///////////////////////////////////////////
 
-
 	//戦闘システム用画像の読み込み////////////////
 		TargetMarker.SetImage(BImgBank.GetImg(TARGET_CURSOR));
 		CEnemyAI::SetAttentionImg(BImgBank.GetImg(ATTENTION_MARKER, MAX_PLAYER_NUM), BImgBank.GetImg(ATTENTION_BOARD), BImgBank.GetImg(ATTENTION_EFFECT));
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
+		DEBUGDX("BattleTextBoxInit_Start");
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
+		DEBUGDX("BattleTextBoxInit_End");
 
 	//ログウィンドウの初期化
+		DEBUGDX("BattleLogWindowInit_Start");
 		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 200, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), &BImgBank);
+		DEBUGDX("BattleLogWindowInit_End");
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
@@ -218,7 +222,10 @@ void CBattle::StartEffect(){	//戦闘開始演出
 	enemyName[0]='\0';
 	for (int i=0; i<ENEMY_NUM; i++){
 		mystrcat(enemyName, Enemy[i].GetName().c_str());
+		mystrcat(enemyName, " ");
 	}
+
+	LogWindow.Add("%sがあらわれた！", enemyName);
 
 	int x=WINDOW_WIDTH+20;
 	int timecount=0;
@@ -443,7 +450,6 @@ int CBattle::ResultCheck(){
 }
 
 void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick){
-	char tmpMessage[256];
 	
 	//エラー防止処理
 		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
@@ -472,8 +478,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	
 	//攻撃対象がいない場合
 		if (targetList.empty()) {
-			mystrcpy(tmpMessage, "  しかし攻撃は外れた！");
-			LogWindow.Add(tmpMessage);
+			LogWindow.Add("  しかし攻撃は外れた！");
 			return;
 		}
 
@@ -493,8 +498,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 
 	//ログウィンドウに出力
 		for (int i=0; i<(int)(targetList.size()); i++){	
-			sprintf_s(tmpMessage, "  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
-			LogWindow.Add(tmpMessage);
+			LogWindow.Add("  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
 		}
 	
 

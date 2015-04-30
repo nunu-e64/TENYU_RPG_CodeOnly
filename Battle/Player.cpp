@@ -104,7 +104,6 @@ void CPlayer::Draw(int _dx, int _dy){
 
 bool CPlayer::Plan(){
 	static bool newPlan = true;
-	char tmp[256];
 	
 	if (newPlan){
 		BattleMenu.Alive = true;
@@ -138,8 +137,7 @@ bool CPlayer::Plan(){
 					if (index<TrickList.size()){
 						//魔力確認
 							if (TrickList[index]->Cost > MagicCount) {	//魔力は足りているか
-								sprintf_s(tmp, "%s：魔力が足りない！(必要コスト%d)", Name.c_str(), TrickList[index]->Cost);
-								LogWindow->Add(tmp);
+								LogWindow->Add("%s：魔力が足りない！(必要コスト%d)", Name.c_str(), TrickList[index]->Cost);
 								return false;
 							} else {
 								NowTrick = TrickList[index];
@@ -149,15 +147,13 @@ bool CPlayer::Plan(){
 						//選んだ技の対象人数によって処理を変える$
 							switch(NowTrick->TargetType){	
 							case trick_tag::SINGLE:
-								strcpy_s(tmp,"@Target_Appear(ENEMY,0,false)");
-								CmdList->Add(tmp);
+								CmdList->Add("@Target_Appear(ENEMY,0,false)");
 								break;
 							case trick_tag::ALL:
 								Target = PLAYER_NUM;
 								break;
 							case trick_tag::SINGLE_FRIEND:
-								strcpy_s(tmp,"@Target_Appear(PLAYER,0,false)");
-								CmdList->Add(tmp);
+								CmdList->Add("@Target_Appear(PLAYER,0,false)");
 								break;
 							default:
 								WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
@@ -171,16 +167,14 @@ bool CPlayer::Plan(){
 					}
 
 				}else if (mystrcmp(result->label, "攻撃")){
-					strcpy_s(tmp,"@Target_Appear(ENEMY,0,false)");
 					NowTrick = &PlainTrick;
-					CmdList->Add(tmp);
+					CmdList->Add("@Target_Appear(ENEMY,0,false)");
 					BattleMenu.Alive = false;
 	
 				}else if (mystrcmp(result->label, "待機")){
 					MaxTimeGauge = WAIT_TIME;
 					for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-						sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAIT);
-						CmdList->Add(tmp);
+						CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAIT);
 					}
 					Status[WAIT] = true;
 					BattleMenu.Alive=false;
@@ -188,37 +182,31 @@ bool CPlayer::Plan(){
 
 				}else if (mystrcmp(result->label, "祈祷")){
 					if (MagicCount == MAX_MAGIC_COUNT){
-						sprintf_s(tmp, "%s：魔力回復の必要はないようだ", Name.c_str());
-						LogWindow->Add(tmp);
+						LogWindow->Add("%s：魔力回復の必要はないようだ", Name.c_str());
 						return false;
 					} else {
 						Status[PRAY] = true;
 						MaxTimeGauge = PRAY_TIME;
 
-						sprintf_s(tmp, "%sは祈り始めた", Name.c_str());
-						LogWindow->Add(tmp);
+						LogWindow->Add("%sは祈り始めた", Name.c_str());
 						for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-							sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENTION_PRAY);
-							CmdList->Add(tmp);
+							CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENTION_PRAY);
 						}
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
 				}else if (mystrcmp(result->label, "防御")){
 					if (DEFFENCE_MC > MagicCount) {	//魔力は足りているか
-						sprintf_s(tmp, "%s：魔力が足りない！(必要コスト%d)", Name.c_str(), DEFFENCE_MC);
-						LogWindow->Add(tmp);
+						LogWindow->Add("%s：魔力が足りない！(必要コスト%d)", Name.c_str(), DEFFENCE_MC);
 						return false;
 					} else {
 						Status[DEFFENCE] = true;
 						MaxTimeGauge = DEFFENCE_TIME;
 						MagicCount-=DEFFENCE_MC;	//魔力消費
 		
-						sprintf_s(tmp, "%sは防御に集中している", Name.c_str());
-						LogWindow->Add(tmp);
+						LogWindow->Add("%sは防御に集中している", Name.c_str());
 						for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
-							sprintf_s(tmp, "@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_DEFFENCE);
-							CmdList->Add(tmp);
+							CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_DEFFENCE);
 						}
 
 						BattleMenu.Alive=false;
@@ -231,17 +219,13 @@ bool CPlayer::Plan(){
 		}else{
 
 			if (CheckHitKeyDown(KEY_INPUT_RIGHT)){
-				char* tmpcmd = "@Target_Move(RIGHT)";
-				CmdList->Add(tmpcmd);
+				CmdList->Add("@Target_Move(RIGHT)");
 			}else if (CheckHitKeyDown(KEY_INPUT_LEFT)){
-				char* tmpcmd = "@Target_Move(LEFT)";
-				CmdList->Add(tmpcmd);
+				CmdList->Add("@Target_Move(LEFT)");
 			}else if (CheckHitKeyDown(KEY_INPUT_OK)){
-				char tmpcmd[256]; sprintf_s(tmpcmd, "@Target_Decide(%d)", ActorIndex);
-				CmdList->Add(tmpcmd);
+				CmdList->Add("@Target_Decide(%d)", ActorIndex);
 			}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
-				char* tmpcmd = "@Target_Disappear";
-				CmdList->Add(tmpcmd);
+				CmdList->Add( "@Target_Disappear");
 				NowTrick = NULL;
 				BattleMenu.Alive = true;
 			}
@@ -252,13 +236,11 @@ bool CPlayer::Plan(){
 }
 
 bool CPlayer::Action(){
-	char tmp[256];	//tmpCmdとtmpMessageを兼ねる
 	
 	if (GetStatus(PRAY)) {
 		MagicCount = min(MagicCount+PRAY_RECOVERY_MC, MAX_MAGIC_COUNT);
 		Status[PRAY] = false;
-		sprintf_s(tmp, "%sは祈りを捧げ魔力を回復した！", Name.c_str());	
-		LogWindow->Add(tmp);
+		LogWindow->Add("%sは祈りを捧げ魔力を回復した！", Name.c_str());
 
 	} else if (GetStatus(DEFFENCE)) {
 		Status[DEFFENCE] = false;
@@ -267,11 +249,8 @@ bool CPlayer::Action(){
 		Status[WAIT] = false;
 		
 	} else {  //技の使用
-		sprintf_s(tmp, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
-		CmdList->Add(tmp);
-
-		sprintf_s(tmp, "%sの%s！", Name.c_str(), NowTrick->Name);
-		LogWindow->Add(tmp);
+		CmdList->Add("@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+		LogWindow->Add("%sの%s！", Name.c_str(), NowTrick->Name);
 
 
 		////技使用後処理

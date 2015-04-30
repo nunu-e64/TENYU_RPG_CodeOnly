@@ -75,14 +75,9 @@ bool CEnemy::Action(){
 		Status[WAIT] = false;
 	} else {
 		//Tatgetの選択と行動
-			char tmpcmd[256];
 			Target = AI.GetTarget(this); 
-			sprintf_s(tmpcmd, "@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);	//アドレスを渡している。intでキャストした方がいいのか？→いや、技名で渡せよ・・・(14/12/25)
-			CmdList->Add(tmpcmd);
-
-			char tmpMessage[256];
-			sprintf_s(tmpMessage, "%sの%s！", Name.c_str(), NowTrick->Name);
-			LogWindow->Add(tmpMessage);
+			CmdList->Add("@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
+			LogWindow->Add("%sの%s！", Name.c_str(), NowTrick->Name);
 
 		//行動後処理
 			NowTrick = NULL;
