@@ -33,14 +33,14 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 			Mode = MODE_PLAYING;
 
-	DebugDx("TextBox_Init_Start");
+	//DebugDx("TextBox_Init_Start");
 
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);
 			TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, TextAutoPlaySpeed);  
 			TextBox = &TextBox1;
 
-	DebugDx("TextBox_Init_End");
+	//DebugDx("TextBox_Init_End");
 
 		////WorldManagerのポインタ変数に代入
 		//	EveManager_p = &EveManager;
@@ -50,9 +50,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	
 
 		//CBattleの初期化
-	DEBUGDX("Battle_Init_Start");
+	//DEBUGDX("Battle_Init_Start");
 			if (!(Battle->Init())) return false;
-	DEBUGDX("Battle_Init_End");
+	//DEBUGDX("Battle_Init_End");
 		
 		SetTransColor(0, 0, 0);	//透過色指定 $マゼンダで統一を
 			
@@ -77,7 +77,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 	
 		SetTransColor(255, 0, 255);	//透過色指定	
 	
-	DebugDx("Load_Init_End");
+	//DebugDx("Load_Init_End");
 			
 		//セーブデータの読み込み
 			if (PLAYDATA_NUM>0) PlayData_p = _playdata_p;

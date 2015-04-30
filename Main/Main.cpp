@@ -60,11 +60,11 @@ bool CMain::GameLoop(){
 }
 
 bool CMain::Playing(const int _dnum){
-		DEBUGDX("PlayingStart");
+		//DEBUGDX("PlayingStart");
 	CField Field;
-		DEBUGDX("Playing_CFieldCreate");
+		//DEBUGDX("Playing_CFieldCreate");
 	if (!Field.Init((PLAYDATA_NUM>0?PlayData:NULL), _dnum)) return true;
-		DEBUGDX("Playing_FieldInit_finish");
+		//DEBUGDX("Playing_FieldInit_finish");
 
 	switch (Field.MainLoop()){
 	case MODE_GAMEOVER:

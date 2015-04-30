@@ -39,7 +39,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	ENEMY_NUM = 0;
 	
 	//Load.cppを通して.rpgの読み込み/////////////////////
-		DEBUGDX("BattleLoad_Start");
+		//DEBUGDX("BattleLoad_Start");
 		//外部テキストのロード
 			CLoad bfsLoad;
 			CBattleFirstSetCmdManager  bfsCmdManager;
@@ -51,7 +51,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 			}else{
 				return false;
 			}
-		DEBUGDX("BattleLoad_End");
+		//DEBUGDX("BattleLoad_End");
 	////////////////////////////////////////////////	
 	
 	//読み込みが適切に済んだかチェック//////////
@@ -64,16 +64,16 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		CEnemyAI::SetAttentionImg(BImgBank.GetImg(ATTENTION_MARKER, MAX_PLAYER_NUM), BImgBank.GetImg(ATTENTION_BOARD), BImgBank.GetImg(ATTENTION_EFFECT));
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
-		DEBUGDX("BattleTextBoxInit_Start");
+		//DEBUGDX("BattleTextBoxInit_Start");
 		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
 		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
 		TextBox = &TextBox1;
-		DEBUGDX("BattleTextBoxInit_End");
-
+		//DEBUGDX("BattleTextBoxInit_End");
+		
 	//ログウィンドウの初期化
-		DEBUGDX("BattleLogWindowInit_Start");
+		//DEBUGDX("BattleLogWindowInit_Start");
 		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 200, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), &BImgBank);
-		DEBUGDX("BattleLogWindowInit_End");
+		//DEBUGDX("BattleLogWindowInit_End");
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();

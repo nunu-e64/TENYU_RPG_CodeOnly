@@ -9,20 +9,33 @@
 //最後尾に命令を追加
 void CCmdList::Add(const char* _format, ...){
 	if( strlen(_format)>256 ){
-		ERRORDX("CmdList::Add 字数オーバー[255]：%s", _format);
+		ERRORDX("CmdList::Add 字数オーバー[255]：%s", _format);		//本体はvsnprintfを使って明示的にサイズを示してやることで防止すべき
 		return;
 	}
 
-	DEBUGDX("_format=%s", _format);
+	char newFormat[512];
+	mystrcpy(newFormat, _format);
+
+	//外部読込みされた文字としての'％'を書式誤認しないように'％％'に書き換える
+	for (int i=0; i<sizeof(newFormat)-1 && newFormat[i]!='\0'; i++){
+		if (newFormat[i]=='%' && (newFormat[i+1]==',' || newFormat[i+1]==' ' || newFormat[i+1]==')')) {
+			for (int j=strlen(newFormat)+1; j<sizeof(newFormat)-1 && j!=i+1; j--){
+				newFormat[j] = newFormat[j-1];
+			}
+			newFormat[i+1]='%';
+			++i;	//二重チェックしないようにひとつ余分に前に進める
+		}
+	}
+
+	//DEBUGDX("_format=%s", newFormat);
 
 	va_list args;
 	char newText[1024];
 	va_start(args, _format);
-	vsprintf_s(newText, _format, args);	
-	//va_end(args);
+	vsnprintf_s(newText, sizeof(newText), newFormat, args);	
+	va_end(args);
 
-	DEBUGDX("ok");
-	DEBUGDX("newText=%s", newText);
+	//DEBUGDX("newText=%s", newText);
 
 	if( strlen(newText)>256 ){
 		ERRORDX("CmdList::Add 字数オーバー[255]：%s", newText);
