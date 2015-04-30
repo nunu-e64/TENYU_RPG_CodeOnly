@@ -69,7 +69,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 		TextBox = &TextBox1;
 
 	//ログウィンドウの初期化
-		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 20, 100, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), &BImgBank);
+		LogWindow.Init(WINDOW_WIDTH-50, 10, 50, WINDOW_HEIGHT-20, GetColor(30, 30, 30), 200, 12, GetColor(240, 240, 240), GetColor(20, 20, 20), &BImgBank);
 
 	//パーティリストの初期化//////////
 		PlayerSpeciesManager->SetMemberList();
@@ -254,7 +254,7 @@ int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
 	
 	do{		
-		if(!LogWindow.GetWindowMode() && !TextBox->Main(&B_CmdList, FlagSet_p)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）		
+		if(!LogWindow.Main() && !TextBox->Main(&B_CmdList, FlagSet_p)){	//ログ表示中あるいはテキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 
 			if ((result=ResultCheck())!=-1){
 				B_CmdManager.Main(&B_CmdList, this, TextBox);

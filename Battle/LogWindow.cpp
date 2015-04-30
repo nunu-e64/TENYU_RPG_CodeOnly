@@ -22,27 +22,17 @@ CLogWindow::CLogWindow(){
 	//OriginalDir = DOWN;
 }
 
-void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank){
+void CLogWindow::Init(int _smallposx, int _posy, int _smallwidth, int _height, int _boxColor, int _stockLine, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank){
 
 	if (Initialized) {
 		ERRORDX("Already Initialized (do nothing)");
 		return;
 	}
 	
-	LineNum = between(1, (int)LINE_MAX, _line);
-	WordNum = between(1, (int)WORD_MAX, _word);
 
-	myLog("new LogWindow.Text[%d][%d]...", LineNum, WordNum);
-	Text = new char* [LineNum];
-	for (int i=0; i<_line; i++){
-		Text[i] = new char[WordNum];	
-		Text[i][0] = '\0';
-	}
-
-
-	PosX = _posx;
+	PosX = _smallposx;
 	PosY = _posy;
-	Width = _width;
+	Width = _smallwidth;
 	Height = _height;
 	BoxColor = _boxColor;
 
@@ -51,12 +41,38 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	WidthFull = WINDOW_WIDTH - PosXFull;
 
 	FontSize = _fontSize;
+	FontHandle = CreateFontToHandle(NULL, FontSize, -1);
 	FontColorMain = _fontColorMain;
 	FontColorSub = _fontColorSub;
+	_bImgBank->GetImg(LOG_WINDOW_BUTTON, ButtonImg, ARRAY_SIZE(ButtonImg));
 
 	NextLine = 0;
+	BackLine = 0;
 	
-	_bImgBank->GetImg(LOG_WINDOW_BUTTON, ButtonImg, ARRAY_SIZE(ButtonImg));
+	//Width‚©‚ç•¶š”ŒvZ->WordNum
+		WordWidth = WidthFull - YOHAKU*2;
+		char tmp[WORD_MAX] = "";
+		WordNum = WORD_MAX;
+		for (int i=0; i<WORD_MAX-1; i++){
+			tmp[i]	 = 'a';
+			tmp[i+1] = '\0';
+			if (GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) > WordWidth){
+				WordNum = i+2;
+				break;
+			}
+		}
+
+	//Height‚ÆFontSize‚©‚çs”ŒvZ->LineNum
+		StockLineNum = max(1, _stockLine);
+		LineNum = min((Height-YOHAKU*2)/(FontSize+LINE_SPACE), StockLineNum);
+
+	myLog("new LogWindow.Text[%d][%d]...", StockLineNum, WordNum);
+	Text = new char* [StockLineNum];
+	for (int i=0; i<StockLineNum; i++){
+		Text[i] = new char[WordNum];	
+		Text[i][0] = '\0';
+	}
+
 
 	//NowStock = 0;
 	//NowTarget = 0;
@@ -64,24 +80,25 @@ void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxCol
 	//NewText = -1;
 	//Showing = false;
 
-
-	//AddStock‚Å‚Ì”¼Šp•¶šƒI[ƒo[‚ğ‰ğŒˆ‚·‚é‚½‚ß‚É‰¡•§ŒÀ‚ğ•t‚¯‚é
-		char tmp[WORD_MAX] = "‚ ";	
-		int tmpnum = 0;
-		while(++tmpnum < WordNum/2){
-			sprintf_s(tmp, "%s‚ ", tmp);
-		}
-		WordWidth = GetDrawStringWidth(tmp, strlen(tmp));
-
 	Visible = true;
 	Initialized = true;
 
 }
 
+void CLogWindow::Clear(){
+
+	for (int i=0; i<StockLineNum; i++){
+		Text[i][0] = '\0';
+	}
+	NextLine = 0;
+	FullMode = false;
+	Visible = true;
+}
+
 void CLogWindow::Term(){
 	if (Initialized){
-		myLog("deleting LogWindow.Text[%d][%d]...", LineNum, WordNum);
-		for (int i=0; i<LineNum; i++){
+		myLog("deleting LogWindow.Text[%d][%d]...", StockLineNum, WordNum);
+		for (int i=0; i<StockLineNum; i++){
 			delete [] Text[i];
 		}
 		delete [] Text;
@@ -111,49 +128,48 @@ bool CLogWindow::Add(char *_newText){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”rœ‚³‚
 		return false;
 	}
 
-	mystrcpy(Text[NextLine], _newText); 
-	NextLine = (++NextLine) % LineNum;
-	
-	Visible = true;
-
-	return true;
-
-			/*
-			////”¼Šp•¶š‚Å–„‚ßs‚­‚µ‚½‚Æ‚«‚ÉƒeƒLƒXƒgƒ{ƒbƒNƒX‚ğƒI[ƒo[‚·‚éƒoƒO‚ğC³=•¶š•`‰æ‚ÌƒTƒCƒY‚Å”»’f
-			}else if (GetDrawStringWidth(String, strlen(String)) > WordWidth){			//š”ƒI[ƒo[ˆ— WordWidth‚ÍInit()‚Å’è‹`
-				char chOverstring[WORD_MAX];
-				char chTruestring[WORD_MAX];
-				char tmp[WORD_MAX]="";
+	////•¶š•`‰æ‚ÌƒTƒCƒY‚Æ•¶š”‚Ì—¼•û‚Å‰üs‚Ì—v•s—v”»’f
+	if (GetDrawStringWidthToHandle(_newText, strlen(_newText), FontHandle) > WordWidth){			//š”ƒI[ƒo[ˆ— WordWidth‚ÍInit()‚Å’è‹`
+		char chOverstring[WORD_MAX];
+		char chTruestring[WORD_MAX];
+		char tmp[WORD_MAX] = "";
 				
-				int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ
-				while(GetDrawStringWidth(tmp, strlen(tmp)) <= WordWidth){
-					tmp[tmpnum]=String[tmpnum];
-					tmp[++tmpnum]='\0';
-				}
+		int tmpnum=0;				//ˆês•ª‚Ì‰¡•‚Å‹æØ‚é‚½‚ß‚ÌˆÊ’u’T‚µ@tmpnum=\0‚ğŠÜ‚Ü‚È‚¢“K³•¶š”
+		while(GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) <= WordWidth){
+			tmp[tmpnum] = _newText[tmpnum];
+			tmp[++tmpnum] = '\0';
+		}
+		--tmpnum;
 
-				if (_ismbblead(String[tmpnum-1])) {
-					tmpnum--;		//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·	$‚ ‚¿‚ç‚ª—§‚Ä‚Î‚±‚¿‚ç‚ª—§‚½‚¸‚¤‚í[‚ñ¨WRAP•¶š‰»‚¯‚à‰ğŒˆ‚µ‚½H
-				}
-				strcpy_s(chOverstring, String+tmpnum);
-				strncpy_s(chTruestring, String, tmpnum);
-
-				AddStock(chTruestring);
-				if (strlen(chOverstring)>0) AddStock(chOverstring);				//ƒI[ƒo[‚µ‚½•ª‚ğØ‚èæ‚Á‚ÄÄ“x“Ç‚İ‚İ
-
-			}else if (mystrlen(String) > WordNum){			//š”ƒI[ƒo[ˆ—iÀÛ‚Í•`‰æƒTƒCƒY‚Åˆ—‚·‚é‚æ‚¤‚Éã‹L‚É‘‚«‘«‚µ‚½‚½‚ß‚±‚¿‚ç‚ğg‚¤‚±‚Æ‚Í‚È‚¢‚Æv‚í‚ê‚éj
-				char chOverstring[WORD_MAX];
-				char chTruestring[WORD_MAX];
+		if (_ismbblead(_newText[tmpnum-1])) {
+			--tmpnum;		//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
+		}
 				
-				int d = (_ismbblead(String[WordNum-1])? -1:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
-				strcpy_s(chOverstring, String+WordNum+d);
-				strncpy_s(chTruestring, String, WordNum+d);
-				
-				//ebugDx("Debug->š”ƒI[ƒo[:%s", chOverstring);
+		strncpy_s(chTruestring, _newText, tmpnum);
+		Add(chTruestring);
+		strcpy_s(chOverstring, _newText+tmpnum);
+		Add(chOverstring);				//ƒI[ƒo[‚µ‚½•ª‚ğØ‚èæ‚Á‚ÄÄ“x“Ç‚İ‚İ
 
-				AddStock(chTruestring);
-				AddStock(chOverstring);				//ƒI[ƒo[‚µ‚½•ª‚ğØ‚èæ‚Á‚ÄÄ“x“Ç‚İ‚İ
-			*/
+	}else if (mystrlen(_newText) > WordNum){			//š”ƒI[ƒo[ˆ—iÀÛ‚Í•`‰æƒTƒCƒY‚Åˆ—‚·‚é‚æ‚¤‚Éã‹L‚É‘‚«‘«‚µ‚½‚½‚ß‚±‚¿‚ç‚ğg‚¤‚±‚Æ‚Í‚È‚¢‚Æv‚í‚ê‚éj
+		char chOverstring[WORD_MAX];
+		char chTruestring[WORD_MAX];
 		
+		int d = (_ismbblead(_newText[WordNum-1])? -1:0);	//s––‚ª‘SŠp•¶š‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶š‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
+		strncpy_s(chTruestring, _newText, WordNum+d);
+		Add(chTruestring);
+		strcpy_s( chOverstring, _newText+WordNum+d);
+		Add(chOverstring);	
+
+	} else {
+
+		mystrcpy(Text[NextLine], _newText); 
+		NextLine = (++NextLine) % StockLineNum;
+	
+		Visible = true;
+
+	}
+	
+	return true;
 }
 
 bool CLogWindow::Add(char **_newTextArray){
@@ -165,41 +181,56 @@ bool CLogWindow::Add(char **_newTextArray){
 	return true;
 }
 
+bool CLogWindow::Main(){
+
+	if (FullMode) {
+		if (CheckHitKey(KEY_INPUT_UP)) {
+			BackLine = min(BackLine+1, StockLineNum-LineNum);
+		} else if (CheckHitKey(KEY_INPUT_DOWN)) {
+			BackLine = max(BackLine-1, 0);
+		}
+		if (CheckHitKeyDown(KEY_INPUT_CANCEL)) FullMode = false;
+	}
+
+	return FullMode;
+}
+
 void CLogWindow::Draw(){
 
 	if(!Visible) return;
-	
-	if (CheckHitKeyDown(KEY_INPUT_P)) SetWindowMode(!FullMode);
 
-	int oldFontSize = GetFontSize();
-	
+	if (CheckHitKeyDown(KEY_INPUT_P)) {	//ƒEƒBƒ“ƒhƒEƒ‚[ƒhØ‘ÖiUŒ‚ƒGƒtƒFƒNƒg’†‚É‚àƒƒOŠm”F‚Å‚«‚é‚æ‚¤AMain‚Å‚Í‚È‚­Draw‚ÅƒL[ƒ`ƒFƒbƒNj
+		SetWindowMode(!FullMode);
+		BackLine = 0;
+	}
+
 	//ƒ{ƒbƒNƒX
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?200:100));
-		DrawBox((!FullMode?PosX:PosXFull), PosY,     (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
-		DrawBox((!FullMode?PosX:PosXFull)+5, PosY+5, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
+		DrawBox((!FullMode?PosX:PosXFull),		  PosY,	       (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
+		DrawBox((!FullMode?PosX:PosXFull)+YOHAKU, PosY+YOHAKU, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
 	
 	//ƒ{ƒ^ƒ“
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?150:100));
-		//DrawRectGraph((!FullMode?PosX:PosXFull)-(int)(ButtonImgSize.x/2), (int)(PosY+Height-ButtonImgSize.y)/2, (int)(!FullMode?0:ButtonImgSize.x), 0, (int)ButtonImgSize.x, (int)ButtonImgSize.y, ButtonImg, true, false);
 		DrawCenterGraph((!FullMode?PosX:PosXFull), (PosY+Height)/2, ButtonImg[(!FullMode?0:1)], true);
 
 	//ƒeƒLƒXƒg
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?220:200));
 
 		//ƒeƒLƒXƒg•`Ê
-		SetFontSize(FontSize);
 		int line;
 		int skipCount = 0;	//‹ós‚Íã‹l‚ß
+		int drawCount = 0;  //ÀÛ‚É•`‰æ‚µ‚½s‚Ì”
 		char* textForDraw = new char[(FullMode? WordNum: 8)];
-		for (int i = 0; i+skipCount < LineNum; i++){
-			line = mod ((i + NextLine + skipCount), LineNum);
+		for (int i = 0; i+skipCount < StockLineNum && drawCount < LineNum; i++){
+			line = mod ((NextLine - LineNum - BackLine + i + skipCount), StockLineNum);
 			if (strlen(Text[line])) {
 				mystrcpy(textForDraw, Text[line], (FullMode? WordNum: 5));
 				if (!FullMode) sprintf_s(textForDraw, -1, "%s..", textForDraw);
-				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*i+1, textForDraw, FontColorSub);
-				DrawString((!FullMode?PosX:PosXFull)+5, PosY + (FontSize+LINE_SPACE)*i  , textForDraw, FontColorMain);
+				DrawStringToHandle((!FullMode?PosX:PosXFull)+YOHAKU, PosY + (FontSize+LINE_SPACE)*i+1+YOHAKU, textForDraw, FontColorSub , FontHandle);
+				DrawStringToHandle((!FullMode?PosX:PosXFull)+YOHAKU, PosY + (FontSize+LINE_SPACE)*i+YOHAKU  , textForDraw, FontColorMain, FontHandle);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
 				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
+				++drawCount;
 			} else {
 				++skipCount;
 				--i;
@@ -208,17 +239,6 @@ void CLogWindow::Draw(){
 
 		delete [] textForDraw;
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,-1);
-		SetFontSize(oldFontSize);
-}
-
-void CLogWindow::Clear(){
-
-	for (int i=0; i<LineNum; i++){
-		Text[i][0] = '\0';
-	}
-	NextLine = 0;
-	FullMode = false;
-	Visible = true;
 }
 
 /*void CTextBox::Draw_Animation(bool _showingstop){

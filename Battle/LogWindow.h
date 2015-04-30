@@ -15,19 +15,18 @@ public:
 		DESTRUCTED;
 	};
 
-	void Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _line , int _word, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank);
+	void Init(int _smallposx, int _posy, int _smallwidth, int _height, int _boxColor, int _stockLine , int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank);
 	void Clear();	//表示テキスト全消去
 	void Term();	//Terminate メモリ解放
-	
-	void Draw();
-	
+
 	bool Add(char *_newText);
 	bool Add(char **_newTextArray);
+
+	bool Main();	
+	void Draw();
+	
 	void SetWindowMode(bool _fullMode){
 		FullMode = _fullMode;
-	}
-	bool GetWindowMode(){
-		return FullMode;
 	}
 
 	void SetVisible(bool _visible){Visible = _visible;}
@@ -35,10 +34,9 @@ public:
 private:
 	//定数
 		enum{
-			//STOCK_LINE_NUM = 1000,
-			LINE_MAX = 255,		//行数最大値		　Initで調整される
 			WORD_MAX = 255,		//一行の文字数最大値　Initで調整される
 			LINE_SPACE = 5,	//行間
+			YOHAKU = 5
 		};
 
 	//メンバ関数	
@@ -50,8 +48,9 @@ private:
 
 		int PosX, PosY, Width, Height;			//左上の座標、横幅縦幅
 		int PosXFull, WidthFull;			//フルサイズモードのとき
-		int LineNum, WordNum;	//WordNumの単位はバイト　LineNumは行数
+		int StockLineNum, LineNum, WordNum;	//WordNumの単位はバイト　LineNumは表示行数、StockLineNumは履歴含めた最大行数
 		int FontSize;
+		int FontHandle;
 		int FontColorMain, FontColorSub;	//Color2は影
 		int BoxColor;
 
@@ -62,6 +61,7 @@ private:
 		bool FullMode;		//ログウィンドウの大きさを切り替えるスイッチ
 
 		int NextLine;	//次に書き換えられるべきTextの配列インデックス
+		int BackLine;	//先頭行の配列インデックス	
 		bool Visible;	//描画されるか
 
 		/*
