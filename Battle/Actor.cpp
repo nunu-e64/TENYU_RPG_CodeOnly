@@ -77,7 +77,6 @@ bool CActor::SetSystemImg(CBImgBank* _bImgBank){
 
 		_bImgBank->GetImg(STATUS_CHANGER, StatusChangerImg, MAX_STATUSCHANGER_IMGSIZE.first, MAX_STATUSCHANGER_IMGSIZE.second);
 
-
 	//Playerは魔力カウンタ実装
 		SetExtraImg(_bImgBank);
 
@@ -221,9 +220,6 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 	tmp.Time = _time;
 	tmp.Img = 0;
 
-	StatusChangerList.push_back(tmp);
-
-
 	//ログ出力
 		char chtmp[256];
 		switch (_kind) {
@@ -253,6 +249,8 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 		}
 
 		LogWindow->Add(chtmp, Name.c_str(), abs(_powerPercent));
+		StatusChangerList.push_back(tmp);
+
 
 }
 
@@ -319,10 +317,13 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	  	DrawBox((int)(-1+barPos.x+_dx), (int)(-1+barPos.y+_dy),(int)(1+barPos.x+TIME_BAR_SIZE.x*MaxTimeGauge/100.0+_dx), (int)(1+barPos.y+TIME_BAR_SIZE.y+_dy), BLUE, true);
 		DrawRectGraph((int)(barPos.x+_dx), (int)(barPos.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
 	
+	SetDrawBright(255, 255, 255);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		
 	//StatusChangerIcon
 		barPos.y += TIME_BAR_SIZE.y + 5;
 		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
-			DrawGraph(barPos.x +i*GetGraphSize(StatusChangerList[i].Img).x, barPos.y, StatusChangerList[i].Img, true);
+			if (StatusChangerList[i].Time > 100 || GetNowCount() % 400 < 200) DrawGraph(barPos.x + i*GetGraphSize(StatusChangerList[i].Img).x, barPos.y, StatusChangerList[i].Img, true);
 		}
 
 	//OldHpとHpのギャップを埋める
@@ -331,8 +332,6 @@ void CActor::Draw_Sub(int _dx, int _dy){
 
 	DrawCenterString((int)(Rect.Center().x), (int)Rect.Center().y, (Mode==PLAN?"PLAN":(Mode==PREPARE?"PREPARE":"ACTION")) , BLACK, true);  //@TEST//
 
-	SetDrawBright(255,255,255);
-	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 }
 
 

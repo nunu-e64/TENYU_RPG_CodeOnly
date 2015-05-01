@@ -30,12 +30,13 @@ bool CImgBank::AddImg(const char* _key, const int _img, int _sizeX, int _sizeY){
 
 	int* newImg = new int[_sizeX*_sizeY];
 
-	if (_sizeX * _sizeY > 1){
+	if (_sizeX * _sizeY > 1) {
 
-		CVector imgSize = GetGraphSize(_img); 
+		CVector imgSize = GetGraphSize(_img);
 		for (int i = 0; i < _sizeY; i++) {
 			for (int j = 0; j < _sizeX; j++) {
-				newImg[i*_sizeX+j] = DerivationGraph((int)(i*imgSize.x / (double)_sizeX), (int)(j*imgSize.y / (double)_sizeY), (int)imgSize.x/_sizeX, (int)imgSize.y/_sizeY, _img);
+				newImg[i*_sizeX+j] = DerivationGraph((int)(j*imgSize.x / (double)_sizeX), (int)(i*imgSize.y / (double)_sizeY), (int)imgSize.x/_sizeX, (int)imgSize.y/_sizeY, _img);
+				//DEBUGDX("%s:%d=%d,%d", _key, i*_sizeX + j, j, i);
 			}
 		}
 	
@@ -74,6 +75,7 @@ bool CImgBank::GetImg(const char* _key, int _img[], int _sizeX, int _sizeY){
 		for (int i = 0; i < _sizeY; i++) {
 			for (int j = 0; j < _sizeX; j++) {
 				_img[i*_sizeX + j] = ImgBank[_key][i*_sizeX + j];
+				//DEBUGDX("%s:%d=%d,%d", _key, i*_sizeX + j, j, i);
 			}
 		}
 		return true;
