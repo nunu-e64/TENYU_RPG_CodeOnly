@@ -4,6 +4,17 @@
 #include "../Main/TextBox.h"
 #include "LogWindow.h"
 
+std::map <std::string, int> CActor::BarImg;
+
+const std::pair<int, int> CActor::ATK_UP(0,0);
+const std::pair<int, int> CActor::ATK_DOWN(0,1);
+const std::pair<int, int> CActor::DEF_UP(1,0);
+const std::pair<int, int> CActor::DEF_DOWN(1,1);
+const std::pair<int, int> CActor::SPD_UP(2, 0);
+const std::pair<int, int> CActor::SPD_DOWN(2, 1);
+const std::pair<int, int> CActor::MAX_STATUSCHANGER_IMGSIZE(5, 2);
+int CActor::StatusChangerImg[5 * 2] = {0};	//上と手動で一致させておかなくてはならない
+
 int CActor::HpFontHandle = -1;
 
 void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _textbox, CCmdList* _cmdlist, CLogWindow* _logWindow){
@@ -55,15 +66,20 @@ void CActor::SetImg(int _img){
 
 bool CActor::SetSystemImg(CBImgBank* _bImgBank){
 	
-	SetBarImg(_bImgBank, HP_BAR);
-	SetBarImg(_bImgBank, TIME_BAR1);
-	SetBarImg(_bImgBank, TIME_BAR2);
-	SetBarImg(_bImgBank, TIME_DEFFENCE);
-	SetBarImg(_bImgBank, TIME_WAIT);
-	SetBarImg(_bImgBank, TIME_PRAY);
-	SetBarImg(_bImgBank, TIME_TRICK);
+	//静的メンバを何度も初期化するのは良くないが、タイトルに戻った後も初期化されないのは困るし大した負荷ではないと思うので現状放置
+		SetBarImg(_bImgBank, HP_BAR);
+		SetBarImg(_bImgBank, TIME_BAR1);
+		SetBarImg(_bImgBank, TIME_BAR2);
+		SetBarImg(_bImgBank, TIME_DEFFENCE);
+		SetBarImg(_bImgBank, TIME_WAIT);
+		SetBarImg(_bImgBank, TIME_PRAY);
+		SetBarImg(_bImgBank, TIME_TRICK);
 
-	SetExtraImg(_bImgBank);
+		_bImgBank->GetImg(STATUS_CHANGER, StatusChangerImg, MAX_STATUSCHANGER_IMGSIZE.first, MAX_STATUSCHANGER_IMGSIZE.second);
+
+
+	//Playerは魔力カウンタ実装
+		SetExtraImg(_bImgBank);
 
 	return true;
 }
@@ -203,7 +219,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 	tmp.StatusKind = _kind;
 	tmp.Power = _powerPercent;
 	tmp.Time = _time;
-	tmp.Img = 0;  //@TODO:ImgBankから画像入手
+	tmp.Img = 0;
 
 	StatusChangerList.push_back(tmp);
 
@@ -213,16 +229,20 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 		switch (_kind) {
 		case sideEffect_tag::ATK:
 			if (_powerPercent>0) {
+				tmp.Img = StatusChangerImg[ATK_UP.first + MAX_STATUSCHANGER_IMGSIZE.first * ATK_UP.second];
 				mystrcpy(chtmp, "  %sの攻撃力が%d％上がった！");
 			} else if (_powerPercent<0) {
+				tmp.Img = StatusChangerImg[ATK_DOWN.first + MAX_STATUSCHANGER_IMGSIZE.first * ATK_DOWN.second];
 				mystrcpy(chtmp, "  %sの攻撃力が%d％下がった！");
 			}
 			break;
 
 		case sideEffect_tag::DEF:
 			if (_powerPercent>0) {
+				tmp.Img = StatusChangerImg[DEF_UP.first + MAX_STATUSCHANGER_IMGSIZE.first * DEF_UP.second];
 				mystrcpy(chtmp, "  %sの防御力が%d％上がった！");
 			} else if (_powerPercent<0) {
+				tmp.Img = StatusChangerImg[DEF_DOWN.first + MAX_STATUSCHANGER_IMGSIZE.first * DEF_DOWN.second];
 				mystrcpy(chtmp, "  %sの防御力が%d％下がった！");
 			}
 			break;

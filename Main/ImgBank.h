@@ -22,11 +22,11 @@ public:
 
 	void LoadPic(const char *_path, const char _key[32], const char _kind[32]);	//CMap‚Æ‚ÌŒİŠ·«Šm•Û
 
-	bool AddImg(const char* _key, const int _img, int _size = 1);
+	bool AddImg(const char* _key, const int _img, int _sizeX = 1, int _sizeY = 1);
 	
 	int GetImg(const char* _key);
-	bool GetImg(const char* _key, int _img[], int _size);
-	int* GetImg(const char* _key, int _size);
+	bool GetImg(const char* _key, int _img[], int _sizeX, int _sizeY=1);
+	int* GetImg(const char* _key, int _sizeX, int _sizeY=1);
 
 private:
     std::map <std::string, int*> ImgBank;

@@ -102,6 +102,7 @@ const char ATTENTION_BOARD[]  = "ATTENTION_BOARD";
 const char ATTENTION_EFFECT[] = "ATTENTION_EFFECT";
 const char LOG_WINDOW_BUTTON[] = "LOG_WINDOW_BUTTON";
 const char MAGIC_COUNTER[] = "MAGIC_COUNTER";
+const char STATUS_CHANGER[] = "STATUS_CHANGER";
 
 //ÉQÅ[ÉÄñº///////////////////////////////////////////
 const char GAME_TITLE[] = "TENYU";
@@ -217,8 +218,8 @@ struct statusChanger_tag {
 	int Time;
 	int StatusKind;
 	int Power;
-
 };
+
 struct sideEffect_tag{
 	enum{
 		ATK,

@@ -122,7 +122,6 @@ protected:
 
 	//グラフィック
 		CRect Rect;
-		std::map <std::string, int> BarImg;
 		int Dx; int Dy;
 
 private:
@@ -130,9 +129,21 @@ private:
 			return _damage;
 		};
 
-		void SetBarImg( CBImgBank* _bImgBank, std::string _key);
 		bool TimeGaugeForward();	//内部的には減少
 		double TimeGauge;	//MaxTimeGauge→0(%)
+
+		static std::map <std::string, int> BarImg;
+		void SetBarImg(CBImgBank* _bImgBank, std::string _key);
+		
+		static const std::pair <int, int> ATK_UP;
+		static const std::pair <int, int> ATK_DOWN;
+		static const std::pair <int, int> DEF_UP;
+		static const std::pair <int, int> DEF_DOWN;
+		static const std::pair <int, int> SPD_UP;
+		static const std::pair <int, int> SPD_DOWN;
+		static const std::pair <int, int> MAX_STATUSCHANGER_IMGSIZE;
+		static int StatusChangerImg[];
+
 		static int HpFontHandle;
 	
 };

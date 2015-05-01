@@ -236,15 +236,15 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		
 //@Load_Pic
 	}else if (mystrcmp(_command, "@Load_Pic")){
-		argnum = 3;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum, false))goto finish;	//•K{
+		argnum = 4;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum, false))goto finish;	//•K{
 
-		int size = 1;
-		if(arg[2]!=NULL && !(mystrtol(arg[2], &size))){
+		int size[2] = {1,1};
+		if ((arg[2] != NULL && !(mystrtol(arg[2], &size[0]))) || (arg[3] != NULL && !(mystrtol(arg[3], &size[1])))) {
 			ERRORDX("Check argument type->%s", _command);
 			goto finish;
 		}
 
-		_bimgbank->AddImg(arg[1], LoadGraph(arg[0], true), size);
+		_bimgbank->AddImg(arg[1], LoadGraph(arg[0], true), size[0], size[1]);
 
 //@Player_Create
 	}else if (mystrcmp(_command,"@Player_Create")){	

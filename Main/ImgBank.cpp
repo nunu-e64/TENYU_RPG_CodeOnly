@@ -18,7 +18,7 @@ void CImgBank::LoadPic(const char *_path, const char _key[32], const char _kind[
 	AddImg(_key, LoadGraph(_path, true));
 }
 
-bool CImgBank::AddImg(const char* _key, const int _img, int _size){
+bool CImgBank::AddImg(const char* _key, const int _img, int _sizeX, int _sizeY){
 
 	if (mystrcmp2(_key, "null")){
 		ERRORDX("You can't use \"null\" for PicKey:%s->(cancel)", _key);
@@ -28,13 +28,15 @@ bool CImgBank::AddImg(const char* _key, const int _img, int _size){
 		return false;
 	}
 
-	int* newImg = new int[_size];
+	int* newImg = new int[_sizeX*_sizeY];
 
-	if (_size > 1){
+	if (_sizeX * _sizeY > 1){
 
 		CVector imgSize = GetGraphSize(_img); 
-		for (int i=0; i<_size; i++){
-			newImg[i] = DerivationGraph((int)(i*imgSize.x/(double)_size), 0, (int)(imgSize.x/(double)_size), (int)imgSize.y, _img);
+		for (int i = 0; i < _sizeY; i++) {
+			for (int j = 0; j < _sizeX; j++) {
+				newImg[i*_sizeX+j] = DerivationGraph((int)(i*imgSize.x / (double)_sizeX), (int)(j*imgSize.y / (double)_sizeY), (int)imgSize.x/_sizeX, (int)imgSize.y/_sizeY, _img);
+			}
 		}
 	
 	} else {
@@ -63,14 +65,16 @@ int CImgBank::GetImg(const char* _key){
 	}
 }
 
-bool CImgBank::GetImg(const char* _key, int _img[], int _size){
+bool CImgBank::GetImg(const char* _key, int _img[], int _sizeX, int _sizeY){
 
 	if (mystrcmp2(_key, "null")) return false;
 
 	if (ImgBank.find(_key)!=ImgBank.end()) {
 		
-		for (int i = 0; i < _size; i++) {
-			_img[i] = ImgBank[_key][i];
+		for (int i = 0; i < _sizeY; i++) {
+			for (int j = 0; j < _sizeX; j++) {
+				_img[i*_sizeX + j] = ImgBank[_key][i*_sizeX + j];
+			}
 		}
 		return true;
 
@@ -81,7 +85,7 @@ bool CImgBank::GetImg(const char* _key, int _img[], int _size){
 
 }
 
-int* CImgBank::GetImg(const char* _key, int _size){
+int* CImgBank::GetImg(const char* _key, int _sizeX, int _sizeY){
 
 	if (mystrcmp2(_key, "null")) return NULL;
 
