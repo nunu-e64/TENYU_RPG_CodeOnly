@@ -318,13 +318,19 @@ void CActor::Draw_Sub(int _dx, int _dy){
 		DrawRectGraph((int)(barPos.x+_dx), (int)(barPos.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
 	
 	SetDrawBright(255, 255, 255);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		
 	//StatusChangerIcon
 		barPos.y += TIME_BAR_SIZE.y + 5;
 		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
-			if (StatusChangerList[i].Time > 100 || GetNowCount() % 400 < 200) DrawGraph(barPos.x + i*GetGraphSize(StatusChangerList[i].Img).x, barPos.y, StatusChangerList[i].Img, true);
+			if (StatusChangerList[i].Time > 100) {
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+			} else {
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(130 + 125 * sin((2 * PI)/1000 * (GetNowCount() % 1000))));
+			}
+			DrawGraph(barPos.x + i*GetGraphSize(StatusChangerList[i].Img).x, barPos.y, StatusChangerList[i].Img, true);
 		}
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 
 	//OldHp‚ÆHp‚ÌƒMƒƒƒbƒv‚ð–„‚ß‚é
 		if (OldHp>Hp) OldHp--;
