@@ -203,11 +203,10 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 	tmp.StatusKind = _kind;
 	tmp.Power = _powerPercent;
 	tmp.Time = _time;
-	tmp.Img = 0;  //TODO:ImgBankから画像入手
+	tmp.Img = 0;  //@TODO:ImgBankから画像入手
 
 	StatusChangerList.push_back(tmp);
 
-	//DEBUGDX("ok");
 
 	//ログ出力
 		char chtmp[256];
@@ -215,20 +214,16 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 		case sideEffect_tag::ATK:
 			if (_powerPercent>0) {
 				mystrcpy(chtmp, "  %sの攻撃力が%d％上がった！");
-				//DEBUGDX("ok2");
 			} else if (_powerPercent<0) {
 				mystrcpy(chtmp, "  %sの攻撃力が%d％下がった！");
-				//DEBUGDX("ok3");
 			}
 			break;
 
 		case sideEffect_tag::DEF:
 			if (_powerPercent>0) {
 				mystrcpy(chtmp, "  %sの防御力が%d％上がった！");
-				//DEBUGDX("ok4");
 			} else if (_powerPercent<0) {
 				mystrcpy(chtmp, "  %sの防御力が%d％下がった！");
-				//DEBUGDX("ok5");
 			}
 			break;
 
@@ -237,7 +232,6 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 			return;
 		}
 
-		//DEBUGDX(chtmp, "hoge", -1);
 		LogWindow->Add(chtmp, Name.c_str(), abs(_powerPercent));
 
 }
@@ -328,7 +322,17 @@ bool CActor::TimeGaugeForward(){
 		TimeGauge = MaxTimeGauge;
 		Mode = (mode_tag)((Mode+1) % MODE_NUM);
 	}
+	
 	TimeGauge-=SpdPer;
+
+	for (std::vector<statusChanger_tag>::iterator it = StatusChangerList.begin(); it != StatusChangerList.end();) {
+		if (--(*it).Time <= 0) { 
+			it = StatusChangerList.erase(it); // erase()の戻り値をitで受ける！
+		} else {
+			++it;
+		}
+	}
+
 	if (TimeGauge<=0){
 		TimeGauge = 0;
 		return true;

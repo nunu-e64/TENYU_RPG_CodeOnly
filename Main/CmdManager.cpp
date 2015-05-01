@@ -326,7 +326,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@NormalTrick_Create
 	}else if (mystrcmp(_command,"@NormalTrick_Create")){
-		argnum = 6+4*10+1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false)) goto finish;	//必須
+		argnum = 6+5*10+1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false)) goto finish;	//必須
 
 		int value[3];
 		for (int i=0; i<3; i++){
@@ -353,10 +353,10 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		//サイドエフェクトの読み込みとvectorリスト化
 		std::vector <sideEffect_tag> sideEffectList;
 		sideEffect_tag tmpEffect;
-		int tmpNum[4]; 
+		int tmpNum[5]; 
 
 
-		for (int i=6; i<argnum && arg[i]!=NULL; i+=4){
+		for (int i=6; i<argnum && arg[i]!=NULL; i+=5){
 			if (mystrcmp2(arg[i], "ATK")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
 				tmpNum[0] = sideEffect_tag::ATK;
 			} else if (mystrcmp2(arg[i], "DEF")) {
@@ -381,7 +381,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				continue;
 			}
 
-			if (!( mystrtol(arg[i+2], &tmpNum[2])) || (!( mystrtol(arg[i+3], &tmpNum[3])))) {
+			if (!(mystrtol(arg[i + 2], &tmpNum[2])) || !(mystrtol(arg[i + 3], &tmpNum[3])) || !(mystrtol(arg[i + 4], &tmpNum[4]))) {
 				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);
 				goto finish;
 			}
@@ -389,6 +389,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			tmpEffect.EffectTarget = tmpNum[1];
 			tmpEffect.Power		   = tmpNum[2];
 			tmpEffect.Incidence	   = tmpNum[3];
+			tmpEffect.Time		   = tmpNum[4];
 			sideEffectList.push_back(tmpEffect);
 		}
 
