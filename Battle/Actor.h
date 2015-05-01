@@ -62,8 +62,11 @@ public:
 		int Damaged(CActor* _attacker, trick_tag const* _trick);
 		bool CheckBarMove();	//死亡確認が済んだらTrue
 		void SetTarget(int _target){ Target=_target; }
+	
+	//ステータス変化技
+		void AddStatusChanger(int _kind, int _powerPercent, int _time);	//時間制限付き
+		void ChangeValue(int _kind, int _powerPercent);	//永続（ステータスに直接影響）
 
-		void ChangeValue(int _kind, int _powerPercent);
 
 	//その他
 		CRect GetRect()const{return Rect;}
@@ -95,9 +98,9 @@ protected:
 		}VisibleStatus;	//生→死での描画内容変更を管理
 		int OldHp;	//描画用
 		double SpdPer;
-		//int Accident;	//状態異常やステータス変動 未使用
 
 		std::map <int, bool> Status;
+		std::vector <statusChanger_tag> StatusChangerList;
 
 		enum mode_tag{
 			PLAN,

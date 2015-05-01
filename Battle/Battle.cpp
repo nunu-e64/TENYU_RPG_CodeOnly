@@ -602,7 +602,8 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				case sideEffect_tag::ATK:
 				case sideEffect_tag::DEF:
 					for (unsigned int j=0; j<effectTargetList.size(); j++){					
-						Actor[effectTargetList[j]]->ChangeValue(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power);
+						//Actor[effectTargetList[j]]->ChangeValue(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power);
+						Actor[effectTargetList[j]]->AddStatusChanger(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Time);
 					}
 					break;
 				default:

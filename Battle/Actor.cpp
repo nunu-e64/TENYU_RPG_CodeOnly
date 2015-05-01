@@ -24,6 +24,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 
 	MaxTimeGauge = 100;	//%
 	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？
+
 	Status[WAIT] = true;
 	Mode = PREPARE;
 
@@ -154,8 +155,24 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 		return 0;
 	}
 	
-	double damage  = _trick->Power + _attacker->GetAtk() - Def;	//$ダメージ計算式は要検討
-	
+	double damage = _trick->Power * _attacker->GetAtk() / Def;	//$ダメージ計算式は要検討
+
+	for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
+		switch (_attacker->StatusChangerList[i].StatusKind) {
+		case sideEffect_tag::ATK:
+			damage *= (100 + _attacker->StatusChangerList[i].Power) / 100.0;
+			break;
+		}
+	}
+
+	for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
+		switch (StatusChangerList[i].StatusKind) {
+		case sideEffect_tag::DEF:
+			damage /= (100+StatusChangerList[i].Power)/100.0;
+			break;
+		}
+	}
+
 	damage = CalcDamage(damage, _attacker, _trick);
 
 	Hp = between(0, MaxHp, Hp-(int)damage);
@@ -178,6 +195,51 @@ bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 
 		return (VisibleStatus != CHANGING);		//描画状況が安定してからtrueをかえす
 	}
+}
+
+void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
+	
+	statusChanger_tag tmp;
+	tmp.StatusKind = _kind;
+	tmp.Power = _powerPercent;
+	tmp.Time = _time;
+	tmp.Img = 0;  //TODO:ImgBankから画像入手
+
+	StatusChangerList.push_back(tmp);
+
+	//DEBUGDX("ok");
+
+	//ログ出力
+		char chtmp[256];
+		switch (_kind) {
+		case sideEffect_tag::ATK:
+			if (_powerPercent>0) {
+				mystrcpy(chtmp, "  %sの攻撃力が%d％上がった！");
+				//DEBUGDX("ok2");
+			} else if (_powerPercent<0) {
+				mystrcpy(chtmp, "  %sの攻撃力が%d％下がった！");
+				//DEBUGDX("ok3");
+			}
+			break;
+
+		case sideEffect_tag::DEF:
+			if (_powerPercent>0) {
+				mystrcpy(chtmp, "  %sの防御力が%d％上がった！");
+				//DEBUGDX("ok4");
+			} else if (_powerPercent<0) {
+				mystrcpy(chtmp, "  %sの防御力が%d％下がった！");
+				//DEBUGDX("ok5");
+			}
+			break;
+
+		default:
+			ERRORDX("StatusKind doesn't match any status. :%s:%d", Name.c_str(), _kind);
+			return;
+		}
+
+		//DEBUGDX(chtmp, "hoge", -1);
+		LogWindow->Add(chtmp, Name.c_str(), abs(_powerPercent));
+
 }
 
 void CActor::ChangeValue(int _kind, int _powerPercent){
@@ -243,11 +305,17 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	  	DrawBox((int)(-1+barPos.x+_dx), (int)(-1+barPos.y+_dy),(int)(1+barPos.x+TIME_BAR_SIZE.x*MaxTimeGauge/100.0+_dx), (int)(1+barPos.y+TIME_BAR_SIZE.y+_dy), BLUE, true);
 		DrawRectGraph((int)(barPos.x+_dx), (int)(barPos.y+_dy), 0, 0, (int)(TIME_BAR_SIZE.x*(MaxTimeGauge-TimeGauge)/100.0), (int)TIME_BAR_SIZE.y, img, false, false);
 	
+	//StatusChangerIcon
+		barPos.y += TIME_BAR_SIZE.y + 5;
+		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
+			DrawGraph(barPos.x +i*GetGraphSize(StatusChangerList[i].Img).x, barPos.y, StatusChangerList[i].Img, true);
+		}
+
 	//OldHpとHpのギャップを埋める
 		if (OldHp>Hp) OldHp--;
 		else if (OldHp<Hp) OldHp++;
 
-	DrawCenterString((int)(Rect.Center().x), (int)Rect.Center().y, (Mode==PLAN?"PLAN":(Mode==PREPARE?"PREPARE":"ACTION")) , BLACK, true);  
+	DrawCenterString((int)(Rect.Center().x), (int)Rect.Center().y, (Mode==PLAN?"PLAN":(Mode==PREPARE?"PREPARE":"ACTION")) , BLACK, true);  //@TEST//
 
 	SetDrawBright(255,255,255);
 	SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;

@@ -209,6 +209,16 @@ namespace sys{
 	bool CheckStrNULL(const char* _str);
 	bool CheckStrNULL(const std::string _str);
 }
+
+//			・status_effect_tag{img, time, maxtime, statustype, power}
+
+struct statusChanger_tag {
+	int Img;
+	int Time;
+	int StatusKind;
+	int Power;
+
+};
 struct sideEffect_tag{
 	enum{
 		ATK,
@@ -227,6 +237,7 @@ struct sideEffect_tag{
 
 	int Power;		//効果力
 	int Incidence;	//発生確率
+	int Time;	//有効時間（バーと同じく％計算）
 };
 struct trick_tag{
 	char Name[32];
