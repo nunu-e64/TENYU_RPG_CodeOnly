@@ -322,7 +322,7 @@ void CActor::Draw_Sub(int _dx, int _dy){
 	//StatusChangerIcon
 		barPos.y += TIME_BAR_SIZE.y + 5;
 		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
-			if (StatusChangerList[i].Time > 100) {
+			if (StatusChangerList[i].Time > 50) {
 				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			} else {
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(130 + 125 * sin((2 * PI)/1000 * (GetNowCount() % 1000))));
