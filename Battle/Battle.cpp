@@ -432,7 +432,7 @@ void CBattle::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool
 }
 
 int CBattle::ResultCheck(){
-	//$/////////////////////////////////////////////////////////
+	//DEBUG:戦闘終了ショートカット//////////////////////////////
 		if (CheckHitKeyDown(KEY_INPUT_W) && ActionQueue.empty()) return WIN;
 		if (CheckHitKeyDown(KEY_INPUT_L) && ActionQueue.empty()) return LOSE;
 	////////////////////////////////////////////////////////////
@@ -559,7 +559,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		if (allOk) break;
 	}
 
-	//死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。$
+	//HACK:死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。
 	/////////////////////////////////
 
 

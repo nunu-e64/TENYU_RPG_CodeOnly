@@ -284,7 +284,7 @@ void CLogWindow::Draw(){
 			if (NowShow-Sumstrlen <= 0) {
 				strcpy_s(chDrawText[i], "");
 			}else{
-				strncpy_s(chDrawText[i], chText[i], min(NowShow-Sumstrlen, mystrlen(chText[i])));	//ルビ用@は表示しないのでそこでアニメーションがずれないようにするコード（まだ試してナイ）→//min(NowShow-Sumstrlen+(chText[i][min(NowShow-Sumstrlen, mystrlen(chText[i]))]=='@'?1:0), mystrlen(chText[i]))	$
+				strncpy_s(chDrawText[i], chText[i], min(NowShow-Sumstrlen, mystrlen(chText[i])));	//ルビ用@は表示しないのでそこでアニメーションがずれないようにするコード（まだ試してナイ）→//min(NowShow-Sumstrlen+(chText[i][min(NowShow-Sumstrlen, mystrlen(chText[i]))]=='@'?1:0), mystrlen(chText[i]))
 			}
 			Sumstrlen += strlen(chText[i]);
 		} 

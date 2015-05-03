@@ -46,7 +46,8 @@ private:
 	int MapGraph[MAP_MAX];		//マップ全体のグラフィックを事前準備しDrawではDrawRectGraphだけで描画
 	bool MapCreated[MAP_MAX];	//マップグラフィックの事前準備ができているか	
 
-	//@Load_Pic用	//vectorではなくmapにしたほうが早そう$
+	//@Load_Pic用	
+		//HACK:vectorではなくmapにする
 		struct ImgData_tag{	
 			int	Img[CHARA_PIC_NUM];
 			char Key[32];

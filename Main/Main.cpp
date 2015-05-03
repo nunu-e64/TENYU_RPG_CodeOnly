@@ -8,9 +8,9 @@
 
 bool CMain::Init(){
 	srand((unsigned int)GetNowCount());
-	//ChangeFont("ＭＳ Ｐゴシック") ;	$
+	//UNKNOWN:ChangeFont("ＭＳ Ｐゴシック") ;
 	
-	/*	//これなんでコメントアウトしてあるのかわからない･･･ 15/04/22
+	/*UNKNOWN	//これなんでコメントアウトしてあるのかわからない･･･ 15/04/22
 	if (_mkdir("tenyu_data")==0){	//ディレクトリを作れるかどうかで存在有無を判断
 		_rmdir("tenyu_data");	//「作れる＝存在していなかった」の確認が済んだので今作ったディレクトリは削除しておく
 		ErrorDx("Error->NotFound dir\"tenyu_data\" (exit)");

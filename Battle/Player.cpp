@@ -34,7 +34,7 @@ void CPlayer::CreateBattleMenu(){
 		BattleMenu.Add("技", TrickList[i]->Name);
 	}
 
-	//テスト用/////////////////////////////////////$
+	//DEBUG:テスト用/////////////////////////////////////
 	for (int i=0; i<7; i++){
 		char tmp[32];	sprintf_s(tmp, "アイテム%d", i);
 		BattleMenu.Add("道具", tmp);
@@ -144,7 +144,7 @@ bool CPlayer::Plan(){
 							}
 
 							
-						//選んだ技の対象人数によって処理を変える$
+						//HACK:選んだ技の対象人数によって処理を変える
 							switch(NowTrick->TargetType){	
 							case trick_tag::SINGLE:
 								CmdList->Add("@Target_Appear(ENEMY,0,false)");

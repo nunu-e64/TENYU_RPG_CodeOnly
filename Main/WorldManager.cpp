@@ -21,7 +21,7 @@ void CWorldManager::FadeDraw(int _time, int _img, bool _changeahead, bool _color
 
 		SetDrawBlendMode( DX_BLENDMODE_ALPHA, alpha);
 		if (_color){
-			DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, _img, true);	//DrawBoxŽg‚í‚È‚¢•û‚ªŒy‚¢‚ç‚µ‚¢$
+			DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, _img, true);	//HACK:DrawBoxŽg‚í‚È‚¢•û‚ªŒy‚¢‚ç‚µ‚¢
 		}else{
 			CVector picsize = GetGraphSize(_img);
 			DrawGraph(WINDOW_WIDTH/2-picsize.x/2, WINDOW_HEIGHT/2-picsize.y/2, _img, true);

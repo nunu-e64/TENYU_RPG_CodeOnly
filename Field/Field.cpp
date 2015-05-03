@@ -54,7 +54,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			if (!(Battle->Init())) return false;
 	//DEBUGDX("Battle_Init_End");
 		
-		SetTransColor(0, 0, 0);	//透過色指定 $マゼンダで統一を
+		SetTransColor(0, 0, 0);	//HACK:透過色指定 マゼンダで統一を
 			
 		//外部テキストのロード
 			CLoad SystemLoad;
@@ -137,7 +137,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				
 			}
 
-			////テスト用：ゲームオーバー＆クリア＆セーブ///////////$
+			////DEBUG：ゲームオーバー＆クリア＆セーブ///////////
 				if (CheckHitKey(KEY_INPUT_S) && CheckHitKey(KEY_INPUT_LCONTROL)){
 					SaveData(0);
 					TextBox->AddStock("0番に上書き保存しました");	TextBox->NextPage(&CmdList, &FlagSet);
@@ -637,7 +637,7 @@ int CField::SaveData(int _dnum, const char _dataname[32]){	//-1：エラー、0：リト
 				sprintf_s(filename, "%s/%s/eve.dat", DIR_SAVE, PlayData_p[_dnum].DataName);
 				break;
 			default:
-				//あとはアイテム、キャラステータス、金、と？ $
+				//UNDONE:ロード機能あとはアイテム、キャラステータス、金、と？ 
 				break;
 			}
 

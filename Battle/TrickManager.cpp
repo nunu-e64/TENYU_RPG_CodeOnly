@@ -44,7 +44,7 @@ void CTrickManager::Clear(){
 	std::vector <const CTrickDamageEffect*>::iterator it = TrickDamageEffectBank.begin();
 	while(it!=TrickDamageEffectBank.end()){
 		delete (*it);	
-		++it;	//この時イテラータの指す先は正常か？	$
+		++it;	//UNKNOWN:この時イテラータの指す先は正常か？→エラーが出てないから良いだろう
 	}
 	TrickDamageEffectBank.clear();
 

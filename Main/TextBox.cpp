@@ -169,7 +169,8 @@ bool CTextBox::AddStock(char *String, int dir, const int count){		//コメント行や
 				}
 
 				if (_ismbblead(String[tmpnum-1])) {
-					tmpnum--;		//行末が全角文字の1バイト目だった場合、文字化けするので1バイトずらす	$あちらが立てばこちらが立たずうわーん→WRAP文字化けも解決した？
+					tmpnum--;		//行末が全角文字の1バイト目だった場合、文字化けするので1バイトずらす
+					//UNKOWN:あちらが立てばこちらが立たずうわーん→WRAP文字化けも解決した？
 				}
 				strcpy_s(chOverstring, String+tmpnum);
 				strncpy_s(chTruestring, String, tmpnum);
@@ -180,7 +181,7 @@ bool CTextBox::AddStock(char *String, int dir, const int count){		//コメント行や
 
 			}else if (mystrchr(String, '[')!=NULL){	//ルビ処理	//'['と'ー'を文字コードの関係上誤認しやがるので半角文字か全角文字かのチェックも必要になる→頑張った俺
 				//上のはみ出し改行処理より先にしなくてはならないのでは？
-				//→改行が挟まるルビは別ルビと扱うのではみ出し処理が先でOK。ただしはみ出し処理内に改行箇所でのルビ分離処理は必要。$
+				//TODO:→改行が挟まるルビは別ルビと扱うのではみ出し処理が先でOK。ただしはみ出し処理内に改行箇所でのルビ分離処理は必要。
 
 				ruby_tag tmpruby;
 				char tmp[WORD_MAX];		mystrcpy(tmp, String);
@@ -327,7 +328,7 @@ void CTextBox::Draw_Animation(bool _showingstop){
 			if (NowShow-Sumstrlen <= 0) {
 				strcpy_s(chDrawText[i], "");
 			}else{
-				strncpy_s(chDrawText[i], chText[i], min(NowShow-Sumstrlen, mystrlen(chText[i])));	//ルビ用@は表示しないのでそこでアニメーションがずれないようにするコード（まだ試してナイ）→//min(NowShow-Sumstrlen+(chText[i][min(NowShow-Sumstrlen, mystrlen(chText[i]))]=='@'?1:0), mystrlen(chText[i]))	$
+				strncpy_s(chDrawText[i], chText[i], min(NowShow-Sumstrlen, mystrlen(chText[i])));	//TODO:ルビ用@は表示しないのでそこでアニメーションがずれないようにするコード（まだ試してナイ）→//min(NowShow-Sumstrlen+(chText[i][min(NowShow-Sumstrlen, mystrlen(chText[i]))]=='@'?1:0), mystrlen(chText[i]))
 			}
 			Sumstrlen += strlen(chText[i]);
 		} 
@@ -529,7 +530,7 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 						//その他のトークコマンドの処理
 						Solve(chStock[NowStock], _flagset);		//次の文章のあるはずのところを探索してNowStockを送る
 						
-						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//まだバグ残ってるかも$	  ←そんなん言われても…
+						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//UNKOWN:まだバグ残ってるかも  ←そんなん言われても…
 							Term(_cmdlist);			//returnのあと呼び出し元[NextPage]の方で処理が続くのでめっちゃバグ起こりそう。怖い(笑)
 							return false;
 						}

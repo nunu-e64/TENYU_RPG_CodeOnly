@@ -43,7 +43,7 @@ protected:
 			STOCK_LINE_NUM = 1000,
 			LINE_MAX = 20,		//行数最大値		 Initで調整される
 			WORD_MAX = 256,		//一行の文字数最大値 Initで調整される
-			LINE_SPACE = 10,	//行間
+			LINE_SPACE = 10,	//HACK:INITに追加すべき内容
 			SHOWING_SPEED = 80	//1秒当たり何文字[全角]
 		};
 

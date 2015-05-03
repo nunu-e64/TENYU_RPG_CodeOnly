@@ -22,7 +22,7 @@ public:
 			AttentionEffectCount[i] = 0;
 		}
 
-		//For Test////////////////$
+		//DEBUG:アテンション初期値////////////////
 			Attention[0] = 5;
 			Attention[1] = 5;
 			Attention[2] = 5;

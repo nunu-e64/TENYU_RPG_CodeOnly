@@ -132,7 +132,7 @@ bool CTalkName::GetVisible(){
 	return false;
 }
 
-void CTalkName::Draw(int _left, int _right, int _bottom){	//座標を読み込んだピクチャではなく、手入力している。Init()と連携させて修正すべき。$
+void CTalkName::Draw(int _left, int _right, int _bottom){	//HACK:座標を読み込んだピクチャではなく、手入力している。Init()と連携させて修正すべき。
 	int oldfontsize = GetFontSize();
 	
 	for (int h=0; h<SIDE_NUM; h++){

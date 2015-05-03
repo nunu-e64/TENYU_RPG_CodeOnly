@@ -23,7 +23,7 @@ void CMap::Draw(int _mapnum, int _x, int _y, int _dx, int _dy){
 
 }
 
-void CMap::CreateMapGraph(int _mapnum){	//一気にCreateするのが重過ぎるなら、マップに入ったときに順次Createもあり（-1：まだCreateしてない）$
+void CMap::CreateMapGraph(int _mapnum){	//HACK:一気にCreateするのが重過ぎるなら、マップに入ったときに順次Createもあり（-1：まだCreateしてない）
 	//MAP_MAX_CHECK(_mapnum,)
 	SetTitle("MapLoading...");
 

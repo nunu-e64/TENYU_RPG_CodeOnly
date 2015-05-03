@@ -30,7 +30,7 @@ void CTextWrap::Draw(bool _showingstop){
 
 	//背景を薄暗く
 		SetDrawBlendMode( DX_BLENDMODE_ALPHA , 50*255/100) ;		//50%アルファブレンド
-		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, BLACK, true);	//DrawBox使わない方が軽いらしい$
+		DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, BLACK, true);	//HACK:DrawBox使わない方が軽いらしい
 		SetDrawBlendMode( DX_BLENDMODE_NOBLEND , 0 ) ;
 
 	//テキスト

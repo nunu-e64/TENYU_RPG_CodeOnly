@@ -21,7 +21,7 @@ bool CLoad::LoadAddText(const char *_path){
 	int i = OldFileLineNum;
 	while( ProcessMessage()==0 && FileRead_eof( FileHandle ) == 0){
 		if (!(i<TEXT_SIZE)) {ErrorDx("Error->LoadText Size Over!:%s", __FILE__, __LINE__, _path);	i=TEXT_SIZE;	break;}
-        if(FileRead_gets(LoadText[i], 256, FileHandle)==-1) ErrorDx("Error->FileReadError", __FILE__, __LINE__,_path) ;		//ファイルがShift-JISじゃない場合ここでフリーズ	$
+        if(FileRead_gets(LoadText[i], 256, FileHandle)==-1) ErrorDx("Error->FileReadError", __FILE__, __LINE__,_path) ;		//UNDONE:ファイルがShift-JISじゃない場合ここでフリーズ	
 		
 		int j=0;
 		while(LoadText[i][j]=='\t'){j++;}

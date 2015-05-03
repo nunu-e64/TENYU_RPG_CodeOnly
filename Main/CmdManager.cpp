@@ -1076,7 +1076,7 @@ bool CCmdManager::WindowCmdSolve(const char* _command, char* _argument, CWorldMa
 		}
 
 		_worldmanager->Draw(true, true);
-		WaitTimer(num);		//一定時間経過するまでwhileループさせてDrawする方が各種アニメーションが止まらないためいいのでは？←必要ならどっちも作っちゃえよ$
+		WaitTimer(num);		//UNDONE:@Waitについて、一定時間経過するまでwhileループさせてDrawする方が各種アニメーションが止まらないためいいのでは？←必要ならどっちも作っちゃえよ
 
 //@Anten
 	}else if (mystrcmp(_command, "@Anten",'l')){

@@ -17,7 +17,6 @@ public:
 	void Draw(bool _showingstop=false);
 
 private:
-	//行間は定数化すべきか（オーバーライドできるの？→コンストラクタで初期化すれば可能なはず）$
 		
 };
 

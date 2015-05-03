@@ -29,7 +29,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 
 	Alive = Visible = (Hp!=0? true:false);
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
-	SpdPer = between(0.001, 100.0, (double)Spd);	//$相対値から絶対値への変換
+	SpdPer = between(0.001, 100.0, (double)Spd);	//HACK:SPDの仕様変更。相対値から絶対値への変換
 	OldHp = Hp;
 	if (HpFontHandle==-1) HpFontHandle = CreateFontToHandle(NULL , 10, -1) ;	//HpBarに表示するHP用のフォント作成
 
@@ -169,9 +169,8 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 		ErrorDx("Error->CActor::Damage->_trick==NULL", __FILE__, __LINE__);
 		return 0;
 	}
-	
-	double damage = _trick->Power * _attacker->GetAtk() / Def;	//$ダメージ計算式は要検討
 
+	double damage = _trick->Power * _attacker->GetAtk() / (double)Def; //HACK:ダメージ計算式は要検討
 	for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
 		switch (_attacker->StatusChangerList[i].StatusKind) {
 		case sideEffect_tag::ATK:
