@@ -32,9 +32,9 @@ void CEnemySpeciesManager::Clear(){
 
 }
 
-bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img){
+bool CEnemySpeciesManager::CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd, int _img) {
 	CEnemySpecies newEnemy;
-	newEnemy.SetValue(_name, _maxhp, _atk, _def, _spd);
+	newEnemy.SetValue(_name, _level, _geneMaxHp, _geneAtk, _geneDef, _geneSpd);
 	newEnemy.Img = _img;
 	
 	if (EnemyBankLock) {

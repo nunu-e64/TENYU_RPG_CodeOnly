@@ -10,11 +10,10 @@ public:
 		CONSTRUCTED;
 		Name = "UNDEFINED_NAME";
 		Img = -1;
-		Lv = -1;
 		
-		Hp = MaxHp = 1;
-		Atk = Def = -1;
-		Spd = -1.0;
+		Level = -1;
+		Hp = MaxHpGene = -1;
+		AtkGene = DefGene = SpdGene = -1;
 
 		TrickList.clear();
 	}
@@ -23,18 +22,27 @@ public:
 	std::string GetName()const{return Name;}
 
 protected:
-	void SetValue(const char* _name, int _maxhp, int _atk, int _def, double _spd);
+	enum value_tag {
+		MAXHP,
+		ATK,
+		DEF,
+		SPD
+	};
+
+	void SetValue(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd);
+	int CalcValue(value_tag _key, int _level, int _gene);
 
 	std::string Name;
-	int Img;
+	int Img;	//UNDONE:画像類はいずれPlayerSpeciesとEnemySpeciesで別に管理する
 
-	int Lv;
+	int Level;
 	int Hp;
-	int MaxHp;
-	int Atk;
-	int Def;
-	double Spd;	//タイムゲージに対するパーセント
-	
+
+	int MaxHpGene;
+	int AtkGene;
+	int DefGene;
+	int SpdGene;
+		
 	std::vector <trick_tag const*> TrickList;		//技リスト
 	
 };
@@ -50,6 +58,7 @@ public:
 		CONSTRUCTED;
 		Exp = 0;
 		MagicCount = MAX_MAGIC_COUNT;
+		PlainTrickPowerGene = -1;
 	}
 	~CPlayerSpecies(){
 		DESTRUCTED;
@@ -58,6 +67,8 @@ public:
 protected:
 	int MagicCount;	//魔力。上限はMAX_MAGIC_COUNT。
 	trick_tag PlainTrick; 
+
+	int PlainTrickPowerGene;
 
 private:
 	int Exp;

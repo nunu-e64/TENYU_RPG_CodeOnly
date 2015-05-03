@@ -22,7 +22,7 @@ public:
 
 	void Clear();
 
-	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img);
+	bool CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
 	

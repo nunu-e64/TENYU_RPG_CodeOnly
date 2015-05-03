@@ -248,40 +248,31 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@Player_Create
 	}else if (mystrcmp(_command,"@Player_Create")){	
-		argnum = 6;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//ïKê{
+		argnum = 8;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//ïKê{
 
-		int value[3];
-		for (int i=0; i<3; i++){
+		int value[6];
+		for (int i=0; i<6; i++){
 			if(!( mystrtol(arg[i+1], &value[i]))){
 				ERRORDX("Check argument type->%s", _command);
 				goto finish;
 			}
 		}
-		double spd;
-		if (!(mystrtod(arg[4], &spd))) {
-			ERRORDX("Check argument type->%s", _command);
-			goto finish;
-		}	
 
-		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], spd, _bimgbank->GetImg(arg[5]), _trickManager->GetTrick("PLAIN"));
+		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], value[4], value[5], _bimgbank->GetImg(arg[7]), _trickManager->GetTrick("PLAIN"));
 
 //@Enemy_Create
 	}else if (mystrcmp(_command,"@Enemy_Create")){		
-		argnum = 6;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//ïKê{
+		argnum = 7;		arg = new char*[argnum];	if(!ArgCut(_command, _argument, arg, argnum))goto finish;	//ïKê{
 
-		int value[3];
-		for (int i=0; i<3; i++){
+		int value[5];
+		for (int i=0; i<5; i++){
 			if(!( mystrtol(arg[i+1], &value[i]))){
 				ERRORDX("Check argument type->%s", _command);
 				goto finish;
 			}
 		}
-		double spd;
-		if (!(mystrtod(arg[4], &spd))) {
-			ERRORDX("Check argument type->%s", _command);
-			goto finish;
-		}	
-		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], spd, _bimgbank->GetImg(arg[5]));
+
+		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], value[4], _bimgbank->GetImg(arg[6]));
 
 //@TrickEffect_Create
 	}else if (mystrcmp(_command,"@TrickEffect_Create")){

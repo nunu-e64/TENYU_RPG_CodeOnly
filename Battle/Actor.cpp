@@ -27,14 +27,19 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	LogWindow = _logWindow;
 	CmdList = _cmdlist;
 
+	//レベルと成長素子に基づいて各キャラステータスを計算
+		Atk = CalcValue(ATK, Level, AtkGene);
+		Def = CalcValue(DEF, Level, DefGene);
+		Spd = 1; //今は一定値で対応	//between(0.001, 100.0, / CalcValue(SPD, Level, SpdGene) / 100.0);
+		MaxHp = CalcValue(MAXHP, Level, MaxHpGene);
+
 	Alive = Visible = (Hp!=0? true:false);
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
-	SpdPer = between(0.001, 100.0, (double)Spd);
-	OldHp = Hp;
-	if (HpFontHandle==-1) HpFontHandle = CreateFontToHandle(NULL , 10, -1) ;	//HpBarに表示するHP用のフォント作成
-
+	OldHp = Hp;		//UNDONE:戦闘ごとに全回復させるならここで明示的に=MaxHpとしておく
+	
 	MaxTimeGauge = 100;	//%
-	TimeGauge = rand()%MaxTimeGauge;	//ランダムでいいの？
+	TimeGauge = rand() % (MaxTimeGauge / 2) + MaxTimeGauge / 2;	//タイムゲージ初期位置はゲージの半分以下でランダム（内部的にはMaxTimeGause/2以上）。バグ防止のため
+	if (HpFontHandle == -1) HpFontHandle = CreateFontToHandle(NULL, 10, -1);	//HpBarに表示するHP用のフォント作成
 
 	Status[WAIT] = true;
 	Mode = PREPARE;
@@ -170,7 +175,7 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 		return 0;
 	}
 
-	double damage = _trick->Power * _attacker->GetAtk() / (double)Def; //HACK:ダメージ計算式は要検討
+	double damage = _trick->Power * _attacker->GetAtk() / (double)GetDef(); //HACK:ダメージ計算式は要検討
 	for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
 		switch (_attacker->StatusChangerList[i].StatusKind) {
 		case sideEffect_tag::ATK:
@@ -253,7 +258,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 
 }
 
-void CActor::ChangeValue(int _kind, int _powerPercent){
+void CActor::ChangeValue(int _kind, int _powerPercent){	//永続（ステータスに直接影響）
 	
 	switch(_kind){
 	case sideEffect_tag::ATK:
@@ -347,15 +352,16 @@ bool CActor::TimeGaugeForward(){
 		Mode = (mode_tag)((Mode+1) % MODE_NUM);
 	}
 	
-	TimeGauge-=SpdPer;
+	TimeGauge-=Spd;
 
-	for (std::vector<statusChanger_tag>::iterator it = StatusChangerList.begin(); it != StatusChangerList.end();) {
-		if (--(*it).Time <= 0) { 
-			it = StatusChangerList.erase(it); // erase()の戻り値をitで受ける！
-		} else {
-			++it;
+	//ステータス変動効果の有効時間管理
+		for (std::vector<statusChanger_tag>::iterator it = StatusChangerList.begin(); it != StatusChangerList.end();) {
+			if (--(*it).Time <= 0) { 
+				it = StatusChangerList.erase(it); // erase()の戻り値をitで受ける！
+			} else {
+				++it;
+			}
 		}
-	}
 
 	if (TimeGauge<=0){
 		TimeGauge = 0;

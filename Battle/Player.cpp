@@ -5,7 +5,7 @@
 
 void CPlayer::FirstSet2(){
 	if (strlen(PlainTrick.Name)){
-		PlainTrick.Power = 10;
+		PlainTrick.Power = CalcValue(MAXHP, Level, MaxHpGene) / 10;
 	}
 }
 

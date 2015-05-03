@@ -519,8 +519,10 @@ int SetTitle(const char* format, ...);		//Dxlib関数SetMainWindowTextの上位互換
 
 /////////////////////////////////////////////////////////////
 ////その他///////////////////////////////////////////////////
-template<class T>inline T between(const T& min_border, const T& max_border, const T& num)	//numがmin_border以上max_border以下になるようチェック	※引数はすべて型が同じでなくてはならない
-{	return max((min_border), min((max_border), (num)));
+template<class T>inline T between(const T& min_border, const T& max_border, const T& num, bool* _result=NULL) {	//numがmin_border以上max_border以下になるようチェック。resultに結果を格納	※引数はすべて型が同じでなくてはならない
+	T result = max((min_border), min((max_border), (num)));
+	if (_result != NULL) *_result = (result == num ? true : false);
+	return result;
 }
 inline int mod(int a, int b){	//VB6のように必ず非負のあまりを返す関数。%演算子は負の数を取りうるので不便。
 	if (b!=0) {

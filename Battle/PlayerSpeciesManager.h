@@ -23,7 +23,7 @@ public:
 
 	bool CPlayerSpeciesManager::CheckAfterLoad();	//必要な読み込み処理がすべて完了しているかの確認
 
-	bool CreateSpecies(const char* _name, int _maxhp, int _atk, int _def, double _spd, int _img, const trick_tag* _plainTrick);
+	bool CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _genePlainTrickPower, int _geneAtk, int _geneDef, int _geneSpd, int _img, const trick_tag* _plainTrick);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
 	CPlayerSpecies* GetSpecies(const char* _name);
 	CPlayerSpecies* GetSpecies(int _index);

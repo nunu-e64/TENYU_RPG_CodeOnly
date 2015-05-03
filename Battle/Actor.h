@@ -51,9 +51,9 @@ public:
 		bool GetVisible()const{ return Visible; }
 		void SetVisible(bool _visible){ Visible = _visible;}
 		
-		//int GetDef(){return Def;}
-		int GetAtk()const{ return Atk; }	//構造体作ってGetValueとかでまとめた方がいいかも
-		int GetHp()const{ return Hp; }
+		int GetAtk()const{ return Atk; }
+		int GetDef() { return Def; }
+		int GetHp()const { return Hp; }
 		int GetMaxHp()const{ return MaxHp; }
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
@@ -88,6 +88,11 @@ protected:
 		int ActorIndex;	//Actor全体の通し番号
 		int Index;	//Player,Enemyごとの通し番号
 
+		int Atk;
+		int Def;
+		double Spd;
+		int MaxHp;
+
 	//戦闘関連
 		bool Alive;		//生死。死んだら即時に変更
 		bool Visible;	//単純に描画されるか否か。処理は継続。点滅表示に使用。
@@ -97,7 +102,6 @@ protected:
 			INVISIBLE
 		}VisibleStatus;	//生→死での描画内容変更を管理
 		int OldHp;	//描画用
-		double SpdPer;
 
 		std::map <int, bool> Status;
 		std::vector <statusChanger_tag> StatusChangerList;
