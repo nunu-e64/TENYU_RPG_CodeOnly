@@ -50,7 +50,7 @@ void CLogWindow::Init(int _smallposx, int _posy, int _smallwidth, int _height, i
 	BackLine = 0;
 	
 	//Width‚©‚ç•¶Žš”ŒvŽZ->WordNum
-		WordWidth = WidthFull - YOHAKU*2;
+		WordWidth = WidthFull - YOHAKU;	//‚È‚é‚×‚­” ƒMƒŠƒMƒŠ‚Ü‚Å•¶Žš‚ª“ü‚é‚æ‚¤‚É‰E—]”’‚Íl—¶‚µ‚È‚¢
 		char tmp[WORD_MAX] = "";
 		WordNum = WORD_MAX;
 		for (int i=0; i<WORD_MAX-1; i++){
@@ -144,10 +144,10 @@ bool CLogWindow::Add(char *_format, ...){		//ƒRƒƒ“ƒgs‚â‹ó”’s‚ÍLoad‚Ì’iŠK‚Å”r
 		char chOverstring[WORD_MAX];
 		char chTruestring[WORD_MAX];
 
-		int d = (_ismbblead(newText[WordNum - 2]) ? --WordNum : 0);	//s––‚ª‘SŠp•¶Žš‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶Žš‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
-		mystrcpy(chTruestring, newText, WordNum);
+		int d = (_ismbblead(newText[WordNum - 2]) ? -1 : 0);	//s––‚ª‘SŠp•¶Žš‚Ì1ƒoƒCƒg–Ú‚¾‚Á‚½ê‡A•¶Žš‰»‚¯‚·‚é‚Ì‚Å1ƒoƒCƒg‚¸‚ç‚·
+		mystrcpy(chTruestring, newText, WordNum + d);
 		Add(chTruestring);
-		mystrcpy(chOverstring, newText + WordNum - 1 - spaceCount);
+		mystrcpy(chOverstring, newText + WordNum + d - 1 - spaceCount);
 		for (int i = 0; i < spaceCount; i++) {
 			chOverstring[i] = ' ';
 		}
