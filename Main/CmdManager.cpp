@@ -357,7 +357,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 
 		for (int i=6; i<argnum && arg[i]!=NULL; i+=5){
-			if (mystrcmp2(arg[i], "ATK")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
+			if (mystrcmp2(arg[i], "ATK")) {	//HACK:こんなんもうenumではなくstringをキーにしたマップを作るべきか(連想配列)
 				tmpNum[0] = sideEffect_tag::ATK;
 			} else if (mystrcmp2(arg[i], "DEF")) {
 				tmpNum[0] = sideEffect_tag::DEF;

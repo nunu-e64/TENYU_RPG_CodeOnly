@@ -29,7 +29,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 
 	Alive = Visible = (Hp!=0? true:false);
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);
-	SpdPer = between(0.001, 100.0, (double)Spd);	//HACK:SPDの仕様変更。相対値から絶対値への変換
+	SpdPer = between(0.001, 100.0, (double)Spd);
 	OldHp = Hp;
 	if (HpFontHandle==-1) HpFontHandle = CreateFontToHandle(NULL , 10, -1) ;	//HpBarに表示するHP用のフォント作成
 
