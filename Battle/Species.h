@@ -58,7 +58,7 @@ public:
 		CONSTRUCTED;
 		Exp = 0;
 		MagicCount = MAX_MAGIC_COUNT;
-		PlainTrickPowerGene = -1;
+		BaseTrickPowerGene = -1;
 	}
 	~CPlayerSpecies(){
 		DESTRUCTED;
@@ -66,9 +66,9 @@ public:
 
 protected:
 	int MagicCount;	//ñÇóÕÅBè„å¿ÇÕMAX_MAGIC_COUNTÅB
-	trick_tag PlainTrick; 
+	trick_tag BaseTrick; 
 
-	int PlainTrickPowerGene;
+	int BaseTrickPowerGene;
 
 private:
 	int Exp;

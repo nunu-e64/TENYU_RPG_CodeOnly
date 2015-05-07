@@ -4,8 +4,8 @@
 
 
 void CPlayer::FirstSet2(){
-	if (strlen(PlainTrick.Name)){
-		PlainTrick.Power = CalcValue(MAXHP, Level, MaxHpGene) / 10;
+	if (strlen(BaseTrick.Name)){
+		BaseTrick.Power = CalcValue(MAXHP, Level, MaxHpGene) / 10;
 	}
 }
 
@@ -17,7 +17,7 @@ void CPlayer::CreateBattleMenu(){
 	
 	BattleMenu.Init(10, 360, 100, 130);
 
-	if (strlen(PlainTrick.Name)) {
+	if (strlen(BaseTrick.Name)) {
 		BattleMenu.Create("UŒ‚");
 		BattleMenu.Add("","‹Z");
 	} else {
@@ -167,7 +167,7 @@ bool CPlayer::Plan(){
 					}
 
 				}else if (mystrcmp(result->label, "UŒ‚")){
-					NowTrick = &PlainTrick;
+					NowTrick = &BaseTrick;
 					CmdList->Add("@Target_Appear(ENEMY,0,false)");
 					BattleMenu.Alive = false;
 	

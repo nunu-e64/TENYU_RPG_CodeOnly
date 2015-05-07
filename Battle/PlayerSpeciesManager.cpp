@@ -11,18 +11,18 @@ void CPlayerSpeciesManager::Clear(){
 
 }
 
-bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _genePlainTrickPower, int _geneAtk, int _geneDef, int _geneSpd, int _img, const trick_tag* _plainTrick) {
+bool CPlayerSpeciesManager::CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _geneBaseTrickPower, int _geneAtk, int _geneDef, int _geneSpd, int _img, const trick_tag* _baseTrick) {
 	CPlayerSpecies newPlayer;
 	newPlayer.SetValue(_name, _level, _geneMaxHp, _geneAtk, _geneDef, _geneSpd);
 	newPlayer.Img = _img;
 
 	//普通攻撃をTrickListから中身ごとコピーしてくる。Powerの計算と代入はレベルに左右されるのでPlayerをインスタンス化したときに行う
 		bool valueChecker;
-		newPlayer.PlainTrickPowerGene = between(1, 5, _genePlainTrickPower, &valueChecker);
-		if (!valueChecker) WARNINGDX("ValueWarning(PlainTrickPowerGene):%d", _genePlainTrickPower);
+		newPlayer.BaseTrickPowerGene = between(1, 5, _geneBaseTrickPower, &valueChecker);
+		if (!valueChecker) WARNINGDX("ValueWarning(BaseTrickPowerGene):%d", _geneBaseTrickPower);
 
-		if (_plainTrick != NULL) newPlayer.PlainTrick = *_plainTrick;	//通常技登録
-		else newPlayer.PlainTrick.Name[0] = '\0';
+		if (_baseTrick != NULL) newPlayer.BaseTrick = *_baseTrick;	//通常技登録
+		else newPlayer.BaseTrick.Name[0] = '\0';
 
 	if (PlayerBankLock) {
 		WARNINGDX("'%s':PlayerBank is Locked!", _name);

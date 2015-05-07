@@ -258,7 +258,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			}
 		}
 
-		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], value[4], value[5], _bimgbank->GetImg(arg[7]), _trickManager->GetTrick("PLAIN"));
+		_playerSpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], value[4], value[5], _bimgbank->GetImg(arg[7]), _trickManager->GetTrick("BASE"));
 
 //@Enemy_Create
 	}else if (mystrcmp(_command,"@Enemy_Create")){		
@@ -293,8 +293,8 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 		_trickManager->CreateDamageEffect(arg[1], arg[0], stringList);
 
-//@PlainTrick_Create
-	}else if (mystrcmp(_command,"@PlainTrick_Create")){
+//@BaseTrick_Create
+	}else if (mystrcmp(_command,"@BaseTrick_Create")){
 		argnum = 3;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{
 
 		std::vector <sideEffect_tag> tmp;
@@ -312,7 +312,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		tmpTrick.DamageEffectIndex = _trickManager->GetTrickDamageEffectIndex(arg[2]);
 		tmpTrick.TargetType = trick_tag::SINGLE;
 		tmpTrick.SideEffect = tmp;
-		_trickManager->Add(tmpTrick, "PLAIN");
+		_trickManager->Add(tmpTrick, "BASE");
 
 
 //@NormalTrick_Create
