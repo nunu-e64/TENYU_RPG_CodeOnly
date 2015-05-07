@@ -24,30 +24,30 @@ void CSpecies::SetValue(const char* _name, int _level, int _geneMaxHp, int _gene
 int CSpecies::CalcValue(value_tag _key, int _level, int _gene) {
 
 	bool checker;
-	_level = between(1, 9999, _level, &checker);
-	if (!checker) WARNINGDX("Name=%s, key=%d, gene=%d", Name.c_str(), (int)_key, _gene);
+	int level = between(1, 9999, _level, &checker);
+	if (!checker) WARNINGDX("ErrorLevel:%d Name=%s, key=%d, gene=%d", _level, Name.c_str(), (int)_key, _gene);
 
 	switch (_key) {
 	case MAXHP:
 		switch (_gene) {
 		case 1:
-			return (_level + 4) * 10;
+			return (level + 4) * 10;
 			break;
 		case 2:
-			return (_level + 4) * 12;
+			return (level + 4) * 12;
 			break;
 		case 3:
-			return (_level + 4) * 14;
+			return (level + 4) * 14;
 			break;
 		case 4:
-			return (_level + 4) * 17;
+			return (level + 4) * 17;
 			break;
 		case 5:
-			return (_level + 4) * 20;
+			return (level + 4) * 20;
 			break;
 		default:
-			ERRORDX("ErrorGene[MAXHP]: Name=%s, _key=%d,_level=,_gene=%d (instead:calc by _gene=3)", Name.c_str(), (int)_key, _level, _gene);
-			return CalcValue(_key, _level, _gene);
+			ERRORDX("ErrorGene[MAXHP]: Name=%s, _key=%d,level=%d,_gene=%d (instead:calc by _gene=3)", Name.c_str(), (int)_key, level, _gene);
+			return CalcValue(_key, level, _gene);
 			break;
 		}
 		break;
@@ -55,17 +55,17 @@ int CSpecies::CalcValue(value_tag _key, int _level, int _gene) {
 	case DEF:
 		switch (_gene) {
 		case 1:
-			return 70 + _level;
+			return 70 + level;
 			break;
 		case 2:
-			return 80 + _level * 2;
+			return 80 + level * 2;
 			break;
 		case 3:
-			return 90 + _level * 3;
+			return 90 + level * 3;
 			break;
 		default:
-			ERRORDX("ErrorGene[ATKorDEF] Name=%s, _key=%d,_level=,_gene=%d (instead: calc by _gene=2)", Name.c_str(), (int)_key, _level, _gene);
-			return CalcValue(_key, _level, _gene);
+			ERRORDX("ErrorGene[ATKorDEF] Name=%s, _key=%d,level=%d,_gene=%d (instead: calc by _gene=2)", Name.c_str(), (int)_key, level, _gene);
+			return CalcValue(_key, level, _gene);
 			break;
 		}
 		break;
