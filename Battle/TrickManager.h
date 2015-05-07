@@ -18,6 +18,7 @@ public:
 
 	~CTrickManager(){
 		DESTRUCTED;	
+		Clear();
 	}
 
 	void Add(trick_tag _trick, const char* _key);
