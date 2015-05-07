@@ -3,6 +3,8 @@
 #include "BImgBank.h"
 #include "../Main/TextBox.h"
 #include "LogWindow.h"
+#include "BattleCalculator.h"
+
 
 std::map <std::string, int> CActor::BarImg;
 
@@ -28,10 +30,10 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	CmdList = _cmdlist;
 
 	//レベルと成長素子に基づいて各キャラステータスを計算
-		Atk = CalcValue(ATK, Level, AtkGene);
-		Def = CalcValue(DEF, Level, DefGene);
+		Atk = CBattleCalc::CalcValue(CBattleCalc::ATK, Level, AtkGene);
+		Def = CBattleCalc::CalcValue(CBattleCalc::DEF, Level, DefGene);
 		Spd = 1; //今は一定値で対応	//between(0.001, 100.0, / CalcValue(SPD, Level, SpdGene) / 100.0);
-		MaxHp = CalcValue(MAXHP, Level, MaxHpGene);
+		MaxHp = CBattleCalc::CalcValue(CBattleCalc::MAXHP, Level, MaxHpGene);
 
 	Alive = Visible = (Hp!=0? true:false);
 	VisibleStatus = (Alive? VISIBLE:INVISIBLE);

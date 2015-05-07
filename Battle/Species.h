@@ -22,15 +22,15 @@ public:
 	std::string GetName()const{return Name;}
 
 protected:
-	enum value_tag {
-		MAXHP,
-		ATK,
-		DEF,
-		SPD
-	};
+	//enum value_tag {
+	//	MAXHP,
+	//	ATK,
+	//	DEF,
+	//	SPD
+	//};
 
 	void SetValue(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd);
-	int CalcValue(value_tag _key, int _level, int _gene);
+	//int CalcValue(value_tag _key, int _level, int _gene);
 
 	std::string Name;
 	int Img;	//UNDONE:‰æ‘œ—Ş‚Í‚¢‚¸‚êPlayerSpecies‚ÆEnemySpecies‚Å•Ê‚ÉŠÇ—‚·‚é

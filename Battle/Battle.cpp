@@ -312,8 +312,8 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 			if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
 
 		//‹à‚ÆŒoŒ±’lŒvŽZ
-			int gold = BattleCalc::CalcGold(1, 2);
-			int exp = BattleCalc::CalcExp(1, 2);
+			int gold = CBattleCalc::CalcGold(1, 2);
+			int exp = CBattleCalc::CalcExp(1, 2);
 			PlayerSpeciesManager->AddGold(gold);
 			//PlayerSpeciesManager->AddExp(exp);
 		

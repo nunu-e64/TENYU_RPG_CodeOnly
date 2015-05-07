@@ -271,7 +271,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				goto finish;
 			}
 		}
-
 		_enemySpeciesManager->CreateSpecies(arg[0], value[0], value[1], value[2], value[3], value[4], _bimgbank->GetImg(arg[6]));
 
 //@TrickEffect_Create

@@ -1,11 +1,12 @@
 #include "../Define.h"
 #include "Player.h"
 #include "Battle.h"
+#include "BattleCalculator.h"
 
 
 void CPlayer::FirstSet2(){
 	if (strlen(BaseTrick.Name)){
-		BaseTrick.Power = CalcValue(MAXHP, Level, MaxHpGene) / 10;
+		BaseTrick.Power = CBattleCalc::CalcBaseTrickPower(Level, BaseTrickPowerGene);
 	}
 }
 
