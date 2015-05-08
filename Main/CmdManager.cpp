@@ -353,7 +353,9 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				tmpNum[0] = sideEffect_tag::DEF;
 			} else if (mystrcmp2(arg[i], "SPD")) {
 				tmpNum[0] = sideEffect_tag::SPD;
-			}else{
+			} else if (mystrcmp2(arg[i], "HEAL")) {
+				tmpNum[0] = sideEffect_tag::HEAL;
+			} else {
 				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
 				continue;
 			}

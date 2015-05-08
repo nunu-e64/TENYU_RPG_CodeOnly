@@ -5,7 +5,7 @@
 
 int CBattleCalculator::CalcTrickPower(int _level) {
 
-	return CalcValue(MAXHP, _level, 3) / 4;		//UNDONE ‚±‚Ì‚Ö‚ñŽb’è’l
+	return (_level > 0 ? CalcValue(MAXHP, _level, 3) / 4 : 0);		//UNDONE ‚±‚Ì‚Ö‚ñŽb’è’l
 
 }
 

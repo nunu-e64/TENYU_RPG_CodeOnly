@@ -8,11 +8,11 @@
 
 std::map <std::string, int> CActor::BarImg;
 
-const std::pair<int, int> CActor::ATK_UP(0,0);
-const std::pair<int, int> CActor::ATK_DOWN(0,1);
-const std::pair<int, int> CActor::DEF_UP(1,0);
-const std::pair<int, int> CActor::DEF_DOWN(1,1);
-const std::pair<int, int> CActor::SPD_UP(2, 0);
+const std::pair<int, int> CActor::ATK_UP  (0, 0);
+const std::pair<int, int> CActor::ATK_DOWN(0, 1);
+const std::pair<int, int> CActor::DEF_UP  (1, 0);
+const std::pair<int, int> CActor::DEF_DOWN(1, 1);
+const std::pair<int, int> CActor::SPD_UP  (2, 0);
 const std::pair<int, int> CActor::SPD_DOWN(2, 1);
 const std::pair<int, int> CActor::MAX_STATUSCHANGER_IMGSIZE(5, 2);
 int CActor::StatusChangerImg[5 * 2] = {0};	//上と手動で一致させておかなくてはならない
@@ -178,23 +178,27 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	}
 
 	double damage = _trick->Power * _attacker->GetAtk() / (double)GetDef(); //HACK:ダメージ計算式は要検討
-	for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
-		switch (_attacker->StatusChangerList[i].StatusKind) {
-		case sideEffect_tag::ATK:
-			damage *= (100 + _attacker->StatusChangerList[i].Power) / 100.0;
-			break;
-		}
-	}
 
-	for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
-		switch (StatusChangerList[i].StatusKind) {
-		case sideEffect_tag::DEF:
-			damage /= (100+StatusChangerList[i].Power)/100.0;
-			break;
+	//攻撃側の時間制限付き特殊効果
+		for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
+			switch (_attacker->StatusChangerList[i].StatusKind) {
+			case sideEffect_tag::ATK:
+				damage *= (100 + _attacker->StatusChangerList[i].Power) / 100.0;
+				break;
+			}
 		}
-	}
+
+	//被弾側の時間制限付き特殊効果
+		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
+			switch (StatusChangerList[i].StatusKind) {
+			case sideEffect_tag::DEF:
+				damage /= (100 + StatusChangerList[i].Power) / 100.0;
+				break;
+			}
+		}
 
 	damage = CalcDamage(damage, _attacker, _trick);
+	damage = max(1, damage);	//ダメージ最小値は1
 
 	Hp = between(0, MaxHp, Hp-(int)damage);
 	//死亡判定はCheckBarMoveではなくここですべきか？
@@ -220,6 +224,8 @@ bool CActor::CheckBarMove(){	//Hpバーの移動終了を確認
 
 void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 	
+	if (_powerPercent == 0) return;
+
 	statusChanger_tag tmp;
 	tmp.StatusKind = _kind;
 	tmp.Power = _powerPercent;
@@ -228,24 +234,36 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 
 	//ログ出力
 		char chtmp[256];
+		std::pair <int, int> imgIndex;
+
 		switch (_kind) {
 		case sideEffect_tag::ATK:
 			if (_powerPercent>0) {
-				tmp.Img = StatusChangerImg[ATK_UP.first + MAX_STATUSCHANGER_IMGSIZE.first * ATK_UP.second];
+				imgIndex = ATK_UP;
 				mystrcpy(chtmp, "  %sの攻撃力が%d％上がった！");
-			} else if (_powerPercent<0) {
-				tmp.Img = StatusChangerImg[ATK_DOWN.first + MAX_STATUSCHANGER_IMGSIZE.first * ATK_DOWN.second];
+			} else {
+				imgIndex = ATK_DOWN;
 				mystrcpy(chtmp, "  %sの攻撃力が%d％下がった！");
 			}
 			break;
 
 		case sideEffect_tag::DEF:
 			if (_powerPercent>0) {
-				tmp.Img = StatusChangerImg[DEF_UP.first + MAX_STATUSCHANGER_IMGSIZE.first * DEF_UP.second];
+				imgIndex = DEF_UP;
 				mystrcpy(chtmp, "  %sの防御力が%d％上がった！");
-			} else if (_powerPercent<0) {
-				tmp.Img = StatusChangerImg[DEF_DOWN.first + MAX_STATUSCHANGER_IMGSIZE.first * DEF_DOWN.second];
+			} else {
+				imgIndex = DEF_DOWN;
 				mystrcpy(chtmp, "  %sの防御力が%d％下がった！");
+			}
+			break;
+
+		case sideEffect_tag::SPD:
+			if (_powerPercent>0) {
+				imgIndex = SPD_UP;
+				mystrcpy(chtmp, "  %sの行動速度が%d％上がった！");
+			} else {
+				imgIndex = SPD_DOWN;
+				mystrcpy(chtmp, "  %sの行動速度が%d％下がった！");
 			}
 			break;
 
@@ -254,9 +272,9 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 			return;
 		}
 
+		tmp.Img = StatusChangerImg[imgIndex.first + MAX_STATUSCHANGER_IMGSIZE.first * imgIndex.second];
 		LogWindow->Add(chtmp, Name.c_str(), abs(_powerPercent));
 		StatusChangerList.push_back(tmp);
-
 
 }
 
@@ -353,13 +371,22 @@ bool CActor::TimeGaugeForward(){
 		TimeGauge = MaxTimeGauge;
 		Mode = (mode_tag)((Mode+1) % MODE_NUM);
 	}
-	
-	TimeGauge-=Spd;
+
+	//時間制限付き速度変更特殊効果の有無確認
+		double spd = Spd;
+		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
+			if (StatusChangerList[i].StatusKind == sideEffect_tag::SPD) {
+				spd *= (100 + StatusChangerList[i].Power) / 100.0;
+			}
+		}
+		spd = max(spd, 0.001);	//速度最小値は0.001
+
+	TimeGauge-=spd;
 
 	//ステータス変動効果の有効時間管理
 		for (std::vector<statusChanger_tag>::iterator it = StatusChangerList.begin(); it != StatusChangerList.end();) {
 			if (--(*it).Time <= 0) { 
-				it = StatusChangerList.erase(it); // erase()の戻り値をitで受ける！
+				it = StatusChangerList.erase(it); 
 			} else {
 				++it;
 			}
