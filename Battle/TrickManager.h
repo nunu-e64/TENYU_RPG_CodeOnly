@@ -22,7 +22,7 @@ public:
 	}
 
 	void Add(trick_tag _trick, const char* _key);
-	void Add(char _name[32], int _power, int _cost, int _time, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList);
+	void Add(char _name[32], int _level, int _cost, int _time, trick_tag::targetType_tag _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList);
 	void Clear();
 
 	trick_tag const* GetTrick(const char _name[32], bool _errorMessage=false);
