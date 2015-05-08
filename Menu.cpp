@@ -7,15 +7,16 @@ void CMenu::Init(int _x, int _y, int _width, int _height){
 	Width = _width;
 	Height = _height;
 }
+void CMenu::Create(CMenuNode* _groupParent) {
 
-void CMenu::Create(const char _frontlabel[32]){
+	if (_groupParent == NULL) ERRORDX("NULL argument[_groupParent] (Not Initialized this Menu)");
 
 	Clear();
 	god = new CMenuNode("NULL");
 	god->prev = god;
 	god->next = god;
 
-	front = new CMenuNode(_frontlabel);
+	front = _groupParent;
 	front->prev = front;
 	front->next = front;
 	front->parent = god;
@@ -23,16 +24,63 @@ void CMenu::Create(const char _frontlabel[32]){
 
 	Cursor = front;
 	Alive = false;
+
 }
 
-void CMenu::Add(const char _parentlabel[32], const char _newlabel[32]){
+void CMenu::Create(const char _frontlabel[32]){
+	
+	Create(new CMenuNode(_frontlabel));
+		
+}
+
+void CMenu::Add(const char _parentlabel[32], CMenuNode* _groupParent) {
 	CMenuNode* tmp;
 
-	if (Find(_newlabel)!=NULL){
-		ErrorDx("Error->CMenu::Add->Already existed name:%s", _newlabel);
+	if (Find(_groupParent->label) != NULL) {
+		ERRORDX("Already existed name:%s(delete group)", _groupParent->label);
+		Clear(_groupParent);
 		return;
 	}
 
+	if (!(strlen(_parentlabel))) {
+		tmp = god;
+	} else {
+		tmp = Find(_parentlabel);
+	}
+
+	if (tmp == NULL) {
+		ERRORDX("NotFoundParentLabel:%s(delete group)", _parentlabel);
+		Clear(_groupParent);
+		return;
+	} else if (tmp->child == NULL) {
+		tmp->child = _groupParent;
+		tmp->child->parent = tmp;
+		tmp->child->next = tmp->child;
+		tmp->child->prev = tmp->child;
+	} else {
+		tmp = tmp->child;
+		while (tmp->next != tmp->parent->child) { tmp = tmp->next; }
+		tmp->next = _groupParent;
+		tmp->next->prev = tmp;
+		tmp->next->next = tmp->parent->child;
+		tmp->next->parent = tmp->parent;
+		tmp->parent->child->prev = tmp->next;
+	}
+
+}
+
+void CMenu::Add(const char _parentlabel[32], const char _newlabel[32]){
+
+	if (Find(_newlabel)!=NULL){
+		ERRORDX("Already existed name:%s", _newlabel);
+		return;
+	} else if (strlen(_parentlabel) && Find(_parentlabel) == NULL) {
+		ERRORDX("NotFoundParentLabel:%s", _parentlabel);
+		return;
+	} else {
+		Add(_parentlabel, new CMenuNode(_newlabel));
+	}
+	/*
 	if (!(strlen(_parentlabel))){
 		tmp = god;
 	}else{
@@ -55,6 +103,7 @@ void CMenu::Add(const char _parentlabel[32], const char _newlabel[32]){
 		tmp->next->parent = tmp->parent;
 		tmp->parent->child->prev = tmp->next;
 	}
+	*/
 }
 
 void CMenu::Clear(){
@@ -132,6 +181,8 @@ bool CMenu::Move(CMenuNode* &_result){
 	}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
 		if (Cursor->parent != NULL && Cursor->parent != god){
 			Cursor = Cursor->parent;
+		} else {
+			return true;
 		}
 
 	/*
@@ -192,4 +243,64 @@ void CBattleMenu::Draw(){
 			if (tmp==tmp->parent->child) break;
 		}		
 	}
+}
+
+void CFieldMenu::Draw() {
+	if (!Alive) return;
+
+	DrawBox(X, Y, X + Width, Y + Height, GetColor(30, 20, 80), true);	//HACK:DrawGraphにせねば
+	DrawBox(X + 5, Y + 5, X + Width - 5, Y + Height - 5, GRAY, false);
+
+	//母メニューの文字表示とカーソル表示
+	CMenuNode* tmp = GetFront();
+	for (int i = 0; tmp != NULL; i++) {
+		DrawString(X + 30, Y + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+		if (Cursor == tmp) DrawString(X + 8, Y + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+		tmp = tmp->next;
+
+		if (tmp == GetFront()) break;
+	}
+
+	//子メニューの表示とカーソル表示
+
+/*	if (mystrcmp(Cursor->parent->parent->label, "Status")) {
+		tmp = Find("Status")->child->child;
+		DrawBox(X + Width, Y + Height + 5, X + Width + Width, Y + Height * 4 + 5, GetColor(30, 20, 80), true);
+		DrawBox(X + 5 + Width, Y + Height + 5 + 5, X + Width + Width - 5, Y + Height * 4 + 5 - 5, GRAY, false);
+		for (int i = 0; tmp != NULL; i++) {
+			DrawString(X + 30, Y + Height + 5 + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+			if (Cursor == tmp) DrawString(X + 8, Y + Height + 5 + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+			tmp = tmp->next;
+
+			if (tmp == tmp->parent->child) break;
+		}
+
+		tmp = Find("Status")->child;
+		DrawBox(X, Y + Height + 5, X + Width, Y + Height * 4 + 5, GetColor(30, 20, 80), true);
+		DrawBox(X + 5, Y + Height + 5 + 5, X + Width - 5, Y + Height * 4 + 5 - 5, GRAY, false);
+
+		for (int i = 0; tmp != NULL; i++) {
+			DrawString(X + 30, Y + Height + 5 + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+			if (Cursor == tmp) DrawString(X + 8, Y + Height + 5 + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+			tmp = tmp->next;
+
+			if (tmp == tmp->parent->child) break;
+		}
+		
+
+	} else */
+	if (Cursor->parent->child != GetFront()) {	//カーソルがfrontと同じ階にいない→子
+		tmp = Cursor->parent->child;
+		DrawBox(X, Y + Height + 5, X + Width, Y + Height * 4 + 5, GetColor(30, 20, 80), true);
+		DrawBox(X + 5, Y + Height + 5 + 5, X + Width - 5, Y + Height * 4 + 5 - 5, GRAY, false);
+
+		for (int i = 0; tmp != NULL; i++) {
+			DrawString(X + 30, Y + Height + 5 + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+			if (Cursor == tmp) DrawString(X + 8, Y + Height + 5 + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+			tmp = tmp->next;
+
+			if (tmp == tmp->parent->child) break;
+		}
+	}
+
 }

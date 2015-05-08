@@ -37,7 +37,9 @@ public:
 	};
 
 	void Init(int _x, int _y, int _width, int _height);
+	void Create(CMenuNode* _groupParent);
 	void Create(const char _frontlabel[32]);
+	void Add(const char _parentlabel[32], CMenuNode* _groupParent);
 	void Add(const char _parentlabel[32], const char _newlabel[32]);
 	void SetCursor(CMenuNode* _node){ Cursor = _node; }
 
@@ -72,6 +74,13 @@ public:
 	void Draw();
 };
 
+class CFieldMenu: public CMenu {
+public:
+	CFieldMenu() { CONSTRUCTED; }
+	~CFieldMenu() { DESTRUCTED; }
+
+	void Draw();
+};
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////

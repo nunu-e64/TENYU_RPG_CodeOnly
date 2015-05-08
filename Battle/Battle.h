@@ -23,8 +23,8 @@
 #include <queue>
 #include <map>
 
-class PlayerSpeciesManager;
-class EnemySpeciesManager;
+class CPlayerSpeciesManager;
+class CEnemySpeciesManager;
 
 
 class CBattle : public CWorldManager{
@@ -39,6 +39,8 @@ public:
 	}
 
 	bool Init();
+	CMenuNode* GetFieldStatusMenuFrontNode(const char _parentLabel[32]);
+
 	void BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void BattleStart(int* _result, CCmdList* _fieldcmdlist_p);
 	void BattleSetting(const char* _wincommand, const char* _losecommand);
@@ -141,9 +143,9 @@ private:
 			CPlayer* Player;
 			CEnemy* Enemy;
 			CActor** Actor;
-			int ACTOR_NUM;
-			int PLAYER_NUM;
-			int ENEMY_NUM;
+			int ACTOR_NUM;		//戦闘に出ているすべての人数（敵＋味方）
+			int PLAYER_NUM;		//戦闘に出ている味方人数
+			int ENEMY_NUM;		//戦闘に出ている敵人数
 			//vector<CEnemy>
 
 

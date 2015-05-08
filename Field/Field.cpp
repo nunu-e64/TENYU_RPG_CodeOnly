@@ -49,8 +49,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	DebugDx("OK");
 		//	
 
-		//CBattleの初期化
 	//DEBUGDX("Battle_Init_Start");
+		//CBattleの初期化
 			if (!(Battle->Init())) return false;
 	//DEBUGDX("Battle_Init_End");
 		
@@ -82,10 +82,18 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//セーブデータの読み込み
 			if (PLAYDATA_NUM>0) PlayData_p = _playdata_p;
 			if (!StartSet(_dnum)) return false;
+		
+		//フィールドメニューの作成
+			CreateFieldMenu();
 
 	CHECK_TIME_END("Init_Field")
 		
 	return true;
+}
+
+void CField::CreateFieldMenu() {
+	FieldMenu.Init(20, 30, 400, 50);
+	FieldMenu.Create(Battle->GetFieldStatusMenuFrontNode("Status"));
 }
 
 int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
@@ -95,17 +103,28 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 	
 		CHECK_TIME_START	
 
-		if( !TextBox->Main(&CmdList, &FlagSet)){	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
-			
-			if (OldX!=X||OldY!=Y) {		//アクションコマンドによる移動判定用
-				OldX=X; OldY=Y;
+		if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
+		
+		} else if (FieldMenu.Alive) {
+			CMenuNode* resultNode = NULL;
+			if (FieldMenu.Move(resultNode) && resultNode == NULL) {
+				FieldMenu.Alive = false;
+			}
+
+		} else {
+
+			if (OldX != X || OldY != Y) {		//アクションコマンドによる移動判定用
+				OldX = X; OldY = Y;
 				if (CheckEvent(true)) {
 					TextBox->NextPage(&CmdList, &FlagSet);		//足元にテキストが設定してあれば表示
 				}
 
 			}else if (CheckHitKeyDown(KEY_INPUT_OK)){
 				if (CheckEvent(false)) TextBox->NextPage(&CmdList, &FlagSet);		//目の前のオブジェクトにテキストが設定してあれば表示
-				
+
+			} else if (CheckHitKeyDown(KEY_INPUT_CANCEL)) {
+				FieldMenu.Alive = true;
+
 			}else{
 				//歩行/////////////////////////////////////////////////////
 				int walkspeed = ((CheckHitKey(KEY_INPUT_LSHIFT)||CheckHitKey(KEY_INPUT_RSHIFT))? 4:2);
@@ -114,16 +133,17 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				#endif
 				
 				//PUSHBLOCKを押したときだけWalkからtrueが返る
-				if(CheckHitKey(KEY_INPUT_RIGHT)){		if(Walk(RIGHT, walkspeed))TextBox->NextPage(&CmdList, &FlagSet);
-				}else if(CheckHitKey(KEY_INPUT_LEFT)){	if(Walk(LEFT, walkspeed))TextBox->NextPage(&CmdList, &FlagSet);
-				}else if(CheckHitKey(KEY_INPUT_DOWN)){	if(Walk(DOWN, walkspeed))TextBox->NextPage(&CmdList, &FlagSet);
-				}else if(CheckHitKey(KEY_INPUT_UP)){	if(Walk(UP, walkspeed))TextBox->NextPage(&CmdList, &FlagSet);
+				if(      CheckHitKey(KEY_INPUT_RIGHT)){	if(Walk(RIGHT, walkspeed)) TextBox->NextPage(&CmdList, &FlagSet);
+				}else if(CheckHitKey(KEY_INPUT_LEFT)){	if(Walk(LEFT,  walkspeed)) TextBox->NextPage(&CmdList, &FlagSet);
+				}else if(CheckHitKey(KEY_INPUT_DOWN)){	if(Walk(DOWN,  walkspeed)) TextBox->NextPage(&CmdList, &FlagSet);
+				}else if(CheckHitKey(KEY_INPUT_UP)){	if(Walk(UP,    walkspeed)) TextBox->NextPage(&CmdList, &FlagSet);
 				}
 				X = between(0, MAP_SIZE-1, (int)X);
 				Y = between(0, MAP_SIZE-1, (int)Y);
 				
-				if (OldX!=X||OldY!=Y) {		//移動しなかった時は足元チェックしない
-					OldX=X; OldY=Y;
+				if (OldX!=X || OldY!=Y) {		//移動しなかった時は足元チェックしない
+					OldX = X; 
+					OldY = Y;
 					if (CheckEvent(true)){
 						TextBox->NextPage(&CmdList, &FlagSet);		//足元にテキストが設定してあれば表示
 					}else{
@@ -213,9 +233,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
 				}
-
-
-			////////////////////////////////////////////////
+			////DEBUG:ここまで////////////////////////////////////////////
 		}
 
 		CHECK_TIME_END("Main_Walk")	
@@ -279,6 +297,10 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 	
 		CHECK_TIME_START2	EveManager->Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager->Draw_over")
 	}
+
+	//フィールドメニューの描画////////////////////////////////
+	FieldMenu.Draw();
+	//////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////////////
 	//テキストボックス描画//////////////////////////////////////////////////////////////////

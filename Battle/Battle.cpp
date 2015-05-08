@@ -82,6 +82,36 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	return true;
 }
 
+CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
+	if (!PlayerSpeciesManager->CheckAfterLoad()) return NULL;
+
+	CMenuNode* parentNode = new CMenuNode(_parentLabel);
+	CPlayerSpecies* tmpPlayerSpecies;
+	CMenuNode* newNode;
+	CMenuNode* prevNode = NULL;
+
+	for (int i = 0; i < PlayerSpeciesManager->GetMemberListSize(); i++) {
+		tmpPlayerSpecies = PlayerSpeciesManager->GetSpecies(i);
+		newNode = new CMenuNode(tmpPlayerSpecies->GetName().c_str());
+		if (prevNode != NULL) {
+			prevNode->next = newNode;
+			newNode->prev = prevNode;
+		} else {
+			parentNode->child = newNode;
+		}
+		newNode->parent = parentNode;
+		prevNode = newNode;
+
+	}
+
+	if (prevNode != NULL) {
+		parentNode->child->prev = prevNode;
+		prevNode->next = parentNode->child;
+	}
+
+	return parentNode;
+}
+
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//戦闘ごとに行う開始内部準備処理///////////////////////////////////////////////////	
 		

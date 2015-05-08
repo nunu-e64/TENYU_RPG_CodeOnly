@@ -60,7 +60,8 @@ private:
 		bool CheckEvent(bool _foot=false, bool _push=false);
 		bool StartSet (const int _dnum);
 		int SaveData(int _dnum, const char _dataname[32] = "");
-		
+		void CreateFieldMenu();
+
 	//メンバ変数
 		int NowMap;
 		int GodX, GodY;	//神システム用（未実装未保存）
@@ -98,7 +99,7 @@ private:
 		CEveManager* EveManager;
 
 		CBattle* Battle;
-
+		CFieldMenu FieldMenu;
 };
 
 
