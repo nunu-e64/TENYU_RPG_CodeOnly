@@ -272,3 +272,11 @@ double CPlayer::CalcDamage(double _damage, CActor* _attacker, trick_tag const* _
 	return _damage;
 }
 
+void CPlayer::MpHeal(int _count) {
+	int mc= between(MagicCount, MAX_MAGIC_COUNT, MagicCount + _count);
+
+	if (mc > MagicCount) {
+		LogWindow->Add("  %sの魔力が%dポイント回復した！", GetName().c_str(), mc - MagicCount);
+		MagicCount = mc;
+	}
+}

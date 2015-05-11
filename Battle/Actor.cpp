@@ -308,7 +308,6 @@ void CActor::ChangeValue(int _kind, int _powerPercent){	//永続（ステータスに直接
 }
 
 void CActor::Heal(int _percent) {
-
 	int hp = between(Hp, MaxHp, Hp + MaxHp*_percent / 100);
 
 	if (hp > Hp) {
@@ -316,7 +315,6 @@ void CActor::Heal(int _percent) {
 		Hp = hp;
 	}
 }
-
 
 void CActor::Draw_Sub(int _dx, int _dy){
 	CVector barPos;

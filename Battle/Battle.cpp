@@ -660,6 +660,16 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
 					}
 					break;
+				case sideEffect_tag::MPHEAL:
+					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+						if (Actor[effectTargetList[j]]->IsPlayer()) Player[Actor[effectTargetList[j]]->GetIndex()].MpHeal(_trick->SideEffect[i].Power);
+					}
+					break;
+				case sideEffect_tag::ATTENTION:
+					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
+					}
+					break;
 				default:
 					WARNINGDX("_trick->SideEffectType->Not Match. %s", _trick->Name);
 				}

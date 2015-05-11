@@ -20,6 +20,8 @@ public:
 	void CreateBattleMenu();
 	void Draw(int _dx=0, int _dy=0);
 
+	void MpHeal(int _count);
+
 private:
 	//ƒƒ“ƒoŠÖ”
 		void FirstSet2();
@@ -29,6 +31,7 @@ private:
 		bool Action();
 		
 		double CalcDamage(double _damage, CActor* _attacker, trick_tag const* _trick);
+	
 
 	//ƒƒ“ƒo•Ï”
 		int MagicCounterImg[2];

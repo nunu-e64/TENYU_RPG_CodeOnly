@@ -227,6 +227,8 @@ struct sideEffect_tag{
 		DEF,
 		SPD,
 		HEAL,
+		MPHEAL,
+		ATTENTION,
 		EFFECTTYPE_NUM,
 	}; int EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
 	enum{
