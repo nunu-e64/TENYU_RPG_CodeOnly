@@ -536,7 +536,7 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 						//その他のトークコマンドの処理
 						Solve(chStock[NowStock], _flagset);		//次の文章のあるはずのところを探索してNowStockを送る
 						
-						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//UNKOWN:まだバグ残ってるかも  ←そんなん言われても…
+						if (NowStock==StockLine && (NowTarget==0 || TextLineNum()==3)) {	//UNKNOWN:まだバグ残ってるかも  ←そんなん言われても…
 							Term(_cmdlist);			//returnのあと呼び出し元[NextPage]の方で処理が続くのでめっちゃバグ起こりそう。怖い(笑)
 							return false;
 						}

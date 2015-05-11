@@ -133,7 +133,7 @@ bool CTalkName::GetVisible(){
 }
 
 std::string CTalkName::GetNowName() {
-	std::string tmpString = Name[NowLeft][0];
+	std::string tmpString = Name[(NowLeft?0:1)][0];
 	return tmpString;
 }
 
