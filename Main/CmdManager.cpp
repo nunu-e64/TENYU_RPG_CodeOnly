@@ -372,8 +372,8 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				tmpNum[1] = sideEffect_tag::SINGLE;
 			} else if (mystrcmp2(arg[i+1], "ALL_FRIEND")) {
 				tmpNum[1] = sideEffect_tag::ALL_FRIEND;
-			} else if (mystrcmp2(arg[i+1], "ALL_OPPOSITE")) {
-				tmpNum[1] = sideEffect_tag::ALL_OPPOSITE;
+			} else if (mystrcmp2(arg[i+1], "ALL")) {
+				tmpNum[1] = sideEffect_tag::ALL;
 			}else{
 				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;

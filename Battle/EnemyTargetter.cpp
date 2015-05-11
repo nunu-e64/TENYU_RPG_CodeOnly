@@ -27,7 +27,7 @@ void CEnemyTargetter::CalcAttentionRank(){
 		} 
 	}
 
-	//上に詰める	//条件が合えば毎ループ発生するのも効率悪い。できれば改善。
+	//上に詰める
 	int i = 0;
 	while(AttentionRank[i] != 0){
 		if (i == PLAYER_NUM-1) {

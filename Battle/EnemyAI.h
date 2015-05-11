@@ -5,6 +5,7 @@
 
 class CActor;
 class CEnemy;
+class CLogWindow;
 
 #include "EnemyPlanner.h"
 #include "EnemyTargetter.h"
@@ -62,7 +63,7 @@ public:
 
 	bool AddRandomPlanSet(const unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _clear=false);
 	
-	void AddAttention(int _playerIndex, int _value);
+	void AddAttention(int _playerIndex, int _value, CLogWindow* _logWindow = NULL);
 	void SetAttention(int _playerIndex, int _value);
 
 	static void SetAttentionImg(int* _markerImg, int _boardImg, int _effectImg);	

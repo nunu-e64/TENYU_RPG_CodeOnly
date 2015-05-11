@@ -2,6 +2,7 @@
 #include "EnemyAI.h"
 #include "Actor.h"
 #include "Enemy.h"
+#include "LogWindow.h"
 
 
 int CEnemyAI::AttentionMarkerImg[MAX_PLAYER_NUM] = {0};
@@ -44,10 +45,19 @@ bool CEnemyAI::AddRandomPlanSet(const unsigned int _index, std::vector<std::pair
 	}
 }
 
-void CEnemyAI::AddAttention(int _playerIndex, int _value){
-	Attention[_playerIndex] = between(0, MAX_ATTENTION, Attention[_playerIndex]+_value); 
+void CEnemyAI::AddAttention(int _playerIndex, int _value, CLogWindow* _logWindow){
+	int attention = between(0, MAX_ATTENTION, Attention[_playerIndex]+_value); 
+
+	if (_logWindow != NULL && attention != Attention[_playerIndex]) {
+		char tmp[32];
+		mystrcpy(tmp, (_value > 0 ? "上がった" : "下がった"));
+		_logWindow->Add("  %sへの%sのアテンションが%dポイント%s！", Actor[_playerIndex]->GetName().c_str(), Planner->GetName().c_str(), abs(attention-Attention[_playerIndex]), tmp);
+	}
+
+	Attention[_playerIndex] = attention;
 	Targetter->CalcAttentionRank();
-	
+
+
 	//演出  ダサいので一時ボツ//
 		//AttentionEffectCount[_playerIndex] = (_value>0?EFFECT_COUNT:(_value<0?-EFFECT_COUNT:0));
 

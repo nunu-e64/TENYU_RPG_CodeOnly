@@ -582,7 +582,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動
 				if (!noDamage && Actor[_attackerActorIndex]->IsPlayer()) {
 					for (int i=0; i<(int)(targetList.size()); i++){	
-						if (targetList[i] >= PLAYER_NUM) Enemy[targetList[i]-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+						if (!Actor[targetList[i]]->IsPlayer()) Enemy[Actor[targetList[i]]->GetIndex()].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
 					}
 				}
 
@@ -622,7 +622,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			case sideEffect_tag::SINGLE:	//カーソル選択したActor
 				effectTargetList.push_back(targetList[0]);
 				break;
-			case sideEffect_tag::ALL_OPPOSITE:	//敵全体
+			case sideEffect_tag::ALL:	//敵全体
 				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
 					if (Actor[i]->GetAlive()) {
 						effectTargetList.push_back(i);
@@ -667,7 +667,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 					break;
 				case sideEffect_tag::ATTENTION:
 					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
+						if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[targetList[j]]->GetIndex()].AddAttention(_attackerActorIndex, _trick->SideEffect[i].Power, &LogWindow);
 					}
 					break;
 				default:

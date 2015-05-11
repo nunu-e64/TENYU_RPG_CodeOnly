@@ -235,7 +235,7 @@ struct sideEffect_tag{
 		ME,
 		SINGLE,
 		ALL_FRIEND,
-		ALL_OPPOSITE,
+		ALL,
 		EFFECTTARGET_NUM,
 	}; int EffectTarget;	//Œø‰Ê‘ÎÛ”ÍˆÍ
 
