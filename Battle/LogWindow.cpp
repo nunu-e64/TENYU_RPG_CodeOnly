@@ -348,6 +348,10 @@ void CFieldLog::Draw() {
 			mystrcpy(textForDraw, Text[line], WordNum);
 			DrawStringToHandle(PosX + BoxSpace, PosY + (FontSize + LineSpace)*i + 1 + BoxSpace, textForDraw, FontColorSub, FontHandle);
 			DrawStringToHandle(PosX + BoxSpace, PosY + (FontSize + LineSpace)*i + BoxSpace, textForDraw, FontColorMain, FontHandle);
+
+			//sprintf_s(textForDraw, WordNum, "%d", line);	//DEBUG
+			//DrawStringToHandle(PosX, PosY + (FontSize + LineSpace)*i + BoxSpace, textForDraw, FontColorMain, FontHandle);
+
 			++drawCount;
 		} else {
 			++skipCount;
@@ -375,6 +379,30 @@ bool CFieldLog::Main() {
 	return Visible;
 }
 
+void CFieldLog::MemorizeCurrentPos() {	//トークラベルの挿入箇所を記憶しておく
+	PosMemoOld = (PosMemo == -1 ? NextLine : PosMemo);
+	PosMemo = NextLine;
+	//DEBUGDX("Memorize: Memo:Old=%d:%d", PosMemo, PosMemoOld);
+}
+
+void CFieldLog::ResetCurrentPos() {
+	//DEBUGDX("ResetCurrentPos");
+	PosMemoOld = PosMemo = -1;
+}
+
+void CFieldLog::InsertToMemoPos(const char* _string) {	//トークラベルの挿入用
+	//DEBUGDX("Insert:%s Memo:Old=%d:%d", _string, PosMemo, PosMemoOld);
+	if (PosMemoOld != -1) {
+		for (int i = NextLine; mod(i, StockLineNum) != PosMemoOld; i--) {
+			mystrcpy(Text[mod(i, StockLineNum)], Text[mod(i - 1, StockLineNum)]);
+		}
+		mystrcpy(Text[PosMemoOld], _string);
+		NextLine = (++NextLine) % StockLineNum;
+		
+		++PosMemo;	//挿入した分、記録時の位置が変わるのでずらしておく
+		++PosMemoOld;
+	}
+}
 /*void CTextBox::Draw_Animation(bool _showingstop){
 	
 	if (Showing){	//テキストアニメーション中

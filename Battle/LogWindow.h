@@ -101,11 +101,17 @@ private:
 
 class CFieldLog: public CLogWindow {
 public:
+	CFieldLog() { PosMemo = PosMemoOld = -1; }
+
 	void Draw();
 	bool Main();
+	void MemorizeCurrentPos();
+	void ResetCurrentPos();
+	void InsertToMemoPos(const char* _string);
 
 private:
-
+	int PosMemo;
+	int PosMemoOld;
 };
 
 

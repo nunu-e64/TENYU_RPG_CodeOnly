@@ -41,7 +41,7 @@ CTextBox::CTextBox(){
 	OriginalDir = DOWN;
 }
 
-void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CLogWindow* _logWindow){
+void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CFieldLog* _logWindow){
 	TalkName.Init();
 	FieldLog = _logWindow;
 
@@ -97,6 +97,7 @@ void CTextBox::Term(CCmdList* _cmdlist){
 		FieldLog->Add(" ");
 		FieldLog->Add("-----------------");
 		FieldLog->Add(" ");
+		FieldLog->ResetCurrentPos();
 
 	//トークラベル（名前表示）のリセット＆非表示
 		TalkName.Clear(true);
@@ -158,7 +159,6 @@ bool CTextBox::AddStock(char *String, int dir, const int count){		//コメント行や
 			if (String[0]=='@' && !isdigit(String[1])) {					//コマンドなら表示しないので256字以下でさえあるなら一行の字数を気にしない				
 				strcpy_s(chStock[StockLine], String);
 				StockLine++;
-				Alive = true;
 				Visible=true;
 
 
@@ -254,9 +254,12 @@ bool CTextBox::AddStock(char *String, int dir, const int count){		//コメント行や
 normal:
 				strcpy_s(chStock[StockLine], String);
 				StockLine++;
-				Alive = true;
 				Visible=true;
 			}
+
+			if (!Alive) FieldLog->MemorizeCurrentPos();
+			Alive = true;
+			
 
 			return true;
 		}
@@ -478,7 +481,11 @@ void CTextBox::NextPage(CCmdList* _cmdlist, CFlagSet *_flagset){
 				NewText = NowTarget;
 			}
 		}
+
+		if (Alive) FieldLog->MemorizeCurrentPos();
 	}
+
+
 }
 
 void CTextBox::SetAutoPlay(bool _autoplay, int _autoplayspeed){
@@ -490,6 +497,10 @@ void CTextBox::SetAutoPlay(bool _autoplay, int _autoplayspeed){
 			AutoPlaySpeed = DefaultAutoPlaySpeed;
 		}
 	}
+}
+
+void CTextBox::LogTalkName() {
+	FieldLog->InsertToMemoPos(TalkName.GetNowName().c_str());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -513,6 +524,7 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 							NowTarget++;
 						}
 						NowStock++;
+//						FieldLog->MemorizeCurrentPos();
 						return false;
 					
 					}else if (mystrcmp(chStock[NowStock], "@Stop")){
@@ -522,9 +534,11 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 						}else if(NowTarget==LineNum-1){
 							strcpy_s(chText[NowTarget], "");	
 							NowStock++;						
+//							FieldLog->MemorizeCurrentPos();
 							return true;
 						}else{
 							strcpy_s(chText[NowTarget], "");
+//							FieldLog->MemorizeCurrentPos();
 							return true;
 						}
 
@@ -555,9 +569,6 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 		}else{								//一般テキスト
 			strcpy_s(chText[NowTarget], chStock[NowStock]);
 			
-			if (TalkName.GetVisible()) {
-				FieldLog->Add(TalkName.GetNowName().c_str());
-			}
 			FieldLog->Add("  %s", chStock[NowStock]);	//ログに記録
 
 			NowStock++;	

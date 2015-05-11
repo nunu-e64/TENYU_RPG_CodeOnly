@@ -19,7 +19,7 @@ public:
 		DESTRUCTED;
 	};
 
-	void Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CLogWindow* _logWindow);
+	void Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CFieldLog* _logWindow);
 	virtual void Term(CCmdList* _cmdlist);	//Terminate
 
 	bool Main(CCmdList* _cmdlist, CFlagSet *_flagset);	
@@ -37,6 +37,7 @@ public:
 
 	//TextName（話し手の名前をTextBoxの上に表示）
 		CTalkName TalkName;
+		void LogTalkName();
 
 protected:
 	//定数
@@ -111,7 +112,7 @@ protected:
 			std::vector <ruby_tag> Ruby;
 
 		//ログクラス
-			CLogWindow* FieldLog;
+			CFieldLog* FieldLog;
 };
 
 

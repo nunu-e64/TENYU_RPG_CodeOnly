@@ -1281,6 +1281,9 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 			}
 		}
 
+		_textbox->LogTalkName();
+
+
 //@TName_Dec
 	}else if (mystrcmp(_command, "@TName_Dec",'l')){
 		argnum = 11;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
@@ -1336,7 +1339,9 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 			_textbox->TalkName.SetNowName(left, arg[1], true);
 		}else{
 			_textbox->TalkName.SetNowSide(left);
-		}	
+		}
+
+		_textbox->LogTalkName();
 
 //@AutoPlay_Set
 	}else if (mystrcmp(_command, "@AutoPlay_Set",'l')){
