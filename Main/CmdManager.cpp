@@ -329,10 +329,12 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		trick_tag::targetType_tag targetType;
 		if (mystrcmp2(arg[5], "SINGLE")) {
 			targetType = trick_tag::SINGLE;
-		} else if (mystrcmp2(arg[5], "ALL")) {
+		} else if (mystrcmp2(arg[5], 'p', 2, "ALL", "NULL")) {
 			targetType = trick_tag::ALL;
 		} else if (mystrcmp2(arg[5], "SINGLE_FRIEND")) {
 			targetType = trick_tag::SINGLE_FRIEND;
+		} else if (mystrcmp2(arg[5], "ALL_FRIEND")) {
+			targetType = trick_tag::ALL_FRIEND;
 		} else {
 			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
 			goto finish;

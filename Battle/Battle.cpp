@@ -528,85 +528,89 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 
 		if (!noDamage) {
 			//間の調整
-			int timecount = 0;
-			do { Draw(); if (++timecount == 10) { break; } } while (BasicLoop());
+				int timecount = 0;
+				do { Draw(); if (++timecount == 10) { break; } } while (BasicLoop());
 
 			//実際のダメージ計算
-			int* damage = new int[targetList.size()];
+				int* damage = new int[targetList.size()];
 
-			for (unsigned int i = 0; i < targetList.size(); i++) {
-				damage[i] = Actor[targetList[i]]->Damaged(Actor[attackerActorIndex], _trick);
-			}
+				for (unsigned int i = 0; i < targetList.size(); i++) {
+					damage[i] = Actor[targetList[i]]->Damaged(Actor[attackerActorIndex], _trick);
+				}
 
 			//ログウィンドウに出力
-			for (int i = 0; i < (int)(targetList.size()); i++) {
-				LogWindow.Add("  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
-			}
+				for (int i = 0; i < (int)(targetList.size()); i++) {
+					LogWindow.Add("  %sに%dのダメージ！", Actor[targetList[i]]->GetName().c_str(), damage[i]);
+				}
 
 
 			//ダメージ値表示演出//////////////////////////////////////////////////////////////
-			timecount = 0;
-			bool* oldVisible = new bool[targetList.size()];
-			CVector* charPos = new CVector[targetList.size()];
-
-			for (unsigned int i = 0; i < targetList.size(); i++) {
-				oldVisible[i] = Actor[targetList[i]]->GetVisible();
-				charPos[i] = CVector(Actor[targetList[i]]->GetRect().Center().x, Actor[targetList[i]]->GetRect().Top);
-			}
-
-			do {
-				Draw();
+				timecount = 0;
+				bool* oldVisible = new bool[targetList.size()];
+				CVector* charPos = new CVector[targetList.size()];
 
 				for (unsigned int i = 0; i < targetList.size(); i++) {
-					DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y - 5 * sin(min(timecount, 10)*(PI / 2) / 10)), WHITE, "%d", damage[i]);
-
-					if (timecount % 6 == 0) Actor[targetList[i]]->SetVisible(oldVisible[i] && true);
-					if (timecount % 6 == 3) Actor[targetList[i]]->SetVisible(false);
+					oldVisible[i] = Actor[targetList[i]]->GetVisible();
+					charPos[i] = CVector(Actor[targetList[i]]->GetRect().Center().x, Actor[targetList[i]]->GetRect().Top);
 				}
-				if (++timecount > 40) {
+
+				do {
+					Draw();
+
 					for (unsigned int i = 0; i < targetList.size(); i++) {
-						Actor[targetList[i]]->SetVisible(oldVisible[i]);
-					}
-					break;
-				}
+						DrawCenterString((int)(charPos[i].x), (int)(charPos[i].y - 5 * sin(min(timecount, 10)*(PI / 2) / 10)), WHITE, "%d", damage[i]);
 
-			} while (BasicLoop());
+						if (timecount % 6 == 0) Actor[targetList[i]]->SetVisible(oldVisible[i] && true);
+						if (timecount % 6 == 3) Actor[targetList[i]]->SetVisible(false);
+					}
+					if (++timecount > 40) {
+						for (unsigned int i = 0; i < targetList.size(); i++) {
+							Actor[targetList[i]]->SetVisible(oldVisible[i]);
+						}
+						break;
+					}
+
+				} while (BasicLoop());
+
+				delete[] damage;
+				delete[] oldVisible;
+				delete[] charPos;
 			////////////////////////////////////////////////////////////////////////////
 		
 
 
 			//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動
-			if (!noDamage && Actor[_attackerActorIndex]->IsPlayer()) {
-				for (int i=0; i<(int)(targetList.size()); i++){	
-					if (targetList[i] >= PLAYER_NUM) Enemy[targetList[i]-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+				if (!noDamage && Actor[_attackerActorIndex]->IsPlayer()) {
+					for (int i=0; i<(int)(targetList.size()); i++){	
+						if (targetList[i] >= PLAYER_NUM) Enemy[targetList[i]-PLAYER_NUM].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
+					}
 				}
-			}
 
 
 			//HPバー減少を待つ///////////////
-			std::vector <bool> hpBarMoved(targetList.size());
-			unsigned int i;
-			bool allOk;
-			while(true){
-				Draw();
-				if (!BasicLoop()) break;
+				std::vector <bool> hpBarMoved(targetList.size());
+				unsigned int i;
+				bool allOk;
+				while(true){
+					Draw();
+					if (!BasicLoop()) break;
 
-				allOk = true;
-				for (i=0; i<targetList.size(); i++){
-					if (!hpBarMoved[i]) {
-						if (!(hpBarMoved[i] = Actor[targetList[i]]->CheckBarMove())) allOk = false;
+					allOk = true;
+					for (i=0; i<targetList.size(); i++){
+						if (!hpBarMoved[i]) {
+							if (!(hpBarMoved[i] = Actor[targetList[i]]->CheckBarMove())) allOk = false;
+						}
 					}
+					if (allOk) break;
 				}
-				if (allOk) break;
-			}
 
 			//HACK:死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。
 			/////////////////////////////////
 		}
 
 	//サイドエフェクトの有無確認と発動//////////////////////////////////////////////////////////
-	std::vector <int> effectTargetList;	//ターゲットのActor番号	
-	for (unsigned int i=0; i<_trick->SideEffect.size(); i++){
+		std::vector <int> effectTargetList;	//ターゲットのActor番号	
+		for (unsigned int i=0; i<_trick->SideEffect.size(); i++){
 		
 		//ターゲットを確定しActor番号をvectorリスト化
 			effectTargetList.clear();
@@ -657,13 +661,10 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 					WARNINGDX("_trick->SideEffectType->Not Match. %s", _trick->Name);
 				}
 			}
-	}
+		}
 	//サイドエフェクトの処理ここまで////////////////////////////////////////////////////////////////////////////////////////////
 
-	delete [] damage;
-	delete [] oldVisible;
-	delete [] charPos;
-
+	
 }
 
 
