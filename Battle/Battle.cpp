@@ -656,6 +656,9 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 					}
 					break;
 				case sideEffect_tag::HEAL:
+					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
+					}
 					break;
 				default:
 					WARNINGDX("_trick->SideEffectType->Not Match. %s", _trick->Name);

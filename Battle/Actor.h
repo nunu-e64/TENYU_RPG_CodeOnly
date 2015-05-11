@@ -66,7 +66,7 @@ public:
 	//ステータス変化技
 		void AddStatusChanger(int _kind, int _powerPercent, int _time);	//時間制限付き
 		void ChangeValue(int _kind, int _powerPercent);	//永続（ステータスに直接影響）
-
+		void Heal(int _percent);
 
 	//その他
 		CRect GetRect()const{return Rect;}
