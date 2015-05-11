@@ -89,10 +89,11 @@ private:
 	//所持インスタンス
 		CMap Map;
 		CTextBox* TextBox;
-		///遂に解決14/12/11プロジェクトの設定からスタックサイズを1MBから4MBに拡大して解決。stackoverflowだったようだ→//こっちに移すとField.Initで停止する原因不明14/06/10//////////
-		CTextBox  TextBox1;
-		CTextWrap TextWrap1;
-		///////////////////////////////////////////////////////
+			///遂に解決14/12/11プロジェクトの設定からスタックサイズを1MBから4MBに拡大して解決。stackoverflowだったようだ→//こっちに移すとField.Initで停止する原因不明14/06/10//////////
+			CTextBox  TextBox1;
+			CTextWrap TextWrap1;
+			///////////////////////////////////////////////////////
+
 		CFieldCmdManager FieldCmdManager;
 		CFirstSetCmdManager FirstSetCmdManager;
 		CCmdList CmdList;
@@ -100,6 +101,7 @@ private:
 
 		CBattle* Battle;
 		CFieldMenu FieldMenu;
+		CFieldLog FieldLog;
 };
 
 

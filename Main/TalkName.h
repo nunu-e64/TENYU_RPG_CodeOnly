@@ -26,6 +26,7 @@ public:
 		bool SetNowName(bool _left, char* _name, bool _add=true);
 		void SetNowSide(bool _left){NowLeft=_left;};
 		bool GetVisible();
+		std::string GetNowName();
 
 		void Draw(int _left, int _right, int bottom);
 

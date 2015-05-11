@@ -3,13 +3,14 @@
 #define TEXTBOX_H							////
 ////////////////////////////////////////////////
 
-//#include "CmdList.h"
 #include "TalkName.h"
+#include "../Battle/LogWindow.h"
 
 	//static const int TextShowMode = 0;	//0…行送り 1…ページ送り
 
 
 class CCmdList;
+class CLogWindow;
 
 class CTextBox{
 public:
@@ -18,7 +19,7 @@ public:
 		DESTRUCTED;
 	};
 
-	void Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed);
+	void Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CLogWindow* _logWindow);
 	virtual void Term(CCmdList* _cmdlist);	//Terminate
 
 	bool Main(CCmdList* _cmdlist, CFlagSet *_flagset);	
@@ -108,9 +109,11 @@ protected:
 				char chNum[3];	//00~99
 			};
 			std::vector <ruby_tag> Ruby;
+
+		//ログクラス
+			CLogWindow* FieldLog;
 };
 
 
 ////多重インクルード防止（インクルードガード）//
-#endif										////
-////////////////////////////////////////////////
+#endif								t////////////

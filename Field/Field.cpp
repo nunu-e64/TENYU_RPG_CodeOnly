@@ -33,11 +33,14 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 			Mode = MODE_PLAYING;
 
+		//ログウィンドウの初期化
+			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
+
 	//DebugDx("TextBox_Init_Start");
 
 		//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
-			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed);
-			TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, TextAutoPlaySpeed);  
+			TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, TextAutoPlaySpeed, &FieldLog);
+			TextWrap1.Init(100, 100, 400, 300, 30, 30 * 2, 14, WHITE, GRAY, TextAutoPlaySpeed, &FieldLog);
 			TextBox = &TextBox1;
 
 	//DebugDx("TextBox_Init_End");
@@ -103,7 +106,10 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 	
 		CHECK_TIME_START	
 
-		if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
+
+		if (FieldLog.Main()) {	//ログ表示中はキー操作無効（表示非表示切り替えはMain内で判定）
+		
+		}else if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 		
 		} else if (FieldMenu.Alive) {
 			CMenuNode* resultNode = NULL;
@@ -228,7 +234,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					return MODE_GAMEOVER;
 				}else if (CheckHitKeyDown(KEY_INPUT_ESCAPE) || CheckHitKey(KEY_INPUT_3)){
 					return MODE_BACKTOTITLE;
-				}else if (CheckHitKeyDown(KEY_INPUT_P)){
+				}else if (CheckHitKeyDown(KEY_INPUT_I)){
 					CmdList.Add("@AutoPlay_Set(true,1)");
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
@@ -298,14 +304,17 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 		CHECK_TIME_START2	EveManager->Draw(NowMap, X, Y, true, dx, dy);	CHECK_TIME_END2("EveManager->Draw_over")
 	}
 
+	//テキストボックス描画//////////////////////////////////////////////////////////////////
+	TextBox->Draw(!CmdList.Empty() || _textshowingstop);
+	////////////////////////////////////////////////////////////////////////////////////////
+
 	//フィールドメニューの描画////////////////////////////////
 	FieldMenu.Draw();
 	//////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////////////
-	//テキストボックス描画//////////////////////////////////////////////////////////////////
-	TextBox->Draw(!CmdList.Empty() || _textshowingstop);
-	////////////////////////////////////////////////////////////////////////////////////////
+	//ログの描画///////////////////////////////////////////////
+	FieldLog.Draw();
+	///////////////////////////////////////////////////////////
 	
 	if (_screenflip)	{BasicLoop();}
 }

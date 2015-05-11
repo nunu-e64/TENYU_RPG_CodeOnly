@@ -41,9 +41,10 @@ CTextBox::CTextBox(){
 	OriginalDir = DOWN;
 }
 
-void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed){
+void CTextBox::Init(int _posx, int _posy, int _width, int _height, int _line , int _words, int _fontsize, int _color1, int _color2, int _autoplayspeed, CLogWindow* _logWindow){
 	TalkName.Init();
-	
+	FieldLog = _logWindow;
+
 	PosX = _posx;
 	PosY = _posy;
 	Width = _width;
@@ -92,6 +93,11 @@ void CTextBox::Term(CCmdList* _cmdlist){
 
 	Ruby.clear();
 	
+	//ログに会話終了の印を挿入
+		FieldLog->Add(" ");
+		FieldLog->Add("-----------------");
+		FieldLog->Add(" ");
+
 	//トークラベル（名前表示）のリセット＆非表示
 		TalkName.Clear(true);
 		TalkName.Clear(false);
@@ -548,6 +554,12 @@ bool CTextBox::NextLine(CCmdList *_cmdlist, CFlagSet *_flagset){
 				
 		}else{								//一般テキスト
 			strcpy_s(chText[NowTarget], chStock[NowStock]);
+			
+			if (TalkName.GetVisible()) {
+				FieldLog->Add(TalkName.GetNowName().c_str());
+			}
+			FieldLog->Add("  %s", chStock[NowStock]);	//ログに記録
+
 			NowStock++;	
 			return true;
 		}

@@ -132,6 +132,11 @@ bool CTalkName::GetVisible(){
 	return false;
 }
 
+std::string CTalkName::GetNowName() {
+	std::string tmpString = Name[NowLeft][0];
+	return tmpString;
+}
+
 void CTalkName::Draw(int _left, int _right, int _bottom){	//HACK:座標を読み込んだピクチャではなく、手入力している。Init()と連携させて修正すべき。
 	int oldfontsize = GetFontSize();
 	

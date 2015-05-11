@@ -8,6 +8,9 @@ CLogWindow::CLogWindow(){
 	Visible = false;
 	Initialized = false;
 
+	LineSpace = 5;
+	BoxSpace = 5;
+
 	//
 	//StockLine = -1;
 
@@ -22,7 +25,64 @@ CLogWindow::CLogWindow(){
 	//OriginalDir = DOWN;
 }
 
-void CLogWindow::Init(int _smallposx, int _posy, int _smallwidth, int _height, int _boxColor, int _stockLine, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank){
+void CLogWindow::Init(int _posx, int _posy, int _width, int _height, int _boxColor, int _stockLine, int _fontSize, int _fontColorMain, int _fontColorSub) {
+
+	if (Initialized) {
+		ERRORDX("Already Initialized (do nothing)");
+		return;
+	}
+
+
+	PosX = _posx;
+	PosY = _posy;
+	Width = _width;
+	Height = _height;
+	BoxColor = _boxColor;
+
+	FontSize = _fontSize;
+	FontHandle = CreateFontToHandle(NULL, FontSize, -1);
+	FontColorMain = _fontColorMain;
+	FontColorSub = _fontColorSub;
+
+	NextLine = 0;
+	BackLine = 0;
+
+	//WidthÇ©ÇÁï∂éöêîåvéZ->WordNum
+	WordWidth = Width - BoxSpace;	//Ç»ÇÈÇ◊Ç≠î†ÉMÉäÉMÉäÇ‹Ç≈ï∂éöÇ™ì¸ÇÈÇÊÇ§Ç…âEó]îíÇÕçló∂ÇµÇ»Ç¢
+	char tmp[WORD_MAX] = "";
+	WordNum = WORD_MAX;
+	for (int i = 0; i<WORD_MAX - 1; i++) {
+		tmp[i] = 'a';
+		tmp[i + 1] = '\0';
+		if (GetDrawStringWidthToHandle(tmp, strlen(tmp), FontHandle) > WordWidth) {
+			WordNum = i + 1;
+			break;
+		}
+	}
+
+	//HeightÇ∆FontSizeÇ©ÇÁçsêîåvéZ->LineNum
+	StockLineNum = max(1, _stockLine);
+	LineNum = min((Height - BoxSpace * 2) / (FontSize + LineSpace), StockLineNum);
+
+	myLog("new LogWindow.Text[%d][%d]...", StockLineNum, WordNum);
+	Text = new char*[StockLineNum];
+	for (int i = 0; i<StockLineNum; i++) {
+		Text[i] = new char[WordNum];
+		Text[i][0] = '\0';
+	}
+
+
+	//NowStock = 0;
+	//NowTarget = 0;
+
+	//NewText = -1;
+	//Showing = false;
+
+	Initialized = true;
+
+}
+
+void CBattleLog::Init(int _smallposx, int _posy, int _smallwidth, int _height, int _boxColor, int _stockLine, int _fontSize, int _fontColorMain, int _fontColorSub, CBImgBank* _bImgBank){
 
 	if (Initialized) {
 		ERRORDX("Already Initialized (do nothing)");
@@ -50,7 +110,7 @@ void CLogWindow::Init(int _smallposx, int _posy, int _smallwidth, int _height, i
 	BackLine = 0;
 	
 	//WidthÇ©ÇÁï∂éöêîåvéZ->WordNum
-		WordWidth = WidthFull - YOHAKU;	//Ç»ÇÈÇ◊Ç≠î†ÉMÉäÉMÉäÇ‹Ç≈ï∂éöÇ™ì¸ÇÈÇÊÇ§Ç…âEó]îíÇÕçló∂ÇµÇ»Ç¢
+		WordWidth = WidthFull - BoxSpace;	//Ç»ÇÈÇ◊Ç≠î†ÉMÉäÉMÉäÇ‹Ç≈ï∂éöÇ™ì¸ÇÈÇÊÇ§Ç…âEó]îíÇÕçló∂ÇµÇ»Ç¢
 		char tmp[WORD_MAX] = "";
 		WordNum = WORD_MAX;
 		for (int i=0; i<WORD_MAX-1; i++){
@@ -64,7 +124,7 @@ void CLogWindow::Init(int _smallposx, int _posy, int _smallwidth, int _height, i
 
 	//HeightÇ∆FontSizeÇ©ÇÁçsêîåvéZ->LineNum
 		StockLineNum = max(1, _stockLine);
-		LineNum = min((Height-YOHAKU*2)/(FontSize+LINE_SPACE), StockLineNum);
+		LineNum = min((Height-BoxSpace*2)/(FontSize+LineSpace), StockLineNum);
 
 	myLog("new LogWindow.Text[%d][%d]...", StockLineNum, WordNum);
 	Text = new char* [StockLineNum];
@@ -91,8 +151,11 @@ void CLogWindow::Clear(){
 		Text[i][0] = '\0';
 	}
 	NextLine = 0;
+}
+
+void CBattleLog::Clear() {
 	FullMode = false;
-	Visible = true;
+	CLogWindow::Clear();
 }
 
 void CLogWindow::Term(){
@@ -121,7 +184,7 @@ void CLogWindow::Term(){
 */
 }
 
-bool CLogWindow::Add(char *_format, ...){		//ÉRÉÅÉìÉgçsÇ‚ãÛîíçsÇÕLoadÇÃíiäKÇ≈îrèúÇ≥ÇÍÇƒÇ¢ÇÈ
+bool CLogWindow::Add(const char *_format, ...){		//ÉRÉÅÉìÉgçsÇ‚ãÛîíçsÇÕLoadÇÃíiäKÇ≈îrèúÇ≥ÇÍÇƒÇ¢ÇÈ
 	va_list args;
 	char newText[WORD_MAX];
 	va_start(args, _format);
@@ -183,8 +246,6 @@ bool CLogWindow::Add(char *_format, ...){		//ÉRÉÅÉìÉgçsÇ‚ãÛîíçsÇÕLoadÇÃíiäKÇ≈îrè
 		mystrcpy(Text[NextLine], newText); 
 		NextLine = (++NextLine) % StockLineNum;
 	
-		Visible = true;
-
 	}
 	
 	return true;
@@ -201,19 +262,26 @@ bool CLogWindow::Add(char **_newTextArray){
 
 bool CLogWindow::Main(){
 
+	if (CheckHitKey(KEY_INPUT_UP)) {
+		BackLine = min(BackLine+1, StockLineNum-LineNum);
+	} else if (CheckHitKey(KEY_INPUT_DOWN)) {
+		BackLine = max(BackLine-1, 0);
+	}
+
+	return Visible;
+}
+
+bool CBattleLog::Main() {
+
 	if (FullMode) {
-		if (CheckHitKey(KEY_INPUT_UP)) {
-			BackLine = min(BackLine+1, StockLineNum-LineNum);
-		} else if (CheckHitKey(KEY_INPUT_DOWN)) {
-			BackLine = max(BackLine-1, 0);
-		}
+		CLogWindow::Main();
 		if (CheckHitKeyDown(KEY_INPUT_CANCEL)) FullMode = false;
 	}
 
 	return FullMode;
 }
 
-void CLogWindow::Draw(){
+void CBattleLog::Draw(){
 
 	if(!Visible) return;
 
@@ -225,7 +293,7 @@ void CLogWindow::Draw(){
 	//É{ÉbÉNÉX
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?200:100));
 		DrawBox((!FullMode?PosX:PosXFull),		  PosY,	       (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
-		DrawBox((!FullMode?PosX:PosXFull)+YOHAKU, PosY+YOHAKU, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
+		DrawBox((!FullMode?PosX:PosXFull)+BoxSpace, PosY+BoxSpace, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
 	
 	//É{É^Éì
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?150:100));
@@ -244,10 +312,8 @@ void CLogWindow::Draw(){
 			if (strlen(Text[line])) {
 				mystrcpy(textForDraw, Text[line], (FullMode? WordNum: 5));
 				if (!FullMode) sprintf_s(textForDraw, -1, "%s..", textForDraw);
-				DrawStringToHandle((!FullMode?PosX:PosXFull)+YOHAKU, PosY + (FontSize+LINE_SPACE)*i+1+YOHAKU, textForDraw, FontColorSub , FontHandle);
-				DrawStringToHandle((!FullMode?PosX:PosXFull)+YOHAKU, PosY + (FontSize+LINE_SPACE)*i+YOHAKU  , textForDraw, FontColorMain, FontHandle);
-				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4 + 1, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line+1, Text[line], FontColorSub);
-				//DrawString((!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)/2 - WordNum*(FontSize+1)/4	, PosY+Height/2 + LINE_SPACE/2 - LineNum*(FontSize+LINE_SPACE)/2 + (FontSize+LINE_SPACE)*line	, Text[line], FontColorMain);
+				DrawStringToHandle((!FullMode?PosX:PosXFull)+BoxSpace, PosY + (FontSize+LineSpace)*i+1+BoxSpace, textForDraw, FontColorSub , FontHandle);
+				DrawStringToHandle((!FullMode?PosX:PosXFull)+BoxSpace, PosY + (FontSize+LineSpace)*i+BoxSpace  , textForDraw, FontColorMain, FontHandle);
 				++drawCount;
 			} else {
 				++skipCount;
@@ -257,6 +323,56 @@ void CLogWindow::Draw(){
 
 		delete [] textForDraw;
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,-1);
+}
+
+void CFieldLog::Draw() {
+
+	if (!Visible) return;
+
+	//É{ÉbÉNÉX
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	DrawBox(PosX, PosY, PosX + Width, PosY + Height, BoxColor, true);
+	DrawBox(PosX + BoxSpace, PosY + BoxSpace, PosX + Width - 5, PosY + Height - 5, GRAY, false);
+
+	//ÉeÉLÉXÉg
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220);
+
+	//ÉeÉLÉXÉgï`é 
+	int line;
+	int skipCount = 0;	//ãÛçsÇÕè„ãlÇﬂ
+	int drawCount = 0;  //é¿ç€Ç…ï`âÊÇµÇΩçsÇÃêî
+	char* textForDraw = new char[WordNum];
+	for (int i = 0; i + skipCount < StockLineNum && drawCount < LineNum; i++) {
+		line = mod((NextLine - LineNum - BackLine + i + skipCount), StockLineNum);
+		if (strlen(Text[line])) {
+			mystrcpy(textForDraw, Text[line], WordNum);
+			DrawStringToHandle(PosX + BoxSpace, PosY + (FontSize + LineSpace)*i + 1 + BoxSpace, textForDraw, FontColorSub, FontHandle);
+			DrawStringToHandle(PosX + BoxSpace, PosY + (FontSize + LineSpace)*i + BoxSpace, textForDraw, FontColorMain, FontHandle);
+			++drawCount;
+		} else {
+			++skipCount;
+			--i;
+		}
+	}
+
+	delete[] textForDraw;
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, -1);
+
+}
+
+bool CFieldLog::Main() {
+
+	if (Visible) {
+		CLogWindow::Main();
+		if (CheckHitKeyDown(KEY_INPUT_P) || CheckHitKeyDown(KEY_INPUT_OK) || CheckHitKeyDown(KEY_INPUT_CANCEL)) Visible = false;
+	} else {
+		if (CheckHitKeyDown(KEY_INPUT_P)) {
+			Visible = true;
+			BackLine = 0;
+		}
+	}
+
+	return Visible;
 }
 
 /*void CTextBox::Draw_Animation(bool _showingstop){

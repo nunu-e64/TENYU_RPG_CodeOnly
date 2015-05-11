@@ -134,7 +134,7 @@ private:
 			CTextBox* TextBox;
 			CTextBox TextBox1;
 			CTextWrap TextWrap1;
-			CLogWindow LogWindow;
+			CBattleLog LogWindow;
 		
 			CEveManager* EveManager_p;	//ラップモード時にオリジナルイベント読み込み用
 			CFlagSet* FlagSet_p;

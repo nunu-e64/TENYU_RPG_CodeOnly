@@ -65,8 +65,8 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 
 	//メインのテキストボックスとオーバーラップ用テキストボックスの初期化
 		//DEBUGDX("BattleTextBoxInit_Start");
-		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3);	//コンストラクタに書いたら起動しなくなった
-		TextWrap1.Init(100, 100, 400, 300, 30, 30*2, 14, WHITE, GRAY, 3);  
+		TextBox1.Init(60, 370, WINDOW_WIDTH-80*2, 100, 3, 25*2, 16, WHITE, BLACK, 3, &LogWindow);	//コンストラクタに書いたら起動しなくなった
+		TextWrap1.Init(100, 100, 400, 300, 30, 30 * 2, 14, WHITE, GRAY, 3, &LogWindow);
 		TextBox = &TextBox1;
 		//DEBUGDX("BattleTextBoxInit_End");
 		
