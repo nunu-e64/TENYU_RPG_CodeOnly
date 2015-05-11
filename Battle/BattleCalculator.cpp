@@ -15,6 +15,14 @@ int CBattleCalculator::CalcBaseTrickPower(int _level, int _gene) {
 
 }
 
+double CBattleCalculator::CalcSpd(int _level, int _gene) {
+	bool checker;
+	int level = between(1, 9999, _level, &checker);
+	if (!checker) WARNINGDX("ErrorLevel:%d gene=%d", _level, _gene);
+	
+	return BASIC_SPD;
+}
+
 int CBattleCalculator::CalcValue(value_tag _key, int _level, int _gene) {
 
 	bool checker;

@@ -69,6 +69,7 @@ const double MAGIC_DEFFENCE_RATE = 0.1;
 const double MAX_MAGIC_COUNTER_DAMAGE_RATE = 0.3;
 const int PRAY_RECOVERY_MC = 5;
 
+const double BASIC_SPD = 1.0;
 const int DEFFENCE_TIME = 100;
 const int PRAY_TIME = 100;
 const int WAIT_TIME = 50;
@@ -215,7 +216,7 @@ namespace sys{
 
 struct statusChanger_tag {
 	int Img;
-	int Time;
+	double Time;
 	int StatusKind;
 	int Power;
 };

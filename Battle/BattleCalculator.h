@@ -21,6 +21,7 @@ public:
 
 	static int CalcTrickPower(int _level);
 	static int CalcBaseTrickPower(int _level, int _gene);
+	static double CalcSpd(int _level, int _gene);
 	static int CalcValue(value_tag _key, int _level, int _gene);
 
 	static int CalcGold(int _lv, int _goldgene);

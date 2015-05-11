@@ -30,9 +30,9 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	CmdList = _cmdlist;
 
 	//レベルと成長素子に基づいて各キャラステータスを計算
-		Atk = CBattleCalc::CalcValue(CBattleCalc::ATK, Level, AtkGene);
-		Def = CBattleCalc::CalcValue(CBattleCalc::DEF, Level, DefGene);
-		Spd = 1; //今は一定値で対応	//between(0.001, 100.0, / CalcValue(SPD, Level, SpdGene) / 100.0);
+		Atk   = CBattleCalc::CalcValue(CBattleCalc::ATK, Level, AtkGene);
+		Def   = CBattleCalc::CalcValue(CBattleCalc::DEF, Level, DefGene);
+		Spd   = CBattleCalc::CalcSpd(Level, SpdGene);
 		MaxHp = CBattleCalc::CalcValue(CBattleCalc::MAXHP, Level, MaxHpGene);
 
 	Alive = Visible = (Hp!=0? true:false);
@@ -229,7 +229,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 	statusChanger_tag tmp;
 	tmp.StatusKind = _kind;
 	tmp.Power = _powerPercent;
-	tmp.Time = _time;
+	tmp.Time = (double)_time;
 	tmp.Img = 0;
 
 	//ログ出力
@@ -385,7 +385,8 @@ bool CActor::TimeGaugeForward(){
 
 	//ステータス変動効果の有効時間管理
 		for (std::vector<statusChanger_tag>::iterator it = StatusChangerList.begin(); it != StatusChangerList.end();) {
-			if (--(*it).Time <= 0) { 
+			(*it).Time -= BASIC_SPD;
+			if ((*it).Time <= 0) { 
 				it = StatusChangerList.erase(it); 
 			} else {
 				++it;
