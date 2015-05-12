@@ -101,7 +101,7 @@ private:
 
 class CFieldLog: public CLogWindow {
 public:
-	CFieldLog() { PosMemo = PosMemoOld = -1; }
+	CFieldLog();
 
 	void Draw();
 	bool Main();
@@ -110,8 +110,8 @@ public:
 	void InsertToMemoPos(const char* _string);
 
 private:
-	int PosMemo;
-	int PosMemoOld;
+	int PosMemo;	//会話の区切り位置を記憶
+	int PosMemoOld; //会話の区切り位置を記憶してログにトークラベルを挿入
 };
 
 

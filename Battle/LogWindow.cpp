@@ -292,8 +292,8 @@ void CBattleLog::Draw(){
 
 	//ボックス
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?200:100));
-		DrawBox((!FullMode?PosX:PosXFull),		  PosY,	       (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull), PosY+Height, BoxColor, true);
-		DrawBox((!FullMode?PosX:PosXFull)+BoxSpace, PosY+BoxSpace, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
+		DrawBox((!FullMode?PosX:PosXFull),	 PosY,	 (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull),   PosY+Height, BoxColor, true);
+		DrawBox((!FullMode?PosX:PosXFull)+5, PosY+5, (!FullMode?PosX:PosXFull)+(!FullMode?Width:WidthFull)-5, PosY+Height-5, GRAY, false);
 	
 	//ボタン
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (FullMode?150:100));
@@ -325,6 +325,15 @@ void CBattleLog::Draw(){
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND,-1);
 }
 
+
+CFieldLog::CFieldLog() {
+	LineSpace = 10;
+	BoxSpace = 25;
+
+	PosMemo = PosMemoOld = -1;
+}
+
+
 void CFieldLog::Draw() {
 
 	if (!Visible) return;
@@ -332,7 +341,7 @@ void CFieldLog::Draw() {
 	//ボックス
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawBox(PosX, PosY, PosX + Width, PosY + Height, BoxColor, true);
-	DrawBox(PosX + BoxSpace, PosY + BoxSpace, PosX + Width - 5, PosY + Height - 5, GRAY, false);
+	DrawBox(PosX + 5, PosY + 5, PosX + Width - 5, PosY + Height - 5, GRAY, false);
 
 	//テキスト
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 220);
