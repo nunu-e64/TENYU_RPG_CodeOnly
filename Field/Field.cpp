@@ -2,6 +2,9 @@
 #include "Field.h"
 #include "Load.h"
 
+#include "ItemManager.h"
+
+
 CField::CField(){
 	CONSTRUCTED;
 	Battle = CBattle::GetInstance();
@@ -88,6 +91,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		
 		//フィールドメニューの作成
 			CreateFieldMenu();
+
+		//ItemManagerの初期化
+			CItemManager::GetInstance()->Init();
 
 	CHECK_TIME_END("Init_Field")
 		
