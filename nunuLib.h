@@ -6,6 +6,8 @@
 #include "DxLib.h"
 #include "math.h"
 #include <direct.h>
+#include <vector>
+#include <map>
 #include <string>
 
 //#define MYLOG_DISABLE
@@ -13,10 +15,11 @@
 //#define DEBUGDX_DISABLE	//マクロの無効化
 //#define FPS_DISABLE
 #define CHECK_TIME_DISABLE	//時間測定マクロの無効化
-	#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
+#define CHECK_TIME2_DISABLE	//時間測定マクロ（狭い）の無効化
 #define ARRAY_SIZE(array)    (sizeof(array)/sizeof(array[0]))	//newで動的に確保した配列には使用した場合ポインタのメモリサイズ(4)が返されてしまう。これはsizeof()はコンパイル時に評価しているため。
+#define STR(_var) #_var		//変数名などを文字列化するトークン
 
-//namespace nunuLib{
+//namespace nunuLib{	//UNDONE:よく使い方がわからなかった
 
 const double PI = 3.1415926535897932384626433832795f;
 const int WINDOW_WIDTH = 640;	//32px*20cell
@@ -24,14 +27,14 @@ const int WINDOW_HEIGHT = 480;	//32px*15cell
 
 ////////////////////////////////////////////////////////
 //色定数////////////////////////////////////////////////
-	const int RED = GetColor( 255 , 0 , 0 );
-	const int GREEN = GetColor( 0 , 255 , 0 );
-	const int BLUE = GetColor( 0 , 0 , 255 );
-	const int YELLOW = GetColor( 255 , 255 , 0 );
-	const int MAGENTA = GetColor(255, 0, 255);
-	const int BLACK = GetColor( 0 , 0 , 0 );
-	const int WHITE = GetColor( 255 , 255 , 255 );
-	const int GRAY = GetColor( 120 , 120 , 120 );
+	const int RED		= GetColor( 255 , 0 , 0 );
+	const int GREEN		= GetColor( 0 , 255 , 0 );
+	const int BLUE		= GetColor( 0 , 0 , 255 );
+	const int YELLOW	= GetColor( 255 , 255 , 0 );
+	const int MAGENTA	= GetColor(255, 0, 255);
+	const int BLACK		= GetColor( 0 , 0 , 0 );
+	const int WHITE		= GetColor( 255 , 255 , 255 );
+	const int GRAY		= GetColor( 120 , 120 , 120 );
 ////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////
@@ -79,6 +82,44 @@ SYSTEMTIME GetNowSystemTime();
 std::string GetNowSystemTimeString();
 /////////////////////////////////////////////////////////////
 
+
+//enumの定義と管理用マップの自動作成マクロ//////////////////////////////
+//列挙子を示す文字列をキーとし列挙子の数値を値としたmapを作成
+#define ENUM(_name, ...)								\
+	struct _name {										\
+	enum type {__VA_ARGS__, NUM};						\
+	std::map <std::string, type> converter;				\
+	_name() {createEnumMap(converter, #__VA_ARGS__, type::NUM, __VA_ARGS__);}}_name;
+/*
+#define ENUM2(_name, _listname, ...)					\
+	enum _name {__VA_ARGS__, NUM};					\
+	std::map <std::string, _name> _listname;		\
+	createEnumMap(_listname, #__VA_ARGS__, _name::NUM, __VA_ARGS__);
+
+createEnumMapだけをコンストラクタに移したい
+or
+箱を先に作っておいてそのポインタにつっこむ
+*/
+
+//ENUMマクロで使用。新たに定義したenumに紐づく連想配列を作成
+template <class T>inline void createEnumMap(std::map<std::string, T> &_map, char* _list, int _num, ...) {
+	char* cntx;		//strtok_s用の雑用	
+	char* listCopy = new char[255];
+	char* tmpKey;
+
+	mystrcpy(listCopy, _list);
+
+	va_list args;
+	va_start(args, _num);
+
+	if ((tmpKey = strtok_s(listCopy, ", ", &cntx)) != NULL) _map[tmpKey] = va_arg(args, T);
+	for (int i = 1; i < _num; i++) {
+		if ((tmpKey = strtok_s(NULL, ", ", &cntx)) != NULL) _map[tmpKey] = va_arg(args, T);
+	}
+	va_end(args);
+	delete[] listCopy;
+}
+/////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////

@@ -5,9 +5,18 @@
 void CItemManager::Init() {
 	Clear();
 
-	DEBUGDX("MACROstart");
-	ENUM(hoge_tag, hoge_tag_map, AAA,BBB,CCC,DDD,EEE);
-	DEBUGDX("MACROfin: %s: %d, %s:%d", STR(AAA), AAA, STR(hoge_tag::NUM), hoge_tag::NUM);
+	//DEBUGDX("MACRO: %s: %d, %s:%d", STR(AAA), AAA, STR(hoge_tag::NUM), hoge_tag::NUM);
+	
+	hoge_tag::type i = hoge_tag::AAA;
+	hoge_tag::type j = hoge_tag.converter["AA"];
+
+	DEBUGDX("key:%s, value:%d", "AAA", hoge_tag.converter["AAA"]);
+	DEBUGDX("key:%s, value:%d", "BBB", hoge_tag.converter["BBB"]);
+	DEBUGDX("key:%s, value:%d", "NUM", hoge_tag::NUM);
+
+	DEBUGDX("key:%s, value:%d", "AA",  hoge_tag2.converter["AA"]);
+	DEBUGDX("key:%s, value:%d", "BB",  hoge_tag2.converter["BB"]);
+	DEBUGDX("key:%s, value:%d", "NUM", hoge_tag2::NUM);
 
 }
 

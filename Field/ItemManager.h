@@ -9,46 +9,7 @@
 #include "Item.h"
 
 
-#define STR(_var) #_var
-#define ENUM(_name, _listname, ...) \
-	DEBUGDX(#__VA_ARGS__);	\
-	enum _name {__VA_ARGS__, NUM}; \
-	std::map <std::string, _name> _listname;	\
-	createEnumMap(_listname, #__VA_ARGS__, _name::NUM, __VA_ARGS__);
-
-template <class T>inline void createEnumMap(std::map<std::string, T> _map, char* _list, int _num, ...) {
-	char* cntx;		//strtok_s用の雑用	
-	char *delim = ", ";//デリミタ（複数渡せる）ここではカンマと空白
-	char* tmpKey = new char[255];  
-	char* copy = new char[255];
-
-	mystrcpy(copy, _list);
-
-	va_list args;
-	va_start(args, _num);
-
-	DEBUGDX("YET:%s", copy);
-	tmpKey = strtok_s(copy, delim, &cntx);
-	DEBUGDX("OK:%s", copy);
-	DEBUGDX("%s", tmpKey);
-
-	if ((tmpKey = strtok_s(_list, ", ", &cntx)) != NULL) {
-		DEBUGDX("%s", tmpKey);
-		_map[std::string(tmpKey)] = va_arg(args, T);
-		DEBUGDX("%d", (int)_map[tmpKey]);
-	}
-	for (int i = 1; i < _num; i++) {
-		if ((tmpKey = strtok_s(NULL, ", ", &cntx)) != NULL) {
-			_map[tmpKey] = va_arg(args, T);
-			DEBUGDX("%d", (int)_map[tmpKey]);
-		}
-	}
-	va_end(args);
-
-	delete[] tmpKey;
-}
-
-class CItemManager{
+class CItemManager {
 public:
 	static CItemManager* GetInstance() {
 		static CItemManager instance;
@@ -65,17 +26,26 @@ public:
 	void Add(const char* _name, const char* _kind, int _salePrice, int _ownLimit, std::vector<std::string> _flags);
 
 
-private :
+private:
 	std::map <std::string, CItem*> ItemBank;
 	//bool ItemBankLock;	要素のポインタを取得することはないのでロックは不要
 
 	enum item_tag {
-		NORMAL, 
+		NORMAL,
 		WEAPON,
 		ACCECERLY
 	};
 	std::map < std::string, item_tag > item_tag_map;
 
+	struct hoge_tag2 {
+		enum type { AA, BB, CC, NUM };
+		std::map < std::string, type > converter;
+		hoge_tag2() {
+		}
+	}hoge_tag2;
+	//std::map < std::string, hoge_tag2::type > hoge_tag2::converter;
+
+	ENUM(hoge_tag, AAA, BBB, CCC, DDD, EEE);
 
 	//単一性を保証(Singleton)////////////////////////////////
 	CItemManager() {
