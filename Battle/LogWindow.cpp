@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "LogWindow.h"
 #include "BImgBank.h"
 

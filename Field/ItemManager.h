@@ -30,15 +30,8 @@ private:
 	std::map <std::string, CItem*> ItemBank;
 	//bool ItemBankLock;	要素のポインタを取得することはないのでロックは不要
 
-	enum item_tag {
-		NORMAL,
-		WEAPON,
-		ACCECERLY
-	};
-	std::map < std::string, item_tag > item_tag_map;
 
-	ENUM(hoge_tag, AAA, BBB, CCC, DDD, EEE);
-	hoge_tag::type hogera;
+	ENUM(item_tag, NORMAL, WEAPON, ACCESSORY);
 
 	//単一性を保証(Singleton)////////////////////////////////
 	CItemManager() {

@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "EveObj.h"
 
 void CEveObj::Draw(int _x, int _y){

@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "ScreenChanger.h"
 
 

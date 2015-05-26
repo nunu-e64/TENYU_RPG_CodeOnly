@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Player.h"
 #include "Battle.h"
 #include "BattleCalculator.h"

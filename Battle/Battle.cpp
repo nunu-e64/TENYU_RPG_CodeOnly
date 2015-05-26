@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Battle.h"
 #include "PlayerSpeciesManager.h"
 #include "EnemySpeciesManager.h"

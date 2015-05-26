@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "CmdList.h"
 #include "CmdManager.h"
 #include "TextBox.h"
@@ -351,18 +350,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			goto finish;
 		}
 
-		//if (mystrcmp2(arg[5], "SINGLE")) {
-		//	targetType = trick_tag::SINGLE;
-		//} else if (mystrcmp2(arg[5], 'p', 2, "ALL", "NULL")) {
-		//	targetType = trick_tag::ALL;
-		//} else if (mystrcmp2(arg[5], "SINGLE_FRIEND")) {
-		//	targetType = trick_tag::SINGLE_FRIEND;
-		//} else if (mystrcmp2(arg[5], "ALL_FRIEND")) {
-		//	targetType = trick_tag::ALL_FRIEND;
-		//} else {
-		//	ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
-		//	goto finish;
-		//}
 
 		if (arg[argnum-1]!=NULL) WARNINGDX("@NormalTrick_Create: too large number of args:%d (continue)", argnum);
 
@@ -381,22 +368,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
 				continue;
 			}
-			//if (mystrcmp2(arg[i], "ATK")) {	//HACK:こんなんもうenumではなくstringをキーにしたマップを作るべきか(連想配列)
-			//	tmpNum[0] = sideEffect_tag::type_tag::ATK;
-			//} else if (mystrcmp2(arg[i], "DEF")) {
-			//	tmpNum[0] = sideEffect_tag::DEF;
-			//} else if (mystrcmp2(arg[i], "SPD")) {
-			//	tmpNum[0] = sideEffect_tag::SPD;
-			//} else if (mystrcmp2(arg[i], "HEAL")) {
-			//	tmpNum[0] = sideEffect_tag::HEAL;
-			//} else if (mystrcmp2(arg[i], "MPHEAL")) {
-			//	tmpNum[0] = sideEffect_tag::MPHEAL;
-			//} else if (mystrcmp2(arg[i], "ATTENTION")) {
-			//	tmpNum[0] = sideEffect_tag::ATTENTION;
-			//} else {
-			//	WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
-			//	continue;
-			//}
 
 			for (unsigned int j = 0; j < strlen(arg[i + 1]); j++) {
 				arg[i+1][j] = toupper(arg[i+1][j]);
@@ -407,18 +378,6 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;
 			}
-			//if (mystrcmp2(arg[i+1], "ME")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
-			//	tmpNum[1] = sideEffect_tag::ME;
-			//} else if (mystrcmp2(arg[i+1], "SINGLE")) {
-			//	tmpNum[1] = sideEffect_tag::SINGLE;
-			//} else if (mystrcmp2(arg[i+1], "ALL_FRIEND")) {
-			//	tmpNum[1] = sideEffect_tag::ALL_FRIEND;
-			//} else if (mystrcmp2(arg[i+1], "ALL")) {
-			//	tmpNum[1] = sideEffect_tag::ALL;
-			//}else{
-			//	WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
-			//	continue;
-			//}
 
 			if (!(mystrtol(arg[i + 2], &tmpNum[2])) || !(mystrtol(arg[i + 3], &tmpNum[3])) || !(mystrtol(arg[i + 4], &tmpNum[4]))) {
 				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);

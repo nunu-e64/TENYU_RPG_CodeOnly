@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "EnemyTargetter.h"
 #include "Enemy.h"
 

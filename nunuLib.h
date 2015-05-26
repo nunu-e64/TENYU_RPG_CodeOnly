@@ -90,16 +90,7 @@ std::string GetNowSystemTimeString();
 	enum type {__VA_ARGS__, NUM};						\
 	std::map <std::string, type> converter;				\
 	_name() {createEnumMap(converter, #__VA_ARGS__, type::NUM, __VA_ARGS__);}}_name;
-/*
-#define ENUM2(_name, _listname, ...)					\
-	enum _name {__VA_ARGS__, NUM};					\
-	std::map <std::string, _name> _listname;		\
-	createEnumMap(_listname, #__VA_ARGS__, _name::NUM, __VA_ARGS__);
 
-createEnumMapだけをコンストラクタに移したい
-or
-箱を先に作っておいてそのポインタにつっこむ
-*/
 
 //ENUMマクロで使用。新たに定義したenumに紐づく連想配列を作成
 template <class T>inline void createEnumMap(std::map<std::string, T> &_map, char* _list, int _num, ...) {

@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Main.h"
 
 #include "../Mrt.h"

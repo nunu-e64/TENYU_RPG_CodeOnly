@@ -1,4 +1,3 @@
-#include "Define.h"
 #include "Menu.h"
 
 void CMenu::Init(int _x, int _y, int _width, int _height){

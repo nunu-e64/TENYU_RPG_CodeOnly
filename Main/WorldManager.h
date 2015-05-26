@@ -3,14 +3,13 @@
 #define WORLDMANAGER_H						////
 ////////////////////////////////////////////////
 
-#include "../Define.h"	//インクルードしなくてもいい（赤線は出るがコンパイル時に解決するためエラーは出ない）
 
-#include "../Field/Map.h"
-#include "TextBox.h"
-#include "TextWrap.h"
-#include "CmdManager.h"
-#include "CmdList.h"
-#include "../Field/EveManager.h"
+//#include "../Field/Map.h"
+//#include "TextBox.h"
+//#include "TextWrap.h"
+//#include "CmdManager.h"
+//#include "CmdList.h"
+//#include "../Field/EveManager.h"
 
 class CWorldManager{
 public:

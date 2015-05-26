@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "TextBox.h"
 #include "CmdList.h"
 

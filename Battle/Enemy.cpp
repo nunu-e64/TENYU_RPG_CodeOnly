@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Enemy.h"
 #include "Species.h"
 #include "LogWindow.h"

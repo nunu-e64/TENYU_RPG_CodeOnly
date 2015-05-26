@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Load.h"
 
 #include "../Main/CmdList.h"

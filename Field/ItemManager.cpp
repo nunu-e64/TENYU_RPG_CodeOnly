@@ -1,24 +1,8 @@
-#include "../Define.h"
 #include "ItemManager.h"
 
 
 void CItemManager::Init() {
 	Clear();
-
-	////DEBUGDX("MACRO: %s: %d, %s:%d", STR(AAA), AAA, STR(hoge_tag::NUM), hoge_tag::NUM);
-	//
-	//hoge_tag::type i = hoge_tag::AAA;
-	//hoge_tag::type j = hoge_tag.converter["AA"];
-	//DEBUGDX(STR(hoge_tag::AA));
-
-	//DEBUGDX("key:%s, value:%d", "AAA", hoge_tag.converter["AAA"]);
-	//DEBUGDX("key:%s, value:%d", "BBB", hoge_tag.converter["BBB"]);
-	//DEBUGDX("key:%s, value:%d", "NUM", hoge_tag::NUM);
-
-	//DEBUGDX("key:%s, value:%d", "AA",  hoge_tag2.converter["AA"]);
-	//DEBUGDX("key:%s, value:%d", "BB",  hoge_tag2.converter["BB"]);
-	//DEBUGDX("key:%s, value:%d", "NUM", hoge_tag2::NUM);
-
 }
 
 void CItemManager::Clear(){
@@ -38,42 +22,7 @@ void CItemManager::Add(const char* _name, const char* _kind, int _salePrice, int
 	
 	CItem* newItem = new CItem();
 
-	std::string hoge;
-	item_tag kind = item_tag_map[_kind];
 
 
-	if (mystrcmp(_kind, STR(NORMAL))) {}
-	item_tag_map[STR(WEAPON)] = WEAPON;
-	
-	/*
 
-	やりたいことは、
-	ENUM(tagname, hoge0, hoge1, hoge2, ....)
-	enum item_tag {__VA_ARG__}
-	#_VA_ARG__
-
-	１．enumで管理、ifでchar*をチェックしてintに変換
-	２．map<char* , int>とenumで管理。mapでintに変換
-		・項目増やすのが手間？
-			・enum増やす→map増やす　∴if文書き足すよりも楽、平文を一か所でしか使わない
-
-	３．intではなくstringでkindを保持する
-		・入力ミスの確認のため結局mapかifでチェックが必要になる
-
-	∴２を採用→一般化してライブラリに足したい
-	create(hoge)
-	enum不要説？
-	利用時はkind = HOGEHOGE then の形式なので　kind＝hoge(HOGEHOGE)
-	どのみちHOGEHOGE：enumかconstcher*は必要になる
-	ライブラリ関数内でconstの定義はできない
-	enumは作ってもらわねばならない
-	*/
-	/*
-	newItem->Name = _name;
-	newItem->Kind = 
-	newItem->
-	newItem->
-	newItem->
-	newItem->
-	*/
 }

@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "EnemyAI.h"
 #include "Actor.h"
 #include "Enemy.h"

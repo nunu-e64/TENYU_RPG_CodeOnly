@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Actor.h"
 #include "BImgBank.h"
 #include "../Main/TextBox.h"

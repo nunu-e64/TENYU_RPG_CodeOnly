@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "EveManager.h"
 #include "Field.h"
 

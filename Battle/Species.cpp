@@ -1,4 +1,3 @@
-#include "../Define.h"
 #include "Species.h"
 #include "BattleCalculator.h"
 

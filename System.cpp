@@ -1,5 +1,4 @@
 
-#include "Define.h"
 #include "Main/Main.h"
 
 struct objkind_tag objkind_tag;
