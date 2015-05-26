@@ -155,16 +155,16 @@ enum direction_tag{		//順番変更禁止（System.cppで使用）
 	UP,
 	DIRECTION_NUM
 };
-enum objkind_tag{
-	PANEL,				//踏むことでイベント開始
-	WALKABLE_NUM,	//↑これより上のKindはプレイヤーが上を歩くことができる（当たり判定がなく踏むことでイベント）
-	BLOCK,				//BLOCK,NPCは調べることでイベント開始
-	NPC,
-	PUSHBLOCK,			//押すことでイベント開始（調べない）
-	UNDERDRAW_NUM,	//↑これより上（数字としては小さい）のKindはプレイヤーキャラの下に描写
-	COVER,				//イベント開始方法がない、下を歩行可能
-	KIND_NUM
-};
+extern ENUM(objkind_tag, PANEL, WALKABLE_NUM, BLOCK, NPC, PUSHBLOCK, UNDERDRAW_NUM, COVER);
+	//PANEL,				//踏むことでイベント開始
+	//WALKABLE_NUM,	//↑これより上のKindはプレイヤーが上を歩くことができる（当たり判定がなく踏むことでイベント）
+	//BLOCK,				//BLOCK,NPCは調べることでイベント開始
+	//NPC,
+	//PUSHBLOCK,			//押すことでイベント開始（調べない）
+	//UNDERDRAW_NUM,	//↑これより上（数字としては小さい）のKindはプレイヤーキャラの下に描写
+	//COVER,				//イベント開始方法がない、下を歩行可能
+	//KIND_NUM
+
 enum charaeffect_tag{
 	NONE,
 	BLINK,
@@ -222,22 +222,10 @@ struct statusChanger_tag {
 };
 
 struct sideEffect_tag{
-	enum{
-		ATK,
-		DEF,
-		SPD,
-		HEAL,
-		MPHEAL,
-		ATTENTION,
-		EFFECTTYPE_NUM,
-	}; int EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
-	enum{
-		ME,
-		SINGLE,
-		ALL_FRIEND,
-		ALL,
-		EFFECTTARGET_NUM,
-	}; int EffectTarget;	//効果対象範囲
+	ENUM(type_tag, ATK, DEF, SPD, HEAL, MPHEAL, ATTENTION); 
+	enum type_tag::type EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
+	ENUM(target_tag, ME, SINGLE, ALL_FRIEND, ALL);
+	enum target_tag::type EffectTarget;	//効果対象範囲
 
 	int Power;		//効果力
 	int Incidence;	//発生確率
@@ -251,14 +239,11 @@ struct trick_tag{
 	std::vector <sideEffect_tag> SideEffect;
 	int DamageEffectIndex;	//描画エフェクトの種別番号
 
-	enum targetType_tag{	//Battleで分岐処理
-		SINGLE,
-		ALL,
-		SINGLE_FRIEND,
-		ALL_FRIEND,
-		//DEADOK_SINGLE	//死人を対象にするパターン
-		TARGETTYPE_NUM,
-	}TargetType;
+	ENUM(targetType_tag, SINGLE, ALL, SINGLE_FRIEND, ALL_FRIEND, DEADOK_SINGLE);
+	enum targetType_tag::type targetType;
+
+//死人を対象にするパターン
+	//TargetType; 	//Battleで分岐処理
 
 	/*enum specialType_tag{ //Actor個別処理
 		NORMAL,

@@ -175,22 +175,33 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 			}
 		}
 		int kind=0;
-			if( mystrcmp(arg[2], "NPC") ){
-				kind = NPC;
-			}else if( mystrcmp(arg[2], "BLOCK") ){
-				kind = BLOCK;
-			}else if( mystrcmp(arg[2], "PANEL") ){
-				kind = PANEL;
-			}else if( mystrcmp(arg[2], "COVER") ){
-				kind = COVER;
-			}else if( mystrcmp(arg[2], "PUSHBLOCK") ){
-				kind = PUSHBLOCK;
+		for (unsigned int i = 0; i < strlen(arg[2]); i++) {
+			arg[2][i] = toupper(arg[2][i]);
+		}
 
-			}else{
-				WarningDx("Warning->Not Match arg[Kind] (BLOCK):%s", __FILE__, __LINE__, arg[2]);
-				mystrcpy(arg[2], "BLOCK");
-				kind = BLOCK;
-			}
+		if (objkind_tag.converter.find(arg[2]) != objkind_tag.converter.end()) {
+			kind = objkind_tag.converter[arg[2]];
+		} else {
+			WarningDx("Warning->Not Match arg[Kind] (BLOCK):%s", __FILE__, __LINE__, arg[2]);
+			mystrcpy(arg[2], "BLOCK");
+			kind = objkind_tag::BLOCK;
+		}
+
+		//if (mystrcmp(arg[2], "NPC")) {
+		//	kind = NPC;
+		//}else if( mystrcmp(arg[2], "BLOCK") ){
+		//	kind = BLOCK;
+		//}else if( mystrcmp(arg[2], "PANEL") ){
+		//	kind = PANEL;
+		//}else if( mystrcmp(arg[2], "COVER") ){
+		//	kind = COVER;
+		//}else if( mystrcmp(arg[2], "PUSHBLOCK") ){
+		//	kind = PUSHBLOCK;
+		//}else{
+		//	WarningDx("Warning->Not Match arg[Kind] (BLOCK):%s", __FILE__, __LINE__, arg[2]);
+		//	mystrcpy(arg[2], "BLOCK");
+		//	kind = BLOCK;
+		//}
 			
 		char numname[16];
 		if (mystrcmp(arg[4], "NULL") || arg[4]==NULL) {		//Nameを指定していない時は"Kind-Mapnum-Datanum"をNameにする
@@ -309,7 +320,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		tmpTrick.Cost = 0;
 		tmpTrick.Time = time;
 		tmpTrick.DamageEffectIndex = _trickManager->GetTrickDamageEffectIndex(arg[2]);
-		tmpTrick.TargetType = trick_tag::SINGLE;
+		tmpTrick.targetType = trick_tag::targetType_tag::SINGLE;
 		tmpTrick.SideEffect = tmp;
 		_trickManager->Add(tmpTrick, "BASE");
 
@@ -326,19 +337,32 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			}
 		}
 
-		trick_tag::targetType_tag targetType;
-		if (mystrcmp2(arg[5], "SINGLE")) {
-			targetType = trick_tag::SINGLE;
-		} else if (mystrcmp2(arg[5], 'p', 2, "ALL", "NULL")) {
-			targetType = trick_tag::ALL;
-		} else if (mystrcmp2(arg[5], "SINGLE_FRIEND")) {
-			targetType = trick_tag::SINGLE_FRIEND;
-		} else if (mystrcmp2(arg[5], "ALL_FRIEND")) {
-			targetType = trick_tag::ALL_FRIEND;
+		trick_tag tmp;
+		enum trick_tag::targetType_tag::type targetType;
+		for (unsigned int j = 0; j < strlen(arg[5]); j++) {
+			arg[5][j] = toupper(arg[5][j]);
+		}
+		if (tmp.targetType_tag.converter.find(arg[5]) != tmp.targetType_tag.converter.end()) {
+			targetType = tmp.targetType_tag.converter[arg[5]];
+		} else if (sys::CheckStrNULL(arg[5])){
+			targetType = trick_tag::targetType_tag::ALL;
 		} else {
 			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
 			goto finish;
 		}
+
+		//if (mystrcmp2(arg[5], "SINGLE")) {
+		//	targetType = trick_tag::SINGLE;
+		//} else if (mystrcmp2(arg[5], 'p', 2, "ALL", "NULL")) {
+		//	targetType = trick_tag::ALL;
+		//} else if (mystrcmp2(arg[5], "SINGLE_FRIEND")) {
+		//	targetType = trick_tag::SINGLE_FRIEND;
+		//} else if (mystrcmp2(arg[5], "ALL_FRIEND")) {
+		//	targetType = trick_tag::ALL_FRIEND;
+		//} else {
+		//	ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
+		//	goto finish;
+		//}
 
 		if (arg[argnum-1]!=NULL) WARNINGDX("@NormalTrick_Create: too large number of args:%d (continue)", argnum);
 
@@ -347,44 +371,61 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		sideEffect_tag tmpEffect;
 		int tmpNum[5]; 
 
-
 		for (int i=6; i<argnum && arg[i]!=NULL; i+=5){
-			if (mystrcmp2(arg[i], "ATK")) {	//HACK:こんなんもうenumではなくstringをキーにしたマップを作るべきか(連想配列)
-				tmpNum[0] = sideEffect_tag::ATK;
-			} else if (mystrcmp2(arg[i], "DEF")) {
-				tmpNum[0] = sideEffect_tag::DEF;
-			} else if (mystrcmp2(arg[i], "SPD")) {
-				tmpNum[0] = sideEffect_tag::SPD;
-			} else if (mystrcmp2(arg[i], "HEAL")) {
-				tmpNum[0] = sideEffect_tag::HEAL;
-			} else if (mystrcmp2(arg[i], "MPHEAL")) {
-				tmpNum[0] = sideEffect_tag::MPHEAL;
-			} else if (mystrcmp2(arg[i], "ATTENTION")) {
-				tmpNum[0] = sideEffect_tag::ATTENTION;
+			for (unsigned int j = 0; j < strlen(arg[i]); j++) {
+				arg[i][j] = toupper(arg[i][j]);
+			}
+			if (tmpEffect.type_tag.converter.find(arg[i]) != tmpEffect.type_tag.converter.end()) {
+				tmpNum[0] = tmpEffect.type_tag.converter[arg[i]];
 			} else {
 				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
 				continue;
 			}
+			//if (mystrcmp2(arg[i], "ATK")) {	//HACK:こんなんもうenumではなくstringをキーにしたマップを作るべきか(連想配列)
+			//	tmpNum[0] = sideEffect_tag::type_tag::ATK;
+			//} else if (mystrcmp2(arg[i], "DEF")) {
+			//	tmpNum[0] = sideEffect_tag::DEF;
+			//} else if (mystrcmp2(arg[i], "SPD")) {
+			//	tmpNum[0] = sideEffect_tag::SPD;
+			//} else if (mystrcmp2(arg[i], "HEAL")) {
+			//	tmpNum[0] = sideEffect_tag::HEAL;
+			//} else if (mystrcmp2(arg[i], "MPHEAL")) {
+			//	tmpNum[0] = sideEffect_tag::MPHEAL;
+			//} else if (mystrcmp2(arg[i], "ATTENTION")) {
+			//	tmpNum[0] = sideEffect_tag::ATTENTION;
+			//} else {
+			//	WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
+			//	continue;
+			//}
 
-			if (mystrcmp2(arg[i+1], "ME")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
-				tmpNum[1] = sideEffect_tag::ME;
-			} else if (mystrcmp2(arg[i+1], "SINGLE")) {
-				tmpNum[1] = sideEffect_tag::SINGLE;
-			} else if (mystrcmp2(arg[i+1], "ALL_FRIEND")) {
-				tmpNum[1] = sideEffect_tag::ALL_FRIEND;
-			} else if (mystrcmp2(arg[i+1], "ALL")) {
-				tmpNum[1] = sideEffect_tag::ALL;
-			}else{
+			for (unsigned int j = 0; j < strlen(arg[i + 1]); j++) {
+				arg[i+1][j] = toupper(arg[i+1][j]);
+			}
+			if (tmpEffect.target_tag.converter.find(arg[i+1]) != tmpEffect.target_tag.converter.end()) {
+				tmpNum[1] = tmpEffect.target_tag.converter[arg[i + 1]];
+			} else {
 				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;
 			}
+			//if (mystrcmp2(arg[i+1], "ME")) {	//こんなんもうstringをキーにしたマップを作るべきか(連想配列)
+			//	tmpNum[1] = sideEffect_tag::ME;
+			//} else if (mystrcmp2(arg[i+1], "SINGLE")) {
+			//	tmpNum[1] = sideEffect_tag::SINGLE;
+			//} else if (mystrcmp2(arg[i+1], "ALL_FRIEND")) {
+			//	tmpNum[1] = sideEffect_tag::ALL_FRIEND;
+			//} else if (mystrcmp2(arg[i+1], "ALL")) {
+			//	tmpNum[1] = sideEffect_tag::ALL;
+			//}else{
+			//	WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
+			//	continue;
+			//}
 
 			if (!(mystrtol(arg[i + 2], &tmpNum[2])) || !(mystrtol(arg[i + 3], &tmpNum[3])) || !(mystrtol(arg[i + 4], &tmpNum[4]))) {
 				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);
 				goto finish;
 			}
-			tmpEffect.EffectType   = tmpNum[0];
-			tmpEffect.EffectTarget = tmpNum[1];
+			tmpEffect.EffectType   = (sideEffect_tag::type_tag::type)   tmpNum[0];
+			tmpEffect.EffectTarget = (sideEffect_tag::target_tag::type) tmpNum[1];
 			tmpEffect.Power		   = tmpNum[2];
 			tmpEffect.Incidence	   = tmpNum[3];
 			tmpEffect.Time		   = tmpNum[4];

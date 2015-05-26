@@ -146,14 +146,14 @@ bool CPlayer::Plan(){
 
 							
 						//HACK:‘I‚ñ‚¾‹Z‚Ì‘ÎÛl”‚É‚æ‚Á‚Äˆ—‚ð•Ï‚¦‚é
-							switch(NowTrick->TargetType){	
-							case trick_tag::SINGLE:
+							switch(NowTrick->targetType){	
+							case trick_tag::targetType_tag::SINGLE:
 								CmdList->Add("@Target_Appear(ENEMY,0,false)");
 								break;
-							case trick_tag::ALL:
+							case trick_tag::targetType_tag::ALL:
 								Target = PLAYER_NUM;
 								break;
-							case trick_tag::SINGLE_FRIEND:
+							case trick_tag::targetType_tag::SINGLE_FRIEND:
 								CmdList->Add("@Target_Appear(PLAYER,0,false)");
 								break;
 							default:

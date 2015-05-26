@@ -490,21 +490,21 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 
 	//ターゲットを確定しActor番号をvectorリスト化	//死人は除外
 		std::vector <int> targetList;	//ターゲットのActor番号	
-		switch (_trick->TargetType){
-		case trick_tag::SINGLE:
+		switch (_trick->targetType){
+		case trick_tag::targetType_tag::SINGLE:
 			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
 			break;
-		case trick_tag::ALL:
+		case trick_tag::targetType_tag::ALL:
 			for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
 				if (Actor[i]->GetAlive()) {	 //生存確認	
 					targetList.push_back(i);
 				}	
 			}
 			break;
-		case trick_tag::SINGLE_FRIEND:
+		case trick_tag::targetType_tag::SINGLE_FRIEND:
 			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
 			break;
-		case trick_tag::ALL_FRIEND:
+		case trick_tag::targetType_tag::ALL_FRIEND:
 			for (int i = (!Actor[_attackerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i<(!Actor[_attackerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
 				if (Actor[i]->GetAlive()) {	 //生存確認	
 					targetList.push_back(i);
@@ -616,20 +616,20 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			effectTargetList.clear();
 
 			switch (_trick->SideEffect[i].EffectTarget){
-			case sideEffect_tag::ME:
+			case sideEffect_tag::target_tag::ME:
 				effectTargetList.push_back(_attackerActorIndex);
 				break;
-			case sideEffect_tag::SINGLE:	//カーソル選択したActor
+			case sideEffect_tag::target_tag::SINGLE:	//カーソル選択したActor
 				effectTargetList.push_back(targetList[0]);
 				break;
-			case sideEffect_tag::ALL:	//敵全体
+			case sideEffect_tag::target_tag::ALL:	//敵全体
 				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
 					if (Actor[i]->GetAlive()) {
 						effectTargetList.push_back(i);
 					}	
 				}
 				break;
-			case sideEffect_tag::ALL_FRIEND:	//味方全体
+			case sideEffect_tag::target_tag::ALL_FRIEND:	//味方全体
 				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? 0: PLAYER_NUM); i<(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: ACTOR_NUM); i++){
 					if (Actor[i]->GetAlive()) {
 						effectTargetList.push_back(i);
@@ -644,28 +644,28 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		//効果発動判定ののちターゲットごとに処理をさせる
 			if (_trick->SideEffect[i].Incidence > rand()%100) {
 				switch (_trick->SideEffect[i].EffectType){
-				case sideEffect_tag::ATK:
-				case sideEffect_tag::DEF:
+				case sideEffect_tag::type_tag::ATK:
+				case sideEffect_tag::type_tag::DEF:
 					for (unsigned int j=0; j<effectTargetList.size(); j++){					
 						Actor[effectTargetList[j]]->AddStatusChanger(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Time);
 					}
 					break;
-				case sideEffect_tag::SPD:
+				case sideEffect_tag::type_tag::SPD:
 					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
 						Actor[effectTargetList[j]]->AddStatusChanger(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Time);
 					}
 					break;
-				case sideEffect_tag::HEAL:
+				case sideEffect_tag::type_tag::HEAL:
 					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
 						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
 					}
 					break;
-				case sideEffect_tag::MPHEAL:
+				case sideEffect_tag::type_tag::MPHEAL:
 					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
 						if (Actor[effectTargetList[j]]->IsPlayer()) Player[Actor[effectTargetList[j]]->GetIndex()].MpHeal(_trick->SideEffect[i].Power);
 					}
 					break;
-				case sideEffect_tag::ATTENTION:
+				case sideEffect_tag::type_tag::ATTENTION:
 					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
 						if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[targetList[j]]->GetIndex()].AddAttention(_attackerActorIndex, _trick->SideEffect[i].Power, &LogWindow);
 					}

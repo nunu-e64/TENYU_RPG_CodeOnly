@@ -182,7 +182,7 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	//攻撃側の時間制限付き特殊効果
 		for (unsigned int i = 0; i < _attacker->StatusChangerList.size(); i++) {
 			switch (_attacker->StatusChangerList[i].StatusKind) {
-			case sideEffect_tag::ATK:
+			case sideEffect_tag::type_tag::ATK:
 				damage *= (100 + _attacker->StatusChangerList[i].Power) / 100.0;
 				break;
 			}
@@ -191,7 +191,7 @@ int CActor::Damaged(CActor* _attacker, trick_tag const* _trick){
 	//被弾側の時間制限付き特殊効果
 		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
 			switch (StatusChangerList[i].StatusKind) {
-			case sideEffect_tag::DEF:
+			case sideEffect_tag::type_tag::DEF:
 				damage /= (100 + StatusChangerList[i].Power) / 100.0;
 				break;
 			}
@@ -237,7 +237,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 		std::pair <int, int> imgIndex;
 
 		switch (_kind) {
-		case sideEffect_tag::ATK:
+		case sideEffect_tag::type_tag::ATK:
 			if (_powerPercent>0) {
 				imgIndex = ATK_UP;
 				mystrcpy(chtmp, "  %sの攻撃力が%d％上がった！");
@@ -247,7 +247,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 			}
 			break;
 
-		case sideEffect_tag::DEF:
+		case sideEffect_tag::type_tag::DEF:
 			if (_powerPercent>0) {
 				imgIndex = DEF_UP;
 				mystrcpy(chtmp, "  %sの防御力が%d％上がった！");
@@ -257,7 +257,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 			}
 			break;
 
-		case sideEffect_tag::SPD:
+		case sideEffect_tag::type_tag::SPD:
 			if (_powerPercent>0) {
 				imgIndex = SPD_UP;
 				mystrcpy(chtmp, "  %sの行動速度が%d％上がった！");
@@ -281,7 +281,7 @@ void CActor::AddStatusChanger(int _kind, int _powerPercent, int _time) {
 void CActor::ChangeValue(int _kind, int _powerPercent){	//永続（ステータスに直接影響）
 	
 	switch(_kind){
-	case sideEffect_tag::ATK:
+	case sideEffect_tag::type_tag::ATK:
 		Atk += (int)((double)Atk*_powerPercent/100);
 
 		if (_powerPercent>0){
@@ -291,7 +291,7 @@ void CActor::ChangeValue(int _kind, int _powerPercent){	//永続（ステータスに直接
 		}
 		break;
 
-	case sideEffect_tag::DEF:
+	case sideEffect_tag::type_tag::DEF:
 		Def += (int)((double)Def*_powerPercent/100);
 
 		if (_powerPercent>0){
@@ -383,7 +383,7 @@ bool CActor::TimeGaugeForward(){
 	//時間制限付き速度変更特殊効果の有無確認
 		double spd = Spd;
 		for (unsigned int i = 0; i < StatusChangerList.size(); i++) {
-			if (StatusChangerList[i].StatusKind == sideEffect_tag::SPD) {
+			if (StatusChangerList[i].StatusKind == sideEffect_tag::type_tag::SPD) {
 				spd *= (100 + StatusChangerList[i].Power) / 100.0;
 			}
 		}

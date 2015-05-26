@@ -26,7 +26,7 @@ void CEveObj::Draw(int _x, int _y){
 			break;
 		}
 		SetDrawBlendMode( DX_BLENDMODE_ALPHA, Alpha);
-		if (Kind==NPC){
+		if (Kind == objkind_tag::NPC) {
 			DrawGraph(_x+Dx%MAP_CHIP_SIZE, _y+Dy%MAP_CHIP_SIZE, Img[Dir*4+mod(Step,4)],true);
 		}else{
 			DrawGraph(_x+Dx%MAP_CHIP_SIZE, _y+Dy%MAP_CHIP_SIZE, Img[0],true);

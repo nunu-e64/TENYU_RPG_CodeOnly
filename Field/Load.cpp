@@ -192,11 +192,11 @@ void CLoad::CommandCopy(CCmdList* _cmdlist){
 void CLoad::EventTextCopy(CEveManager* _evemanager){
 	Punctuate( _evemanager, "@EVENT", -1);
 
-	Punctuate( _evemanager, "@NPC", NPC);
-	Punctuate( _evemanager, "@BLOCK", BLOCK);
-	Punctuate( _evemanager, "@PANEL", PANEL);
-	Punctuate( _evemanager, "@COVER", COVER);
-	Punctuate( _evemanager, "@PUSHBLOCK", PUSHBLOCK);
+	Punctuate( _evemanager, "@NPC",		  objkind_tag::NPC);
+	Punctuate( _evemanager, "@BLOCK",	  objkind_tag::BLOCK);
+	Punctuate( _evemanager, "@PANEL",	  objkind_tag::PANEL);
+	Punctuate( _evemanager, "@COVER",	  objkind_tag::COVER);
+	Punctuate( _evemanager, "@PUSHBLOCK", objkind_tag::PUSHBLOCK);
 }
 
 void CLoad::Punctuate(CEveManager* _evemanager, const char* _command, int _kind){

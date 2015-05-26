@@ -40,7 +40,7 @@ void CEveManager::Draw(int _mapnum, int _x, int _y, bool _overdraw, int _dx, int
 		int i = ii + (int)(_dx/MAP_CHIP_SIZE);
 		for (int jj = -1; jj < WINDOW_HEIGHT/MAP_CHIP_SIZE + 1 ; jj++){
 			int j = jj + (int)(_dy/MAP_CHIP_SIZE);
-			for (int k = (_overdraw? (UNDERDRAW_NUM+1):0); k < (_overdraw? KIND_NUM:UNDERDRAW_NUM); k++){
+			for (int k = (_overdraw ? (objkind_tag::UNDERDRAW_NUM + 1) : 0); k < (_overdraw ? objkind_tag::NUM : objkind_tag::UNDERDRAW_NUM); k++) {
 				
 				if (GetEveObj(&eveobj_p, _mapnum, mod(drawx+i,MAP_SIZE), mod(drawy+j,MAP_SIZE), k, true)){
 					eveobj_p->Draw(-_dx+i*MAP_CHIP_SIZE-MAP_CHIP_SIZE/2, -_dy+j*MAP_CHIP_SIZE);
@@ -61,10 +61,10 @@ void CEveManager::SetEveObj(int _mapnum, int _datanum, int _kind, int _img[CHARA
 	eveobj.Mapnum = _mapnum;
 	eveobj.Datanum = _datanum;
 	eveobj.Visible = _visible;
-	eveobj.Kind = (objkind_tag)_kind;	
+	eveobj.Kind = (objkind_tag::type)_kind;	
 	
 	//Img
-		if (_kind==NPC){
+		if (_kind == objkind_tag::NPC) {
 			for(int i=0; i<CHARA_PIC_NUM; i++){
 				eveobj.Img[i] = _img[i];
 			}
@@ -144,7 +144,7 @@ void CEveManager::SetPic(const char* _name, const int _img[CHARA_PIC_NUM], const
 	CEveObj *eveobj_p = &EveObj_dammy;
 	
 	if (GetEveObj(&eveobj_p, _name)){
-		if (eveobj_p->Kind==NPC){
+		if (eveobj_p->Kind == objkind_tag::NPC) {
 			for(int i=0; i<CHARA_PIC_NUM; i++){
 				eveobj_p->Img[i] = _img[i];
 			}
@@ -211,7 +211,7 @@ bool CEveManager::GetText(char** &_text, int &_count, int _mapnum, int _x, int _
 		mystrcpy(_text[i], EOP);
 
 		_count = ++(eveobj_p->Count);		//テキストを持ちViibleがTrueのものは、PANELでも実際に表示するテキストが存在しなくてもカウントアップ
-		if (eveobj_p->Kind==NPC) eveobj_p->Dir = sys::TurnDir(_mydir, +2);	//NPCなら話しかけたときの向きに応じて向きを変える
+		if (eveobj_p->Kind == objkind_tag::NPC) eveobj_p->Dir = sys::TurnDir(_mydir, +2);	//NPCなら話しかけたときの向きに応じて向きを変える
 		strcpy_s(NowName, eveobj_p->Name);	//調べたオブジェクトの名前はEveManagerに保存しておく。コマンドで対象とする名前を入力する際に使う。
 
 		TmpEffect = eveobj_p->Effect;		//RND_DIRなどのEffectを話しかけたときに一時的に無効化するためにEveManagerに一時保存しておく
@@ -272,7 +272,7 @@ void CEveManager::SetText(const char _eventtext[1000][256], const int _line, con
 bool CEveManager::CheckWalkable(int _mapnum, int _x, int _y){
 	CEveObj *eveobj_p = &EveObj_dammy;
 
-	for (int k = WALKABLE_NUM+1; k < UNDERDRAW_NUM; k++){
+	for (int k = objkind_tag::WALKABLE_NUM + 1; k < objkind_tag::UNDERDRAW_NUM; k++) {
 		if (GetEveObj(&eveobj_p, _mapnum, _x, _y, k)&&(eveobj_p->Visible)){
 			return false;
 		}
@@ -283,7 +283,7 @@ bool CEveManager::CheckWalkable(int _mapnum, int _x, int _y){
 void CEveManager::SetDir(const char* _name, int _dir){
 	CEveObj *eveobj_p = &EveObj_dammy;
 	
-	if (GetEveObj(&eveobj_p, _name, NPC)){
+	if (GetEveObj(&eveobj_p, _name, objkind_tag::NPC)) {
 		eveobj_p->Dir = (direction_tag)_dir;
 		return;
 	}
@@ -380,7 +380,7 @@ void CEveManager::SetCount(const char* _name, int _count, bool _add){
 void CEveManager::Jump(CField* _field, char* _name){
 	CEveObj *eveobj_p = &EveObj_dammy;
 	
-	if (GetEveObj(&eveobj_p, _name, NPC)){
+	if (GetEveObj(&eveobj_p, _name, objkind_tag::NPC)) {
 		eveobj_p->Dy -= 5;
 		for(int i=0; i<5; i++){
 			_field->Draw(true, true);			
@@ -395,7 +395,7 @@ void CEveManager::Jump(CField* _field, char* _name){
 void CEveManager::Walk(CField* _field, char* _name, int _dir, int _walkspeed, bool _walk, int _fade){
 	CEveObj *eveobj_p = &EveObj_dammy;
 	
-	if (GetEveObj(&eveobj_p, _name, (_walk?NPC:-1), _field->GetNowMap())){
+	if (GetEveObj(&eveobj_p, _name, (_walk?objkind_tag::NPC:-1), _field->GetNowMap())){
 		if (_walk) SetDir(_name, _dir);
 
 		//障害物の有無チェックなしで歩き続ける仕様→スライドの時には障害物の有無チェックする仕様（Command.cppで）
@@ -446,7 +446,7 @@ bool CEveManager::GetEveObj(CEveObj** _eveobj_p, int _mapnum, int _x, int _y, in
 
 	int x=_x, y=_y;
 	for (unsigned int i=0; i<EveObj[_mapnum].size(); i++){
-		if (!(_kind==-1 || EveObj[_mapnum][i].Kind==_kind)) continue;	//軽量化のため条件文を分割
+		if (!(_kind==-1 || (int)EveObj[_mapnum][i].Kind==_kind)) continue;	//軽量化のため条件文を分割
 		if (_forcheck){
 			x = _x - EveObj[_mapnum][i].Dx/MAP_CHIP_SIZE;
 			y = _y - EveObj[_mapnum][i].Dy/MAP_CHIP_SIZE;
@@ -474,7 +474,7 @@ bool CEveManager::GetEveObj(CEveObj** _eveobj_p, const char* _name, const int _k
 	for (int i=0; i < MAP_MAX; i++){
 		if (i!=_mapnum && _mapnum!=-1) continue;
 		for (unsigned int j=0; j<EveObj[i].size(); j++){
-			if ((_kind==-1 || EveObj[i][j].Kind==_kind) && mystrcmp(name, EveObj[i][j].Name)){
+			if ((_kind==-1 || (int)EveObj[i][j].Kind==_kind) && mystrcmp(name, EveObj[i][j].Name)){
 				*_eveobj_p = &EveObj[i][j];
 				return true;
 			}

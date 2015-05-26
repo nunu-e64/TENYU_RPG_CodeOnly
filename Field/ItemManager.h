@@ -37,15 +37,8 @@ private:
 	};
 	std::map < std::string, item_tag > item_tag_map;
 
-	struct hoge_tag2 {
-		enum type { AA, BB, CC, NUM };
-		std::map < std::string, type > converter;
-		hoge_tag2() {
-		}
-	}hoge_tag2;
-	//std::map < std::string, hoge_tag2::type > hoge_tag2::converter;
-
 	ENUM(hoge_tag, AAA, BBB, CCC, DDD, EEE);
+	hoge_tag::type hogera;
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)////////////////////////////////
 	CItemManager() {

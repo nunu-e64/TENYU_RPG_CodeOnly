@@ -2,6 +2,8 @@
 #include "Define.h"
 #include "Main/Main.h"
 
+struct objkind_tag objkind_tag;
+
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
 	#ifdef _DEBUG

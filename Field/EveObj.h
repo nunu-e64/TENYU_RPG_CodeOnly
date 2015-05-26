@@ -14,7 +14,7 @@ public:
 		strcpy_s(Name, "");
 		Count = 0;
 		Dir = DOWN;
-		Kind = KIND_NUM;
+		Kind = objkind_tag::NUM;
 
 		for (int i=0; i<ARRAY_SIZE(Img); i++){
 			Img[i]=-1;
@@ -50,7 +50,7 @@ public:
 		bool Visible;
 
 		enum direction_tag Dir;		//DOWNで初期化
-		enum objkind_tag Kind;
+		enum objkind_tag::type Kind;
 		int Step;		//0~3
 		int Dx, Dy;		//描画時にずらすぶん（歩行やジャンプなど）
 		unsigned char Alpha;

@@ -537,19 +537,19 @@ bool CField::CheckEvent(bool _foot, bool _push){
 	int count;		//EveManagerからEveObjのCountを受け取るが変更はできない（Count加算はEveManager->GetTextで行われる）
 
 	if (_push){
-			if (EveManager->GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, PUSHBLOCK)){
+			if (EveManager->GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, objkind_tag::PUSHBLOCK)){
 				event_happened = true;
 			}
 	}else if (!_foot){
-		for (int k = WALKABLE_NUM+1; k < UNDERDRAW_NUM; k++){
-			if (k==PUSHBLOCK) continue;
+		for (int k = objkind_tag::WALKABLE_NUM + 1; k < objkind_tag::UNDERDRAW_NUM; k++) {
+			if (k == objkind_tag::PUSHBLOCK) continue;
 			if (EveManager->GetText(addtext, count, NowMap, (X+((Dir==RIGHT)?1:((Dir==LEFT)? -1:0)))%MAP_SIZE, (Y+((Dir==DOWN)? 1:((Dir==UP)?-1:0)))%MAP_SIZE, Dir, k)){
 				event_happened = true;
 				break;
 			}
 		}
 	}else{
-		for (int k = 0; k < WALKABLE_NUM; k++){
+		for (int k = 0; k < objkind_tag::WALKABLE_NUM; k++){
 			if (EveManager->GetText(addtext, count, NowMap, X, Y, Dir, k)){
 				event_happened = true;
 				break;
@@ -590,7 +590,7 @@ bool CField::StartSet(const int _dnum){	//PlayDataに格納された読み込みセーブデー
 		
 		for (unsigned int i = 0; i < PlayData_p[_dnum].EveObj.size(); i++){
 			sprintf_s(bufcmd, "@Position_Set(%s,%d,%d)", PlayData_p[_dnum].EveObj[i].Name, PlayData_p[_dnum].EveObj[i].Dx/MAP_CHIP_SIZE, PlayData_p[_dnum].EveObj[i].Dy/MAP_CHIP_SIZE);	PlayDataCmdList.Add(bufcmd);
-			if (PlayData_p[_dnum].EveObj[i].Kind==NPC){
+			if ( PlayData_p[_dnum].EveObj[i].Kind == objkind_tag::NPC ){
 				sprintf_s(bufcmd, "@Dir_Set(%s,%d)", PlayData_p[_dnum].EveObj[i].Name, PlayData_p[_dnum].EveObj[i].Dir);																PlayDataCmdList.Add(bufcmd);
 			}
 			sprintf_s(bufcmd, "@Count_Set(%s,%d)", PlayData_p[_dnum].EveObj[i].Name, PlayData_p[_dnum].EveObj[i].Count);																PlayDataCmdList.Add(bufcmd);
