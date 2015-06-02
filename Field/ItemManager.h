@@ -30,7 +30,7 @@ private:
 	std::map <std::string, CItem*> ItemBank;
 	//bool ItemBankLock;	要素のポインタを取得することはないのでロックは不要
 
-
+	
 	ENUM(item_tag, NORMAL, WEAPON, ACCESSORY);
 
 	//単一性を保証(Singleton)////////////////////////////////
