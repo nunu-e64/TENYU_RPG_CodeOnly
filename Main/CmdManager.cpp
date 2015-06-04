@@ -5,6 +5,7 @@
 #include "../Field/Field.h"
 #include "../Field/Load.h"
 #include "../Field/Map.h"
+#include "../Field/ItemManager.h"
 #include "../Field/EveManager.h"
 
 #include "../Battle/Battle.h"
@@ -226,7 +227,36 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		_field->SetPosition((int)pos[0], (int)pos[1], (int)pos[2]);
 		_field->SetMyDir(sys::StrtoDir(arg[3]));
 		_field->SetMyPic(_map->GetImgData(arg[4]), arg[4]);
-			
+
+//@Create_ConsumptionItem
+	} else if (mystrcmp(_command, "@Create_ConsumptionItem")) {
+		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		//@Create_ConsumptionItem(Name, OwnLimit, Price, 売却可否, 戦闘中使用可否フラグ ? , WaitTIme, 対象, [ステータス名, 効果値] * n)
+
+		int ownLimit, price, time;
+		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price)) || !(mystrtol(arg[5], &time))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}
+		
+		bool sellable = !sys::TrueOrFalse(arg[3], false);
+		bool battleUsable = !sys::TrueOrFalse(arg[3], false);
+
+		std::vector <std::string> flags;
+		//CItemManager::GetInstance()->Add(arg[0], "CONSUMPTION", price, ownLimit, flags);
+
+//@Create_AccessoryItem
+	} else if (mystrcmp(_command, "@Create_AccessoryItem")) {
+		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+
+//@Create_KeyItem
+	} else if (mystrcmp(_command, "@Create_KeyItem")) {
+		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+
+//@Create_MaterialItem
+	} else if (mystrcmp(_command, "@Create_MaterialItem")) {
+		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+
 
 //コマンド不一致
 	}else{
@@ -378,7 +408,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;
 			}
-
+			
 			if (!(mystrtol(arg[i + 2], &tmpNum[2])) || !(mystrtol(arg[i + 3], &tmpNum[3])) || !(mystrtol(arg[i + 4], &tmpNum[4]))) {
 				ERRORDX("@NormalTrick_Create->Check argument type->%s", _command);
 				goto finish;

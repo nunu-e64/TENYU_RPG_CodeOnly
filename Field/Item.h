@@ -3,19 +3,48 @@
 #define ITEM_H								////
 ////////////////////////////////////////////////
 
+#include "ItemManager.h"
 
 class CItem{	//インターフェースクラス
 public:
+	CItem() {
+		CONSTRUCTED;
+		Name = "";
+		Kind = CItemManager::item_tag::NOKIND;
+		Price = 0;
+		OwnLimit = -1;
+	}
+
+	std::string Name;
+	CItemManager::item_tag::type Kind;
+	int OwnLimit;		//所持制限　0で所持不可　-1で無制限
+	int Price;			//売却価格
+	bool Sellable;
 
 
 };
 
 
-/*
-class CWeapon : public CItem{
+
+class CConsumptionItem: public CItem {
+public:
+	bool BattleUsable;	//戦闘中利用可否
+	int WaitTime;		//戦闘中使用後の待機時間
+
+	std::vector<std::pair<sideEffect_tag::type_tag::type, int> > effectSet;	//ステータス名と効果値(%)
+	sideEffect_tag::target_tag::type Target;
+};
+
+class CAccessoryItem: public CItem {
+public:
+	std::vector < std::pair<std::string, int> > Material;	//練成に必要な素材アイテム名と個数
 
 };
-*/
+
+class CKeyItem: public CItem {
+
+};
+
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////
