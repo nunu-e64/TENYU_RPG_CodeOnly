@@ -100,14 +100,14 @@ bool CCmdManager::NextCommand(CCmdList* _cmdlist, char* commandline, char* comma
 
 
 //引数分解：区切り文字CMD_SEPARATORはDefine.hで定義
-bool CCmdManager::ArgCut(const char* _command, char* _argument, char** _arg, int _argnum, bool _warning){
+bool CCmdManager::ArgCut(const char* _command, char* _argument, char** _arg, int _argnum, bool _warning, int _minimum){
 
 	char *cntx;		//strtok_s用の雑用
 	_arg[0] = strtok_s(_argument, CMD_SEPARATOR, &cntx );
 		
 	for (int i=1; i<_argnum; i++){
 		_arg[i] = strtok_s( NULL, CMD_SEPARATOR , &cntx);
-		if( _arg[i] == NULL && _warning){
+		if( _arg[i] == NULL && (_warning || i < _minimum)){
 			ErrorDx("Error->More arguments are needed->%s", _command);
 			return false;
 		}
@@ -230,33 +230,87 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 
 //@Create_ConsumptionItem
 	} else if (mystrcmp(_command, "@Create_ConsumptionItem")) {
-		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		argnum = 7 + 2 * 10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 7))goto finish;	//必須
 		//@Create_ConsumptionItem(Name, OwnLimit, Price, 売却可否, 戦闘中使用可否フラグ ? , WaitTIme, 対象, [ステータス名, 効果値] * n)
 
-		int ownLimit, price, time;
-		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price)) || !(mystrtol(arg[5], &time))) {
+		if (arg[argnum - 1] != NULL) WARNINGDX("ArgumentNum may be too large. @Create_ConsumptionItem:%s", _command);
+
+		int ownLimit, price, waitTime;
+		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price)) || !(mystrtol(arg[5], &waitTime))) {
 			ERRORDX("Check argument type->%s", _command);
 			goto finish;
 		}
 		
-		bool sellable = !sys::TrueOrFalse(arg[3], false);
-		bool battleUsable = !sys::TrueOrFalse(arg[3], false);
+		bool sellable	  = !sys::TrueOrFalse(arg[3], false);
+		bool battleUsable = !sys::TrueOrFalse(arg[4], false);
 
-		std::vector <std::string> flags;
-		//CItemManager::GetInstance()->Add(arg[0], "CONSUMPTION", price, ownLimit, flags);
+		std::vector <std::pair<std::string, int> > effectSet;
+		int power;
+		for (int i = 7; i < argnum-1 && arg[i]!=NULL; i+=2) {
+			if (!(mystrtol(arg[i+1], &power))) {
+				ERRORDX("Check argument type->%s", _command);
+				goto finish;
+			}
+			effectSet.push_back(std::pair<std::string, int>(arg[i], power));
+		}
+
+		CItemManager::GetInstance()->AddConsumptionItem(arg[0], ownLimit, price, sellable, battleUsable, waitTime, arg[6], effectSet);
 
 //@Create_AccessoryItem
 	} else if (mystrcmp(_command, "@Create_AccessoryItem")) {
-		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		argnum = 4 + 2*10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 4))goto finish;	//必須
+		//@Create_AccessoryItem(Name, OwnLimit, Price, 売却可否, [SOZAINAME, num] * n)
+		
+		if (arg[argnum - 1] != NULL) WARNINGDX("ArgumentNum may be too large. @Create_AccessoryItem(Name=%s)", arg[0]);
+
+		int ownLimit, price;
+		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}
+
+		bool sellable = !sys::TrueOrFalse(arg[3], false);
+
+		int num;
+		std::vector <std::pair<std::string, int> > materialSet;
+		for (int i = 4; i < argnum - 1 && arg[i] != NULL; i += 2) {
+			if (!(mystrtol(arg[i + 1], &num))) {
+				ERRORDX("Check argument type->%s", _command);
+				goto finish;
+			}
+			materialSet.push_back(std::pair<std::string, int>(arg[i], num));
+		}
+
+		CItemManager::GetInstance()->AddAccessoryItem(arg[0], ownLimit, price, sellable, materialSet);
+
 
 //@Create_KeyItem
 	} else if (mystrcmp(_command, "@Create_KeyItem")) {
-		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		argnum = 4;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+
+		int ownLimit, price;
+		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}
+
+		bool sellable = !sys::TrueOrFalse(arg[3], false);
+
+		CItemManager::GetInstance()->AddKeyItem(arg[0], ownLimit, price, sellable);
 
 //@Create_MaterialItem
 	} else if (mystrcmp(_command, "@Create_MaterialItem")) {
-		argnum = 5;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		argnum = 4;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+		
+		int ownLimit, price;
+		if (!(mystrtol(arg[1], &ownLimit)) || !(mystrtol(arg[2], &price))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}
 
+		bool sellable = !sys::TrueOrFalse(arg[3], false);
+
+		CItemManager::GetInstance()->AddMaterialItem(arg[0], ownLimit, price, sellable);
 
 //コマンド不一致
 	}else{

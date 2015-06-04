@@ -24,7 +24,7 @@ public:
 protected:
 
 	bool NextCommand(CCmdList* _cmdlist, char* commandline, char* command, char* &argument);
-	bool ArgCut(const char* _command, char* _argument, char** _arg, int _argnum, bool _warning=true);
+	bool ArgCut(const char* _command, char* _argument, char** _arg, int _argnum, bool _warning=true, int _minimum = 0);
 
 	bool MusicCmdSolve (const char* _command, char* _argument, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);
 	bool FieldCmdSolve (const char* _command, char* _argument, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);

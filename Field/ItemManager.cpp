@@ -29,6 +29,8 @@ bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _k
 
 	if (ItemBank.find(_name) == ItemBank.end()) {
 
+		DEBUGDX("newItem:%s", _name);
+
 		_newItem->Kind = _kind;
 		_newItem->Name = _name;
 		_newItem->OwnLimit = _ownLimit;
