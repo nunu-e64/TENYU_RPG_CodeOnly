@@ -247,3 +247,16 @@ int CItemManager::GetPlayerItemNum(std::string _name) {
 		return PlayerItemBag[_name];
 	}
 }
+
+std::vector<std::string> CItemManager::GetBattleItemNameList() {	
+	std::vector<std::string> itemList;
+	
+	std::map <std::string, CConsumptionItem*>::iterator it = ConsumptionItemBank.begin();
+	while (it != ConsumptionItemBank.end()) {
+		if ((*it).second->BattleUsable && GetPlayerItemNum((*it).first) > 0) {
+			itemList.push_back((*it).first);
+		}
+		++it;
+	}
+	return itemList;
+}

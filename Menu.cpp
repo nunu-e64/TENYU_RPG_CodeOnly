@@ -121,10 +121,7 @@ void CMenu::Clear(CMenuNode* _top){
 	while (tmp != NULL){
 		if (tmp->child!=NULL) Clear(tmp->child);
 		CMenuNode* deleteNode = tmp;
-		
-		//tmp->prev->next = tmp->next;	消した後にリンクをつなぎなおしたいとき（ノードの一部削除のときに使う）
-		//tmp->next->prev = tmp->prev;	消した後にリンクをつなぎなおしたいとき（ノードの一部削除のときに使う）
-		
+			
 		tmp = tmp->next;
 		delete deleteNode;
 	}

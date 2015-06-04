@@ -17,7 +17,7 @@ public:
 	};
 	~CPlayer(){DESTRUCTED;}
 	
-	void CreateBattleMenu();
+	void CreateBattleMenu(std::vector <std::string> _battleItemList);
 	void Draw(int _dx=0, int _dy=0);
 
 	void MpHeal(int _count);

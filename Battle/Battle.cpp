@@ -8,6 +8,7 @@
 
 #include "../Field/Load.h"
 #include "../Field/EveManager.h"
+#include "../Field/ItemManager.h"
 
 
 CBattle::CBattle(){
@@ -129,7 +130,7 @@ void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evem
 
 		//初期値設定
 			for (int i=0; i<PLAYER_NUM; i++){
-				Player[i].CreateBattleMenu();//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
+				Player[i].CreateBattleMenu(CItemManager::GetInstance()->GetBattleItemNameList());//※必ずAddTrickの後にすること（内部でBattleMenuを作っているため）
 				Player[i].SetRect(WINDOW_WIDTH/4*(i+1), WINDOW_HEIGHT-200);
 			}
 			

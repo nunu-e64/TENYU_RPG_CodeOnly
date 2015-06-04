@@ -13,7 +13,7 @@ void CPlayer::SetExtraImg(CBImgBank* _bImgBank){
 	_bImgBank->GetImg(MAGIC_COUNTER, MagicCounterImg, ARRAY_SIZE(MagicCounterImg));
 }
 
-void CPlayer::CreateBattleMenu(){
+void CPlayer::CreateBattleMenu(std::vector <std::string> _battleItemList) {
 	
 	BattleMenu.Init(10, 360, 100, 130);
 
@@ -34,13 +34,10 @@ void CPlayer::CreateBattleMenu(){
 		BattleMenu.Add("技", TrickList[i]->Name);
 	}
 
-	//DEBUG:テスト用/////////////////////////////////////
-	for (int i=0; i<7; i++){
-		char tmp[32];	sprintf_s(tmp, "アイテム%d", i);
-		BattleMenu.Add("道具", tmp);
+	for (unsigned int i = 0; i < _battleItemList.size(); i++) {
+		BattleMenu.Add("道具", _battleItemList[i].c_str());
 	}	
-	////////////////////////////////////////////////
-
+	
 }
 
 void CPlayer::Draw(int _dx, int _dy){
