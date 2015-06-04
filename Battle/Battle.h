@@ -4,28 +4,26 @@
 ////////////////////////////////////////////////
 
 #include "BImgBank.h"
-#include "TrickManager.h"
-#include "Player.h"
-#include "Enemy.h"
 #include "LogWindow.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
 #include "../Main/CmdList.h"
 #include "../Main/CmdManager.h"
-#include "../Field/EveManager.h"
-#include "../Field/Map.h"
-
 #include "../Main/WorldManager.h"
+#include "../Menu.h"
 
-#include <vector>
-#include <string>
 #include <queue>
-#include <map>
 
+class CEveManager;
 class CPlayerSpeciesManager;
 class CEnemySpeciesManager;
+class CTrickManager;
 
+class CActor;
+class CPlayer;
+class CEnemy;
+class CEnemySpecies;
 
 class CBattle : public CWorldManager{
 public:
@@ -66,17 +64,8 @@ public:
 		void ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick);
 
 		//アテンション関係
-			void AddAttention(int _enemyIndex, int _playerIndex, int _value){
-				NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM,);
-				NUM_MAX_CHECK(_playerIndex, PLAYER_NUM,);
-				Enemy[_enemyIndex].AddAttention(_playerIndex, _value);
-			}
-			void SetAttention(int _enemyIndex, int _playerIndex, int _value){
-				NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM,);
-				NUM_MAX_CHECK(_playerIndex, PLAYER_NUM,);
-				Enemy[_enemyIndex].SetAttention(_playerIndex, _value);
-			}
-
+		void AddAttention(int _enemyIndex, int _playerIndex, int _value);
+		void SetAttention(int _enemyIndex, int _playerIndex, int _value);
 	
 	//ターゲット選択マーカー
 		class CTargetMarker{

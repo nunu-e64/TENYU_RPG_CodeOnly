@@ -1,8 +1,9 @@
 #include "Field.h"
 #include "Load.h"
-
+#include "EveManager.h"
 #include "ItemManager.h"
 
+#include "../Battle/Battle.h"
 
 CField::CField(){
 	CONSTRUCTED;

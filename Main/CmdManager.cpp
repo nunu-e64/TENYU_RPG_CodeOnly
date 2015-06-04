@@ -9,6 +9,7 @@
 #include "../Field/EveManager.h"
 
 #include "../Battle/Battle.h"
+#include "../Battle/TrickManager.h"
 #include "../Battle/PlayerSpeciesManager.h"
 #include "../Battle/EnemySpeciesManager.h"
 

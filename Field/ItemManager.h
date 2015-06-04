@@ -3,10 +3,6 @@
 #define ITEMMANAGER_H								////
 ////////////////////////////////////////////////
 
-#include <vector>
-#include <map>
-#include <string>
-//#include "Item.h"
 
 class CItem;
 class CConsumptionItem;
@@ -47,8 +43,6 @@ private:
 	std::map <std::string, CAccessoryItem*> AccessoryItemBank;
 	std::map <std::string, CKeyItem*> KeyItemBank;
 	std::map <std::string, CMaterialItem*> MaterialItemBank;
-
-	//bool ItemBankLock;	要素のポインタを取得することはない(要素自体がポインタの時は問題ない)のでロックは不要
 
 	
 	//単一性を保証(Singleton)////////////////////////////////

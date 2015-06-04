@@ -3,9 +3,6 @@
 #define ACTOR_H								////
 ////////////////////////////////////////////////
 
-#include <vector>
-#include <map>
-#include <string>
 
 #include "Species.h"
 

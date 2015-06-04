@@ -2,9 +2,13 @@
 #include "PlayerSpeciesManager.h"
 #include "EnemySpeciesManager.h"
 #include "BattleCalculator.h"
-
+#include "TrickManager.h"
+#include "Player.h"
+#include "Enemy.h"
 
 #include "../Field/Load.h"
+#include "../Field/EveManager.h"
+
 
 CBattle::CBattle(){
 	CONSTRUCTED;	
@@ -679,6 +683,18 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	
 }
 
+
+void CBattle::AddAttention(int _enemyIndex, int _playerIndex, int _value) {
+	NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM, );
+	NUM_MAX_CHECK(_playerIndex, PLAYER_NUM, );
+	Enemy[_enemyIndex].AddAttention(_playerIndex, _value);
+}
+
+void CBattle::SetAttention(int _enemyIndex, int _playerIndex, int _value) {
+	NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM, );
+	NUM_MAX_CHECK(_playerIndex, PLAYER_NUM, );
+	Enemy[_enemyIndex].SetAttention(_playerIndex, _value);
+}
 
 //////////////////////////////////////////////////////////////
 void CBattle::CTargetMarker::SetImage(int _img){

@@ -4,7 +4,6 @@
 ////////////////////////////////////////////////
 
 #include "Map.h"
-#include "EveManager.h"
 
 #include "../Main/TextBox.h"
 #include "../Main/TextWrap.h"
@@ -13,7 +12,10 @@
 #include "../Main/WorldManager.h"
 #include "../Main/ScreenChanger.h"
 
-#include "../Battle/Battle.h"
+#include "../Menu.h"
+
+class CEveManager;
+class CBattle;
 
 
 class CField : public CWorldManager{
