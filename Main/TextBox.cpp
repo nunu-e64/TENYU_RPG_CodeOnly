@@ -1,5 +1,6 @@
 #include "TextBox.h"
 #include "CmdList.h"
+#include "../Field/ItemManager.h"
 
 CTextBox::CTextBox(){
 	CONSTRUCTED;
@@ -647,6 +648,27 @@ bool CTextBox::Solve(const char* string, CFlagSet *_flagset){
 
 						if (num == _flagset->GetFlagNum(arg[0]) || num == -1){
 							NowStock = i+1;		//_CASEでNumも一致した場合、その次の行に標準を合わせてNextLineのループに返す
+							break;
+						}
+					}
+
+				} else if (mystrcmp(command[0], "@ITEM")) {
+					if (arg[1] == NULL) {
+						ErrorDx("@ITEM_CASE needs 2 arg:[ItemName,num]");
+					} else {
+						if (!mystrtol(arg[1], &num)) {
+							if (mystrcmp(arg[1], 'p', 3, "ELSE", "Else", "else")) {
+								num = -1;
+							} else {
+								ERRORDX("Could not change argument type->%s", chStock[i]);
+								continue;
+							}
+						} else if (num<-1) {
+							ERRORDX("You can't use arg[num]<-1 for ITEM:%s", arg[1]);
+						}
+
+						if (num == CItemManager::GetInstance()->GetPlayerItemNum(arg[0]) || num == -1) {
+							NowStock = i + 1;		//_CASEでNumも一致した場合、その次の行に標準を合わせてNextLineのループに返す
 							break;
 						}
 					}

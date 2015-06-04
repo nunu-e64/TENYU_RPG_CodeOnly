@@ -31,12 +31,13 @@ public:
 	void AddAccessoryItem	(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet);
 	void AddKeyItem			(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void AddMaterialItem	(const char* _name, int _ownLimit, int _price, bool _sellable);
-	void SetAccessoryEffect(const char* _name, std::vector<sideEffect_tag> _effectSet);
+	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _effectSet);
 
 	bool IncPlayerItem(std::string _name, int _num);	
 	bool DecPlayerItem(std::string _name, int _num);
 
-	int GetPlayerItemNum(const std::string _name);
+	CItem* GetItem(std::string _name);
+	int GetPlayerItemNum(std::string _name);
 
 private:
 

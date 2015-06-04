@@ -226,9 +226,22 @@ bool CItemManager::DecPlayerItem(std::string _name) {
 	}
 }
 
-int CItemManager::GetPlayerItemNum(const std::string _name) {
+CItem* CItemManager::GetItem(std::string _name) {
 
-	if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
+	if (ItemBank.find(_name) == ItemBank.end()) {
+		ERRORDX("Not Found Item. :%s", _name.c_str());
+		return NULL;
+	} else {
+		return ItemBank[_name];
+	}
+}
+
+int CItemManager::GetPlayerItemNum(std::string _name) {
+
+	if (ItemBank.find(_name) == ItemBank.end()) {
+		WARNINGDX("Not Found Item. :%s", _name.c_str());
+		return 0;
+	} else if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
 		return 0;
 	} else {
 		return PlayerItemBag[_name];
