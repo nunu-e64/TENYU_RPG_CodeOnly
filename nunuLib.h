@@ -89,7 +89,9 @@ std::string GetNowSystemTimeString();
 	struct _name {										\
 	enum type {__VA_ARGS__, NUM};						\
 	std::map <std::string, type> converter;				\
-	_name() {createEnumMap(converter, #__VA_ARGS__, type::NUM, __VA_ARGS__);}}_name;
+	_name() {createEnumMap(converter, #__VA_ARGS__, type::NUM, __VA_ARGS__);}		\
+	bool exist(std::string _key){return (converter.find(_key)!=converter.end());}	\
+	}_name;
 
 
 //ENUMマクロで使用。新たに定義したenumに紐づく連想配列を作成
