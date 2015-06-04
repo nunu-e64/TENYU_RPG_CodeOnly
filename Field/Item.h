@@ -37,7 +37,7 @@ public:
 
 class CAccessoryItem: public CItem {
 public:
-	std::vector < std::pair<std::string, int> > Material;	//練成に必要な素材アイテム名と個数
+	std::vector < std::pair<std::string, int> > MaterialSet;	//練成に必要な素材アイテム名と個数
 
 };
 
@@ -45,6 +45,9 @@ class CKeyItem: public CItem {
 
 };
 
+class CMaterialItem: public CItem {
+
+};
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////
