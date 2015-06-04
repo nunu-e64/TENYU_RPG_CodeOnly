@@ -21,7 +21,6 @@ public:
 	int Price;			//”„‹p‰¿Ši
 	bool Sellable;
 
-
 };
 
 

@@ -7,6 +7,7 @@ void CItemManager::Init() {
 }
 
 void CItemManager::Clear(){
+	DEBUGDX("CLEAR");
 
 	//イテレータ使ってすべてdeleteしなくちゃいけない 
 	std::map <std::string, CItem*>::iterator it = ItemBank.begin();
@@ -21,15 +22,14 @@ void CItemManager::Clear(){
 	KeyItemBank.clear();
 	MaterialItemBank.clear();
 
+	PlayerItemBag.clear();
+
 }
 
 
 bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _kind, int _ownLimit, int _price, bool _sellable) {
-	
 
 	if (ItemBank.find(_name) == ItemBank.end()) {
-
-		DEBUGDX("newItem:%s", _name);
 
 		_newItem->Kind = _kind;
 		_newItem->Name = _name;
@@ -39,6 +39,7 @@ bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _k
 		_newItem->Sellable = _sellable;
 
 		ItemBank[_name] = _newItem;
+		DEBUGDX("newItem:%s:%d", _name, (int)ItemBank[_name]);
 		return true;
 
 	} else {
@@ -160,4 +161,76 @@ void CItemManager::AddMaterialItem(const char* _name, int _ownLimit, int _price,
 void CItemManager::SetAccessoryEffect(const char* _name, std::vector<sideEffect_tag> _effectSet) {
 
 
+}
+bool CItemManager::IncPlayerItem(std::string _name, int _num) {
+	bool result = true;
+	
+	for (int i = 0; i < _num; i++) {
+		result = IncPlayerItem(_name) && result;
+	}
+	return result;
+
+}
+bool CItemManager::IncPlayerItem(std::string _name) {
+
+	if (ItemBank.find(_name) == ItemBank.end()) {
+		ERRORDX("Not Found Item. :%s", _name.c_str());
+		return false;
+
+	} else if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
+		if (ItemBank[_name]->OwnLimit != 0) {
+			PlayerItemBag[_name] = 1;
+			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			return true;
+		} else {
+			return false;
+		}
+
+	} else {
+		if (PlayerItemBag[_name] + 1 <= ItemBank[_name]->OwnLimit || ItemBank[_name]->OwnLimit == -1) {
+			++PlayerItemBag[_name];
+			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+}
+
+bool CItemManager::DecPlayerItem(std::string _name, int _num) {
+	bool result = true;
+
+	for (int i = 0; i < _num; i++) {
+		result = DecPlayerItem(_name) && result;
+	}
+	return result;
+}
+bool CItemManager::DecPlayerItem(std::string _name) {
+
+	if (ItemBank.find(_name) == ItemBank.end()) {
+		ERRORDX("Not Found Item. :%s", _name.c_str());
+		return false;
+
+	} else if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
+		return false;
+
+	} else {
+		if (PlayerItemBag[_name] > 0) {
+			--PlayerItemBag[_name];
+			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+int CItemManager::GetPlayerItemNum(const std::string _name) {
+
+	if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
+		return 0;
+	} else {
+		return PlayerItemBag[_name];
+	}
 }

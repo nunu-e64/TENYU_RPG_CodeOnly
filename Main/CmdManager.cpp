@@ -1127,6 +1127,39 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 		_textbox->SetReturnVisible(true);
 
+//@GetItem(name, [num])
+	} else if (mystrcmp(_command, "@GetItem", 'p')) {
+		argnum = 2;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 1)) goto finish;	//必須
+
+		int num = 1;
+		if (arg[1] != NULL) {
+			if (!mystrtol(arg[1], &num)) {
+				ERRORDX("Check Argument Type[num]. :%s", _command);
+				goto finish;
+			} else if (num < 0) {
+				WARNINGDX("@GetItem[num] < 0 :%s", _command);
+				goto finish;
+			}
+		}
+
+		CItemManager::GetInstance()->IncPlayerItem(arg[0], num);
+
+//@LoseItem(name, [num])
+	} else if (mystrcmp(_command, "@LoseItem", 'p')) {
+		argnum = 2;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 1)) goto finish;	//必須
+
+		int num = 1;
+		if (arg[1] != NULL) {
+			if (!mystrtol(arg[1], &num)) {
+				ERRORDX("Check Argument Type[num]. :%s", _command);
+				goto finish;
+			} else if (num < 0) {
+				WARNINGDX("@LoseItem[num] < 0 :%s", _command);
+				goto finish;
+			}
+		}
+
+		CItemManager::GetInstance()->DecPlayerItem(arg[0], num);
 
 //コマンド不一致
 	}else{

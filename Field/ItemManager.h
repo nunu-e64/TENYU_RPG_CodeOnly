@@ -31,18 +31,26 @@ public:
 	void AddAccessoryItem	(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet);
 	void AddKeyItem			(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void AddMaterialItem	(const char* _name, int _ownLimit, int _price, bool _sellable);
-
 	void SetAccessoryEffect(const char* _name, std::vector<sideEffect_tag> _effectSet);
 
+	bool IncPlayerItem(std::string _name, int _num);	
+	bool DecPlayerItem(std::string _name, int _num);
+
+	int GetPlayerItemNum(const std::string _name);
 
 private:
 
-	std::map <std::string, CItem*> ItemBank;
+	bool IncPlayerItem(std::string _name);	//true...増加成功 false...所持制限orエラー
+	bool DecPlayerItem(std::string _name);	//true...減少成功 false...既に0orエラー
 
+
+	std::map <std::string, CItem*> ItemBank;
 	std::map <std::string, CConsumptionItem*> ConsumptionItemBank;
 	std::map <std::string, CAccessoryItem*> AccessoryItemBank;
 	std::map <std::string, CKeyItem*> KeyItemBank;
 	std::map <std::string, CMaterialItem*> MaterialItemBank;
+
+	std::map <std::string, int> PlayerItemBag;	//所持アイテムの個数
 
 	
 	//単一性を保証(Singleton)////////////////////////////////

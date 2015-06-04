@@ -36,6 +36,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 			Mode = MODE_PLAYING;
 
+		//ItemManagerの初期化
+			CItemManager::GetInstance()->Init();
+
 		//ログウィンドウの初期化
 			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
 
@@ -55,10 +58,11 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	DebugDx("OK");
 		//	
 
-	//DEBUGDX("Battle_Init_Start");
+	
 		//CBattleの初期化
+			//DEBUGDX("Battle_Init_Start");
 			if (!(Battle->Init())) return false;
-	//DEBUGDX("Battle_Init_End");
+			//DEBUGDX("Battle_Init_End");
 		
 		SetTransColor(0, 0, 0);	//HACK:透過色指定 マゼンダで統一を
 			
@@ -92,8 +96,6 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//フィールドメニューの作成
 			CreateFieldMenu();
 
-		//ItemManagerの初期化
-			CItemManager::GetInstance()->Init();
 
 	CHECK_TIME_END("Init_Field")
 		
