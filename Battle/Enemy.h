@@ -34,6 +34,8 @@ public:
 		AI.SetAttention(_playerIndex, _value);
 	}
 
+	std::vector<std::string> GetDropItemList();		//戦闘終了時にドロップしたアイテムをリストにして取得
+
 private:
 	//メンバ関数
 		bool Plan();

@@ -41,6 +41,10 @@ public:
 
 	std::vector <std::string> GetBattleItemNameList();	//所持している利用可能な消費アイテムのリストを取得
 
+
+	void DebugShowAllItem();	//DEBUG: 
+	void DebugShowAllPlayerItem();	//DEBUG: 
+
 private:
 
 	bool IncPlayerItem(std::string _name);	//true...増加成功 false...所持制限orエラー
@@ -55,7 +59,7 @@ private:
 
 	std::map <std::string, int> PlayerItemBag;	//所持アイテムの個数
 
-	
+
 	//単一性を保証(Singleton)////////////////////////////////
 	CItemManager() {
 		CONSTRUCTED;

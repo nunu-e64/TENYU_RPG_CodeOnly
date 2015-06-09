@@ -22,12 +22,6 @@ public:
 	std::string GetName()const{return Name;}
 
 protected:
-	//enum value_tag {
-	//	MAXHP,
-	//	ATK,
-	//	DEF,
-	//	SPD
-	//};
 
 	void SetValue(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd);
 	//int CalcValue(value_tag _key, int _level, int _gene);
@@ -99,12 +93,13 @@ public:
 protected:
 	CEnemyAI AI;
 
+	std::vector <std::pair<std::string, int> > DropItemList;	//first:ItemName, second:DropProbability
+
 private:
 	int GoldGene;
 	int ExpGene;
 
 	bool FirstRandomPlanSettingFlag;
-
 };
 
 

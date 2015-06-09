@@ -24,8 +24,9 @@ public:
 
 	bool CreateSpecies(const char* _name, int _level, int _geneMaxHp, int _geneAtk, int _geneDef, int _geneSpd, int _img);
 	bool SetTrickList(const char* _name, std::vector <trick_tag const*> _trickList);
-	//bool SetAI(const char* _name, CEnemyPlanner* _enemyPlanner);
+	bool SetDropItemList(const char* _name, std::vector <std::pair<std::string, int> > _dropItemList);
 	
+
 	bool AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _defaultPlan=false);
 	bool SetEnemyPlanner(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);
 	bool SetEnemyTargetter(std::string _enemyName, std::string _typeName, std::vector<std::string> _argList);

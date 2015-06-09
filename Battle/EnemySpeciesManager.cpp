@@ -89,6 +89,26 @@ bool CEnemySpeciesManager::SetTrickList(const char* _name, std::vector <trick_ta
 	}
 }
 
+bool CEnemySpeciesManager::SetDropItemList(const char* _name, std::vector <std::pair<std::string, int> > _dropItemList) {
+
+	if (EnemyBank.find(_name) != EnemyBank.end()) {
+
+		if (EnemyBank[_name].DropItemList.empty()) {
+			EnemyBank[_name].DropItemList = _dropItemList;
+			return true;
+
+		} else {
+			ERRORDX("Enemy[%s]:Already Set DropItemSet", _name);
+			return false;
+		}
+
+	} else {
+		ERRORDX("Not Found Enemy Name:%s", _name);
+		return false;
+	}
+}
+
+
 bool CEnemySpeciesManager::AddRandomPlanSet(const char* _name, unsigned int _index, std::vector<std::pair<int, int> > _planList, bool _defaultPlan){
 
 	if (EnemyBank.find(_name)!=EnemyBank.end()){

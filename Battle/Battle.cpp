@@ -350,6 +350,17 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 			int exp = CBattleCalc::CalcExp(1, 2);
 			PlayerSpeciesManager->AddGold(gold);
 			//PlayerSpeciesManager->AddExp(exp);
+
+		//ドロップアイテム
+			std::vector<std::string> gotItemList;
+			for (int i = 0; i < ENEMY_NUM; i++) {
+				std::vector <std::string> tmp = Enemy[i].GetDropItemList();
+				for (unsigned int i = 0; i < tmp.size(); i++) {
+					if (CItemManager::GetInstance()->IncPlayerItem(tmp[i], 1)) {
+						gotItemList.push_back(tmp[i]);
+					}
+				}
+			}
 		
 		//Player元データに保存
 			PlayerSpeciesManager->CopyValue(PLAYER_NUM, Player);	//PlayerSpecies配列で渡したいがキャストではメモリ配置の関係上配列での参照がずれるため断念
@@ -358,26 +369,31 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 			char resultMessage[2][256];
 			sprintf_s(resultMessage[0], "取得Gold：%d", gold);
 			sprintf_s(resultMessage[1], "取得Exp：%d", exp);
-			CRect resultScreen(200, WINDOW_WIDTH-200, 150, WINDOW_HEIGHT-200);
+			CRect resultScreen(200, WINDOW_WIDTH-200, 100, WINDOW_HEIGHT-100);
 			int timecount=0;
 
-			do{
+			do {
 				Draw();
 
-				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(200*min(timecount,60)/(double)60));
+				SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(200 * min(timecount, 60) / (double)60));
 				DrawBox(resultScreen, BLACK, true);
-				DrawString(resultScreen.Left+30, resultScreen.Top+30, resultMessage[0], WHITE);
-				DrawString(resultScreen.Left+30, resultScreen.Top+60, resultMessage[1], WHITE);
-				if (timecount>=60){
-					DrawCenterString((int)resultScreen.Center().x, (int)resultScreen.Bottom-10+(timecount/6)%5, WHITE, "▼");
+				DrawString(resultScreen.Left + 30, resultScreen.Top + 30, resultMessage[0], WHITE);
+				DrawString(resultScreen.Left + 30, resultScreen.Top + 60, resultMessage[1], WHITE);
+
+				for (unsigned int i = 0; i < gotItemList.size(); i++) {
+					DrawString(resultScreen.Left + 30, resultScreen.Top + 90 + i * 20, gotItemList[i].c_str(), WHITE);
 				}
-				SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+				if (timecount >= 60) {
+					DrawCenterString((int)resultScreen.Center().x, (int)resultScreen.Bottom - 10 + (timecount / 6) % 5, WHITE, "▼");
+				}
+				SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 				++timecount;
-				if (CheckHitKeyDown(KEY_INPUT_OK)){
-					if (timecount<60) {
-						timecount=60;
-					}else{
+				if (CheckHitKeyDown(KEY_INPUT_OK)) {
+					if (timecount < 60) {
+						timecount = 60;
+					} else {
 						break;
 					}
 				}

@@ -7,7 +7,6 @@ void CItemManager::Init() {
 }
 
 void CItemManager::Clear(){
-	DEBUGDX("CLEAR");
 
 	//イテレータ使ってすべてdeleteしなくちゃいけない 
 	std::map <std::string, CItem*>::iterator it = ItemBank.begin();
@@ -259,4 +258,74 @@ std::vector<std::string> CItemManager::GetBattleItemNameList() {
 		++it;
 	}
 	return itemList;
+}
+
+void CItemManager::DebugShowAllItem() {	//DEBUG
+
+	std::string tmp;
+	{
+		tmp += "--ALL--\n";
+		std::map <std::string, CItem*>::iterator it = ItemBank.begin();
+		while (it != ItemBank.end()) {
+			tmp += (*it).first;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+	{
+		tmp += "--Consumption--\n";
+		std::map <std::string, CConsumptionItem*>::iterator it = ConsumptionItemBank.begin();
+		while (it != ConsumptionItemBank.end()) {
+			tmp += (*it).first;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+	{
+		tmp += "--Accessory--\n";
+		std::map <std::string, CAccessoryItem*>::iterator it = AccessoryItemBank.begin();
+		while (it != AccessoryItemBank.end()) {
+			tmp += (*it).first;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+	{
+		tmp += "--KeyItem--\n";
+		std::map <std::string, CKeyItem*>::iterator it = KeyItemBank.begin();
+		while (it != KeyItemBank.end()) {
+			tmp += (*it).first;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+	{
+		tmp += "--MaterialItem--\n";
+		std::map <std::string, CMaterialItem*>::iterator it = MaterialItemBank.begin();
+		while (it != MaterialItemBank.end()) {
+			tmp += (*it).first;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+
+	DEBUGDX(tmp.c_str());
+}
+
+void CItemManager::DebugShowAllPlayerItem() {
+
+	std::string tmp;
+	{
+		tmp += "--Player--\n";
+		std::map <std::string, int>::iterator it = PlayerItemBag.begin();
+		while (it != PlayerItemBag.end()) {
+			tmp += (*it).first;
+			tmp += ":";
+			tmp += (*it).second;
+			tmp += "\n";
+			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
+		}
+	}
+
+	DEBUGDX(tmp.c_str());
 }

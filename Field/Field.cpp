@@ -58,11 +58,6 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//	DebugDx("OK");
 		//	
 
-	
-		//CBattleの初期化
-			//DEBUGDX("Battle_Init_Start");
-			if (!(Battle->Init())) return false;
-			//DEBUGDX("Battle_Init_End");
 		
 		SetTransColor(0, 0, 0);	//HACK:透過色指定 マゼンダで統一を
 			
@@ -84,10 +79,15 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 			}else{
 				return false;
 			}
+			//DebugDx("Load_Init_End");
 	
-		SetTransColor(255, 0, 255);	//透過色指定	
+		SetTransColor(255, 0, 255);	//透過色指定
+
+		//CBattleの初期化
+		//DEBUGDX("Battle_Init_Start");
+		if (!(Battle->Init())) return false;
+		//DEBUGDX("Battle_Init_End");
 	
-	//DebugDx("Load_Init_End");
 			
 		//セーブデータの読み込み
 			if (PLAYDATA_NUM>0) PlayData_p = _playdata_p;

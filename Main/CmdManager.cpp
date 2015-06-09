@@ -509,7 +509,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 //@EnemyTrick_Set
 	}else if (mystrcmp(_command,"@EnemyTrick_Set")){		
-		argnum = 10+2+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
+		argnum = 10 + 2 + 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{
 
 		if (arg[0]==NULL){
 			ErrorDx("Error->@EnemyTrick_Set->arg[name]=NULL", __FILE__, __LINE__);
@@ -535,6 +535,33 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			_enemySpeciesManager->SetTrickList(arg[0], trickList);
 		}
 
+//@EnemyDropItem_Set
+	} else if (mystrcmp(_command, "@EnemyDropItem_Set")) {
+		argnum = 1 + 2 * 10 + 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false, 1);	//ïKê{
+
+		if (arg[argnum - 1] != NULL) {
+			WARNINGDX("Too many args(max DropItemNum is 10) :%s", _command);
+		}
+
+		std::vector < std::pair < std::string, int> > dropItemList;
+		int percent;
+
+		for (int i = 1; i < argnum - 1 && arg[i] != NULL; i += 2) {
+			if (CItemManager::GetInstance()->GetItem(arg[i]) != NULL) {
+				if (mystrtol(arg[i + 1], &percent)) {
+					dropItemList.push_back(std::pair<std::string, int> (arg[i], percent));
+				} else {
+					WARNINGDX("Check Argument Type. :%s", _command);
+					continue;
+				}
+			} else {
+				WARNINGDX("Not found Item Name[%s] :%s", arg[i], _command);
+				CItemManager::GetInstance()->DebugShowAllItem();
+				continue;
+			}
+		}
+		_enemySpeciesManager->SetDropItemList(arg[0], dropItemList);
+		
 //@RandomPlan_Set
 	}else if (mystrcmp(_command,"@RandomPlan_Set")){		
 		argnum = 20+2+1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//ïKê{

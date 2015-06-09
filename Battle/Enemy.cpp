@@ -86,3 +86,16 @@ bool CEnemy::Action(){
 
 	return true;
 }
+
+std::vector<std::string> CEnemy::GetDropItemList() {
+
+	std::vector <std::string> dropItemList;
+	for (unsigned int i = 0; i < DropItemList.size(); i++) {
+		if (DropItemList[i].second > rand() % 100) {
+			dropItemList.push_back(DropItemList[i].first);
+		}
+	}
+
+	return dropItemList;
+
+}
