@@ -242,8 +242,10 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					return MODE_GAMEOVER;
 				}else if (CheckHitKeyDown(KEY_INPUT_ESCAPE) || CheckHitKey(KEY_INPUT_3)){
 					return MODE_BACKTOTITLE;
-				}else if (CheckHitKeyDown(KEY_INPUT_I)){
+				}else if (CheckHitKeyDown(KEY_INPUT_G)){
 					CmdList.Add("@AutoPlay_Set(true,1)");
+				} else if (CheckHitKeyDown(KEY_INPUT_I)) {
+					CItemManager::GetInstance()->DebugShowAllPlayerItem();
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
 					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
 				}

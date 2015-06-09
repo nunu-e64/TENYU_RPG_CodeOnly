@@ -5,6 +5,7 @@
 
 #include "Actor.h"
 #include "../Menu.h"
+#include "../Field/Item.h"
 
 
 class CPlayer : public CActor, public CPlayerSpecies{
@@ -38,6 +39,7 @@ private:
 
 		CBattleMenu BattleMenu;
 
+		CConsumptionItem const* NowItem;
 };
 
 

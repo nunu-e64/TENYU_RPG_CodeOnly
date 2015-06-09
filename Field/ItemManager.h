@@ -37,6 +37,8 @@ public:
 	bool DecPlayerItem(std::string _name, int _num);
 
 	CItem* GetItem(std::string _name);
+	CConsumptionItem* GetConsumptionItem(std::string _name);
+
 	int GetPlayerItemNum(std::string _name);			//所持しているアイテム数を取得
 
 	std::vector <std::string> GetBattleItemNameList();	//所持している利用可能な消費アイテムのリストを取得

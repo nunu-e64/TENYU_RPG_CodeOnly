@@ -42,7 +42,7 @@ void CActor::FirstSet(int _playernum, int _enemynum, int _index, CTextBox** _tex
 	TimeGauge = rand() % (MaxTimeGauge / 2) + MaxTimeGauge / 2;	//タイムゲージ初期位置はゲージの半分以下でランダム（内部的にはMaxTimeGause/2以上）。バグ防止のため
 	if (HpFontHandle == -1) HpFontHandle = CreateFontToHandle(NULL, 10, -1);	//HpBarに表示するHP用のフォント作成
 
-	Status[WAIT] = true;
+	SetStatus(WAIT, true);
 	Mode = PREPARE;
 
 	Target = -1;
@@ -167,6 +167,9 @@ bool CActor::GetStatus(int _key){
 		return false;
 		//ERRORDX("NotFound Key:%s", _key);
 	}
+}
+void CActor::SetStatus(int _key, bool _value) {
+	Status[_key] = _value;
 }
 
 

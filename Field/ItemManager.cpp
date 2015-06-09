@@ -53,14 +53,15 @@ void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _pri
 
 		CConsumptionItem* newItem = new CConsumptionItem();
 
+		trick_tag tmpTrick;
 		sideEffect_tag tmpEffect;
 		newItem->BattleUsable = _battleUsable;
 		newItem->WaitTime = _waitTime;
 
-		if (tmpEffect.target_tag.exist(_target)) {
-			newItem->Target = tmpEffect.target_tag.converter[_target];
+		if (tmpTrick.targetType_tag.exist(_target)) {
+			newItem->Target = tmpTrick.targetType_tag.converter[_target];
 		} else {
-			WARNINGDX("Don't match any key[sideEffect_tag::target_tag] name:%s, key:%s", _name, _target);
+			WARNINGDX("Don't match any key[Trick_tag::target_tag] name:%s, key:%s", _name, _target);
 			delete newItem;
 			return;
 		}
@@ -234,6 +235,15 @@ CItem* CItemManager::GetItem(std::string _name) {
 		return ItemBank[_name];
 	}
 }
+CConsumptionItem* CItemManager::GetConsumptionItem(std::string _name) {
+
+	if (ConsumptionItemBank.find(_name) == ConsumptionItemBank.end()) {
+		ERRORDX("Not Found ConsumptionItem. :%s", _name.c_str());
+		return NULL;
+	} else {
+		return ConsumptionItemBank[_name];
+	}
+}
 
 int CItemManager::GetPlayerItemNum(std::string _name) {
 
@@ -321,7 +331,9 @@ void CItemManager::DebugShowAllPlayerItem() {
 		while (it != PlayerItemBag.end()) {
 			tmp += (*it).first;
 			tmp += ":";
-			tmp += (*it).second;
+			char strNum[1024];
+			sprintf_s(strNum, "%d", (*it).second);
+			tmp += strNum;
 			tmp += "\n";
 			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
 		}

@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "Field/ItemManager.h"
 
 void CMenu::Init(int _x, int _y, int _width, int _height){
 	X = _x;
@@ -226,18 +227,36 @@ void CBattleMenu::Draw(){
 	}
 
 	//子メニューの表示とカーソル表示
-	if (Cursor->parent->child != tmp){	//tmp=front
+	if (Cursor->parent->child != tmp) {	//tmp=front
 		tmp = Cursor->parent->child;
-		DrawBox(X+Width+5, Y, X+Width*4+5, Y+Height, GetColor(30, 20, 80), true);
-		DrawBox(X+Width+5+5, Y+5, X+Width*4+5-5, Y+Height-5, GRAY, false);
-		
-		for (int i=0; tmp!=NULL; i++){
-			DrawString(X+Width+5+30, Y+10+i*(1+GetFontSize()), tmp->label, WHITE, BLACK);
-			if (Cursor == tmp) DrawString(X+Width+5+8, Y+10+i*(1+GetFontSize()), "|>", WHITE, BLACK);
-			tmp = tmp->next;
+		CRect childRect(X + Width + 5, X + Width * 4 + 5, Y, Y + Height);
+		DrawBox(childRect.Left,		childRect.Top,		childRect.Right,		childRect.Bottom, GetColor(30, 20, 80), true);
+		DrawBox(childRect.Left + 5,	childRect.Top + 5,	childRect.Right - 5,	childRect.Bottom - 5, GRAY, false);
 
-			if (tmp==tmp->parent->child) break;
-		}		
+		if (mystrcmp(Cursor->parent->label, "道具")) {
+			CItemManager* itemManager = CItemManager::GetInstance();
+			for (int i = 0; tmp != NULL; i++) {
+				char strNum[64];
+				sprintf_s(strNum, "%s%d", "*", itemManager->GetPlayerItemNum(tmp->label));
+
+				DrawString(childRect.Left + 30, Y + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+				DrawString(childRect.Right - 2 * (1 + GetFontSize()), Y + 10 + i*(1 + GetFontSize()), strNum, WHITE, BLACK);
+				if (Cursor == tmp) DrawString(childRect.Left + 5 + 8, Y + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+				tmp = tmp->next;
+
+				if (tmp == tmp->parent->child) break;
+			}
+
+		} else {
+			for (int i = 0; tmp != NULL; i++) {
+				DrawString(childRect.Left + 30, Y + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+				if (Cursor == tmp) DrawString(childRect.Left + 8, Y + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+				tmp = tmp->next;
+
+				if (tmp == tmp->parent->child) break;
+			}
+		}
+
 	}
 }
 

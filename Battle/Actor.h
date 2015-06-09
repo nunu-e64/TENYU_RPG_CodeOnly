@@ -55,6 +55,7 @@ public:
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
 		bool GetStatus(int _key);
+		void SetStatus(int _key, bool _value);
 
 		int Damaged(CActor* _attacker, trick_tag const* _trick);
 		bool CheckBarMove();	//€–SŠm”F‚ªÏ‚ñ‚¾‚çTrue
@@ -100,7 +101,6 @@ protected:
 		}VisibleStatus;	//¶¨€‚Å‚Ì•`‰æ“à—e•ÏX‚ğŠÇ—
 		int OldHp;	//•`‰æ—p
 
-		std::map <int, bool> Status;
 		std::vector <statusChanger_tag> StatusChangerList;
 
 		enum mode_tag{
@@ -146,7 +146,8 @@ private:
 		static int StatusChangerImg[];
 
 		static int HpFontHandle;
-	
+
+		std::map <int, bool> Status;	
 };
 
 

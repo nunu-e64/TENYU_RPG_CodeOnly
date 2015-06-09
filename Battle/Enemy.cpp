@@ -70,8 +70,8 @@ bool CEnemy::Plan(){
 bool CEnemy::Action(){
 	
 	
-	if (Status[WAIT] || NowTrick==NULL){	//待機を選択した場合
-		Status[WAIT] = false;
+	if (GetStatus(WAIT) || NowTrick==NULL){	//待機を選択した場合
+		SetStatus(WAIT, false);
 	} else {
 		//Tatgetの選択と行動
 			Target = AI.GetTarget(this); 

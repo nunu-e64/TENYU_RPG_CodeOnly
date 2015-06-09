@@ -1,12 +1,13 @@
 #include "Player.h"
 #include "Battle.h"
 #include "BattleCalculator.h"
-
+#include "../Field/Item.h"
 
 void CPlayer::FirstSet2(){
 	if (strlen(BaseTrick.Name)){
 		BaseTrick.Power = CBattleCalc::CalcBaseTrickPower(Level, BaseTrickPowerGene);
 	}
+	NowItem = NULL;
 }
 
 void CPlayer::SetExtraImg(CBImgBank* _bImgBank){
@@ -101,12 +102,13 @@ void CPlayer::Draw(int _dx, int _dy){
 
 bool CPlayer::Plan(){
 	static bool newPlan = true;
-	
+
 	if (newPlan){
 		BattleMenu.Alive = true;
 		BattleMenu.SetCursor(BattleMenu.GetFront());
 		
 		NowTrick = NULL;
+		NowItem = NULL;
 		Target = -1;
 
 		newPlan = false;
@@ -114,24 +116,38 @@ bool CPlayer::Plan(){
 	}else{
 
 		if (Target != -1) {	//Targetが-1じゃない＝TargetMarker.DecideなどでTargetが選択済み
-			if (NowTrick!=NULL) {
+			if (NowTrick != NULL) {
 				MagicCount -= NowTrick->Cost;	//魔力消費
 				MaxTimeGauge = NowTrick->Time;
+			
+			} else if (NowItem != NULL) {
+
+				MaxTimeGauge = NowItem->WaitTime;
+				for (int i = 0; i < ENEMY_NUM; i++) {	//敵アテンション変動
+					//CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAIT);
+				}
+				SetStatus(WAIT, true);
+
+				LogWindow->Add("%sは%sを使った！", Name.c_str(), NowItem->Name.c_str());
+				CItemManager::GetInstance()->DecPlayerItem(NowItem->Name, 1);
+
+				//使う処理
+
 			} else {
-				ERRORDX("Player[%s]:NowTrick=NULL", Name.c_str());
+				ERRORDX("Player[%s]:NowTrick=NULL && NowItem=NULL", Name.c_str());
 			}
-			return  (newPlan=true);
+			return  (newPlan = true);
 		}
 
 		if (BattleMenu.Alive){		
 			CMenuNode* result = NULL;
 
-			if (BattleMenu.Move(result) && result!=NULL){
+			if (BattleMenu.Move(result) && result != NULL) {
 
 				if (mystrcmp(result->parent->label, "技")){
 					unsigned int index = BattleMenu.GetIndex(result);
 				
-					if (index<TrickList.size()){
+					if (index < TrickList.size()) {
 						//魔力確認
 							if (TrickList[index]->Cost > MagicCount) {	//魔力は足りているか
 								LogWindow->Add("%s：魔力が足りない！(必要コスト%d)", Name.c_str(), TrickList[index]->Cost);
@@ -173,7 +189,7 @@ bool CPlayer::Plan(){
 					for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
 						CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_WAIT);
 					}
-					Status[WAIT] = true;
+					SetStatus(WAIT, true);
 					BattleMenu.Alive=false;
 					return  (newPlan=true);
 
@@ -182,7 +198,7 @@ bool CPlayer::Plan(){
 						LogWindow->Add("%s：魔力回復の必要はないようだ", Name.c_str());
 						return false;
 					} else {
-						Status[PRAY] = true;
+						SetStatus(PRAY, true);
 						MaxTimeGauge = PRAY_TIME;
 
 						LogWindow->Add("%sは祈り始めた", Name.c_str());
@@ -192,25 +208,53 @@ bool CPlayer::Plan(){
 						BattleMenu.Alive=false;
 						return  (newPlan=true);
 					}
-				}else if (mystrcmp(result->label, "防御")){
+
+				} else if (mystrcmp(result->label, "防御")) {
 					if (DEFFENCE_MC > MagicCount) {	//魔力は足りているか
 						LogWindow->Add("%s：魔力が足りない！(必要コスト%d)", Name.c_str(), DEFFENCE_MC);
 						return false;
 					} else {
-						Status[DEFFENCE] = true;
+						SetStatus(DEFFENCE, true);
 						MaxTimeGauge = DEFFENCE_TIME;
-						MagicCount-=DEFFENCE_MC;	//魔力消費
-		
+						MagicCount -= DEFFENCE_MC;	//魔力消費
+
 						LogWindow->Add("%sは防御に集中している", Name.c_str());
-						for (int i=0; i<ENEMY_NUM; i++) {	//敵アテンション変動
+						for (int i = 0; i < ENEMY_NUM; i++) {	//敵アテンション変動
 							CmdList->Add("@Attention_Add(%d,%d,%d)", i, Index, (int)ATTENIOTN_DEFFENCE);
 						}
 
-						BattleMenu.Alive=false;
-						return  (newPlan=true);
+						BattleMenu.Alive = false;
+						return  (newPlan = true);
 					}
-				
-				//else if("アイテム") ...
+
+				} else if (mystrcmp(result->parent->label, "道具")) {
+					NowItem = CItemManager::GetInstance()->GetConsumptionItem(result->label);
+					
+					if (NowItem != NULL &&  CItemManager::GetInstance()->GetPlayerItemNum(NowItem->Name) > 0) {
+
+						switch (NowItem->Target) {
+						case trick_tag::targetType_tag::SINGLE:
+							CmdList->Add("@Target_Appear(ENEMY,0,false)");
+							break;
+						case trick_tag::targetType_tag::ALL:
+							Target = PLAYER_NUM;
+							break;
+						case trick_tag::targetType_tag::SINGLE_FRIEND:
+							CmdList->Add("@Target_Appear(PLAYER,0,false)");
+							break;
+						case trick_tag::targetType_tag::ALL_FRIEND:
+							Target = PLAYER_NUM;
+							break;
+						default:
+							WARNINGDX("Item->TargetType->Not Match Any Type. %s", NowItem->Name.c_str());
+							return false;
+						}
+
+						BattleMenu.Alive = false;
+
+					} else {
+						return false;
+					}
 				}
 			}
 		}else{
@@ -224,6 +268,7 @@ bool CPlayer::Plan(){
 			}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
 				CmdList->Add( "@Target_Disappear");
 				NowTrick = NULL;
+				NowItem = NULL;
 				BattleMenu.Alive = true;
 			}
 		}
@@ -236,14 +281,14 @@ bool CPlayer::Action(){
 	
 	if (GetStatus(PRAY)) {
 		MagicCount = min(MagicCount+PRAY_RECOVERY_MC, MAX_MAGIC_COUNT);
-		Status[PRAY] = false;
+		SetStatus(PRAY, false);
 		LogWindow->Add("%sは祈りを捧げ魔力を回復した！", Name.c_str());
 
 	} else if (GetStatus(DEFFENCE)) {
-		Status[DEFFENCE] = false;
+		SetStatus(DEFFENCE, false);
 
-	} else if (Status[WAIT] || NowTrick==NULL){	//待機を選択した場合
-		Status[WAIT] = false;
+	} else if (GetStatus(WAIT) || NowTrick==NULL){	//待機を選択orアイテムを使用した場合
+		SetStatus(WAIT, false);
 		
 	} else {  //技の使用
 		CmdList->Add("@Damage(%d,%d,%d,NORMAL)", ActorIndex, Target, NowTrick);
@@ -263,7 +308,7 @@ double CPlayer::CalcDamage(double _damage, CActor* _attacker, trick_tag const* _
 	if (GetStatus(DEFFENCE)) {
 		_damage *= MAGIC_DEFFENCE_RATE;	//魔法防御
 	} else {
-		_damage -= _damage * MagicCount/MAX_MAGIC_COUNT*(1-MAX_MAGIC_COUNTER_DAMAGE_RATE);  //魔力によるダメージ減少
+		_damage -= _damage * MagicCount / MAX_MAGIC_COUNT * (1 - MAX_MAGIC_COUNTER_DAMAGE_RATE);  //魔力によるダメージ減少
 	}
 	return _damage;
 }
