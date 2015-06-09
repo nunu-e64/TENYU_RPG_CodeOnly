@@ -421,7 +421,11 @@ inline void myLogf(const char* filename, const char* format, ...){
 inline void myprintfDx(const char* format, va_list args, const char* filename=NULL, int line=0){
 	char string[1024];
 	vsprintf_s(string, format, args);	//va_start‚Æva_end‚ÍŒÄ‚Ño‚µŒ³‚Å‚·‚é
-	if (filename!=NULL) sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line);
+	if (filename != NULL) {
+		if (sprintf_s(string, "%s\n->%s(%d)\n", string, filename, line) == -1) {
+			sprintf_s(string, "BufferOverRun(nunuLib.h)\n->%s(%d)\n", filename, line);
+		}
+	}
 
 	myLogf("MyLog_Printed", "PRINT: %s", string);
 	printfDx(string);
@@ -431,10 +435,11 @@ inline void myprintfDx(const char* format, va_list args, const char* filename=NU
 	ClearDrawScreen();
 }
 inline void ErrorDx(int line, const char* func, const char* filename, const char* format, ...){
-	char tmpchar[256];
+	char tmpchar[1024];
 	va_list args;	va_start(args, format);
-	sprintf_s(tmpchar, "Error->%s\n->%s", format, func);
-	myprintfDx(tmpchar, args, filename, line);
+	if (sprintf_s(tmpchar, "Error->%s\n->%s", format, func) != -1) {
+		myprintfDx(tmpchar, args, filename, line);
+	}
 	va_end(args);
 }
 inline void ErrorDx(const char* format, char* filename, int line, ...){
@@ -451,10 +456,11 @@ inline void ErrorDx(const char* format, ...){
 }
 inline void WarningDx(int line, const char* func, const char* filename, const char* format, ...){
 	#ifndef	WARNINGDX_DISABLE 
-		char tmpchar[256];
+		char tmpchar[1024];
 		va_list args;	va_start(args, format);
-		sprintf_s(tmpchar, "Warning->%s\n->%s", format, func);
-		myprintfDx(tmpchar, args, filename, line);
+		if (sprintf_s(tmpchar, "Warning->%s\n->%s", format, func) != -1) {
+			myprintfDx(tmpchar, args, filename, line);
+		}
 		va_end(args);
 	#endif
 }
@@ -476,10 +482,11 @@ inline void WarningDx(const char* format, ...){
 }
 inline void DebugDx(int line, const char* func, const char* filename, const char* format, ...){
 	#ifndef	DEBUGDX_DISABLE 
-		char tmpchar[256];
+		char tmpchar[1024];
 		va_list args;	va_start(args, format);
-		sprintf_s(tmpchar, "Debug->%s\n->%s", format, func);
-		myprintfDx(tmpchar, args, filename, line);
+		if (sprintf_s(tmpchar, "Debug->%s\n->%s", format, func) != -1) {
+			myprintfDx(tmpchar, args, filename, line);
+		}
 		va_end(args);
 	#endif
 }
