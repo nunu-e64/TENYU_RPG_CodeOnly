@@ -500,7 +500,9 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			for (int i=1; i<argnum && arg[i]!=NULL; i++){
 				if ((tmpTrick = _trickManager->GetTrick(arg[i])) != NULL){
 					trickList.push_back(tmpTrick);
-				}				
+				} else {
+					WARNINGDX("Not found Trick Name. :%s", arg[i]);
+				}
 			}
 			_playerSpeciesManager->SetTrickList(arg[0], trickList);
 		}
@@ -523,10 +525,12 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 
 			std::vector <trick_tag const*>trickList;
 			trick_tag const* tmpTrick;
-			for (int i=1; i<argnum && arg[i]!=NULL; i++){
-				if ((tmpTrick = _trickManager->GetTrick(arg[i])) != NULL){
+			for (int i = 1; i < argnum && arg[i] != NULL; i++) {
+				if ((tmpTrick = _trickManager->GetTrick(arg[i])) != NULL) {
 					trickList.push_back(tmpTrick);
-				}				
+				} else {
+					WARNINGDX("Not found Trick Name. :%s", arg[i]);
+				}
 			}
 			_enemySpeciesManager->SetTrickList(arg[0], trickList);
 		}
