@@ -1285,6 +1285,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		}
 		CItemManager::GetInstance()->IncGold(num);
 
+
 //@LoseMoney(num)
 	} else if (mystrcmp(_command, "@LoseMoney", 'p')) {
 		argnum = 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
@@ -1298,6 +1299,22 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 			goto finish;
 		}
 		CItemManager::GetInstance()->DecGold(num);
+
+
+//@Shop(index)
+	} else if (mystrcmp(_command, "@Shop", 'p')) {
+		argnum = 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
+
+		int index;
+		if (!mystrtol(arg[0], &index)) {
+			ERRORDX("Check Argument Type[index]. :%s", _command);
+			goto finish;
+		} else if (index < 0) {
+			WARNINGDX("@Shop[index] < 0 (do nothing) :%s", _command);
+			goto finish;
+		}
+		CShopManager::GetInstance()->OpenShop(index);
+
 
 //コマンド不一致
 	}else{

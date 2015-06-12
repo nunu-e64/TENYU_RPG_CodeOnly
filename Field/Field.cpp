@@ -41,6 +41,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//ItemManagerの初期化
 			CItemManager::GetInstance()->Init();
 
+		//ShopManagerの初期化
+			CShopManager::GetInstance()->Init();
+				
 		//ログウィンドウの初期化
 			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
 
