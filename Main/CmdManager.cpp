@@ -5,8 +5,9 @@
 #include "../Field/Field.h"
 #include "../Field/Load.h"
 #include "../Field/Map.h"
-#include "../Field/Item.h"
 #include "../Field/EveManager.h"
+#include "../Field/Item.h"
+#include "../Field/ShopManager.h"
 
 #include "../Battle/Battle.h"
 #include "../Battle/TrickManager.h"
@@ -306,11 +307,10 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		CItemManager::GetInstance()->AddConsumptionItem(arg[0], ownLimit, price, sellable, battleUsable, waitTime, target, sideEffectList);
 
 
-//@Create_AccessoryItem
+//@Create_AccessoryItem(Name, OwnLimit, Price, ”„‹p‰Â”Û, [SOZAINAME, num] * n)
 	} else if (mystrcmp(_command, "@Create_AccessoryItem")) {
 		argnum = 4 + 2*10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 4))goto finish;	//•K{
-		//@Create_AccessoryItem(Name, OwnLimit, Price, ”„‹p‰Â”Û, [SOZAINAME, num] * n)
-		
+				
 		if (arg[argnum - 1] != NULL) WARNINGDX("ArgumentNum may be too large. @Create_AccessoryItem(Name=%s)", arg[0]);
 
 		int ownLimit, price;
@@ -348,6 +348,7 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 
 		CItemManager::GetInstance()->AddKeyItem(arg[0], ownLimit, price, sellable);
 
+
 //@Create_MaterialItem
 	} else if (mystrcmp(_command, "@Create_MaterialItem")) {
 		argnum = 4;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//•K{
@@ -361,6 +362,27 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		bool sellable = !sys::TrueOrFalse(arg[3], false);
 
 		CItemManager::GetInstance()->AddMaterialItem(arg[0], ownLimit, price, sellable);
+
+
+//@Create_Shop(”Ô†, [¤•i–¼] * n, ...)
+	} else if (mystrcmp(_command, "@Create_Shop")) {
+		argnum = 1 + 30 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 2))goto finish;	//•K{
+		
+		if (arg[argnum - 1] != NULL) WARNINGDX("Too many arguments.(max=%d) @Create_Shop :%s", argnum, _command);
+		
+		int index;
+		if (!(mystrtol(arg[0], &index))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		}
+
+		std::vector <std::string> itemList;
+		for (int i = 1; i < argnum - 1 && arg[i] != NULL; i++) {
+			itemList.push_back(arg[i]);
+		}
+
+		CShopManager::GetInstance()->AddShop(index, itemList);
+
 
 //ƒRƒ}ƒ“ƒh•sˆê’v
 	}else{
