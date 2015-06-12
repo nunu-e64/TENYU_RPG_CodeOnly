@@ -34,6 +34,8 @@ public:
 
 	void CopyValue(int PLAYER_NUM, CPlayer* _player); 
 
+	void AddExp(int _exp);
+
 private:
 	bool PlayerBankLock;
 	std::map <std::string, CPlayerSpecies> PlayerBank;

@@ -101,6 +101,16 @@ void CPlayerSpeciesManager::CopyValue(int PLAYER_NUM, CPlayer* _player){
 
 }
 
+void CPlayerSpeciesManager::AddExp(int _exp) {
+
+	//HACK: 経験地分配についてはベンチの仲間にも分配するのかなど、要検討
+	_exp = max(0, _exp);
+	for (unsigned int i = 0; i < MemberList.size(); i++) {
+		MemberList[i]->Exp += _exp;
+	}
+
+}
+
 bool CPlayerSpeciesManager::CheckAfterLoad(){
 	bool forReturn = true;
 

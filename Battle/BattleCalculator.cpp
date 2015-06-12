@@ -78,10 +78,10 @@ int CBattleCalculator::CalcValue(value_tag _key, int _level, int _gene) {
 
 }
 
-int CBattleCalculator::CalcGold(int _lv, int _goldgene){
-	return max(1,_lv*_goldgene);
+int CBattleCalculator::CalcGold(int _lv, int _goldgene) {
+	return max(1, _lv*_goldgene);
 }
 
-int CBattleCalculator::CalcExp(int _lv, int _expgene){
-	return max(1,_lv*_expgene);
+int CBattleCalculator::CalcExp(int _lv, int _expgene) {
+	return max(1, _lv*_expgene);
 }

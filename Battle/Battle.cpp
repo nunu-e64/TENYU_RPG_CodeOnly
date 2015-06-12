@@ -346,10 +346,15 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 			if (strlen(WinCommand)) _fieldcmdlist->Add(WinCommand);
 
 		//金と経験値計算
-			int gold = CBattleCalc::CalcGold(1, 2);
-			int exp = CBattleCalc::CalcExp(1, 2);
+			int gold = 0;
+			int exp = 0;
+			for (int i = 0; i < ENEMY_NUM; i++) {
+				gold += CBattleCalc::CalcGold(	Enemy[i].GetLevel(), Enemy[i].GetGoldGene());
+				exp	 += CBattleCalc::CalcExp(	Enemy[i].GetLevel(), Enemy[i].GetExpGene());
+			}
+
 			CItemManager::GetInstance()->AddGold(gold);
-			//PlayerSpeciesManager->AddExp(exp);
+			PlayerSpeciesManager->AddExp(exp);
 
 		//ドロップアイテム
 			std::vector<std::string> gotItemList;

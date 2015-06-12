@@ -20,6 +20,9 @@ public:
 	~CSpecies(){DESTRUCTED;}
 
 	std::string GetName()const{return Name;}
+	int GetLevel(){
+		return Level;
+	}
 
 protected:
 
@@ -61,7 +64,6 @@ public:
 protected:
 	int MagicCount;	//ñÇóÕÅBè„å¿ÇÕMAX_MAGIC_COUNTÅB
 	trick_tag BaseTrick; 
-
 	int BaseTrickPowerGene;
 
 private:
@@ -90,14 +92,22 @@ public:
 		DESTRUCTED;	
 	}
 
+	int GetGoldGene() {
+		return GoldGene;
+	}
+	int GetExpGene() {
+		return ExpGene;
+	}
+
 protected:
 	CEnemyAI AI;
 
 	std::vector <std::pair<std::string, int> > DropItemList;	//first:ItemName, second:DropProbability
 
-private:
 	int GoldGene;
 	int ExpGene;
+
+private:
 
 	bool FirstRandomPlanSettingFlag;
 };

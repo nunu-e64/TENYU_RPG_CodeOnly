@@ -324,7 +324,7 @@ void CItemManager::DebugShowAllPlayerItem() {
 		}
 
 		char strNum[1024];
-		sprintf_s(strNum, "\n\n--PlayerMoney--\n%d", Gold);
+		sprintf_s(strNum, "\n\n--PlayerMoney--\n%d\n", Gold);
 		tmp += strNum;
 	}
 
