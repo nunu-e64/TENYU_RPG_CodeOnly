@@ -378,7 +378,11 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 
 		std::vector <std::string> itemList;
 		for (int i = 1; i < argnum - 1 && arg[i] != NULL; i++) {
-			itemList.push_back(arg[i]);
+			if (CItemManager::GetInstance()->GetItem(arg[i])){
+				itemList.push_back(arg[i]);
+			} else {
+				continue;
+			}
 		}
 
 		CShopManager::GetInstance()->AddShop(index, itemList);

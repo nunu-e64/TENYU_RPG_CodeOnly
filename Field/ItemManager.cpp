@@ -38,7 +38,7 @@ bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _k
 		_newItem->Sellable = _sellable;
 
 		ItemBank[_name] = _newItem;
-		DEBUGDX("newItem:%s:%d", _name, (int)ItemBank[_name]);
+		//DEBUGDX("newItem:%s:%d", _name, (int)ItemBank[_name]);
 		return true;
 
 	} else {
@@ -165,7 +165,7 @@ bool CItemManager::IncPlayerItem(std::string _name) {
 	} else if (PlayerItemBag.find(_name) == PlayerItemBag.end()) {
 		if (ItemBank[_name]->OwnLimit != 0) {
 			PlayerItemBag[_name] = 1;
-			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			//DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
 			return true;
 		} else {
 			return false;
@@ -174,7 +174,7 @@ bool CItemManager::IncPlayerItem(std::string _name) {
 	} else {
 		if (PlayerItemBag[_name] + 1 <= ItemBank[_name]->OwnLimit || ItemBank[_name]->OwnLimit == -1) {
 			++PlayerItemBag[_name];
-			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			//DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
 			return true;
 		} else {
 			return false;
@@ -203,7 +203,7 @@ bool CItemManager::DecPlayerItem(std::string _name) {
 	} else {
 		if (PlayerItemBag[_name] > 0) {
 			--PlayerItemBag[_name];
-			DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
+			//DEBUGDX("%s:%d", _name.c_str(), PlayerItemBag[_name]);
 			return true;
 		} else {
 			return false;
