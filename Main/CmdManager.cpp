@@ -1241,6 +1241,35 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 		CItemManager::GetInstance()->DecPlayerItem(arg[0], num);
 
+
+//@GetMoney(num)
+	} else if (mystrcmp(_command, "@GetMoney", 'p')) {
+		argnum = 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
+
+		int num;
+		if (!mystrtol(arg[0], &num)) {
+			ERRORDX("Check Argument Type[num]. :%s", _command);
+			goto finish;
+		} else if (num < 0) {
+			WARNINGDX("@GetMoney[num] < 0 (do nothing) :%s", _command);
+			goto finish;
+		}
+		CItemManager::GetInstance()->IncGold(num);
+
+//@LoseMoney(num)
+	} else if (mystrcmp(_command, "@LoseMoney", 'p')) {
+		argnum = 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
+
+		int num;
+		if (!mystrtol(arg[0], &num)) {
+			ERRORDX("Check Argument Type[num]. :%s", _command);
+			goto finish;
+		} else if (num < 0) {
+			WARNINGDX("@LoseMoney[num] < 0 (do nothing) :%s", _command);
+			goto finish;
+		}
+		CItemManager::GetInstance()->DecGold(num);
+
 //コマンド不一致
 	}else{
 		return false;

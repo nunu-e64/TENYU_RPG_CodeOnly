@@ -353,7 +353,7 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 				exp	 += CBattleCalc::CalcExp(	Enemy[i].GetLevel(), Enemy[i].GetExpGene());
 			}
 
-			CItemManager::GetInstance()->AddGold(gold);
+			CItemManager::GetInstance()->IncGold(gold);
 			PlayerSpeciesManager->AddExp(exp);
 
 		//ドロップアイテム

@@ -255,6 +255,29 @@ std::vector<std::string> CItemManager::GetBattleItemNameList() {
 	return itemList;
 }
 
+
+bool CItemManager::IncGold(int _gold) {
+	if (_gold <= 0) {
+		return false;
+	} else {
+		Gold += _gold;	//HACK: ‹àŠzãŒÀ‚ª•K—v‚È‚ç‚±‚±‚Å§ŒÀ‚·‚é
+		return true;
+	}
+}
+
+bool CItemManager::DecGold(int _gold) {
+	
+	if (Gold == 0 || _gold <= 0) {
+		return false;
+	} else {
+		Gold -= _gold;
+		if (Gold < 0) Gold = 0;
+		return true;
+	}
+
+}
+	
+
 void CItemManager::DebugShowAllItem() {	//DEBUG
 
 	std::string tmp;
