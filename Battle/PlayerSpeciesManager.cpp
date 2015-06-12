@@ -3,7 +3,6 @@
 
 
 void CPlayerSpeciesManager::Clear(){
-	Gold = 0; 
 	PlayerBank.clear(); 
 	PlayerBankLock = false;
 	MemberList.clear();

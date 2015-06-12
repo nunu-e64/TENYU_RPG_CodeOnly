@@ -311,7 +311,7 @@ void CItemManager::DebugShowAllPlayerItem() {
 
 	std::string tmp;
 	{
-		tmp += "--Player--\n";
+		tmp += "\n--PlayerItemPocket--\n";
 		std::map <std::string, int>::iterator it = PlayerItemBag.begin();
 		while (it != PlayerItemBag.end()) {
 			tmp += (*it).first;
@@ -322,6 +322,10 @@ void CItemManager::DebugShowAllPlayerItem() {
 			tmp += "\n";
 			++it;	//イテレータの指す先を無効化しているがeraseしたわけではないのでイテレータは変動していない＠。ただし保障されていないため危険ではある。
 		}
+
+		char strNum[1024];
+		sprintf_s(strNum, "\n\n--PlayerMoney--\n%d", Gold);
+		tmp += strNum;
 	}
 
 	DEBUGDX(tmp.c_str());

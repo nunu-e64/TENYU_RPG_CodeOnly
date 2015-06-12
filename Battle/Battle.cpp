@@ -348,7 +348,7 @@ void CBattle::BattleFinish(int &_result, CCmdList* _fieldcmdlist){
 		//金と経験値計算
 			int gold = CBattleCalc::CalcGold(1, 2);
 			int exp = CBattleCalc::CalcExp(1, 2);
-			PlayerSpeciesManager->AddGold(gold);
+			CItemManager::GetInstance()->AddGold(gold);
 			//PlayerSpeciesManager->AddExp(exp);
 
 		//ドロップアイテム

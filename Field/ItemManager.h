@@ -33,25 +33,29 @@ public:
 	void AddMaterialItem	(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _sideEffectSet);
 
-	bool IncPlayerItem(std::string _name, int _num);	
-	bool DecPlayerItem(std::string _name, int _num);
-
 	CItem* GetItem(std::string _name);
 	CConsumptionItem* GetConsumptionItem(std::string _name);
 
+	//アイテムポケット関係//////////////////////
+	bool IncPlayerItem(std::string _name, int _num);	
+	bool DecPlayerItem(std::string _name, int _num);
 	int GetPlayerItemNum(std::string _name);			//所持しているアイテム数を取得
-
 	std::vector <std::string> GetBattleItemNameList();	//所持している利用可能な消費アイテムのリストを取得
+	////////////////////////////////////////////
 
+	//財布関係//////////////////////////////////
+	void AddGold(int _gold) { Gold += _gold; }
+	////////////////////////////////////////////
 
-	void DebugShowAllItem();	//DEBUG: 
-	void DebugShowAllPlayerItem();	//DEBUG: 
+	//DEBUG: ///////////////////////////////////
+	void DebugShowAllItem();	 
+	void DebugShowAllPlayerItem();
+	////////////////////////////////////////////
 
 private:
 
 	bool IncPlayerItem(std::string _name);	//true...増加成功 false...所持制限orエラー
 	bool DecPlayerItem(std::string _name);	//true...減少成功 false...既に0orエラー
-
 
 	std::map <std::string, CItem*> ItemBank;
 	std::map <std::string, CConsumptionItem*> ConsumptionItemBank;
@@ -60,6 +64,8 @@ private:
 	std::map <std::string, CMaterialItem*> MaterialItemBank;
 
 	std::map <std::string, int> PlayerItemBag;	//所持アイテムの個数
+
+	int Gold;	//財布
 
 
 	//単一性を保証(Singleton)////////////////////////////////

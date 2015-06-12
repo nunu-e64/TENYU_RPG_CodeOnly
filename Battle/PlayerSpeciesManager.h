@@ -32,7 +32,6 @@ public:
 	bool SetMemberList();
 	int GetMemberListSize()const{return MemberList.size();}
 
-	void AddGold(int _gold){Gold+=_gold;}
 	void CopyValue(int PLAYER_NUM, CPlayer* _player); 
 
 private:
@@ -40,14 +39,12 @@ private:
 	std::map <std::string, CPlayerSpecies> PlayerBank;
 	CPlayerSpecies Dammy_Player;
 
-	int Gold;	//所持金
 	std::vector <CPlayerSpecies*> MemberList;		//プレイヤーリスト。0~MAX_PLAYER_NUM-1	が戦闘に出る
 
 	//単一性を保証(Singleton)//////////////////////////////////////////
 		CPlayerSpeciesManager(){
 			CONSTRUCTED;
 			PlayerBankLock = false;
-			Gold = 0;
 		}
 		CPlayerSpeciesManager(const CPlayerSpeciesManager& hoge);
 		CPlayerSpeciesManager& operator=(const CPlayerSpeciesManager& hoge);
