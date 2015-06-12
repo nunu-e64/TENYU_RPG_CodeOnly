@@ -132,6 +132,10 @@ bool CPlayer::Plan(){
 				CItemManager::GetInstance()->DecPlayerItem(NowItem->Name, 1);
 
 				//Žg‚¤ˆ—
+				char tmpCmd[1024];
+				sprintf_s(tmpCmd, "@Item_Use(%s, %d, %d)", NowItem->Name.c_str(), ActorIndex, Target);
+				CmdList->Add(tmpCmd);
+				DEBUGDX(tmpCmd);
 
 			} else {
 				ERRORDX("Player[%s]:NowTrick=NULL && NowItem=NULL", Name.c_str());

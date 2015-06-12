@@ -47,32 +47,17 @@ bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _k
 	}
 }
 
-void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, const char* _target, std::vector<std::pair<std::string, int> > _effectSet) {
+void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, trick_tag::targetType_tag::type _target, std::vector<sideEffect_tag> _sideEffectSet) {
 
 	if (ConsumptionItemBank.find(_name) == ConsumptionItemBank.end()) {
 
 		CConsumptionItem* newItem = new CConsumptionItem();
 
 		trick_tag tmpTrick;
-		sideEffect_tag tmpEffect;
 		newItem->BattleUsable = _battleUsable;
 		newItem->WaitTime = _waitTime;
-
-		if (tmpTrick.targetType_tag.exist(_target)) {
-			newItem->Target = tmpTrick.targetType_tag.converter[_target];
-		} else {
-			WARNINGDX("Don't match any key[Trick_tag::target_tag] name:%s, key:%s", _name, _target);
-			delete newItem;
-			return;
-		}
-
-		for (unsigned int i = 0; i < _effectSet.size(); i++) {
-			if (tmpEffect.type_tag.exist(_effectSet[i].first)) {
-				newItem->effectSet.push_back(std::pair<sideEffect_tag::type_tag::type, int>(tmpEffect.type_tag.converter[_effectSet[i].first], _effectSet[i].second));
-			} else{
-				WARNINGDX("Don't match any key[sideEffect_tag::type_tag] name:%s, key:%s", _name, _effectSet[i].first.c_str());
-			}
-		}
+		newItem->Target = _target;
+		newItem->SideEffectSet = _sideEffectSet;
 
 		if (AddItem(newItem, _name, item_tag::CONSUMPTION, _ownLimit, _price, _sellable)) {
 			ConsumptionItemBank[_name] = newItem;
@@ -158,7 +143,7 @@ void CItemManager::AddMaterialItem(const char* _name, int _ownLimit, int _price,
 
 }
 
-void CItemManager::SetAccessoryEffect(const char* _name, std::vector<sideEffect_tag> _effectSet) {
+void CItemManager::SetAccessoryEffect(const char* _name, std::vector<sideEffect_tag> _sideEffectSet) {
 
 
 }

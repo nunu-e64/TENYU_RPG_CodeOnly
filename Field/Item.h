@@ -30,7 +30,7 @@ public:
 	bool BattleUsable;	//戦闘中利用可否
 	int WaitTime;		//戦闘中使用後の待機時間
 
-	std::vector<std::pair<sideEffect_tag::type_tag::type, int> > effectSet;	//ステータス名と効果値(%)
+	std::vector<sideEffect_tag> SideEffectSet;	//ステータス名と効果値(%)
 	trick_tag::targetType_tag::type Target;
 };
 

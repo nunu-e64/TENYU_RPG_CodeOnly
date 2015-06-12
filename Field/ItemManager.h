@@ -27,11 +27,11 @@ public:
 	void Clear();
 
 	bool AddItem(CItem* _newItem, const char* _name, item_tag::type _kind, int _ownLimit, int _price, bool _sellable);
-	void AddConsumptionItem (const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, const char* _target, std::vector<std::pair<std::string, int> > _effectSet);
+	void AddConsumptionItem (const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, trick_tag::targetType_tag::type _target, std::vector<sideEffect_tag> _sideEffectSet);
 	void AddAccessoryItem	(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet);
 	void AddKeyItem			(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void AddMaterialItem	(const char* _name, int _ownLimit, int _price, bool _sellable);
-	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _effectSet);
+	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _sideEffectSet);
 
 	bool IncPlayerItem(std::string _name, int _num);	
 	bool DecPlayerItem(std::string _name, int _num);

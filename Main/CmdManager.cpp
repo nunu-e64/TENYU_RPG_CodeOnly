@@ -5,7 +5,7 @@
 #include "../Field/Field.h"
 #include "../Field/Load.h"
 #include "../Field/Map.h"
-#include "../Field/ItemManager.h"
+#include "../Field/Item.h"
 #include "../Field/EveManager.h"
 
 #include "../Battle/Battle.h"
@@ -229,10 +229,9 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		_field->SetMyDir(sys::StrtoDir(arg[3]));
 		_field->SetMyPic(_map->GetImgData(arg[4]), arg[4]);
 
-//@Create_ConsumptionItem
+//@Create_ConsumptionItem(Name, OwnLimit, Price, 売却可否, 戦闘中使用可否フラグ ? , WaitTIme, 対象, [ステータス名, 効果値] * n)
 	} else if (mystrcmp(_command, "@Create_ConsumptionItem")) {
 		argnum = 7 + 2 * 10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 7))goto finish;	//必須
-		//@Create_ConsumptionItem(Name, OwnLimit, Price, 売却可否, 戦闘中使用可否フラグ ? , WaitTIme, 対象, [ステータス名, 効果値] * n)
 
 		if (arg[argnum - 1] != NULL) WARNINGDX("ArgumentNum may be too large. @Create_ConsumptionItem:%s", _command);
 
@@ -254,8 +253,58 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 			}
 			effectSet.push_back(std::pair<std::string, int>(arg[i], power));
 		}
+		
+		trick_tag::targetType_tag::type target;
 
-		CItemManager::GetInstance()->AddConsumptionItem(arg[0], ownLimit, price, sellable, battleUsable, waitTime, arg[6], effectSet);
+		//ターゲットを数値からENUMに変換
+		trick_tag tmpTrick;
+		if (tmpTrick.targetType_tag.exist(arg[6])) {
+			target = tmpTrick.targetType_tag.converter[arg[6]];
+		} else {
+			WARNINGDX("Don't match any key[Trick_tag::target_tag]:%s", _command);
+			goto finish;
+		}
+
+		//サイドエフェクトの読み込みとvectorリスト化///////////////////////////
+		std::vector <sideEffect_tag> sideEffectList;
+		sideEffect_tag tmpEffect;
+
+		switch (target) {
+		case trick_tag::targetType_tag::ALL:
+			tmpEffect.EffectTarget = sideEffect_tag::target_tag::ALL;
+			break;
+		case trick_tag::targetType_tag::ALL_FRIEND:
+			tmpEffect.EffectTarget = sideEffect_tag::target_tag::ALL_FRIEND;
+			break;
+		default:
+			tmpEffect.EffectTarget = sideEffect_tag::target_tag::SINGLE;
+			break;
+		}
+
+		for (int i = 7; i < argnum - 1 && arg[i] != NULL; i += 2) {
+			if (!(mystrtol(arg[i + 1], &tmpEffect.Power))) {
+				ERRORDX("Check argument type->%s", _command);
+				continue;
+			}
+
+			for (unsigned int j = 0; j < strlen(arg[i]); j++) {
+				arg[i][j] = toupper(arg[i][j]);
+			}
+			if (tmpEffect.type_tag.exist(arg[i])) {
+				tmpEffect.EffectType = tmpEffect.type_tag.converter[arg[i]];
+			} else {
+				WARNINGDX("@Create_ConsumptionItem->SideEffectName doesn't match any Effect.(continue)\n->%s", _command);
+				continue;
+			}
+
+			tmpEffect.Incidence = 100;
+			tmpEffect.Time = -1;
+			sideEffectList.push_back(tmpEffect);
+		}
+		/////////////////////////////////////////////////////////////////////////////////
+
+		CItemManager::GetInstance()->AddConsumptionItem(arg[0], ownLimit, price, sellable, battleUsable, waitTime, target, sideEffectList);
+
 
 //@Create_AccessoryItem
 	} else if (mystrcmp(_command, "@Create_AccessoryItem")) {
@@ -1648,6 +1697,40 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 		}
 
 		_battle->AddAttention(enemyIndex, playerIndex, addValue);		
+
+
+
+//@Item_Use(%s, %d, %d)", ItemName, UserActorIndex, TargetActorIndex)		
+	} else if (mystrcmp(_command, "@Item_Use", 'l')) {
+		argnum = 3;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum))goto finish;	//必須
+
+		int userActorIndex = -1;
+		if (!mystrtol(arg[1], &userActorIndex)) {
+			ERRORDX("@Item_Use->Check type arg[userActorIndex]->%s", _command);
+			goto finish;
+		} else if (userActorIndex<0 || userActorIndex>_battle->GetActorNum()) {
+			ERRORDX("@Item_Use-> 0<=arg[userActorIndex]<ACTOR_NUM :%s", _command);
+			goto finish;
+		}
+
+		int targetActorIndex = -1;
+		if (!mystrtol(arg[2], &targetActorIndex)) {
+			ERRORDX("@Item_Use->Check type arg[targetActorIndex]->%s", _command);
+			goto finish;
+		} else if (targetActorIndex<0 || targetActorIndex>_battle->GetActorNum()) {
+			ERRORDX("@Item_Use-> 0<=arg[targetActorIndex]<ACTOR_NUM :%s", _command);
+			goto finish;
+		}
+
+		CConsumptionItem* consumptionItem =	 CItemManager::GetInstance()->GetConsumptionItem(arg[0]);
+		if (consumptionItem == NULL) {
+			ERRORDX("@Item_Use-> NotFoundItemName :%s", _command);
+			goto finish;
+		}
+
+		for (unsigned int i = 0; i < consumptionItem->SideEffectSet.size(); i++) {
+			_battle->InvokeSideEffect(consumptionItem->SideEffectSet[i], userActorIndex, targetActorIndex);
+		}
 
 
 //コマンド不一致
