@@ -505,14 +505,14 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 	bool noDamage = !(_trick->Power > 0);
 
 	//エラー防止処理
-		int attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
-		int targetActorIndex   = between(0, ACTOR_NUM-1, _targetActorIndex); 
+		_attackerActorIndex = between(0, ACTOR_NUM-1, _attackerActorIndex); 
+		_targetActorIndex   = between(0, ACTOR_NUM-1, _targetActorIndex); 
 
 	//ターゲットを確定しActor番号をvectorリスト化	//死人は除外
 		std::vector <int> targetList;	//ターゲットのActor番号	
 		switch (_trick->targetType){
 		case trick_tag::targetType_tag::SINGLE:
-			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+			if (Actor[_targetActorIndex]->GetAlive()) targetList.push_back(_targetActorIndex);
 			break;
 		case trick_tag::targetType_tag::ALL:
 			for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
@@ -522,7 +522,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			}
 			break;
 		case trick_tag::targetType_tag::SINGLE_FRIEND:
-			if (Actor[targetActorIndex]->GetAlive()) targetList.push_back(targetActorIndex);
+			if (Actor[_targetActorIndex]->GetAlive()) targetList.push_back(_targetActorIndex);
 			break;
 		case trick_tag::targetType_tag::ALL_FRIEND:
 			for (int i = (!Actor[_attackerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i<(!Actor[_attackerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
@@ -542,8 +542,8 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 			return;
 		}
 
-	//技の種類に応じたエフェクト発動
-		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
+	//技の種類に応じた描画エフェクト発動
+		if (_trick->DamageEffectIndex!=-1) TrickManager->DrawEffect(_trick->DamageEffectIndex, this, &BImgBank, Actor[_attackerActorIndex]->GetRect(), Actor[targetList[0]]->GetRect());
 
 
 		if (!noDamage) {
@@ -555,7 +555,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				int* damage = new int[targetList.size()];
 
 				for (unsigned int i = 0; i < targetList.size(); i++) {
-					damage[i] = Actor[targetList[i]]->Damaged(Actor[attackerActorIndex], _trick);
+					damage[i] = Actor[targetList[i]]->Damaged(Actor[_attackerActorIndex], _trick);
 				}
 
 			//ログウィンドウに出力
@@ -629,78 +629,83 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		}
 
 	//サイドエフェクトの有無確認と発動//////////////////////////////////////////////////////////
-		std::vector <int> effectTargetList;	//ターゲットのActor番号	
 		for (unsigned int i=0; i<_trick->SideEffect.size(); i++){
-		
-		//ターゲットを確定しActor番号をvectorリスト化
-			effectTargetList.clear();
-
-			switch (_trick->SideEffect[i].EffectTarget){
-			case sideEffect_tag::target_tag::ME:
-				effectTargetList.push_back(_attackerActorIndex);
-				break;
-			case sideEffect_tag::target_tag::SINGLE:	//カーソル選択したActor
-				effectTargetList.push_back(targetList[0]);
-				break;
-			case sideEffect_tag::target_tag::ALL:	//敵全体
-				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
-					if (Actor[i]->GetAlive()) {
-						effectTargetList.push_back(i);
-					}	
-				}
-				break;
-			case sideEffect_tag::target_tag::ALL_FRIEND:	//味方全体
-				for (int i=(Actor[_attackerActorIndex]->IsPlayer()? 0: PLAYER_NUM); i<(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: ACTOR_NUM); i++){
-					if (Actor[i]->GetAlive()) {
-						effectTargetList.push_back(i);
-					}	
-				}
-				break;
-			default:
-				WARNINGDX("_trick->SideEffectTargetType->Not Match. %s", _trick->Name);
-				break;
-			}
-		
-		//効果発動判定ののちターゲットごとに処理をさせる
-			if (_trick->SideEffect[i].Incidence > rand()%100) {
-				switch (_trick->SideEffect[i].EffectType){
-				case sideEffect_tag::type_tag::ATK:
-				case sideEffect_tag::type_tag::DEF:
-					for (unsigned int j=0; j<effectTargetList.size(); j++){					
-						Actor[effectTargetList[j]]->AddStatusChanger(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Time);
-					}
-					break;
-				case sideEffect_tag::type_tag::SPD:
-					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-						Actor[effectTargetList[j]]->AddStatusChanger(_trick->SideEffect[i].EffectType, _trick->SideEffect[i].Power, _trick->SideEffect[i].Time);
-					}
-					break;
-				case sideEffect_tag::type_tag::HEAL:
-					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-						Actor[effectTargetList[j]]->Heal(_trick->SideEffect[i].Power);
-					}
-					break;
-				case sideEffect_tag::type_tag::MPHEAL:
-					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-						if (Actor[effectTargetList[j]]->IsPlayer()) Player[Actor[effectTargetList[j]]->GetIndex()].MpHeal(_trick->SideEffect[i].Power);
-					}
-					break;
-				case sideEffect_tag::type_tag::ATTENTION:
-					for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-						if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[targetList[j]]->GetIndex()].AddAttention(_attackerActorIndex, _trick->SideEffect[i].Power, &LogWindow);
-					}
-					break;
-				default:
-					WARNINGDX("_trick->SideEffectType->Not Match. %s", _trick->Name);
-				}
-			}
+			InvokeSideEffect(_trick->SideEffect[i], _attackerActorIndex, _targetActorIndex);
 		}
 	//サイドエフェクトの処理ここまで////////////////////////////////////////////////////////////////////////////////////////////
-
 	
 }
 
+void CBattle::InvokeSideEffect(sideEffect_tag _sideEffect, int _invokerActorIndex, int _cursorTargetActorIndex){
 
+	//エラー防止処理
+	_invokerActorIndex = between(0, ACTOR_NUM - 1, _invokerActorIndex);
+	_cursorTargetActorIndex = between(0, ACTOR_NUM - 1, _cursorTargetActorIndex);
+
+	//ターゲットを確定しActor番号をvectorリスト化
+	std::vector <int> effectTargetList;	//ターゲットのActor番号	
+	effectTargetList.clear();
+
+	switch (_sideEffect.EffectTarget) {
+	case sideEffect_tag::target_tag::ME:
+		effectTargetList.push_back(_invokerActorIndex);
+		break;
+	case sideEffect_tag::target_tag::SINGLE:	//カーソル選択したActor
+		effectTargetList.push_back(_cursorTargetActorIndex);
+		break;
+	case sideEffect_tag::target_tag::ALL:	//敵全体
+		for (int i = (Actor[_invokerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i<(Actor[_invokerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
+			if (Actor[i]->GetAlive()) {
+				effectTargetList.push_back(i);
+			}
+		}
+		break;
+	case sideEffect_tag::target_tag::ALL_FRIEND:	//味方全体
+		for (int i = (Actor[_invokerActorIndex]->IsPlayer() ? 0 : PLAYER_NUM); i<(Actor[_invokerActorIndex]->IsPlayer() ? PLAYER_NUM : ACTOR_NUM); i++) {
+			if (Actor[i]->GetAlive()) {
+				effectTargetList.push_back(i);
+			}
+		}
+		break;
+	default:
+		WARNINGDX(">SideEffectTargetType->Not Match. :%d", _sideEffect.EffectTarget);
+		break;
+	}
+
+	//効果発動判定ののちターゲットごとに処理をさせる
+	if (_sideEffect.Incidence > rand() % 100) {
+		switch (_sideEffect.EffectType) {
+		case sideEffect_tag::type_tag::ATK:
+		case sideEffect_tag::type_tag::DEF:
+			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				Actor[effectTargetList[j]]->AddStatusChanger(_sideEffect.EffectType, _sideEffect.Power, _sideEffect.Time);
+			}
+			break;
+		case sideEffect_tag::type_tag::SPD:
+			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				Actor[effectTargetList[j]]->AddStatusChanger(_sideEffect.EffectType, _sideEffect.Power, _sideEffect.Time);
+			}
+			break;
+		case sideEffect_tag::type_tag::HEAL:
+			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				Actor[effectTargetList[j]]->Heal(_sideEffect.Power);
+			}
+			break;
+		case sideEffect_tag::type_tag::MPHEAL:
+			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				if (Actor[effectTargetList[j]]->IsPlayer()) Player[Actor[effectTargetList[j]]->GetIndex()].MpHeal(_sideEffect.Power);
+			}
+			break;
+		case sideEffect_tag::type_tag::ATTENTION:
+			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
+			}
+			break;
+		default:
+			WARNINGDX("_trick->SideEffectType->Not Match. :%d", _sideEffect.EffectType);
+		}
+	}
+}
 void CBattle::AddAttention(int _enemyIndex, int _playerIndex, int _value) {
 	NUM_MAX_CHECK(_enemyIndex, ENEMY_NUM, );
 	NUM_MAX_CHECK(_playerIndex, PLAYER_NUM, );

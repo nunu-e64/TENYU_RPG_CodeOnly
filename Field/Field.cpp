@@ -247,7 +247,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				} else if (CheckHitKeyDown(KEY_INPUT_I)) {
 					CItemManager::GetInstance()->DebugShowAllPlayerItem();
 				}else if (CheckHitKeyDown(KEY_INPUT_B)){;
-					CmdList.Add("@Battle(bg_01, エネミーC, エネミーB, エネミーA)");
+					CmdList.Add("@Battle(bg_01, エネミーA, エネミーB, エネミーC)");
 				}
 			////DEBUG:ここまで////////////////////////////////////////////
 		}

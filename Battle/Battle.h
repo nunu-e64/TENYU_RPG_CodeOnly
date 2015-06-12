@@ -62,6 +62,7 @@ public:
 
 	//戦闘用
 		void ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick_tag const* _trick);
+		void InvokeSideEffect(sideEffect_tag _sideEffect, int _invokerActorIndex, int _cursorTargetActorIndex);
 
 		//アテンション関係
 		void AddAttention(int _enemyIndex, int _playerIndex, int _value);
