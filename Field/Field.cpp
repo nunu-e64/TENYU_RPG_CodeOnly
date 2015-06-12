@@ -2,6 +2,7 @@
 #include "Load.h"
 #include "EveManager.h"
 #include "ItemManager.h"
+#include "ShopManager.h"
 
 #include "../Battle/Battle.h"
 
@@ -9,6 +10,7 @@ CField::CField(){
 	CONSTRUCTED;
 	Battle = CBattle::GetInstance();
 	EveManager = CEveManager::GetInstance();
+	ShopManager = CShopManager::GetInstance();
 }
 
 CField::~CField(){
@@ -116,6 +118,8 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 
 
 		if (FieldLog.Main()) {	//ログ表示中はキー操作無効（表示非表示切り替えはMain内で判定）
+
+		} else if (ShopManager->Main()) {
 		
 		}else if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 		
@@ -324,6 +328,10 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 
 	//ログの描画///////////////////////////////////////////////
 	FieldLog.Draw();
+	///////////////////////////////////////////////////////////
+
+	//ショップの描画///////////////////////////////////////////////
+	ShopManager->Draw();
 	///////////////////////////////////////////////////////////
 	
 	if (_screenflip)	{BasicLoop();}

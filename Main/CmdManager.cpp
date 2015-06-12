@@ -374,6 +374,9 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		if (!(mystrtol(arg[0], &index))) {
 			ERRORDX("Check argument type->%s", _command);
 			goto finish;
+		} else if (index < 0) {
+			ERRORDX("arg[index] should be larger or equal to 0. :%s", _command);
+			goto finish;
 		}
 
 		std::vector <std::string> itemList;

@@ -46,7 +46,9 @@ public:
 	//ç‡ïzä÷åW//////////////////////////////////
 	bool IncGold(int _gold); 
 	bool DecGold(int _gold); 
+	int GetGold() { return Gold; };
 	////////////////////////////////////////////
+
 
 	//DEBUG: ///////////////////////////////////
 	void DebugShowAllItem();	 

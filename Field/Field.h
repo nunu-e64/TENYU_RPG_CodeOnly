@@ -16,6 +16,7 @@
 
 class CEveManager;
 class CBattle;
+class CShopManager;
 
 
 class CField : public CWorldManager{
@@ -102,6 +103,7 @@ private:
 		CBattle* Battle;
 		CFieldMenu FieldMenu;
 		CFieldLog FieldLog;
+		CShopManager* ShopManager;
 };
 
 
