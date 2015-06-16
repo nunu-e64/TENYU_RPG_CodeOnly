@@ -224,7 +224,7 @@ struct statusChanger_tag {
 extern ENUM(target_tag, ME, SINGLE_ENEMY, SINGLE_FRIEND, ALL_FRIEND, ALL_ENEMY);
 
 struct sideEffect_tag{
-	ENUM(type_tag, ATK, DEF, SPD, HEAL, MPHEAL, ATTENTION); 
+	ENUM(type_tag, ATK, DEF, SPD, HEAL, MPHEAL, ATTENTION, SET_TIMEGAUGE, HEAL_AFTER_ATTACK, HEAL_AFTER_SELECTCOMMAND);
 	type_tag::type EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
 	target_tag::type EffectTarget;	//効果対象範囲
 

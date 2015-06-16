@@ -704,35 +704,34 @@ void CBattle::InvokeSideEffect(sideEffect_tag _sideEffect, int _invokerActorInde
 
 	//効果発動判定ののちターゲットごとに処理をさせる
 	if (_sideEffect.Incidence > rand() % 100) {
-		switch (_sideEffect.EffectType) {
-		case sideEffect_tag::type_tag::ATK:
-		case sideEffect_tag::type_tag::DEF:
-			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+		for (unsigned int j = 0; j < effectTargetList.size(); j++) {
+			switch (_sideEffect.EffectType) {
+			case sideEffect_tag::type_tag::ATK:
+			case sideEffect_tag::type_tag::DEF:
+			case sideEffect_tag::type_tag::SPD:
 				Actor[effectTargetList[j]]->AddStatusChanger(_sideEffect.EffectType, _sideEffect.Power, _sideEffect.Time);
-			}
-			break;
-		case sideEffect_tag::type_tag::SPD:
-			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
-				Actor[effectTargetList[j]]->AddStatusChanger(_sideEffect.EffectType, _sideEffect.Power, _sideEffect.Time);
-			}
-			break;
-		case sideEffect_tag::type_tag::HEAL:
-			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				break;
+			case sideEffect_tag::type_tag::HEAL:
 				Actor[effectTargetList[j]]->Heal(_sideEffect.Power);
-			}
-			break;
-		case sideEffect_tag::type_tag::MPHEAL:
-			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				break;
+			case sideEffect_tag::type_tag::MPHEAL:
 				if (Actor[effectTargetList[j]]->IsPlayer()) Player[Actor[effectTargetList[j]]->GetIndex()].MpHeal(_sideEffect.Power);
-			}
-			break;
-		case sideEffect_tag::type_tag::ATTENTION:
-			for (unsigned int j = 0; j<effectTargetList.size(); j++) {
+				break;
+			case sideEffect_tag::type_tag::ATTENTION:
 				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
+				break;
+			case sideEffect_tag::type_tag::SET_TIMEGAUGE:
+				Actor[effectTargetList[j]]->ChangeValue(_sideEffect.EffectType, _sideEffect.Power);
+				break;
+			case sideEffect_tag::type_tag::HEAL_AFTER_ATTACK:
+				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
+				break;
+			case sideEffect_tag::type_tag::HEAL_AFTER_SELECTCOMMAND:
+				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
+				break;
+			default:
+				WARNINGDX("_trick->SideEffectType->Not Match. :%d", _sideEffect.EffectType);
 			}
-			break;
-		default:
-			WARNINGDX("_trick->SideEffectType->Not Match. :%d", _sideEffect.EffectType);
 		}
 	}
 }

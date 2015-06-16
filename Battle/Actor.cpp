@@ -303,6 +303,12 @@ void CActor::ChangeValue(int _kind, int _powerPercent){	//永続（ステータスに直接
 		}
 		break;
 
+	case sideEffect_tag::type_tag::SET_TIMEGAUGE:
+		TimeGauge = max(1, (double)MaxTimeGauge * (1 - _powerPercent / 100));
+
+		LogWindow->Add("  %sのタイムゲージが強制変動！", GetName().c_str());
+		break;
+
 	default:
 		ERRORDX("StatusKind doesn't match any status. :%s", _kind);
 		return;
