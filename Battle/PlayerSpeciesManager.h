@@ -37,7 +37,7 @@ public:
 
 	void AddExp(int _exp);
 
-	bool SetAccessory(std::string _playerName, std::string _accessoryItemName, int _slot);
+	bool SetAccessory(std::string _playerName, int _slot, std::string _accessoryItemName);
 	CAccessoryItem* GetAccessory(std::string _playerName, int _slot);
 
 private:

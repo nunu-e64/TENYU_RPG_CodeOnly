@@ -327,7 +327,6 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		if (mystrchr(arg[i], '[')) {
 			++arg[i];
 			sideEffect_tag tmpEffect;
-			int tmpNum[5];
 
 			for (i; i < argnum - 1 && arg[i] != NULL; i+=4) {
 				mystrsmt(arg[i + 3], "]");
@@ -1337,14 +1336,24 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 
 		int index;
 		if (!mystrtol(arg[0], &index)) {
-			ERRORDX("Check Argument Type[index]. :%s", _command);
+			ERRORDX("Check Argument Type[index]. :%s,%s", _command, arg[0]);
 			goto finish;
 		} else if (index < 0) {
-			WARNINGDX("@Shop[index] < 0 (do nothing) :%s", _command);
+			WARNINGDX("@Shop[index] < 0 (do nothing) :%s,%s", _command, arg[0]);
 			goto finish;
 		}
 		CShopManager::GetInstance()->OpenShop(index);
 
+//@Accessory_Set(playername, slot, accessoryItemName)
+	} else if (mystrcmp(_command, "@Accessory_Set", 'p')) {
+		argnum = 3;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//必須
+
+		int slot;
+		if (mystrtol(arg[1], &slot)) {
+			CPlayerSpeciesManager::GetInstance()->SetAccessory(arg[0], slot, arg[2]);
+		} else {
+			ERRORDX("Check Argument Type[index]. :%s:%s", _command, arg[1]);
+		}
 
 //コマンド不一致
 	}else{

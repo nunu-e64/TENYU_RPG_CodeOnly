@@ -126,13 +126,17 @@ bool CPlayerSpeciesManager::CheckAfterLoad(){
 	return forReturn;
 }
 
-bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, std::string _accessoryItemName, int _slot) {
+bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, int _slot, std::string _accessoryItemName) {
 
 	if (_slot < MAX_ACCESSORY_SLOT) {
 
 		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
-		player->AccessoryList[_slot] = _accessoryItemName;
-		return true;
+		if (CItemManager::GetInstance()->GetAccessoryItem(_accessoryItemName)) {
+			player->AccessoryList[_slot] = _accessoryItemName;
+			return true;
+		} else {
+			return false;
+		}
 
 	} else {
 		ERRORDX("Slot Number:%d is too large. MAX_ACCESSORY_SLOT is %d.", _slot, MAX_ACCESSORY_SLOT);
