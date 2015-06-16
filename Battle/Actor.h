@@ -55,8 +55,8 @@ public:
 		int GetMaxHp()const{ return MaxHp; }
 		trick_tag const* GetNowTrick()const{ return NowTrick; }
 
-		bool GetStatus(int _key);
-		void SetStatus(int _key, bool _value);
+		int GetStatus(int _key);
+		void SetStatus(int _key, int _value);
 
 		int Damaged(CActor* _attacker, trick_tag const* _trick);
 		bool CheckBarMove();	//€–SŠm”F‚ªÏ‚ñ‚¾‚çTrue
@@ -148,7 +148,7 @@ private:
 
 		static int HpFontHandle;
 
-		std::map <int, bool> Status;	
+		std::map <int, int> Status;	
 };
 
 

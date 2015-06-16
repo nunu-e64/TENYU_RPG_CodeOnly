@@ -628,7 +628,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 		
 
 
-			//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動
+			//攻撃者がPlayerで攻撃対象がEnemyだった場合アテンションが変動////
 				if (!noDamage && Actor[_attackerActorIndex]->IsPlayer()) {
 					for (int i=0; i<(int)(targetList.size()); i++){	
 						if (!Actor[targetList[i]]->IsPlayer()) Enemy[Actor[targetList[i]]->GetIndex()].AddAttention(_attackerActorIndex, ATTENTION_DAMAGE);	
@@ -636,7 +636,7 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				}
 
 
-			//HPバー減少を待つ///////////////
+			//HPバー減少を待つ///////////////////////////////////////////////
 				std::vector <bool> hpBarMoved(targetList.size());
 				unsigned int i;
 				bool allOk;
@@ -654,7 +654,15 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 				}
 
 			//HACK:死亡メッセージはすべてのHPバー移動が終わってからまとめて出るべき。
-			/////////////////////////////////
+			////////////////////////////////////////////////////////////////
+
+			//サイドエフェクトHEAL_AFTER_ATTCKによる回復////////////////////
+				if (Actor[_attackerActorIndex]->GetStatus(sideEffect_tag::type_tag::HEAL_AFTER_ATTACK)) {
+					Actor[_attackerActorIndex]->Heal(Actor[_attackerActorIndex]->GetStatus(sideEffect_tag::type_tag::HEAL_AFTER_ATTACK));
+				}
+			////////////////////////////////////////////////////////////////
+
+
 		}
 
 	//サイドエフェクトの有無確認と発動//////////////////////////////////////////////////////////
@@ -724,10 +732,8 @@ void CBattle::InvokeSideEffect(sideEffect_tag _sideEffect, int _invokerActorInde
 				Actor[effectTargetList[j]]->ChangeValue(_sideEffect.EffectType, _sideEffect.Power);
 				break;
 			case sideEffect_tag::type_tag::HEAL_AFTER_ATTACK:
-				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
-				break;
 			case sideEffect_tag::type_tag::HEAL_AFTER_SELECTCOMMAND:
-				if (!Actor[effectTargetList[j]]->IsPlayer()) Enemy[Actor[effectTargetList[j]]->GetIndex()].AddAttention(_invokerActorIndex, _sideEffect.Power, &LogWindow);
+				Actor[effectTargetList[j]]->SetStatus(_sideEffect.EffectType, _sideEffect.Power);
 				break;
 			default:
 				WARNINGDX("_trick->SideEffectType->Not Match. :%d", _sideEffect.EffectType);

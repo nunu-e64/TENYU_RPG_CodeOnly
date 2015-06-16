@@ -139,6 +139,13 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 			Mode = PLAN;
 		case PLAN:
 			forReturn = Plan();
+
+			if (forReturn) {
+				if (GetStatus(sideEffect_tag::type_tag::HEAL_AFTER_SELECTCOMMAND)) {
+					Heal(GetStatus(sideEffect_tag::type_tag::HEAL_AFTER_SELECTCOMMAND));
+				}
+			}
+
 			break;
 		case ACTION:
 			if (forReturn = Action()) {
@@ -160,15 +167,15 @@ bool CActor::Do(){		//行動待機リスト上位のものから行動していく
 
 }
 
-bool CActor::GetStatus(int _key){
+int CActor::GetStatus(int _key){
 	if (Status.find(_key) != Status.end()) {
 		return Status[_key];
 	} else {
-		return false;
+		return 0;
 		//ERRORDX("NotFound Key:%s", _key);
 	}
 }
-void CActor::SetStatus(int _key, bool _value) {
+void CActor::SetStatus(int _key, int _value) {
 	Status[_key] = _value;
 }
 
