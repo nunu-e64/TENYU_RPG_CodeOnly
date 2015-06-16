@@ -37,6 +37,7 @@ public:
 	virtual void Draw(int _dx=0, int _dy=0)=0;	//純粋仮想関数…親クラス側に定義を書く必要が無くなる
 
 	//基礎情報
+		int GetActorIndex()const { return ActorIndex; }
 		int GetIndex()const{return Index;}
 		bool IsPlayer()const{
 			return (ActorIndex<PLAYER_NUM);

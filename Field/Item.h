@@ -23,21 +23,23 @@ public:
 
 };
 
+class CEffectItem: public CItem {
+public :
+	std::vector<sideEffect_tag> SideEffectSet;
+};
 
 
-class CConsumptionItem: public CItem {
+class CConsumptionItem: public CEffectItem {
 public:
 	bool BattleUsable;	//戦闘中利用可否
 	int WaitTime;		//戦闘中使用後の待機時間
 
-	std::vector<sideEffect_tag> SideEffectSet;	//ステータス名と効果値(%)
 	target_tag::type Target;
 };
 
-class CAccessoryItem: public CItem {
+class CAccessoryItem: public CEffectItem {
 public:
 	std::vector < std::pair<std::string, int> > MaterialSet;	//練成に必要な素材アイテム名と個数
-	std::vector<sideEffect_tag> SideEffectSet;
 };
 
 class CKeyItem: public CItem {

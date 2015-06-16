@@ -1836,15 +1836,16 @@ bool CCmdManager::BattleCmdSolve(const char* _command, char* _argument, CBattle*
 			goto finish;
 		}
 
-		CConsumptionItem* consumptionItem =	 CItemManager::GetInstance()->GetConsumptionItem(arg[0]);
-		if (consumptionItem == NULL) {
-			ERRORDX("@Item_Use-> NotFoundItemName :%s", _command);
+		CEffectItem* effectItem = CItemManager::GetInstance()->GetEffectItem(arg[0]);
+		if (effectItem != NULL) {
+			for (unsigned int i = 0; i < effectItem->SideEffectSet.size(); i++) {
+				_battle->InvokeSideEffect(effectItem->SideEffectSet[i], userActorIndex, targetActorIndex);
+			}
+		} else {
+			ERRORDX("@Item_Use-> NotFoundItemName :%s", arg[0]);
 			goto finish;
 		}
 
-		for (unsigned int i = 0; i < consumptionItem->SideEffectSet.size(); i++) {
-			_battle->InvokeSideEffect(consumptionItem->SideEffectSet[i], userActorIndex, targetActorIndex);
-		}
 
 
 //コマンド不一致

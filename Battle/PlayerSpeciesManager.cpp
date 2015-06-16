@@ -149,7 +149,7 @@ CAccessoryItem* CPlayerSpeciesManager::GetAccessory(std::string _playerName, int
 	if (_slot < MAX_ACCESSORY_SLOT) {
 
 		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
-		if (player != &DummyPlayer || !player->AccessoryList[_slot].empty()) {
+		if (player != &DummyPlayer && !player->AccessoryList[_slot].empty()) {
 			return CItemManager::GetInstance()->GetAccessoryItem(player->AccessoryList[_slot]);
 		} else {
 			return NULL;

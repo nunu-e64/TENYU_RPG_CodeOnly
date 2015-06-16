@@ -221,6 +221,19 @@ CItem* CItemManager::GetItem(std::string _name) {
 		return ItemBank[_name];
 	}
 }
+CEffectItem* CItemManager::GetEffectItem(std::string _name) {
+
+	if (ConsumptionItemBank.find(_name) != ConsumptionItemBank.end()) {
+		return ConsumptionItemBank[_name];
+
+	} else if (AccessoryItemBank.find(_name) != AccessoryItemBank.end()) {
+		return AccessoryItemBank[_name];
+
+	} else {
+		ERRORDX("Not Found Item. :%s", _name.c_str());
+		return NULL;
+	}
+}
 CConsumptionItem* CItemManager::GetConsumptionItem(std::string _name) {
 
 	if (ConsumptionItemBank.find(_name) == ConsumptionItemBank.end()) {

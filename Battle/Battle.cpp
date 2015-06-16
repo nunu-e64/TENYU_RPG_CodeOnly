@@ -293,7 +293,32 @@ void CBattle::StartEffect(){	//戦闘開始演出
 
 int CBattle::MainLoop(){	//戦闘中はこのループ内から出ない
 	int result;
-	
+
+	///戦闘開始時効果発動（アクセサリーなど）//////////////////////////
+	for (int i = 0; i < PLAYER_NUM; i++) {
+		for (int j = 0; j < MAX_ACCESSORY_SLOT; j++) {
+			CAccessoryItem* item = PlayerSpeciesManager->GetAccessory(Player[i].GetName(), j);
+
+			if (item == NULL) {
+				continue;
+			} else {
+
+				LogWindow.Add("%sの%sの効果発動！", Player[i].GetName().c_str(), item->Name.c_str());
+				char tmpCmd[1024];
+				sprintf_s(tmpCmd, "@Item_Use(%s, %d, %d)", item->Name.c_str(), Player[i].GetActorIndex(), Player[i].GetActorIndex());
+				B_CmdList.Add(tmpCmd);
+				DEBUGDX(tmpCmd);
+				B_CmdManager.Main(&B_CmdList, this, TextBox);
+			}
+
+		}
+	}
+
+	B_CmdManager.Main(&B_CmdList, this, TextBox);
+	Draw();
+	BasicLoop();
+	///////////////////////////////////////////////////////////////////
+
 	do{		
 		if(!LogWindow.Main() && !TextBox->Main(&B_CmdList, FlagSet_p)){	//ログ表示中あるいはテキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 

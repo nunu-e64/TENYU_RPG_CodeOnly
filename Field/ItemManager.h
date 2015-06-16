@@ -5,6 +5,7 @@
 
 
 class CItem;
+class CEffectItem;
 class CConsumptionItem;
 class CAccessoryItem;
 class CKeyItem;
@@ -34,6 +35,7 @@ public:
 	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _sideEffectSet);
 
 	CItem* GetItem(std::string _name);
+	CEffectItem* GetEffectItem(std::string _name);
 	CConsumptionItem* GetConsumptionItem(std::string _name);
 	CAccessoryItem* GetAccessoryItem(std::string _name);
 
