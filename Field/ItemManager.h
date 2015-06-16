@@ -28,13 +28,14 @@ public:
 
 	bool AddItem(CItem* _newItem, const char* _name, item_tag::type _kind, int _ownLimit, int _price, bool _sellable);
 	void AddConsumptionItem (const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, target_tag::type _target, std::vector<sideEffect_tag> _sideEffectSet);
-	void AddAccessoryItem	(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet);
+	void AddAccessoryItem(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet, std::vector<sideEffect_tag> _sideEffectSet);
 	void AddKeyItem			(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void AddMaterialItem	(const char* _name, int _ownLimit, int _price, bool _sellable);
 	void SetAccessoryEffect (const char* _name, std::vector<sideEffect_tag> _sideEffectSet);
 
 	CItem* GetItem(std::string _name);
 	CConsumptionItem* GetConsumptionItem(std::string _name);
+	CAccessoryItem* GetAccessoryItem(std::string _name);
 
 	//アイテムポケット関係//////////////////////
 	bool IncPlayerItem(std::string _name, int _num);	

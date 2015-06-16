@@ -8,6 +8,7 @@
 #include "Species.h"
 
 class CPlayer;
+class CAccessoryItem;
 
 class CPlayerSpeciesManager{
 public:
@@ -36,10 +37,13 @@ public:
 
 	void AddExp(int _exp);
 
+	bool SetAccessory(std::string _playerName, std::string _accessoryItemName, int _slot);
+	CAccessoryItem* GetAccessory(std::string _playerName, int _slot);
+
 private:
 	bool PlayerBankLock;
 	std::map <std::string, CPlayerSpecies> PlayerBank;
-	CPlayerSpecies Dammy_Player;
+	CPlayerSpecies DummyPlayer;
 
 	std::vector <CPlayerSpecies*> MemberList;		//プレイヤーリスト。0~MAX_PLAYER_NUM-1	が戦闘に出る
 

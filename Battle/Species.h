@@ -3,6 +3,8 @@
 #define SPECIES_H							////
 ////////////////////////////////////////////////
 
+#include "EnemyAI.h"
+#include <vector>
 
 class CSpecies{
 public:
@@ -44,6 +46,8 @@ protected:
 	
 };
 
+const int MAX_ACCESSORY_SLOT = 3;
+
 class CPlayerSpecies : public virtual CSpecies{
 	friend class CPlayerSpeciesManager;
 public:
@@ -65,14 +69,14 @@ protected:
 	int MagicCount;	//ñÇóÕÅBè„å¿ÇÕMAX_MAGIC_COUNTÅB
 	trick_tag BaseTrick; 
 	int BaseTrickPowerGene;
-
+	
+	std::string AccessoryList[MAX_ACCESSORY_SLOT];
+	
 private:
 	int Exp;
 };
 
 
-#include "EnemyAI.h"
-#include <vector>
 
 class CEnemySpecies : public virtual CSpecies{
 	friend class CEnemySpeciesManager;

@@ -37,7 +37,7 @@ public:
 class CAccessoryItem: public CItem {
 public:
 	std::vector < std::pair<std::string, int> > MaterialSet;	//練成に必要な素材アイテム名と個数
-
+	std::vector<sideEffect_tag> SideEffectSet;
 };
 
 class CKeyItem: public CItem {

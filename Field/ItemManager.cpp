@@ -73,11 +73,12 @@ void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _pri
 
 }
 
-void CItemManager::AddAccessoryItem(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet) {
+void CItemManager::AddAccessoryItem(const char* _name, int _ownLimit, int _price, bool _sellable, std::vector < std::pair<std::string, int> > _materialSet, std::vector<sideEffect_tag> _sideEffectSet) {
 
 	if (AccessoryItemBank.find(_name) == AccessoryItemBank.end()) {
 
 		CAccessoryItem* newItem = new CAccessoryItem();
+		newItem->SideEffectSet = _sideEffectSet;
 
 		for (unsigned int i = 0; i < _materialSet.size(); i++) {
 			if (!(MaterialItemBank.find(_materialSet[i].first) != MaterialItemBank.end())) {
@@ -227,6 +228,15 @@ CConsumptionItem* CItemManager::GetConsumptionItem(std::string _name) {
 		return NULL;
 	} else {
 		return ConsumptionItemBank[_name];
+	}
+}
+CAccessoryItem* CItemManager::GetAccessoryItem(std::string _name) {
+
+	if (AccessoryItemBank.find(_name) == AccessoryItemBank.end()) {
+		ERRORDX("Not Found AccessoryItem. :%s", _name.c_str());
+		return NULL;
+	} else {
+		return AccessoryItemBank[_name];
 	}
 }
 

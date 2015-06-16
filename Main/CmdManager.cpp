@@ -296,9 +296,9 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		CItemManager::GetInstance()->AddConsumptionItem(arg[0], ownLimit, price, sellable, battleUsable, waitTime, target, sideEffectList);
 
 
-//@Create_AccessoryItem(Name, OwnLimit, Price, 売却可否, [SOZAINAME, num] * n)
+//@Create_AccessoryItem(Name, OwnLimit, Price, 売却可否, [SOZAINAME, num] * n, [ME, ATK, 25%, 200time]*n)
 	} else if (mystrcmp(_command, "@Create_AccessoryItem")) {
-		argnum = 4 + 2*10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 4))goto finish;	//必須
+		argnum = 4 + 2*10 + 4*10 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 4))goto finish;	//必須
 				
 		if (arg[argnum - 1] != NULL) WARNINGDX("ArgumentNum may be too large. @Create_AccessoryItem(Name=%s)", arg[0]);
 
@@ -310,9 +310,10 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 
 		bool sellable = !sys::TrueOrFalse(arg[3], false);
 
+		int i;
 		int num;
 		std::vector <std::pair<std::string, int> > materialSet;
-		for (int i = 4; i < argnum - 1 && arg[i] != NULL; i += 2) {
+		for (i = 4; i < argnum - 1 && arg[i] != NULL && !mystrchr(arg[i], '['); i += 2) {
 			if (!(mystrtol(arg[i + 1], &num))) {
 				ERRORDX("Check argument type->%s", _command);
 				goto finish;
@@ -320,7 +321,49 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 			materialSet.push_back(std::pair<std::string, int>(arg[i], num));
 		}
 
-		CItemManager::GetInstance()->AddAccessoryItem(arg[0], ownLimit, price, sellable, materialSet);
+		//サイドエフェクトの読み込みとvectorリスト化
+		std::vector <sideEffect_tag> sideEffectList;
+
+		if (mystrchr(arg[i], '[')) {
+			++arg[i];
+			sideEffect_tag tmpEffect;
+			int tmpNum[5];
+
+			for (i; i < argnum - 1 && arg[i] != NULL; i+=4) {
+				mystrsmt(arg[i + 3], "]");
+
+				for (unsigned int j = 0; j < strlen(arg[i]); j++) {
+					arg[i][j] = toupper(arg[i][j]);
+				}
+				if (target_tag.exist(arg[i])) {
+					tmpEffect.EffectTarget = target_tag.converter[arg[i]];
+				} else {
+					WARNINGDX("@Create_AccessoryItem->EffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
+					continue;
+				}
+
+				for (unsigned int j = 0; j < strlen(arg[i + 1]); j++) {
+					arg[i + 1][j] = toupper(arg[i + 1][j]);
+				}
+				if (tmpEffect.type_tag.exist(arg[i+1])) {
+					tmpEffect.EffectType = tmpEffect.type_tag.converter[arg[i+1]];
+				} else {
+					WARNINGDX("@Create_AccessoryItem->EffectName doesn't match any Effect.(continue)\n->%s", arg[i+1]);
+					continue;
+				}
+
+				if (!(mystrtol(arg[i + 2], &tmpEffect.Power)) || !(mystrtol(arg[i + 3], &tmpEffect.Time))) {
+					ERRORDX("@Create_AccessoryItem->Check argument type->%s", arg[0]);
+					goto finish;
+				}
+
+				tmpEffect.Incidence = 100;
+				sideEffectList.push_back(tmpEffect);
+				
+			}
+		}
+
+		CItemManager::GetInstance()->AddAccessoryItem(arg[0], ownLimit, price, sellable, materialSet, sideEffectList);
 
 
 //@Create_KeyItem

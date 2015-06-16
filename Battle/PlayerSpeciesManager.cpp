@@ -1,6 +1,6 @@
 #include "PlayerSpeciesManager.h"
 #include "Player.h"
-
+#include "../Field/Item.h"
 
 void CPlayerSpeciesManager::Clear(){
 	PlayerBank.clear(); 
@@ -74,13 +74,13 @@ CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(const char* _name){
 		return &PlayerBank[_name];
 	}else{
 		ErrorDx("Error->PlayerSpeciesManager->GetPlayerSpecies->NotFound:%s", __FILE__, __LINE__, _name);
-		return &Dammy_Player;
+		return &DummyPlayer;
 	}
 }
 CPlayerSpecies* CPlayerSpeciesManager::GetSpecies(int _index){
 	if (_index<0 || _index>=(int)(MemberList.size())){
 		ErrorDx("Error->MemberList size error:%d", _index);
-		return &Dammy_Player;
+		return &DummyPlayer;
 	}else{
 		PlayerBankLock = true;
 		return MemberList[_index];
@@ -124,4 +124,35 @@ bool CPlayerSpeciesManager::CheckAfterLoad(){
 	}
 
 	return forReturn;
+}
+
+bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, std::string _accessoryItemName, int _slot) {
+
+	if (_slot < MAX_ACCESSORY_SLOT) {
+
+		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
+		player->AccessoryList[_slot] = _accessoryItemName;
+		return true;
+
+	} else {
+		ERRORDX("Slot Number:%d is too large. MAX_ACCESSORY_SLOT is %d.", _slot, MAX_ACCESSORY_SLOT);
+		return false;
+	}
+}
+
+CAccessoryItem* CPlayerSpeciesManager::GetAccessory(std::string _playerName, int _slot) {
+
+	if (_slot < MAX_ACCESSORY_SLOT) {
+
+		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
+		if (player != &DummyPlayer || !player->AccessoryList[_slot].empty()) {
+			return CItemManager::GetInstance()->GetAccessoryItem(player->AccessoryList[_slot]);
+		} else {
+			return NULL;
+		}
+
+	} else {
+		ERRORDX("Slot Number:%d is too large. MAX_ACCESSORY_SLOT is %d.", _slot, MAX_ACCESSORY_SLOT);
+		return NULL;
+	}
 }
