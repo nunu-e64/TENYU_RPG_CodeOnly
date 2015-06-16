@@ -364,7 +364,7 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		}
 
 		CItemManager::GetInstance()->AddAccessoryItem(arg[0], ownLimit, price, sellable, materialSet, sideEffectList);
-
+		
 
 //@Create_KeyItem
 	} else if (mystrcmp(_command, "@Create_KeyItem")) {

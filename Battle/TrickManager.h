@@ -35,6 +35,9 @@ public:
 			if (_effectIndex>=0) TrickDamageEffectBank[_effectIndex]->DrawDamageEffect(_battle, _bimgbank, _attackerR, _targetR);
 		}
 
+	//DEBUG: ///////////////////////
+	void DebugShowSideEffect(std::vector <sideEffect_tag> _sideEffectList);
+	////////////////////////////////
 
 private:
 	std::map <char256, trick_tag> TrickBank;

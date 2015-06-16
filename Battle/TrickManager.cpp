@@ -101,3 +101,15 @@ int CTrickManager::GetTrickDamageEffectIndex(std::string _name){
 		return -1;
 	}	
 }
+
+void CTrickManager::DebugShowSideEffect(std::vector <sideEffect_tag> _sideEffectList) {
+
+	std::string tmp = "\n----SideEffect---\n";
+	char strNum[1024];
+	for (unsigned int i = 0; i < _sideEffectList.size(); i++) {
+		sprintf_s(strNum, "Target:%d, Type:%d, Power:%d, Incident:%d, Time:%d\n", (int)_sideEffectList[i].EffectType, (int)_sideEffectList[i].EffectTarget, _sideEffectList[i].Power, (int)_sideEffectList[i].Incidence, _sideEffectList[i].Time);
+		tmp += strNum;
+	}
+
+	DEBUGDX(tmp.c_str());
+}
