@@ -221,11 +221,12 @@ struct statusChanger_tag {
 	int Power;
 };
 
+extern ENUM(target_tag, ME, SINGLE_ENEMY, SINGLE_FRIEND, ALL_FRIEND, ALL_ENEMY);
+
 struct sideEffect_tag{
 	ENUM(type_tag, ATK, DEF, SPD, HEAL, MPHEAL, ATTENTION); 
-	enum type_tag::type EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
-	ENUM(target_tag, ME, SINGLE, ALL_FRIEND, ALL);
-	enum target_tag::type EffectTarget;	//効果対象範囲
+	type_tag::type EffectType;	//タグ名を付けない場合はint型で宣言しないと代入処理ができない。
+	target_tag::type EffectTarget;	//効果対象範囲
 
 	int Power;		//効果力
 	int Incidence;	//発生確率
@@ -239,12 +240,7 @@ struct trick_tag{
 	std::vector <sideEffect_tag> SideEffect;
 	int DamageEffectIndex;	//描画エフェクトの種別番号
 
-	ENUM(targetType_tag, SINGLE, ALL, SINGLE_FRIEND, ALL_FRIEND, DEADOK_SINGLE);
-	enum targetType_tag::type targetType;
-
-//死人を対象にするパターン
-	//TargetType; 	//Battleで分岐処理
-
+	target_tag::type Target;
 	/*enum specialType_tag{ //Actor個別処理
 		NORMAL,
 		NODEF,

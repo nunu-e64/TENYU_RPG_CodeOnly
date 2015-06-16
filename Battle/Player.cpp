@@ -162,15 +162,21 @@ bool CPlayer::Plan(){
 
 							
 						//HACK:‘I‚ñ‚¾‹Z‚Ì‘ÎÛl”‚É‚æ‚Á‚Äˆ—‚ð•Ï‚¦‚é
-							switch(NowTrick->targetType){	
-							case trick_tag::targetType_tag::SINGLE:
+							switch(NowTrick->Target){	
+							case target_tag::SINGLE_ENEMY:
 								CmdList->Add("@Target_Appear(ENEMY,0,false)");
 								break;
-							case trick_tag::targetType_tag::ALL:
+							case target_tag::SINGLE_FRIEND:
+								CmdList->Add("@Target_Appear(PLAYER,0,false)");
+								break;
+							case target_tag::ALL_ENEMY:
 								Target = PLAYER_NUM;
 								break;
-							case trick_tag::targetType_tag::SINGLE_FRIEND:
-								CmdList->Add("@Target_Appear(PLAYER,0,false)");
+							case target_tag::ALL_FRIEND:
+								Target = 0;
+								break;
+							case target_tag::ME:
+								Target = ActorIndex;
 								break;
 							default:
 								WARNINGDX("NowTrick->TargetType->Not Found. %s", NowTrick->Name);
@@ -237,17 +243,20 @@ bool CPlayer::Plan(){
 					if (NowItem != NULL &&  CItemManager::GetInstance()->GetPlayerItemNum(NowItem->Name) > 0) {
 
 						switch (NowItem->Target) {
-						case trick_tag::targetType_tag::SINGLE:
+						case target_tag::SINGLE_ENEMY:
 							CmdList->Add("@Target_Appear(ENEMY,0,false)");
 							break;
-						case trick_tag::targetType_tag::ALL:
-							Target = PLAYER_NUM;
-							break;
-						case trick_tag::targetType_tag::SINGLE_FRIEND:
+						case target_tag::SINGLE_FRIEND:
 							CmdList->Add("@Target_Appear(PLAYER,0,false)");
 							break;
-						case trick_tag::targetType_tag::ALL_FRIEND:
+						case target_tag::ALL_ENEMY:
 							Target = PLAYER_NUM;
+							break;
+						case target_tag::ALL_FRIEND:
+							Target = 0;
+							break;
+						case target_tag::ME:
+							Target = ActorIndex;
 							break;
 						default:
 							WARNINGDX("Item->TargetType->Not Match Any Type. %s", NowItem->Name.c_str());

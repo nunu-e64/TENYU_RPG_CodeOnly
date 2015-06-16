@@ -31,7 +31,7 @@ public:
 	int WaitTime;		//戦闘中使用後の待機時間
 
 	std::vector<sideEffect_tag> SideEffectSet;	//ステータス名と効果値(%)
-	trick_tag::targetType_tag::type Target;
+	target_tag::type Target;
 };
 
 class CAccessoryItem: public CItem {

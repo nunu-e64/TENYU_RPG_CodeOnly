@@ -515,22 +515,21 @@ void CBattle::ManageAttack(int _attackerActorIndex, int _targetActorIndex, trick
 
 	//ターゲットを確定しActor番号をvectorリスト化	//死人は除外
 		std::vector <int> targetList;	//ターゲットのActor番号	
-		switch (_trick->targetType){
-		case trick_tag::targetType_tag::SINGLE:
+		switch (_trick->Target) {
+		case target_tag::ME:
+		case target_tag::SINGLE_ENEMY:
+		case target_tag::SINGLE_FRIEND:
 			if (Actor[_targetActorIndex]->GetAlive()) targetList.push_back(_targetActorIndex);
 			break;
-		case trick_tag::targetType_tag::ALL:
-			for (int i=(Actor[_attackerActorIndex]->IsPlayer()? PLAYER_NUM: 0); i<(Actor[_attackerActorIndex]->IsPlayer()? ACTOR_NUM: PLAYER_NUM); i++){
+		case target_tag::ALL_ENEMY:
+			for (int i = (Actor[_attackerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i < (Actor[_attackerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
 				if (Actor[i]->GetAlive()) {	 //生存確認	
 					targetList.push_back(i);
 				}	
 			}
 			break;
-		case trick_tag::targetType_tag::SINGLE_FRIEND:
-			if (Actor[_targetActorIndex]->GetAlive()) targetList.push_back(_targetActorIndex);
-			break;
-		case trick_tag::targetType_tag::ALL_FRIEND:
-			for (int i = (!Actor[_attackerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i<(!Actor[_attackerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
+		case target_tag::ALL_FRIEND:
+			for (int i = (!Actor[_attackerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i < (!Actor[_attackerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
 				if (Actor[i]->GetAlive()) {	 //生存確認	
 					targetList.push_back(i);
 				}
@@ -652,20 +651,21 @@ void CBattle::InvokeSideEffect(sideEffect_tag _sideEffect, int _invokerActorInde
 	effectTargetList.clear();
 
 	switch (_sideEffect.EffectTarget) {
-	case sideEffect_tag::target_tag::ME:
+	case target_tag::ME:
 		effectTargetList.push_back(_invokerActorIndex);
 		break;
-	case sideEffect_tag::target_tag::SINGLE:	//カーソル選択したActor
+	case target_tag::SINGLE_ENEMY:	//カーソル選択したActor
+	case target_tag::SINGLE_FRIEND:	//カーソル選択したActor
 		effectTargetList.push_back(_cursorTargetActorIndex);
 		break;
-	case sideEffect_tag::target_tag::ALL:	//敵全体
+	case target_tag::ALL_ENEMY:	//敵全体
 		for (int i = (Actor[_invokerActorIndex]->IsPlayer() ? PLAYER_NUM : 0); i<(Actor[_invokerActorIndex]->IsPlayer() ? ACTOR_NUM : PLAYER_NUM); i++) {
 			if (Actor[i]->GetAlive()) {
 				effectTargetList.push_back(i);
 			}
 		}
 		break;
-	case sideEffect_tag::target_tag::ALL_FRIEND:	//味方全体
+	case target_tag::ALL_FRIEND:	//味方全体
 		for (int i = (Actor[_invokerActorIndex]->IsPlayer() ? 0 : PLAYER_NUM); i<(Actor[_invokerActorIndex]->IsPlayer() ? PLAYER_NUM : ACTOR_NUM); i++) {
 			if (Actor[i]->GetAlive()) {
 				effectTargetList.push_back(i);

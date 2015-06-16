@@ -255,14 +255,13 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 			effectSet.push_back(std::pair<std::string, int>(arg[i], power));
 		}
 		
-		trick_tag::targetType_tag::type target;
+		target_tag::type target;
 
 		//ターゲットを数値からENUMに変換
-		trick_tag tmpTrick;
-		if (tmpTrick.targetType_tag.exist(arg[6])) {
-			target = tmpTrick.targetType_tag.converter[arg[6]];
+		if (target_tag.exist(arg[6])) {
+			target = target_tag.converter[arg[6]];
 		} else {
-			WARNINGDX("Don't match any key[Trick_tag::target_tag]:%s", _command);
+			WARNINGDX("Don't match any key[target_tag]:%s", _command);
 			goto finish;
 		}
 
@@ -270,17 +269,7 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		std::vector <sideEffect_tag> sideEffectList;
 		sideEffect_tag tmpEffect;
 
-		switch (target) {
-		case trick_tag::targetType_tag::ALL:
-			tmpEffect.EffectTarget = sideEffect_tag::target_tag::ALL;
-			break;
-		case trick_tag::targetType_tag::ALL_FRIEND:
-			tmpEffect.EffectTarget = sideEffect_tag::target_tag::ALL_FRIEND;
-			break;
-		default:
-			tmpEffect.EffectTarget = sideEffect_tag::target_tag::SINGLE;
-			break;
-		}
+		tmpEffect.EffectTarget = target;
 
 		for (int i = 7; i < argnum - 1 && arg[i] != NULL; i += 2) {
 			if (!(mystrtol(arg[i + 1], &tmpEffect.Power))) {
@@ -482,7 +471,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		tmpTrick.Cost = 0;
 		tmpTrick.Time = time;
 		tmpTrick.DamageEffectIndex = _trickManager->GetTrickDamageEffectIndex(arg[2]);
-		tmpTrick.targetType = trick_tag::targetType_tag::SINGLE;
+		tmpTrick.Target = target_tag::SINGLE_ENEMY;
 		tmpTrick.SideEffect = tmp;
 		_trickManager->Add(tmpTrick, "BASE");
 
@@ -499,20 +488,18 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			}
 		}
 
-		trick_tag tmp;
-		enum trick_tag::targetType_tag::type targetType;
+		enum target_tag::type Target;
 		for (unsigned int j = 0; j < strlen(arg[5]); j++) {
 			arg[5][j] = toupper(arg[5][j]);
 		}
-		if (tmp.targetType_tag.converter.find(arg[5]) != tmp.targetType_tag.converter.end()) {
-			targetType = tmp.targetType_tag.converter[arg[5]];
-		} else if (sys::CheckStrNULL(arg[5])){
-			targetType = trick_tag::targetType_tag::ALL;
+		if (target_tag.exist(arg[5])) {
+			Target = target_tag.converter[arg[5]];
+		} else if (sys::CheckStrNULL(arg[5])) {
+			Target = target_tag::ME;
 		} else {
 			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
 			goto finish;
 		}
-
 
 		if (arg[argnum-1]!=NULL) WARNINGDX("@NormalTrick_Create: too large number of args:%d (continue)", argnum);
 
@@ -535,8 +522,8 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			for (unsigned int j = 0; j < strlen(arg[i + 1]); j++) {
 				arg[i+1][j] = toupper(arg[i+1][j]);
 			}
-			if (tmpEffect.target_tag.converter.find(arg[i+1]) != tmpEffect.target_tag.converter.end()) {
-				tmpNum[1] = tmpEffect.target_tag.converter[arg[i + 1]];
+			if (target_tag.exist(arg[i + 1])) {
+				tmpNum[1] = target_tag.converter[arg[i + 1]];
 			} else {
 				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;
@@ -547,14 +534,14 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 				goto finish;
 			}
 			tmpEffect.EffectType   = (sideEffect_tag::type_tag::type)   tmpNum[0];
-			tmpEffect.EffectTarget = (sideEffect_tag::target_tag::type) tmpNum[1];
+			tmpEffect.EffectTarget = (target_tag::type) tmpNum[1];
 			tmpEffect.Power		   = tmpNum[2];
 			tmpEffect.Incidence	   = tmpNum[3];
 			tmpEffect.Time		   = tmpNum[4];
 			sideEffectList.push_back(tmpEffect);
 		}
 
-		_trickManager->Add(arg[0], value[0], value[1], value[2], targetType, arg[4], sideEffectList);	
+		_trickManager->Add(arg[0], value[0], value[1], value[2], Target, arg[4], sideEffectList);	
 
 
 //@PlayerTrick_Set

@@ -17,7 +17,7 @@ void CTrickManager::Add(trick_tag trick, const char* _key){
 	}
 }
 
-void CTrickManager::Add(char _name[32], int _level, int _cost, int _time, trick_tag::targetType_tag::type _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList){
+void CTrickManager::Add(char _name[32], int _level, int _cost, int _time, target_tag::type _targetType, std::string _damageEffectName, std::vector<sideEffect_tag> sideEffectList){
 	if (TrickBankLock) {
 		WARNINGDX("'%s':TrickBank is Locked!(We don't add this trick.)", _name);
 		return;
@@ -28,7 +28,7 @@ void CTrickManager::Add(char _name[32], int _level, int _cost, int _time, trick_
 	tmpTrick.Power = CBattleCalc::CalcTrickPower(_level);
 	tmpTrick.Cost = _cost;
 	tmpTrick.Time = _time;
-	tmpTrick.targetType = _targetType;
+	tmpTrick.Target = _targetType;
 	tmpTrick.DamageEffectIndex = GetTrickDamageEffectIndex(_damageEffectName);
 	tmpTrick.SideEffect = sideEffectList;
 

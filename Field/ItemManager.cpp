@@ -47,7 +47,7 @@ bool CItemManager::AddItem(CItem* _newItem, const char* _name, item_tag::type _k
 	}
 }
 
-void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, trick_tag::targetType_tag::type _target, std::vector<sideEffect_tag> _sideEffectSet) {
+void CItemManager::AddConsumptionItem(const char* _name, int _ownLimit, int _price, bool _sellable, bool _battleUsable, int _waitTime, target_tag::type _target, std::vector<sideEffect_tag> _sideEffectSet) {
 
 	if (ConsumptionItemBank.find(_name) == ConsumptionItemBank.end()) {
 
