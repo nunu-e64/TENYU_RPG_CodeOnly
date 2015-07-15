@@ -531,15 +531,15 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		}
 
 		enum target_tag::type Target;
-		for (unsigned int j = 0; j < strlen(arg[5]); j++) {
-			arg[5][j] = toupper(arg[5][j]);
+		for (unsigned int j = 0; j < strlen(arg[4]); j++) {
+			arg[4][j] = toupper(arg[4][j]);
 		}
-		if (target_tag.exist(arg[5])) {
-			Target = target_tag.converter[arg[5]];
-		} else if (sys::CheckStrNULL(arg[5])) {
+		if (target_tag.exist(arg[4])) {
+			Target = target_tag.converter[arg[4]];
+		} else if (sys::CheckStrNULL(arg[4])) {
 			Target = target_tag::ME;
 		} else {
-			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[5]);
+			ERRORDX("@NormalTrick_Create->TargetType is wrong.(not Add to TrickBank)-> %s", arg[4]);
 			goto finish;
 		}
 
@@ -551,23 +551,24 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 		int tmpNum[5]; 
 
 		for (int i=6; i<argnum && arg[i]!=NULL; i+=5){
+
 			for (unsigned int j = 0; j < strlen(arg[i]); j++) {
 				arg[i][j] = toupper(arg[i][j]);
 			}
-			if (tmpEffect.type_tag.converter.find(arg[i]) != tmpEffect.type_tag.converter.end()) {
-				tmpNum[0] = tmpEffect.type_tag.converter[arg[i]];
+			if (target_tag.exist(arg[i])) {
+				tmpNum[1] = target_tag.converter[arg[i]];
 			} else {
-				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i]);
+				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
 				continue;
 			}
 
 			for (unsigned int j = 0; j < strlen(arg[i + 1]); j++) {
 				arg[i+1][j] = toupper(arg[i+1][j]);
 			}
-			if (target_tag.exist(arg[i + 1])) {
-				tmpNum[1] = target_tag.converter[arg[i + 1]];
+			if (tmpEffect.type_tag.converter.find(arg[i+1]) != tmpEffect.type_tag.converter.end()) {
+				tmpNum[0] = tmpEffect.type_tag.converter[arg[i+1]];
 			} else {
-				WARNINGDX("@NormalTrick_Create->SideEffectTargetType doesn't match any TargetType.(continue)\n->%s", arg[i]);
+				WARNINGDX("@NormalTrick_Create->SideEffectName doesn't match any Effect.(continue)\n->%s", arg[i+1]);
 				continue;
 			}
 			
@@ -583,7 +584,7 @@ bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CB
 			sideEffectList.push_back(tmpEffect);
 		}
 
-		_trickManager->Add(arg[0], value[0], value[1], value[2], Target, arg[4], sideEffectList);	
+		_trickManager->Add(arg[0], value[0], value[1], value[2], Target, arg[5], sideEffectList);	
 
 
 //@PlayerTrick_Set
