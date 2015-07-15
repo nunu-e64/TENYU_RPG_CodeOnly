@@ -128,8 +128,13 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 		
 		} else if (FieldMenu.Alive) {
 			CMenuNode* resultNode = NULL;
-			if (FieldMenu.Move(resultNode) && resultNode == NULL) {
-				FieldMenu.Alive = false;
+
+			if (FieldMenu.Move(resultNode)){
+				if (resultNode == NULL) FieldMenu.Alive = false;
+			} else {
+				if (mystrcmp(FieldMenu.GetCursor()->parent->label, "Status")) {		//HACK: Statusメニュー内で毎ループ更新処理が入ってしまっているが負荷が小さいので改修は後回しにする
+					Battle->UpdateFieldPlayerAccesssoryMenu(FieldMenu.GetCursor());
+				}
 			}
 
 		} else {

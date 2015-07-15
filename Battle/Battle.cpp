@@ -86,6 +86,7 @@ bool CBattle::Init(){	//Field.Init()で呼び出す	//14/06/26
 	return true;
 }
 
+//フィールドメニューのStatus項目にいれるべきMenuNode(Player名リストとその子)を作って返す
 CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 	if (!PlayerSpeciesManager->CheckAfterLoad()) return NULL;
 
@@ -93,6 +94,9 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 	CPlayerSpecies* tmpPlayerSpecies;
 	CMenuNode* newNode;
 	CMenuNode* prevNode = NULL;
+
+	CMenuNode* newAccessoryNode;
+	CMenuNode* prevAccessoryNode;
 
 	for (int i = 0; i < PlayerSpeciesManager->GetMemberListSize(); i++) {
 		tmpPlayerSpecies = PlayerSpeciesManager->GetSpecies(i);
@@ -106,6 +110,24 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 		newNode->parent = parentNode;
 		prevNode = newNode;
 
+		//プレイヤーの装備品表示。空メニューを事前作成しておく。中身は表示の際にLabelだけ書き換えて動的に作成
+		for (int j = 0; j < MAX_ACCESSORY_SLOT; j++) {
+			newAccessoryNode = new CMenuNode("");
+			newAccessoryNode->parent = newNode;
+
+			if (j == 0) {
+				newNode->child = newAccessoryNode;
+			} else {
+				prevAccessoryNode->next = newAccessoryNode;
+				newAccessoryNode->prev = prevAccessoryNode;
+			}
+			prevAccessoryNode = newAccessoryNode;
+		}
+		if (prevAccessoryNode != NULL) {
+			newNode->child->prev = prevAccessoryNode;
+			prevAccessoryNode->next = newNode->child;
+		}
+
 	}
 
 	if (prevNode != NULL) {
@@ -115,6 +137,29 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 
 	return parentNode;
 }
+
+//プレイヤーの今の装備品メニューを作って返しFieldMenuに連結させる
+void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNameNode) {
+
+	CAccessoryItem* tmpAccessory;
+	CMenuNode* accessoryNode;
+
+	accessoryNode = _playerNameNode->child;
+
+	for (int i = 0; i < MAX_ACCESSORY_SLOT && accessoryNode != NULL; i++) {
+		tmpAccessory = PlayerSpeciesManager->GetAccessory(_playerNameNode->label, i);
+
+		if (tmpAccessory != NULL) {
+			mystrcpy(accessoryNode->label, tmpAccessory->Name.c_str());
+		} else {
+			mystrcpy(accessoryNode->label, "装備なし");
+		}
+		
+		accessoryNode = accessoryNode->next;
+	}
+
+}
+
 
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//戦闘ごとに行う開始内部準備処理///////////////////////////////////////////////////	

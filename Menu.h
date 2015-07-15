@@ -41,7 +41,9 @@ public:
 	void Create(const char _frontlabel[32]);
 	void Add(const char _parentlabel[32], CMenuNode* _groupParent);
 	void Add(const char _parentlabel[32], const char _newlabel[32]);
+
 	void SetCursor(CMenuNode* _node){ Cursor = _node; }
+	CMenuNode* GetCursor() { return Cursor; }
 
 	virtual void Draw()=0;
 
