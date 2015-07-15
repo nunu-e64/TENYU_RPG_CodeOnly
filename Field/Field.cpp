@@ -127,13 +127,13 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 		}else if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 		
 		} else if (FieldMenu.Alive) {
-			CMenuNode* resultNode = NULL;
 
-			if (FieldMenu.Move(resultNode)){
-				if (resultNode == NULL) FieldMenu.Alive = false;
-			} else {
-				if (mystrcmp(FieldMenu.GetCursor()->parent->label, "Status")) {		//HACK: Statusメニュー内で毎ループ更新処理が入ってしまっているが負荷が小さいので改修は後回しにする
-					Battle->UpdateFieldPlayerAccesssoryMenu(FieldMenu.GetCursor());
+			CMenuNode* oldCursor = FieldMenu.GetCursor();
+			if (FieldMenu.Move(false)) {
+				if (FieldMenu.GetCursor() == oldCursor && FieldMenu.GetCursor()->parent->child == FieldMenu.GetFront()) {	//一番上かつ変化がないのは一番上でX押したときだけ。たぶん。
+					FieldMenu.Alive = false;
+				} else if (mystrcmp(FieldMenu.GetCursor()->parent->label, "Status")) {		//HACK: Statusメニュー内で毎ループ更新処理が入ってしまっているが負荷が小さいので改修は後回しにする
+					Battle->UpdateFieldPlayerAccesssoryMenu(FieldMenu.GetCursor()->parent);
 				}
 			}
 

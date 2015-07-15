@@ -144,12 +144,12 @@ bool CPlayer::Plan(){
 		}
 
 		if (BattleMenu.Alive){		
-			CMenuNode* result = NULL;
 
-			if (BattleMenu.Move(result) && result != NULL) {
+			if (BattleMenu.Move(true) && BattleMenu.GetCursor() != NULL) {
+				CMenuNode* result = BattleMenu.GetCursor();
 
-				if (mystrcmp(result->parent->label, "‹Z")){
-					unsigned int index = BattleMenu.GetIndex(result);
+				if (mystrcmp(result->parent->label, "‹Z")) {
+					unsigned int index = BattleMenu.GetIndex(BattleMenu.GetCursor());
 				
 					if (index < TrickList.size()) {
 						//–‚—ÍŠm”F

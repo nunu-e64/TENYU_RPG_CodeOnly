@@ -50,7 +50,7 @@ public:
 	CMenuNode* GetFront(){ return front;}
 	CMenuNode* Find(const char _label[32]);
 	int GetIndex(CMenuNode* _node);
-	bool Move(CMenuNode* &_result);
+	bool Move(bool _atTip);
 
 	bool Alive;
 

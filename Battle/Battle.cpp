@@ -139,24 +139,34 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 }
 
 //プレイヤーの今の装備品メニューを作って返しFieldMenuに連結させる
-void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNameNode) {
+void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNodeParent) {
 
+	CMenuNode* _playerNode = _playerNodeParent->child;
 	CAccessoryItem* tmpAccessory;
 	CMenuNode* accessoryNode;
 
-	accessoryNode = _playerNameNode->child;
+	while (true){
 
-	for (int i = 0; i < MAX_ACCESSORY_SLOT && accessoryNode != NULL; i++) {
-		tmpAccessory = PlayerSpeciesManager->GetAccessory(_playerNameNode->label, i);
+		accessoryNode = _playerNode->child;
 
-		if (tmpAccessory != NULL) {
-			mystrcpy(accessoryNode->label, tmpAccessory->Name.c_str());
-		} else {
-			mystrcpy(accessoryNode->label, "装備なし");
+		for (int i = 0; i < MAX_ACCESSORY_SLOT && accessoryNode != NULL; i++) {
+			tmpAccessory = PlayerSpeciesManager->GetAccessory(_playerNode->label, i);
+
+			if (tmpAccessory != NULL) {
+				mystrcpy(accessoryNode->label, tmpAccessory->Name.c_str());
+			} else {
+				mystrcpy(accessoryNode->label, "装備なし");
+			}
+
+			accessoryNode = accessoryNode->next;
 		}
-		
-		accessoryNode = accessoryNode->next;
-	}
+
+		if (_playerNode->next != _playerNodeParent->child) {
+			_playerNode = _playerNode->next;
+		} else {
+			break;
+		}
+	}	
 
 }
 

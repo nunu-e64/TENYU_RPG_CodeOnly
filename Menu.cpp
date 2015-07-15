@@ -80,30 +80,6 @@ void CMenu::Add(const char _parentlabel[32], const char _newlabel[32]){
 	} else {
 		Add(_parentlabel, new CMenuNode(_newlabel));
 	}
-	/*
-	if (!(strlen(_parentlabel))){
-		tmp = god;
-	}else{
-		tmp = Find(_parentlabel);
-	}
-	
-	if (tmp == NULL){
-		ERRORDX("CMenu::Add->NotFoundParentLabel:%s",_parentlabel); 
-	}else if (tmp->child == NULL){
-		tmp->child = new CMenuNode(_newlabel);
-		tmp->child->parent = tmp;
-		tmp->child->next = tmp->child;
-		tmp->child->prev = tmp->child;
-	}else{
-		tmp = tmp->child;
-		while (tmp->next != tmp->parent->child){ tmp = tmp->next;}
-		tmp->next = new CMenuNode(_newlabel);
-		tmp->next->prev = tmp;	
-		tmp->next->next = tmp->parent->child;
-		tmp->next->parent = tmp->parent;
-		tmp->parent->child->prev = tmp->next;
-	}
-	*/
 }
 
 void CMenu::Clear(){
@@ -164,22 +140,22 @@ int CMenu::GetIndex(CMenuNode* _node){
 	return index;
 }
 
-bool CMenu::Move(CMenuNode* &_result){
-	_result = NULL;
+bool CMenu::Move(bool _atTip) {
 	
 	if (CheckHitKeyDown(KEY_INPUT_OK)){
-		if (Cursor->child==NULL){
-			_result = Cursor;
+		if (Cursor->child == NULL) {
 			return true;
 		}else{
 			Cursor = Cursor->child;
+			if (!_atTip) return true;
 		}
 	
 	}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
-		if (Cursor->parent != NULL && Cursor->parent != god){
-			Cursor = Cursor->parent;
-		} else {
+		if (Cursor->parent == NULL || Cursor->parent == god) {
 			return true;
+		} else {
+			Cursor = Cursor->parent;
+			if (!_atTip) return true;
 		}
 
 	/*
