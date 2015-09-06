@@ -145,8 +145,8 @@ bool CPlayer::Plan(){
 
 		if (BattleMenu.Alive){		
 
-			if (BattleMenu.Move(true) && BattleMenu.GetCursor() != NULL) {
-				CMenuNode* result = BattleMenu.GetCursor();
+			CMenuNode* result;
+			if (BattleMenu.Move(result, true) && result != NULL) {
 
 				if (mystrcmp(result->parent->label, "‹Z")) {
 					unsigned int index = BattleMenu.GetIndex(BattleMenu.GetCursor());

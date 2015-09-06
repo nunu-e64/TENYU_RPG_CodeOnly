@@ -39,6 +39,7 @@ public:
 	bool Init();
 	CMenuNode* GetFieldStatusMenuFrontNode(const char _parentLabel[32]);
 	void UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNodeParent);
+	void UpdatePlayerAccesssoryMenu(CMenuNode* _playerNode);
 
 	void BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p);
 	void BattleStart(int* _result, CCmdList* _fieldcmdlist_p);

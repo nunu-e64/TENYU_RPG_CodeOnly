@@ -170,6 +170,10 @@ void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNodeParent) {
 
 }
 
+void UpdatePlayerAccesssoryMenu(CMenuNode* _playerNode) {
+	
+}
+
 
 void CBattle::BattleReady(CFlagSet* _flagset_p, CMap* _map_p, CEveManager* _evemanager_p){
 	//í“¬‚²‚Æ‚És‚¤ŠJn“à•”€”õˆ—///////////////////////////////////////////////////	

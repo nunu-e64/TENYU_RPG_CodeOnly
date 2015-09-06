@@ -36,6 +36,7 @@ public:
 		DESTRUCTED;
 	};
 
+	void Clear();
 	void Init(int _x, int _y, int _width, int _height);
 	void Create(CMenuNode* _groupParent);
 	void Create(const char _frontlabel[32]);
@@ -45,12 +46,12 @@ public:
 	void SetCursor(CMenuNode* _node){ Cursor = _node; }
 	CMenuNode* GetCursor() { return Cursor; }
 
-	virtual void Draw()=0;
+	//virtual void Draw();
 
 	CMenuNode* GetFront(){ return front;}
 	CMenuNode* Find(const char _label[32]);
 	int GetIndex(CMenuNode* _node);
-	bool Move(bool _atTip);
+	bool Move(CMenuNode* &_result, bool _atTip);
 
 	bool Alive;
 
@@ -62,7 +63,6 @@ protected:
 private:
 	CMenuNode* Find(const char _label[32], CMenuNode* _top);
 	void Clear(CMenuNode* _top);
-	void Clear();
 
 	CMenuNode* god;
 	CMenuNode* front;
@@ -78,10 +78,19 @@ public:
 
 class CFieldMenu: public CMenu {
 public:
-	CFieldMenu() { CONSTRUCTED; }
+	CFieldMenu() { 
+		AccessoryMenu = NULL;
+		AccessoryMenuVisible = false;
+		AccessorySlotNum = -1;
+		CONSTRUCTED; 
+	}
 	~CFieldMenu() { DESTRUCTED; }
 
 	void Draw();
+
+	CMenu* AccessoryMenu;
+	bool AccessoryMenuVisible;
+	int AccessorySlotNum;
 };
 
 ////多重インクルード防止（インクルードガード）//

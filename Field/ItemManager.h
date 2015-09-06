@@ -10,6 +10,7 @@ class CConsumptionItem;
 class CAccessoryItem;
 class CKeyItem;
 class CMaterialItem;
+class CMenu;
 
 class CItemManager {
 public:
@@ -39,11 +40,14 @@ public:
 	CConsumptionItem* GetConsumptionItem(std::string _name);
 	CAccessoryItem* GetAccessoryItem(std::string _name);
 
+	CMenu* GetPlayerAccessoryMenu();
+
 	//アイテムポケット関係//////////////////////
 	bool IncPlayerItem(std::string _name, int _num);	
 	bool DecPlayerItem(std::string _name, int _num);
 	int GetPlayerItemNum(std::string _name);			//所持しているアイテム数を取得
 	std::vector <std::string> GetBattleItemNameList();	//所持している利用可能な消費アイテムのリストを取得
+	std::vector <std::string> GetAccessoryItemInBag();	//所持している装備アイテムのリストを取得
 	////////////////////////////////////////////
 
 	//財布関係//////////////////////////////////

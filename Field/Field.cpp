@@ -128,13 +128,54 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 		
 		} else if (FieldMenu.Alive) {
 
-			CMenuNode* oldCursor = FieldMenu.GetCursor();
-			if (FieldMenu.Move(false)) {
-				if (FieldMenu.GetCursor() == oldCursor && FieldMenu.GetCursor()->parent->child == FieldMenu.GetFront()) {	//一番上かつ変化がないのは一番上でX押したときだけ。たぶん。
-					FieldMenu.Alive = false;
-				} else if (mystrcmp(FieldMenu.GetCursor()->parent->label, "Status")) {		//HACK: Statusメニュー内で毎ループ更新処理が入ってしまっているが負荷が小さいので改修は後回しにする
-					Battle->UpdateFieldPlayerAccesssoryMenu(FieldMenu.GetCursor()->parent);
+			if (!FieldMenu.AccessoryMenuVisible) {
+
+				//処理が複雑化してきたら、状態をCursorだけではなくてenum作って管理させたほうがよい
+				CMenuNode* oldCursor = FieldMenu.GetCursor();
+				CMenuNode* result;
+
+				if (FieldMenu.Move(result, false)) {
+					if (FieldMenu.GetCursor() == oldCursor && FieldMenu.GetCursor()->parent->child == FieldMenu.GetFront()) {	//一番上かつ変化がないのは一番上でX押したときだけ。たぶん。
+						FieldMenu.Alive = false;
+
+					} else if (mystrcmp(FieldMenu.GetCursor()->parent->label, "Status")) {		//HACK: Statusメニュー内で毎ループ更新処理が入ってしまっているが負荷が小さいので改修は後回しにする
+						Battle->UpdateFieldPlayerAccesssoryMenu(FieldMenu.GetCursor()->parent);
+
+					} else if (FieldMenu.GetCursor()==oldCursor &&  mystrcmp(FieldMenu.GetCursor()->parent->parent->label, "Status")) {
+						FieldMenu.AccessorySlotNum = FieldMenu.GetIndex(result);
+
+						FieldMenu.AccessoryMenuVisible = true;
+						if (FieldMenu.AccessoryMenu != NULL) delete FieldMenu.AccessoryMenu;
+						FieldMenu.AccessoryMenu = CItemManager::GetInstance()->GetPlayerAccessoryMenu();
+					}
 				}
+
+			} else {
+				//DEBUGDX("OK");
+
+				//装備一覧表示
+				CMenuNode* result;
+				if (FieldMenu.AccessoryMenu != NULL && FieldMenu.AccessoryMenu->Move(result, true)) {
+
+					if (result != NULL) {
+						if (mystrcmp(result->label, "装備しない")) {
+							DEBUGDX(result->label);
+						} else {
+							//Menuは"装備しない"を含むためGetIndexから-1する
+							std::string tmpCmd;
+							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", " + CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result)-1] + ")";
+							DEBUGDX(tmpCmd.c_str());
+							CmdList.Add(tmpCmd.c_str());
+						}
+					}
+
+					FieldMenu.AccessoryMenuVisible = false;
+					if (FieldMenu.AccessoryMenu != NULL) delete FieldMenu.AccessoryMenu;
+					FieldMenu.AccessoryMenu = CItemManager::GetInstance()->GetPlayerAccessoryMenu();
+
+				}
+				//DEBUGDX("OK3");
+
 			}
 
 		} else {

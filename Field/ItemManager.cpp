@@ -1,6 +1,6 @@
 #include "ItemManager.h"
 #include "Item.h"
-
+#include "../Menu.h"
 
 void CItemManager::Init() {
 	Clear();
@@ -253,6 +253,23 @@ CAccessoryItem* CItemManager::GetAccessoryItem(std::string _name) {
 	}
 }
 
+CMenu* CItemManager::GetPlayerAccessoryMenu() {
+
+	CMenu* accessoryMenu = new CMenu();
+	std::string nodeLabel;
+
+	accessoryMenu->Create("‘•”õ‚µ‚È‚¢");
+	
+	for each (auto item in PlayerItemBag) {
+		if (item.second > 0 && GetItem(item.first)->Kind == item_tag::ACCESSORY) {
+			nodeLabel = item.first + "   " + std::to_string(item.second);
+			accessoryMenu->Add("", nodeLabel.c_str());
+		}
+	}
+
+	return accessoryMenu;
+}
+
 int CItemManager::GetPlayerItemNum(std::string _name) {
 
 	if (ItemBank.find(_name) == ItemBank.end()) {
@@ -264,6 +281,20 @@ int CItemManager::GetPlayerItemNum(std::string _name) {
 		return PlayerItemBag[_name];
 	}
 }
+
+std::vector <std::string> CItemManager::GetAccessoryItemInBag() {
+
+	std::vector<std::string> itemList;
+
+	for each (auto item in PlayerItemBag) {
+		if (item.second > 0 && GetItem(item.first)->Kind == item_tag::ACCESSORY) {
+			itemList.push_back(item.first);
+		}
+	}
+
+	return itemList;
+}
+
 
 std::vector<std::string> CItemManager::GetBattleItemNameList() {	
 	std::vector<std::string> itemList;
@@ -277,7 +308,6 @@ std::vector<std::string> CItemManager::GetBattleItemNameList() {
 	}
 	return itemList;
 }
-
 
 bool CItemManager::IncGold(int _gold) {
 	if (_gold <= 0) {

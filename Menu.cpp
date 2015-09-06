@@ -15,6 +15,7 @@ void CMenu::Create(CMenuNode* _groupParent) {
 	god = new CMenuNode("NULL");
 	god->prev = god;
 	god->next = god;
+	god->parent = god;
 
 	front = _groupParent;
 	front->prev = front;
@@ -86,19 +87,19 @@ void CMenu::Clear(){
 	Clear(god);
 	Cursor = front = god = NULL;
 }
-void CMenu::Clear(CMenuNode* _top){
+void CMenu::Clear(CMenuNode* _top) {
 	CMenuNode* tmp = _top;
 
-	if (tmp==NULL) return;
+	if (tmp == NULL) return;
 
-	if (tmp->parent!=NULL) tmp->parent->child=NULL;
-	
+	if (tmp->parent != NULL) tmp->parent->child = NULL;
+
 	_top->prev->next = NULL;	//ƒŠƒ“ƒO‚ðØ‚é
 
-	while (tmp != NULL){
-		if (tmp->child!=NULL) Clear(tmp->child);
+	while (tmp != NULL) {
+		if (tmp->child != NULL) Clear(tmp->child);
 		CMenuNode* deleteNode = tmp;
-			
+
 		tmp = tmp->next;
 		delete deleteNode;
 	}
@@ -131,7 +132,7 @@ CMenuNode* CMenu::Find(const char _label[32], CMenuNode* _top){
 
 int CMenu::GetIndex(CMenuNode* _node){
 	int index = 0;
-
+	DEBUGDX(_node->label);
 	while(_node != _node->parent->child){
 		_node = _node->prev;
 		++index;
@@ -140,14 +141,20 @@ int CMenu::GetIndex(CMenuNode* _node){
 	return index;
 }
 
-bool CMenu::Move(bool _atTip) {
+bool CMenu::Move(CMenuNode* &_result, bool _atTip) {
 	
+	_result = NULL;
+
 	if (CheckHitKeyDown(KEY_INPUT_OK)){
 		if (Cursor->child == NULL) {
+			_result = Cursor;
 			return true;
 		}else{
 			Cursor = Cursor->child;
-			if (!_atTip) return true;
+			if (!_atTip) {
+				_result = Cursor;
+				return true;
+			}
 		}
 	
 	}else if (CheckHitKeyDown(KEY_INPUT_CANCEL)){
@@ -294,4 +301,18 @@ void CFieldMenu::Draw() {
 		}
 	}
 
+	if (AccessoryMenuVisible && AccessoryMenu != NULL) {
+
+		tmp = AccessoryMenu->GetFront();
+		DrawBox(X+Width , Y + Height, X + Width*2, Y + Height * 4 , GetColor(30, 20, 80), true);
+
+		for (int i = 0; tmp != NULL; i++) {
+			DrawString(X +Width + 30, Y + Height + 5 + 10 + i*(1 + GetFontSize()), tmp->label, WHITE, BLACK);
+			if (AccessoryMenu->GetCursor() == tmp) DrawString(X + Width + 8, Y + Height + 5 + 10 + i*(1 + GetFontSize()), "|>", WHITE, BLACK);
+			tmp = tmp->next;
+
+			if (tmp == tmp->parent->child) break;
+		}
+
+	}
 }
