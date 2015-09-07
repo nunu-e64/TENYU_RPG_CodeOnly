@@ -149,7 +149,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 						FieldMenu.AccessoryMenu = CItemManager::GetInstance()->GetPlayerAccessoryMenu();
 					}
 				}
-
+				
 			} else {
 				//DEBUGDX("OK");
 
@@ -163,7 +163,15 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 						} else {
 							//Menuは"装備しない"を含むためGetIndexから-1する
 							std::string tmpCmd;
-							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", " + CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result)-1] + ")";
+							tmpCmd = "@Accessory_Set(";// +std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", " + CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result) - 1] + ")";
+							DEBUGDX(tmpCmd.c_str());
+							tmpCmd += std::string(FieldMenu.GetCursor()->parent->label) + ", ";
+							DEBUGDX(tmpCmd.c_str());
+							tmpCmd += std::to_string(FieldMenu.AccessorySlotNum) + ", ";
+							DEBUGDX(tmpCmd.c_str());
+							tmpCmd += CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result) - 1];
+							DEBUGDX(tmpCmd.c_str());
+							tmpCmd += ")";
 							DEBUGDX(tmpCmd.c_str());
 							CmdList.Add(tmpCmd.c_str());
 						}

@@ -84,9 +84,9 @@ const char DIR_SAVE[] = "tenyu_data/save";				//セーブデータを保存するディレクト
 const char FILE_DATANAME[] = "tenyu_data/save/dataname.rpg";	//セーブデータ名を管理するためのテキストファイル
 
 //システムグラフィック///////////////////////////////////
-const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.png",
-									     "tenyu_data/pic/sys/talkname01.png",
-									     "tenyu_data/pic/sys/talkname02.png"};
+const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.bmp",
+									     "tenyu_data/pic/sys/talkname01.bmp",
+									     "tenyu_data/pic/sys/talkname02.bmp"};	//pngではゲーム読み込み時のTalkName.Initで不正メモリアクセスエラーが出るため対症療法的にbmpを使用(150906)
 
 
 //システムグラフィックのPicKey///////////////////////

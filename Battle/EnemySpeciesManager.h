@@ -43,8 +43,8 @@ private:
 	bool EnemyBankLock;		//金庫番。vectorの要素のアドレスをコピーしたあとにvectorの要素を変化させる（＝アドレスが変わるかもしれない）ことの無いように監視
 	std::map <std::string, CEnemySpecies> EnemyBank;
 
-	std::vector<const CEnemyPlanner* const> EnemyPlannerBank; 
-	std::vector<const CEnemyTargetter* const> EnemyTargetterBank; 
+	std::vector<CEnemyPlanner*> EnemyPlannerBank; 
+	std::vector<CEnemyTargetter*> EnemyTargetterBank; 
 
 	struct encount_tag{
 		struct party_tag{

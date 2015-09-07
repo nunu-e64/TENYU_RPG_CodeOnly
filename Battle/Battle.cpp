@@ -96,7 +96,7 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 	CMenuNode* prevNode = NULL;
 
 	CMenuNode* newAccessoryNode;
-	CMenuNode* prevAccessoryNode;
+	CMenuNode* prevAccessoryNode = NULL;
 
 	for (int i = 0; i < PlayerSpeciesManager->GetMemberListSize(); i++) {
 		tmpPlayerSpecies = PlayerSpeciesManager->GetSpecies(i);
