@@ -6,18 +6,6 @@ void CTalkName::Init(){
 		Clear(true);
 		Clear(false);
 
-		const char HOGERA[3][64] = {"ex_box.png","",""};
-
-		ImgLabel[0] = -1;
-		
-		ImgLabel[1] = LoadGraph("ex_box.png");//ok
-		
-		ImgLabel[2] = LoadGraph(HOGERA[0]);	//ok
-		
-		ImgLabel[0] = LoadGraph("tenyu_data/pic/sys/talkname00.bmp");
-		ImgLabel[1] = LoadGraph("tenyu_data/pic/sys/talkname01.bmp");
-		ImgLabel[2] = LoadGraph("tenyu_data/pic/sys/talkname02.bmp");
-
 	//テキストネームラベル用画像の読み込み
 		ImgLabel[0] = LoadGraph(IMAGE_TALKNAMELABEL[0], true); 
 		ImgLabel[1] = LoadGraph(IMAGE_TALKNAMELABEL[1], true);
