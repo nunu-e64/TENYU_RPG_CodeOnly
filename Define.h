@@ -92,7 +92,7 @@ const char IMAGE_TALKNAMELABEL[3][64] ={ "tenyu_data/pic/sys/talkname00.bmp",
 //システムグラフィックのPicKey///////////////////////
 const char TARGET_CURSOR[] = "TARGET_CURSOR";
 const char HP_BAR[]			= "HP_BAR";
-const char TIME_BAR1[]		= "TI	ME_BAR1";
+const char TIME_BAR1[]		= "TIME_BAR1";
 const char TIME_BAR2[]		= "TIME_BAR2";
 const char TIME_WAIT[]		= "TIME_WAIT";
 const char TIME_TRICK[]		= "TIME_TRICK";

@@ -253,7 +253,7 @@ CAccessoryItem* CItemManager::GetAccessoryItem(std::string _name) {
 	}
 }
 
-CMenu* CItemManager::GetPlayerAccessoryMenu() {
+CMenu* CItemManager::GetPlayerAccessoryMenu() {	//アイテムバッグの中身と個数リストアップ
 
 	CMenu* accessoryMenu = new CMenu();
 	std::string nodeLabel;

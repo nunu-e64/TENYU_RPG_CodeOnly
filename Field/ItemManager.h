@@ -42,7 +42,7 @@ public:
 
 	CMenu* GetPlayerAccessoryMenu();
 
-	//アイテムポケット関係//////////////////////
+	//アイテムバッグ関係////////////////////////
 	bool IncPlayerItem(std::string _name, int _num);	
 	bool DecPlayerItem(std::string _name, int _num);
 	int GetPlayerItemNum(std::string _name);			//所持しているアイテム数を取得

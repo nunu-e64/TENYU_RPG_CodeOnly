@@ -130,6 +130,8 @@ bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, int _slot, std
 
 	if (_slot < MAX_ACCESSORY_SLOT) {
 
+		DEBUGDX("SetAccessory:%s,%d,%s", _playerName.c_str(), _slot, _accessoryItemName.c_str());
+
 		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
 		if (CItemManager::GetInstance()->GetAccessoryItem(_accessoryItemName)) {
 			player->AccessoryList[_slot] = _accessoryItemName;

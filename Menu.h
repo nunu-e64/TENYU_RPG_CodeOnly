@@ -80,7 +80,7 @@ class CFieldMenu: public CMenu {
 public:
 	CFieldMenu() { 
 		AccessoryMenu = NULL;
-		AccessoryMenuVisible = false;
+		AccessoryMenuVisible = false;	//アイテムバッグ一覧の表示有無
 		AccessorySlotNum = -1;
 		CONSTRUCTED; 
 	}
@@ -90,7 +90,7 @@ public:
 
 	CMenu* AccessoryMenu;
 	bool AccessoryMenuVisible;
-	int AccessorySlotNum;
+	int AccessorySlotNum;	//いまチェックしてるプレイヤーの装備スロットインデックス
 };
 
 ////多重インクルード防止（インクルードガード）//

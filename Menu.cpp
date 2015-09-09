@@ -142,7 +142,9 @@ int CMenu::GetIndex(CMenuNode* _node){
 }
 
 bool CMenu::Move(CMenuNode* &_result, bool _atTip) {
-	
+	//決定またはキャンセルキーを押してカーソルが移動するときにTrueを返す。
+	//_atTip…Trueなら、メニューの最深部か一番上の階層のときにしかTrueを返さない
+
 	_result = NULL;
 
 	if (CheckHitKeyDown(KEY_INPUT_OK)){
@@ -301,6 +303,7 @@ void CFieldMenu::Draw() {
 		}
 	}
 
+	//装備メニューの描画
 	if (AccessoryMenuVisible && AccessoryMenu != NULL) {
 
 		tmp = AccessoryMenu->GetFront();
