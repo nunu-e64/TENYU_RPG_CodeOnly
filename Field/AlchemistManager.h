@@ -1,39 +1,27 @@
 ////多重インクルード防止（インクルードガード）//	//pragmaonceと同じ意味だがこちらはコンパイラに依存しない
-#ifndef SHOPMANAGER_H						////
-#define SHOPMANAGER_H						////
+#ifndef ALCHEMISTMANAGER_H						////
+#define ALCHEMISTMANAGER_H						////
 ////////////////////////////////////////////////
 
-class CItem;
-class CItemManager;
+#include "ShopManager.h"
 
-class CShopManager {
+class CAlchemistManager : public CShopManager {
 public:
-	static CShopManager* GetInstance() {
-		static CShopManager instance;
+	static CAlchemistManager* GetInstance() {
+		static CAlchemistManager instance;
 		return &instance;
 	}
-	~CShopManager() {
+	~CAlchemistManager() {
 		DESTRUCTED;
 	}
 
-	void Init();
-	bool AddShop(int _index, std::vector<std::string> _itemList);
-	std::vector <std::string> GetShop(int _index);
-	
-	virtual bool OpenShop(int _index);
+	bool OpenShop(int _index);
 
-	bool IsOpen();
+	bool Main();
 
-	virtual bool Main();
-	virtual void Draw();
+private:
 
-protected:
-
-	std::map<int, std::vector <std::string> > ShopBank;
-
-	int currentOpenShopIndex;
-
-	struct ShopMenu {
+/*	struct ShopMenu {
 		std::vector	<CItem*> ItemList;	//開店時に作る商品棚
 		std::vector<int> Basket;	//数量を記録する買い物かご
 		int SumPrice;
@@ -43,17 +31,15 @@ protected:
 		CItemManager* ItemManager;
 
 		void Move(int _dir);
-		void Draw();
 		bool Buy();
 	}ShopMenu;
-
-
+*/
 	//単一性を保証(Singleton)////////////////////////////////
-	CShopManager() {
+	CAlchemistManager() {
 		CONSTRUCTED;
 	}
-	CShopManager(const CShopManager& hoge);
-	CShopManager& operator=(const CShopManager& hoge);
+	CAlchemistManager(const CAlchemistManager& hoge);
+	CAlchemistManager& operator=(const CAlchemistManager& hoge);
 	/////////////////////////////////////////////////////////
 
 };
