@@ -157,25 +157,27 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 				if (FieldMenu.AccessoryMenu != NULL && FieldMenu.AccessoryMenu->Move(result, true)) {
 
 					if (result != NULL) {
+						std::string tmpCmd;
+
 						if (mystrcmp(result->label, "装備しない")) {
-							DEBUGDX(result->label);
-							//プレイヤーから装備外すコマンド
+							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", NULL)";
+
+							//装備名のラベルを書き換える(実際に内部装備が変わるのはコマンド処理の時)
+							mystrcpy(FieldMenu.GetCursor()->label, result->label);
+
 						} else {
 							//Menuは"装備しない"を含むためGetIndexから-1する
 
-							std::string tmpCmd;
 							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", " + CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result) - 1] + ")";
-							DEBUGDX(tmpCmd.c_str());
-							CmdList.Add(tmpCmd.c_str());
 
 							//装備名のラベルを書き換える(実際に内部装備が変わるのはコマンド処理の時)
 							mystrcpy(FieldMenu.GetCursor()->label, CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result) - 1].c_str());
 
-							/*						
-							CPlayerSpeciesManager::GetInstance()->SetAccessory(std::string(FieldMenu.GetCursor()->parent->label), FieldMenu.AccessorySlotNum), CItemManager::GetInstance()->GetAccessoryItemInBag()[FieldMenu.AccessoryMenu->GetIndex(result) - 1]);
-*/
-							//tmpCmd = @Accessory_Change
 						}
+
+						DEBUGDX(tmpCmd.c_str());
+						CmdList.Add(tmpCmd.c_str());
+
 					}
 
 					FieldMenu.AccessoryMenuVisible = false;

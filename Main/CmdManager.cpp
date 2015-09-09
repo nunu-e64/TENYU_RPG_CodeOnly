@@ -1349,6 +1349,8 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 	} else if (mystrcmp(_command, "@Accessory_Set", 'p')) {
 		argnum = 3;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//•K{
 
+		if (sys::CheckStrNULL(arg[2])) arg[2] = "";
+
 		int slot;
 		if (mystrtol(arg[1], &slot)) {
 			CPlayerSpeciesManager::GetInstance()->SetAccessory(arg[0], slot, arg[2]);

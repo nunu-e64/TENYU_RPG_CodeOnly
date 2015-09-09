@@ -133,9 +133,34 @@ bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, int _slot, std
 		DEBUGDX("SetAccessory:%s,%d,%s", _playerName.c_str(), _slot, _accessoryItemName.c_str());
 
 		CPlayerSpecies* player = GetSpecies(_playerName.c_str());
-		if (CItemManager::GetInstance()->GetAccessoryItem(_accessoryItemName)) {
-			player->AccessoryList[_slot] = _accessoryItemName;
-			return true;
+		CItemManager* itemManager = CItemManager::GetInstance();
+
+		if (_accessoryItemName.length() == 0){	//装備なしを選択＝装備をはずす
+			
+			//元々装備していたアイテムをバッグに返す
+			if (player->AccessoryList[_slot].length() > 0) {
+				itemManager->IncPlayerItem(player->AccessoryList[_slot], 1);
+			}
+			player->AccessoryList[_slot] = "";
+
+		} else if (itemManager->GetAccessoryItem(_accessoryItemName) != NULL) {	//装備アイテムを選択＝装備を交換
+			
+			if (itemManager->GetPlayerItemNum(_accessoryItemName) > 0) {
+				
+				//元々装備していたアイテムをバッグに返す
+				if (player->AccessoryList[_slot].length() > 0) {
+					itemManager->IncPlayerItem(player->AccessoryList[_slot], 1);
+				}
+				
+				//新しく装備するアイテムをバッグからもらう
+				itemManager->DecPlayerItem(_accessoryItemName, 1);
+				player->AccessoryList[_slot] = _accessoryItemName;
+
+				return true;
+			} else {
+				ERRORDX("You can't set item which you don't have in bag.:%s", _accessoryItemName.c_str());
+				return false;
+			}
 		} else {
 			return false;
 		}

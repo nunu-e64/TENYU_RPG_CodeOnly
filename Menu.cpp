@@ -132,7 +132,7 @@ CMenuNode* CMenu::Find(const char _label[32], CMenuNode* _top){
 
 int CMenu::GetIndex(CMenuNode* _node){
 	int index = 0;
-	DEBUGDX(_node->label);
+	//DEBUGDX(_node->label);
 	while(_node != _node->parent->child){
 		_node = _node->prev;
 		++index;
