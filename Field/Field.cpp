@@ -159,11 +159,11 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					if (result != NULL) {
 						std::string tmpCmd;
 
-						if (mystrcmp(result->label, NO_EQUIP)) {
+						if (mystrcmp(result->label, REMOVE_EQUIP) || FieldMenu.AccessoryMenu->GetIndex(result)==0) {
 							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", NULL)";
 
 							//装備名のラベルを書き換える(実際に内部装備が変わるのはコマンド処理の時)
-							mystrcpy(FieldMenu.GetCursor()->label, result->label);
+							mystrcpy(FieldMenu.GetCursor()->label, NO_EQUIP);
 
 						} else {
 							//Menuは"装備しない"を含むためGetIndexから-1する
@@ -175,7 +175,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 
 						}
 
-						DEBUGDX(tmpCmd.c_str());
+						//DEBUGDX(tmpCmd.c_str());
 						CmdList.Add(tmpCmd.c_str());
 
 					}
