@@ -139,7 +139,7 @@ CMenuNode* CBattle::GetFieldStatusMenuFrontNode(const char _parentLabel[32]) {
 }
 
 //プレイヤーの今の装備品メニューを作って返しFieldMenuに連結させる
-//_playerNodeParent…プレイヤー名の親になるNode
+	
 void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNodeParent) {
 
 	CMenuNode* _playerNode = _playerNodeParent->child;
@@ -156,7 +156,7 @@ void CBattle::UpdateFieldPlayerAccesssoryMenu(CMenuNode* _playerNodeParent) {
 			if (tmpAccessory != NULL) {
 				mystrcpy(accessoryNode->label, tmpAccessory->Name.c_str());
 			} else {
-				mystrcpy(accessoryNode->label, "装備なし");
+				mystrcpy(accessoryNode->label, NO_EQUIP);
 			}
 
 			accessoryNode = accessoryNode->next;

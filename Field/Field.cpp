@@ -2,7 +2,7 @@
 #include "Load.h"
 #include "EveManager.h"
 #include "ItemManager.h"
-#include "ShopManager.h"
+#include "AlchemistManager.h"
 
 #include "../Battle/Battle.h"
 
@@ -43,7 +43,8 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//ShopManagerの初期化
 			CShopManager::GetInstance()->Init();
-				
+			//CAlchemistManager::GetInstance()->Init();
+
 		//ログウィンドウの初期化
 			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
 
@@ -159,7 +160,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					if (result != NULL) {
 						std::string tmpCmd;
 
-						if (mystrcmp(result->label, "装備しない")) {
+						if (mystrcmp(result->label, NO_EQUIP)) {
 							tmpCmd = "@Accessory_Set(" + std::string(FieldMenu.GetCursor()->parent->label) + ", " + std::to_string(FieldMenu.AccessorySlotNum) + ", NULL)";
 
 							//装備名のラベルを書き換える(実際に内部装備が変わるのはコマンド処理の時)

@@ -132,6 +132,9 @@ const char _IFBEGIN[] = "_IF_BEGIN";
 const char _IFEND[] = "_IF_END";
 const char _IFCASE[] = "_CASE";
 const char JOKER_NAME[] = "joker";
+
+const char NO_EQUIP[] = "‘•”õ‚È‚µ";
+const char REMOVE_EQUIP[] = "‘•”õ‚µ‚È‚¢";
 ////////////////////////////////////////////////////
 
 enum gamemode_tag{
