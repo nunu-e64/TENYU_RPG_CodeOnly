@@ -6,6 +6,24 @@
 class CItem;
 class CItemManager;
 
+class CShopMenu {
+public:
+	std::vector	<CItem*> ItemList;	//ŠJ“X‚Éì‚é¤•i’I
+	std::vector<int> Basket;	//”—Ê‚ğ‹L˜^‚·‚é”ƒ‚¢•¨‚©‚²
+	int SumPrice;
+
+	int Cursor;
+	bool IsConfirm;
+	CItemManager* ItemManager;
+
+	virtual void Move(int _dir);
+	virtual void Draw();
+	virtual bool Buy();
+
+	virtual bool CanBuy();
+	virtual bool CanClose();
+};
+
 class CShopManager {
 public:
 	static CShopManager* GetInstance() {
@@ -16,37 +34,23 @@ public:
 		DESTRUCTED;
 	}
 
-	void Init();
-	bool AddShop(int _index, std::vector<std::string> _itemList);
-	std::vector <std::string> GetShop(int _index);
-	
+	virtual void Init();
 	virtual bool OpenShop(int _index);
+	bool Main();
+
+	bool AddShop(int _index, std::vector<std::string> _itemList);
+	std::vector <std::string> GetShop(int _index);	
 
 	bool IsOpen();
 
-	virtual bool Main();
-	virtual void Draw();
+	void Draw();
 
 protected:
 
 	std::map<int, std::vector <std::string> > ShopBank;
 
-	int currentOpenShopIndex;
-
-	struct ShopMenu {
-		std::vector	<CItem*> ItemList;	//ŠJ“X‚Éì‚é¤•i’I
-		std::vector<int> Basket;	//”—Ê‚ğ‹L˜^‚·‚é”ƒ‚¢•¨‚©‚²
-		int SumPrice;
-
-		int Cursor;
-		bool IsConfirm;
-		CItemManager* ItemManager;
-
-		void Move(int _dir);
-		void Draw();
-		bool Buy();
-	}ShopMenu;
-
+	int CurrentOpenShopIndex;
+	CShopMenu* ShopMenu;
 
 	//’Pˆê«‚ğ•ÛØ(Singleton)////////////////////////////////
 	CShopManager() {
@@ -55,6 +59,9 @@ protected:
 	CShopManager(const CShopManager& hoge);
 	CShopManager& operator=(const CShopManager& hoge);
 	/////////////////////////////////////////////////////////
+
+private :
+	CShopMenu ShopMenuInstance;
 
 };
 

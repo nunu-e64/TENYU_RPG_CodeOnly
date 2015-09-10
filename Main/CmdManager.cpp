@@ -7,7 +7,7 @@
 #include "../Field/Map.h"
 #include "../Field/EveManager.h"
 #include "../Field/Item.h"
-#include "../Field/ShopManager.h"
+#include "../Field/AlchemistManager.h"
 
 #include "../Battle/Battle.h"
 #include "../Battle/TrickManager.h"
@@ -421,6 +421,31 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 
 		CShopManager::GetInstance()->AddShop(index, itemList);
 
+//@Create_Alchemist(î‘çÜ, [è§ïiñº] * n, ...)	//òBê¨âÆ
+	} else if (mystrcmp(_command, "@Create_Alchemist")) {
+		argnum = 1 + 30 + 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum, false, 2))goto finish;	//ïKê{
+		
+		if (arg[argnum - 1] != NULL) WARNINGDX("Too many arguments.(max=%d) @Create_Alchemist :%s", argnum, _command);
+		
+		int index;
+		if (!(mystrtol(arg[0], &index))) {
+			ERRORDX("Check argument type->%s", _command);
+			goto finish;
+		} else if (index < 0) {
+			ERRORDX("arg[index] should be larger or equal to 0. :%s", _command);
+			goto finish;
+		}
+
+		std::vector <std::string> itemList;
+		for (int i = 1; i < argnum - 1 && arg[i] != NULL; i++) {
+			if (CItemManager::GetInstance()->GetItem(arg[i])){
+				itemList.push_back(arg[i]);
+			} else {
+				continue;
+			}
+		}
+
+		CAlchemistManager::GetInstance()->AddShop(index, itemList);
 
 //ÉRÉ}ÉìÉhïsàÍív
 	}else{
@@ -1345,6 +1370,20 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		}
 		CShopManager::GetInstance()->OpenShop(index);
 
+//@Alchemist(index)
+	} else if (mystrcmp(_command, "@Alchemist", 'p')) {
+		argnum = 1;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{
+
+		int index;
+		if (!mystrtol(arg[0], &index)) {
+			ERRORDX("Check Argument Type[index]. :%s,%s", _command, arg[0]);
+			goto finish;
+		} else if (index < 0) {
+			WARNINGDX("@Alchemist[index] < 0 (do nothing) :%s,%s", _command, arg[0]);
+			goto finish;
+		}
+		CAlchemistManager::GetInstance()->OpenShop(index);
+		
 //@Accessory_Set(playername, slot, accessoryItemName)
 	} else if (mystrcmp(_command, "@Accessory_Set", 'p')) {
 		argnum = 3;		arg = new char*[argnum];	if (!ArgCut(_command, _argument, arg, argnum)) goto finish;	//ïKê{

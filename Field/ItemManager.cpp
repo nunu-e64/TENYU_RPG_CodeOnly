@@ -258,7 +258,7 @@ CMenu* CItemManager::GetPlayerAccessoryMenu() {	//アイテムバッグの中身と個数リス
 	CMenu* accessoryMenu = new CMenu();
 	std::string nodeLabel;
 
-	accessoryMenu->Create("装備しない");
+	accessoryMenu->Create(REMOVE_EQUIP);
 	
 	for each (auto item in PlayerItemBag) {
 		if (item.second > 0 && GetItem(item.first)->Kind == item_tag::ACCESSORY) {

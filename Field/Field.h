@@ -103,7 +103,6 @@ private:
 		CBattle* Battle;
 		CFieldMenu FieldMenu;
 		CFieldLog FieldLog;
-		CShopManager* ShopManager;
 };
 
 

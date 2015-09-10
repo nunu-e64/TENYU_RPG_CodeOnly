@@ -10,7 +10,6 @@ CField::CField(){
 	CONSTRUCTED;
 	Battle = CBattle::GetInstance();
 	EveManager = CEveManager::GetInstance();
-	ShopManager = CShopManager::GetInstance();
 }
 
 CField::~CField(){
@@ -43,7 +42,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 
 		//ShopManagerの初期化
 			CShopManager::GetInstance()->Init();
-			//CAlchemistManager::GetInstance()->Init();
+			CAlchemistManager::GetInstance()->Init();
 
 		//ログウィンドウの初期化
 			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
@@ -123,7 +122,7 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 
 		if (FieldLog.Main()) {	//ログ表示中はキー操作無効（表示非表示切り替えはMain内で判定）
 
-		} else if (ShopManager->Main()) {
+		} else if (CAlchemistManager::GetInstance()->Main() || CShopManager::GetInstance()->Main()) {
 		
 		}else if (TextBox->Main(&CmdList, &FlagSet)) {	//テキスト表示中はキー操作無効（テキスト送りはTextBox.Mainで判定）
 		
@@ -391,7 +390,8 @@ void CField::Draw(bool _screenflip, bool _textshowingstop, int dx, int dy, bool 
 	///////////////////////////////////////////////////////////
 
 	//ショップの描画///////////////////////////////////////////////
-	ShopManager->Draw();
+	CShopManager::GetInstance()->Draw();
+	CAlchemistManager::GetInstance()->Draw();
 	///////////////////////////////////////////////////////////
 	
 	if (_screenflip)	{BasicLoop();}

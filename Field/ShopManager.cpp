@@ -4,8 +4,9 @@
 
 void CShopManager::Init() {
 
+	ShopMenu = &ShopMenuInstance;
 	ShopBank.clear();
-	currentOpenShopIndex = -1;
+	CurrentOpenShopIndex = -1;
 
 }
 
@@ -40,17 +41,17 @@ bool CShopManager::OpenShop(int _index) {
 	if (ShopBank.find(_index) != ShopBank.end()) {
 
 		CItemManager* itemManager = CItemManager::GetInstance();
-		ShopMenu.ItemManager = itemManager;
+		ShopMenu->ItemManager = itemManager;
 
-		currentOpenShopIndex = _index;
-		ShopMenu.Cursor = 0;
-		ShopMenu.IsConfirm = false;
+		CurrentOpenShopIndex = _index;
+		ShopMenu->Cursor = 0;
+		ShopMenu->IsConfirm = false;
 
-		ShopMenu.ItemList.clear();
-		ShopMenu.Basket.clear();
-		for (unsigned int i = 0; i < ShopBank[currentOpenShopIndex].size(); i++) {
-			ShopMenu.ItemList.push_back(itemManager->GetItem(ShopBank[currentOpenShopIndex][i]));
-			ShopMenu.Basket.push_back(0);
+		ShopMenu->ItemList.clear();
+		ShopMenu->Basket.clear();
+		for (unsigned int i = 0; i < ShopBank[CurrentOpenShopIndex].size(); i++) {
+			ShopMenu->ItemList.push_back(itemManager->GetItem(ShopBank[CurrentOpenShopIndex][i]));
+			ShopMenu->Basket.push_back(0);
 		}
 
 		return true;
@@ -64,7 +65,7 @@ bool CShopManager::OpenShop(int _index) {
 
 
 bool CShopManager::IsOpen() {
-	return (currentOpenShopIndex >= 0);
+	return (CurrentOpenShopIndex >= 0);
 }
 
 
@@ -74,35 +75,35 @@ bool CShopManager::Main() {
 
 	//カーソル移動
 	if (CheckHitKeyDown(KEY_INPUT_DOWN)) {
-		ShopMenu.Move(DOWN);
+		ShopMenu->Move(DOWN);
 	
 	} else if (CheckHitKeyDown(KEY_INPUT_UP)) {
-		ShopMenu.Move(UP);
+		ShopMenu->Move(UP);
 	
 	}else if (CheckHitKeyDown(KEY_INPUT_RIGHT)) {
-		ShopMenu.Move(RIGHT);
+		ShopMenu->Move(RIGHT);
 	
 	} else if (CheckHitKeyDown(KEY_INPUT_LEFT)) {
-		ShopMenu.Move(LEFT);
+		ShopMenu->Move(LEFT);
 	
 	} else if (CheckHitKeyDown(KEY_INPUT_OK)) {
-		if (ShopMenu.IsConfirm) {
-			ShopMenu.Buy();		//購入
-			ShopMenu.IsConfirm = false;
+		if (ShopMenu->IsConfirm) {
+			ShopMenu->Buy();		//購入
+			ShopMenu->IsConfirm = false;
 		} else {
-			if (ShopMenu.SumPrice <= ShopMenu.ItemManager->GetGold()) {
-				ShopMenu.IsConfirm = true;
+			if (ShopMenu->CanBuy()) {
+				ShopMenu->IsConfirm = true;
 			}
 		}
 	
 	} else if (CheckHitKeyDown(KEY_INPUT_CANCEL)) {
 
-		if (ShopMenu.IsConfirm) {
-			ShopMenu.IsConfirm = false;
-		} else if (ShopMenu.SumPrice == 0){
-			currentOpenShopIndex = -1;	//閉店
+		if (ShopMenu->IsConfirm) {
+			ShopMenu->IsConfirm = false;
+		} else if (ShopMenu->CanClose()){
+			CurrentOpenShopIndex = -1;	//閉店
 		} else {
-			OpenShop(currentOpenShopIndex);	//バスケットリセット
+			OpenShop(CurrentOpenShopIndex);	//バスケットリセット
 		}
 	}
 
@@ -113,10 +114,10 @@ bool CShopManager::Main() {
 void CShopManager::Draw() {
 	if (!IsOpen()) return;
 
-	ShopMenu.Draw();
+	ShopMenu->Draw();
 }
 
-void CShopManager::ShopMenu::Move(int _dir) {
+void CShopMenu::Move(int _dir) {
 
 	if (!IsConfirm) {
 
@@ -145,24 +146,34 @@ void CShopManager::ShopMenu::Move(int _dir) {
 
 }
 
-bool CShopManager::ShopMenu::Buy() {
-
+bool CShopMenu::CanBuy(){
 	if (SumPrice <= ItemManager->GetGold()) {
-
-		ItemManager->DecGold(SumPrice);
-		for (unsigned int i = 0; i < ItemList.size(); i++) {
-			ItemManager->IncPlayerItem(ItemList[i]->Name, Basket[i]);
-			Basket[i] = 0;	//バスケットは空にする
-		}
 		return true;
-
 	} else {
 		return false;
 	}
+}
+
+bool CShopMenu::CanClose(){
+	if (SumPrice == 0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool CShopMenu::Buy() {
+
+	ItemManager->DecGold(SumPrice);
+	for (unsigned int i = 0; i < ItemList.size(); i++) {
+		ItemManager->IncPlayerItem(ItemList[i]->Name, Basket[i]);
+		Basket[i] = 0;	//バスケットは空にする
+	}
+	return true;
 
 }
 
-void CShopManager::ShopMenu::Draw() {
+void CShopMenu::Draw() {
 
 	CRect rect(60, WINDOW_WIDTH - 60, 60, WINDOW_HEIGHT - 60);
 
@@ -174,18 +185,22 @@ void CShopManager::ShopMenu::Draw() {
 		int top = rect.Top + 20 + i*(2 + GetFontSize());
 
 		if (Cursor == i && !IsConfirm) {
-			DrawString(rect.Left + 20, top, "|>", WHITE, BLACK);
+			DrawString(rect.Left + 20, top, "|>", WHITE, BLACK);	//カーソル
 		}
 
+		//商品名
 		DrawString(rect.Left + 50, top, ItemList[i]->Name.c_str(), WHITE, BLACK);
 
+		//商品金額
 		strNum = std::to_string(ItemList[i]->Price) + "ガル";
 		DrawString(rect.Right - 240, top, strNum.c_str(), WHITE, BLACK);
 
+		//購入個数
 		strNum = (Basket[i]>0 ? "< " : "  ") + std::to_string(Basket[i])
 			+ (Basket[i] < ItemList[i]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[i]->Name) ? " >" : "  ");
 		DrawString(rect.Right - 120, top, strNum.c_str(), WHITE, BLACK);
 
+		//所持個数と所持上限
 		strNum = std::to_string(ItemManager->GetPlayerItemNum(ItemList[i]->Name)) + "/" + std::to_string(ItemList[i]->OwnLimit);
 		DrawString(rect.Right - 60, top, strNum.c_str(), WHITE, BLACK);
 	}

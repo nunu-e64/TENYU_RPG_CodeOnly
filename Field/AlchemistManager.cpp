@@ -1,6 +1,13 @@
 #include "AlchemistManager.h"
 #include "Item.h"
 
+void CAlchemistManager::Init() {
+
+	ShopMenu = &AlchemistMenuInstance;
+	ShopBank.clear();
+	CurrentOpenShopIndex = -1;
+
+}
 
 //開店
 bool CAlchemistManager::OpenShop(int _index) {
@@ -8,17 +15,20 @@ bool CAlchemistManager::OpenShop(int _index) {
 	if (ShopBank.find(_index) != ShopBank.end()) {
 
 		CItemManager* itemManager = CItemManager::GetInstance();
-		ShopMenu.ItemManager = itemManager;
+		ShopMenu->ItemManager = itemManager;
 
-		currentOpenShopIndex = _index;
-		ShopMenu.Cursor = 0;
-		ShopMenu.IsConfirm = false;
+		CurrentOpenShopIndex = _index;
+		ShopMenu->Cursor = 0;
+		ShopMenu->IsConfirm = false;
 
-		ShopMenu.ItemList.clear();
-		ShopMenu.Basket.clear();
-		for (unsigned int i = 0; i < ShopBank[currentOpenShopIndex].size(); i++) {
-			ShopMenu.ItemList.push_back(itemManager->GetItem(ShopBank[currentOpenShopIndex][i]));
-			ShopMenu.Basket.push_back(0);
+		ShopMenu->ItemList.clear();
+		ShopMenu->Basket.clear();
+		for (unsigned int i = 0; i < ShopBank[CurrentOpenShopIndex].size(); i++) {
+			CAccessoryItem* accessoryItem;
+			accessoryItem = itemManager->GetAccessoryItem(ShopBank[CurrentOpenShopIndex][i]);
+
+			ShopMenu->ItemList.push_back(accessoryItem);
+			AlchemistMenuInstance.CurrentMaterialSet.push_back(accessoryItem->MaterialSet);
 		}
 
 		return true;
@@ -31,49 +41,7 @@ bool CAlchemistManager::OpenShop(int _index) {
 }
 
 
-bool CAlchemistManager::Main() {
-
-	if (!IsOpen()) return false;
-
-	//カーソル移動
-	if (CheckHitKeyDown(KEY_INPUT_DOWN)) {
-		ShopMenu.Move(DOWN);
-	
-	} else if (CheckHitKeyDown(KEY_INPUT_UP)) {
-		ShopMenu.Move(UP);
-	
-	}else if (CheckHitKeyDown(KEY_INPUT_RIGHT)) {
-		ShopMenu.Move(RIGHT);
-	
-	} else if (CheckHitKeyDown(KEY_INPUT_LEFT)) {
-		ShopMenu.Move(LEFT);
-	
-	} else if (CheckHitKeyDown(KEY_INPUT_OK)) {
-		if (ShopMenu.IsConfirm) {
-			ShopMenu.Buy();		//購入
-			ShopMenu.IsConfirm = false;
-		} else {
-			if (ShopMenu.SumPrice <= ShopMenu.ItemManager->GetGold()) {
-				ShopMenu.IsConfirm = true;
-			}
-		}
-	
-	} else if (CheckHitKeyDown(KEY_INPUT_CANCEL)) {
-
-		if (ShopMenu.IsConfirm) {
-			ShopMenu.IsConfirm = false;
-		} else if (ShopMenu.SumPrice == 0){
-			currentOpenShopIndex = -1;	//閉店
-		} else {
-			OpenShop(currentOpenShopIndex);	//バスケットリセット
-		}
-	}
-
-	return IsOpen();
-}
-
-/*
-void CShopManager::ShopMenu::Move(int _dir) {
+void CAlchemistMenu::Move(int _dir) {
 
 	if (!IsConfirm) {
 
@@ -87,43 +55,49 @@ void CShopManager::ShopMenu::Move(int _dir) {
 			break;
 
 		case direction_tag::RIGHT:
-			if (Cursor < (int)ItemList.size()) {
-				Basket[Cursor] =
-					min(ItemList[Cursor]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[Cursor]->Name)
-					, Basket[Cursor] + 1);
-			}
-			break;
-
 		case direction_tag::LEFT:
-			Basket[Cursor] = max(0, Basket[Cursor] - 1);
 			break;
 		}
 	}
 
 }
 
-bool CShopManager::ShopMenu::Buy() {
+bool CAlchemistMenu::Buy() {
 
-	if (SumPrice <= ItemManager->GetGold()) {
-
-		ItemManager->DecGold(SumPrice);
-		for (unsigned int i = 0; i < ItemList.size(); i++) {
-			ItemManager->IncPlayerItem(ItemList[i]->Name, Basket[i]);
-			Basket[i] = 0;	//バスケットは空にする
-		}
-		return true;
-
-	} else {
-		return false;
+	for (unsigned int i = 0; i < CurrentMaterialSet[Cursor].size(); i++) {
+		auto tmpPair = CurrentMaterialSet[Cursor][i];
+		ItemManager->DecPlayerItem(tmpPair.first, tmpPair.second);
 	}
 
+	ItemManager->IncPlayerItem(ItemList[Cursor]->Name, 1);
+
+	return true;
 }
 
-void CShopManager::ShopMenu::Draw() {
+bool CAlchemistMenu::CanBuy() {
+
+	for (unsigned int i = 0; i < CurrentMaterialSet[Cursor].size(); i++) {
+		auto tmpPair = CurrentMaterialSet[Cursor][i];
+
+		if (ItemManager->GetPlayerItemNum(tmpPair.first) < tmpPair.second) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool CAlchemistMenu::CanClose() {
+	return true;
+}
+
+void CAlchemistMenu::Draw() {
 
 	CRect rect(60, WINDOW_WIDTH - 60, 60, WINDOW_HEIGHT - 60);
+	CRect rectMaterial(WINDOW_WIDTH/2 + 20, rect.Right-20, rect.Top+20, rect.Bottom-20);
 
 	DrawBox(rect, GetColor(30, 20, 80), true);
+	DrawBox(rectMaterial, GetColor(80, 20, 30), true);
 
 	//商品リスト
 	std::string strNum;
@@ -131,20 +105,30 @@ void CShopManager::ShopMenu::Draw() {
 		int top = rect.Top + 20 + i*(2 + GetFontSize());
 
 		if (Cursor == i && !IsConfirm) {
-			DrawString(rect.Left + 20, top, "|>", WHITE, BLACK);
+			DrawString(rect.Left + 20, top, "|>", WHITE, BLACK);	//カーソル
 		}
 
+		//装備アイテム名
 		DrawString(rect.Left + 50, top, ItemList[i]->Name.c_str(), WHITE, BLACK);
 
-		strNum = std::to_string(ItemList[i]->Price) + "ガル";
-		DrawString(rect.Right - 240, top, strNum.c_str(), WHITE, BLACK);
-
-		strNum = (Basket[i]>0 ? "< " : "  ") + std::to_string(Basket[i])
-			+ (Basket[i] < ItemList[i]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[i]->Name) ? " >" : "  ");
-		DrawString(rect.Right - 120, top, strNum.c_str(), WHITE, BLACK);
-
+		//現在の所持数と所持上限
 		strNum = std::to_string(ItemManager->GetPlayerItemNum(ItemList[i]->Name)) + "/" + std::to_string(ItemList[i]->OwnLimit);
-		DrawString(rect.Right - 60, top, strNum.c_str(), WHITE, BLACK);
+		DrawString(rect.Left + 220, top, strNum.c_str(), WHITE, BLACK);
+	}
+
+	for (unsigned int i = 0; i < CurrentMaterialSet[Cursor].size(); i++) {
+
+		auto tmpPair = CurrentMaterialSet[Cursor][i];
+		int top = rectMaterial.Top + 20 + i*(2 + GetFontSize());
+	
+		//錬成必要素材名
+		DrawString(rectMaterial.Left + 20, top, tmpPair.first.c_str(), WHITE, BLACK);
+
+		//錬成必要素材個数と所持個数。不足なら赤文字
+		strNum = std::to_string(tmpPair.second) + "/"+ std::to_string(ItemManager->GetPlayerItemNum(tmpPair.first));
+		int color = (tmpPair.second > ItemManager->GetPlayerItemNum(tmpPair.first) ? RED : WHITE);
+		DrawString(rectMaterial.Right - 60, top, strNum.c_str(), color, BLACK);
+
 	}
 
 	//決定
@@ -153,14 +137,5 @@ void CShopManager::ShopMenu::Draw() {
 		DrawString(rect.Left + 30, top, "|>", WHITE, BLACK);
 	}
 	DrawString(rect.Left + 60, top, "決定", (IsConfirm ? WHITE : GRAY), BLACK);
-
-	//合計金額＆所持金額
-	SumPrice = 0;
-	for (unsigned int i = 0; i < ItemList.size(); i++) {
-		SumPrice += ItemList[i]->Price * Basket[i];
-	}
-	strNum = "計：" + std::to_string(SumPrice) + "ガル  所持金：" + std::to_string(ItemManager->GetGold()) + "ガル";
-	DrawString(rect.Right - 250, top, strNum.c_str(), WHITE, BLACK);
-
+	
 }
-*/

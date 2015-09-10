@@ -5,6 +5,18 @@
 
 #include "ShopManager.h"
 
+class CAlchemistMenu : public CShopMenu {
+public:
+	void Move(int _dir);
+	void Draw();
+	bool Buy();
+	
+	bool CanBuy();
+	bool CanClose();
+
+	std::vector <std::vector < std::pair<std::string, int> > > CurrentMaterialSet;
+};
+
 class CAlchemistManager : public CShopManager {
 public:
 	static CAlchemistManager* GetInstance() {
@@ -15,25 +27,12 @@ public:
 		DESTRUCTED;
 	}
 
+	void Init();
 	bool OpenShop(int _index);
 
-	bool Main();
-
 private:
+	CAlchemistMenu AlchemistMenuInstance;
 
-/*	struct ShopMenu {
-		std::vector	<CItem*> ItemList;	//開店時に作る商品棚
-		std::vector<int> Basket;	//数量を記録する買い物かご
-		int SumPrice;
-
-		int Cursor;
-		bool IsConfirm;
-		CItemManager* ItemManager;
-
-		void Move(int _dir);
-		bool Buy();
-	}ShopMenu;
-*/
 	//単一性を保証(Singleton)////////////////////////////////
 	CAlchemistManager() {
 		CONSTRUCTED;
@@ -43,6 +42,7 @@ private:
 	/////////////////////////////////////////////////////////
 
 };
+
 
 ////多重インクルード防止（インクルードガード）//
 #endif										////
