@@ -125,7 +125,7 @@ void CAlchemistMenu::Draw() {
 		DrawString(rectMaterial.Left + 20, top, tmpPair.first.c_str(), WHITE, BLACK);
 
 		//˜B¬•K—v‘fÞŒÂ”‚ÆŠŽŒÂ”B•s‘«‚È‚çÔ•¶Žš
-		strNum = std::to_string(tmpPair.second) + "/"+ std::to_string(ItemManager->GetPlayerItemNum(tmpPair.first));
+		strNum = std::to_string(ItemManager->GetPlayerItemNum(tmpPair.first)) + "/"+ std::to_string(tmpPair.second);
 		int color = (tmpPair.second > ItemManager->GetPlayerItemNum(tmpPair.first) ? RED : WHITE);
 		DrawString(rectMaterial.Right - 60, top, strNum.c_str(), color, BLACK);
 
