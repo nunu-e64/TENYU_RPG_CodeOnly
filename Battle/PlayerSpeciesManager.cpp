@@ -143,18 +143,22 @@ bool CPlayerSpeciesManager::SetAccessory(std::string _playerName, int _slot, std
 			}
 			player->AccessoryList[_slot] = "";
 
+			return true;
+
 		} else if (itemManager->GetAccessoryItem(_accessoryItemName) != NULL) {	//装備アイテムを選択＝装備を交換
 			
 			if (itemManager->GetPlayerItemNum(_accessoryItemName) > 0) {
 				
-				//元々装備していたアイテムをバッグに返す
-				if (player->AccessoryList[_slot].length() > 0) {
-					itemManager->IncPlayerItem(player->AccessoryList[_slot], 1);
-				}
-				
+				std::string oldAcce = player->AccessoryList[_slot];
+
 				//新しく装備するアイテムをバッグからもらう
 				itemManager->DecPlayerItem(_accessoryItemName, 1);
 				player->AccessoryList[_slot] = _accessoryItemName;
+
+				//元々装備していたアイテムをバッグに返す
+				if (oldAcce.length() > 0) {
+					itemManager->IncPlayerItem(oldAcce, 1);
+				}				
 
 				return true;
 			} else {
