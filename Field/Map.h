@@ -36,8 +36,8 @@ public:
 	int GetMapData(int _mapnum, int _x, int _y, int layer=0);
 	int* GetImgData(const char _key[32]);
 
-	bool SetMapMusic(int _mapNum, std::string _musicKey);
-	std::string GetMapMusic(int _mapNum);
+	bool SetMapMusic(int _mapNum, std::string _musicKey, bool _isBattle = false);
+	std::string GetMapMusic(int _mapNum, bool _isBattle = false);
 
 private:
 	unsigned char BasMap[MAP_MAX][MAP_SIZE][MAP_SIZE];	//[x][y]
@@ -61,6 +61,7 @@ private:
 	
 	//‰¹Šy
 		std::string MapMusic[MAP_MAX];
+		std::string BattleMusic[MAP_MAX];
 };
 
 

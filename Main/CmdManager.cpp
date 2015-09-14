@@ -179,7 +179,18 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 			ERRORDX("Could not change argument type->%s", _command);
 			goto finish;
 		}
-		_map->SetMapMusic(mapNum, arg[1]);
+		_map->SetMapMusic(mapNum, arg[1], false);
+
+//@Set_BattleMusic(map_num, music_key)
+	} else if (mystrcmp(_command, "@Set_BattleMusic")) {
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+
+		int mapNum;
+		if (!(mystrtol(arg[0], &mapNum))) {
+			ERRORDX("Could not change argument type->%s", _command);
+			goto finish;
+		}
+		_map->SetMapMusic(mapNum, arg[1], true);
 
 //@Set_EventObj
 	}else if (mystrcmp(_command,"@Set_EventObj")){

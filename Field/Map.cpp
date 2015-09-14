@@ -151,15 +151,21 @@ int* CMap::GetImgData(const char _key[32]){
 	return dammyimg.Img;
 }
 
-bool CMap::SetMapMusic(int _mapNum, std::string _musicKey)
+bool CMap::SetMapMusic(int _mapNum, std::string _musicKey, bool _isBattle)
 {
 	MAP_MAX_CHECK(_mapNum, false);
-	MapMusic[_mapNum] = _musicKey;
+	
+	if (_isBattle) {
+		BattleMusic[_mapNum] = _musicKey;
+	} else {
+		MapMusic[_mapNum] = _musicKey;
+	}
+
 	return true;
 }
 
-std::string CMap::GetMapMusic(int _mapNum)
+std::string CMap::GetMapMusic(int _mapNum, bool _isBattle)
 {
 	MAP_MAX_CHECK(_mapNum, "");
-	return MapMusic[_mapNum];
+	return (_isBattle? BattleMusic[_mapNum]: MapMusic[_mapNum]);
 }

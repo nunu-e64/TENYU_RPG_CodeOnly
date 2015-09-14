@@ -476,6 +476,7 @@ void CField::SetNowMap(int _mapnum) {
 	std::string newMusicKey = Map.GetMapMusic(NowMap);
 	std::string oldMusicKey = (oldMap != -1? Map.GetMapMusic(oldMap): "");
 
+	//暫定、音楽未設定のマップに入った時には音楽がなくなる。店や戦闘の出入りを考えるとこれが作りやすいため。
 	if (newMusicKey != oldMusicKey || oldMap == -1) {
 
 		if (oldMusicKey.length() > 0) {
@@ -608,9 +609,19 @@ void CField::BattleStart(){
 			break;
 		}
 
-	//戦闘開始
+	//音楽切り替え
+		std::string fieldMusic = Map.GetMapMusic(NowMap, false);
+		std::string battleMusic = Map.GetMapMusic(NowMap, true);
+
+		if (battleMusic.length() > 0 && battleMusic != fieldMusic) {
+			CMusicManager::GetInstance()->StopMusic(fieldMusic);
+			CMusicManager::GetInstance()->PlayMusic(battleMusic);
+		}
+		
+	//戦闘開始（戦闘終了まで帰ってこない）
 	Battle->BattleStart(&result, &resultcmdlist);
 	
+
 	//画面切り替え効果（戦闘終了）
 		if (result!=LOSE_NOSCREENCHANGE){
 			GetDrawScreenGraph(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, battleGraph) ;
@@ -618,6 +629,13 @@ void CField::BattleStart(){
 			CScreenChanger::ChangeScreen(battleGraph, blankGraph, CScreenChanger::SCREEN_FADE, 30);
 			CScreenChanger::ChangeScreen(blankGraph, fieldGraph,  CScreenChanger::SCREEN_FADE, 30);
 		}
+
+	//音楽切り替え
+		if (fieldMusic.length() > 0 && battleMusic != fieldMusic) {
+			CMusicManager::GetInstance()->StopMusic(battleMusic);
+			CMusicManager::GetInstance()->PlayMusic(fieldMusic);
+		}
+
 	//戦闘結果コマンドの処理
 	FieldCmdManager.Main(&resultcmdlist, this, &Map, TextBox, EveManager);
 }
