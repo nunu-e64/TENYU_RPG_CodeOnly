@@ -42,9 +42,9 @@
 ////////////////////////////////////////////////
 #define MAP_MAX_CHECK(_mapnum, _return) {	\
 	if (!(_mapnum<MAP_MAX)){				\
-		ErrorDx("Error overnum[MapMax]: %d",_mapnum);return _return;	\
+		ERRORDX("TooLargeMapNumber:%d(MAPMAX=%d)",_mapnum,MAP_MAX);return _return;	\
 	}else if(_mapnum<0){					\
-		ErrorDx("Error mapnum<0: %d",_mapnum);return _return;	\
+		ERRORDX("mapnum<0: %d",_mapnum);return _return;	\
 	}}
 
 #define NUM_MAX_CHECK(_num, _max, _return) {	\

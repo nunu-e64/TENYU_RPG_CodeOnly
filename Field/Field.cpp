@@ -24,7 +24,7 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 	CHECK_TIME_START
 	
 		//”•Ï”‚Ì‰Šú‰»
-			NowMap=0;
+			NowMap=-1;
 			GodX = GodY = 0;
 
 			X = Y = 0;		OldX=X; OldY=Y;
@@ -466,11 +466,32 @@ void CField::Jump(){
 	Draw(true, true);
 }
 
-void CField::SetPosition(int _mapnum, int _x, int _y, bool _d){
-	if (_mapnum>=0){
-		MAP_MAX_CHECK(_mapnum,);	
-		NowMap = _mapnum;
+void CField::SetNowMap(int _mapnum) {
+
+	int oldMap = NowMap;
+	MAP_MAX_CHECK(_mapnum,);
+
+	NowMap = _mapnum;
+
+	std::string newMusicKey = Map.GetMapMusic(NowMap);
+	std::string oldMusicKey = (oldMap != -1? Map.GetMapMusic(oldMap): "");
+
+	if (newMusicKey != oldMusicKey || oldMap == -1) {
+
+		if (oldMusicKey.length() > 0) {
+			CMusicManager::GetInstance()->StopMusic(oldMusicKey);
+		}
+
+		if (newMusicKey.length() > 0) {
+			CMusicManager::GetInstance()->PlayMusic(newMusicKey);
+		}
 	}
+}
+
+void CField::SetPosition(int _mapnum, int _x, int _y, bool _d){
+	
+	SetNowMap(_mapnum);
+	
 	X = (_d? X+_x:_x) % MAP_SIZE;
 	Y = (_d? Y+_y:_y) % MAP_SIZE;
 }

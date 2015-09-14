@@ -150,3 +150,16 @@ int* CMap::GetImgData(const char _key[32]){
 	if (!mystrcmp(_key, "NULL")) ErrorDx("Error->Don't match Pickey(all 0):%s", __FILE__, __LINE__, _key);		//"NULL"Ç≈Ç∑ÇÁÇ»Ç¢ÇÃÇÕÉGÉâÅ[
 	return dammyimg.Img;
 }
+
+bool CMap::SetMapMusic(int _mapNum, std::string _musicKey)
+{
+	MAP_MAX_CHECK(_mapNum, false);
+	MapMusic[_mapNum] = _musicKey;
+	return true;
+}
+
+std::string CMap::GetMapMusic(int _mapNum)
+{
+	MAP_MAX_CHECK(_mapNum, "");
+	return MapMusic[_mapNum];
+}

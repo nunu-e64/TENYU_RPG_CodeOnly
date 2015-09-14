@@ -33,7 +33,7 @@ public:
 	void Jump();
 
 	inline int GetNowMap(){return NowMap;}
-	inline void SetNowMap(int _mapnum) {	if(_mapnum<MAP_MAX) NowMap = _mapnum;}
+	void SetNowMap(int _mapnum);
 
 	void SetPosition(int _mapnum, int _x, int _y, bool _d=false);
 	void SetMyPic(const int _img[CHARA_PIC_NUM], const char* _pickey);

@@ -174,7 +174,12 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 	} else if (mystrcmp(_command, "@Set_MapMusic")) {
 		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
-//		_map->SetMapMusic(arg[0], arg[1]);
+		int mapNum;
+		if (!(mystrtol(arg[0], &mapNum))) {
+			ERRORDX("Could not change argument type->%s", _command);
+			goto finish;
+		}
+		_map->SetMapMusic(mapNum, arg[1]);
 
 //@Set_EventObj
 	}else if (mystrcmp(_command,"@Set_EventObj")){
@@ -233,7 +238,7 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		long int pos[3];
 		for (int i=0; i<3; i++){
 			if(!( mystrtol(arg[i], &pos[i]))){
-				ErrorDx("Error->Check argument type->%s", __FILE__, __LINE__, _command);
+				ERRORDX("Check argument type->%s", _command);
 				goto finish;
 			}
 		}
@@ -1147,7 +1152,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				if (!(mystrtol(arg[1], &pos[0]))) pos[0] = -1;
 				for (int i=1; i<3; i++){
 					if(!( mystrtol(arg[i+1], &pos[i]))){
-						ErrorDx("Error->@Position_Set->Check type:%s", __FILE__, __LINE__, arg[i+1]);
+						ERRORDX("@Position_Set->Check type:%s", arg[i+1]);
 						goto finish;
 					}
 				}
@@ -1164,7 +1169,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				int num[2];
 				if (!(mystrtol(arg[1], &num[0]))) num[0] = -1;
 				if(!( mystrtol(arg[2], &num[1]))){
-					ErrorDx("Error->@Position_Set->Check type: %d", __FILE__, __LINE__, arg[2]);
+					ERRORDX("@Position_Set->Check type: %d", arg[2]);
 					goto finish;
 				}
 				int x, y;
@@ -1186,7 +1191,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 				int pos[2];
 				for (int i=0; i<2; i++){
 					if(!( mystrtol(arg[i+1], &pos[i]))){
-						ErrorDx("Error->@Position_Set->Check type:%s", __FILE__, __LINE__, arg[i+1]);
+						ERRORDX("@Position_Set->Check type:%s", arg[i+1]);
 						goto finish;
 					}
 				}
