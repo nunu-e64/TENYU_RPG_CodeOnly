@@ -13,7 +13,7 @@ public:
 
 	void Init();
 	
-	void LoadMusic(std::string _key, const char* _address);
+	void LoadMusic(std::string _key, const char* _address, bool _isPress);
 	void PlayMusic(std::string _key);
 	void StopMusic(std::string _key);
 	void StopAllMusic();

@@ -12,10 +12,16 @@ void CMusicManager::Init()
 	MusicBank.clear();
 }
 
-void CMusicManager::LoadMusic(std::string _key, const char * _address)
+void CMusicManager::LoadMusic(std::string _key, const char * _address, bool _isPress)
 {
 
 	if (GetMusicHandle(_key, false) == -1) {
+
+		if (_isPress) {
+			SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMPRESS);
+		} else {
+			SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMNOPRESS);
+		}
 		int handle = LoadSoundMem(_address);
 
 		if (handle != -1) {

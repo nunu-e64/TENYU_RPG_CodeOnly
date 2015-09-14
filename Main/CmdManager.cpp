@@ -496,7 +496,13 @@ bool CCmdManager::MusicSystemCmdSolve(const char* _command, char* _argument)
 	} else if (mystrcmp(_command, "@Load_Music", 'l')) {
 		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
 
-		CMusicManager::GetInstance()->LoadMusic(arg[1], arg[0]);
+		CMusicManager::GetInstance()->LoadMusic(arg[1], arg[0], true);
+
+//@Load_Sound
+	} else if (mystrcmp(_command, "@Load_Sound", 'l')) {
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
+
+		CMusicManager::GetInstance()->LoadMusic(arg[1], arg[0], false);
 
 //コマンド不一致
 	} else {
