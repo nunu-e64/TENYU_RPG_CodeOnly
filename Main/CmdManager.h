@@ -26,14 +26,17 @@ protected:
 	bool NextCommand(CCmdList* _cmdlist, char* commandline, char* command, char* &argument);
 	bool ArgCut(const char* _command, char* _argument, char** _arg, int _argnum, bool _warning=true, int _minimum = 0);
 
-	bool MusicCmdSolve (const char* _command, char* _argument, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);
 	bool FieldCmdSolve (const char* _command, char* _argument, CField* _field, CMap* _map, CTextBox* _textbox, CEveManager* _evemanager);
 	bool SystemCmdSolve(const char* _command, char* _argument, CField* _field, CMap* _map,                     CEveManager* _evemanager);
 	bool WindowCmdSolve(const char* _command, char* _argument, CWorldManager* _worldmanager, CMap* _map, CTextBox* _textbox);
 	bool TextCmdSolve  (const char* _command, char* _argument, CWorldManager* _worldmanager, CTextBox* _textbox);
 
+	bool MusicSystemCmdSolve(const char* _command, char* _argument);
+	bool MusicCmdSolve(const char* _command, char* _argument);
+
 	bool BattleSystemCmdSolve(const char* _command, char* _argument, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager);
 	bool BattleCmdSolve(const char* _command, char* _argument, CBattle* _battle);
+
 
 };
 

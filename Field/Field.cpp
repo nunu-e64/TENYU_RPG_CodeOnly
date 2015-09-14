@@ -5,6 +5,7 @@
 #include "AlchemistManager.h"
 
 #include "../Battle/Battle.h"
+#include "../Main/MusicManager.h"
 
 CField::CField(){
 	CONSTRUCTED;
@@ -43,6 +44,9 @@ bool CField::Init(playdata_tag* _playdata_p, const int _dnum){
 		//ShopManagerの初期化
 			CShopManager::GetInstance()->Init();
 			CAlchemistManager::GetInstance()->Init();
+
+		//MusicManagerの初期化
+			CMusicManager::GetInstance()->Init();
 
 		//ログウィンドウの初期化
 			FieldLog.Init(50, 50, WINDOW_WIDTH-100, WINDOW_HEIGHT-100, BLACK, 300, 12, WHITE, GRAY);
@@ -300,11 +304,11 @@ int CField::MainLoop(){	//ゲーム中はこのループ内から出ない
 					}
 
 				}else if (CheckHitKey(KEY_INPUT_1)){
-					return MODE_GAMECLEAR;
+					CmdList.Add("@GameOver");
 				}else if (CheckHitKey(KEY_INPUT_2)){
-					return MODE_GAMEOVER;
+					CmdList.Add("@GameClear");
 				}else if (CheckHitKeyDown(KEY_INPUT_ESCAPE) || CheckHitKey(KEY_INPUT_3)){
-					return MODE_BACKTOTITLE;
+					CmdList.Add("@BackToTitle");
 				}else if (CheckHitKeyDown(KEY_INPUT_G)){
 					CmdList.Add("@AutoPlay_Set(true,1)");
 				} else if (CheckHitKeyDown(KEY_INPUT_I)) {

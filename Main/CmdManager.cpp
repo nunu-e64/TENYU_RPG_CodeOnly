@@ -14,6 +14,8 @@
 #include "../Battle/PlayerSpeciesManager.h"
 #include "../Battle/EnemySpeciesManager.h"
 
+#include "MusicManager.h"
+
 void CFirstSetCmdManager::Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CEveManager* _evemanager){
 
 	char commandline[256];	//ƒRƒ}ƒ“ƒhs
@@ -21,8 +23,9 @@ void CFirstSetCmdManager::Main(CCmdList* _cmdlist, CField* _field, CMap* _map, C
 	char *argument=NULL;	//ˆø”	//ƒRƒ“ƒpƒCƒ‹Œx‚ªŸT“©‚µ‚¢‚Ì‚Å‰Šú‰»‚µ‚Ä‚¨‚¢‚Ä‚ ‚°‚é
 
 	while (NextCommand(_cmdlist, commandline, command, argument)){
-		if (!SystemCmdSolve(command, argument, _field, _map, _evemanager)){
-			WarningDx("Warning->CFirstSetCmdManager->Unregisterd command->%s", command);
+		if (!SystemCmdSolve(command, argument, _field, _map, _evemanager)
+			&& !MusicSystemCmdSolve(command, argument)){
+			WARNINGDX("CFirstSetCmdManager->Unregisterd command->%s", command);
 		}
 	}
 }
@@ -36,8 +39,9 @@ void CFieldCmdManager::Main(CCmdList* _cmdlist, CField* _field, CMap* _map, CTex
 	while (NextCommand(_cmdlist, commandline, command, argument) && _field->GetGameMode()==MODE_PLAYING){	//Mode‚ª•ÏX‚³‚ê‚ÄGameOver‚Æ‚©‚µ‚Ä‚¢‚½‚ç‹­§I—¹
 		if (!FieldCmdSolve (command, argument, _field, _map, _textbox, _evemanager) 
 		 && !WindowCmdSolve(command, argument, _field, _map, _textbox)
-		 && !TextCmdSolve  (command, argument, _field, _textbox)){
-			WarningDx("Warning->CFieldCmdManager->Unregisterd command->%s", command);
+		 && !TextCmdSolve  (command, argument, _field, _textbox)
+		 && !MusicCmdSolve (command, argument)){
+			WARNINGDX("CFieldCmdManager->Unregisterd command->%s", command);
 		}
 	}
 }
@@ -51,8 +55,9 @@ void CBattleCmdManager::Main(CCmdList* _cmdlist, CBattle* _battle, CTextBox* _te
 	while (NextCommand(_cmdlist, commandline, command, argument)){
 		if (!WindowCmdSolve(command, argument, _battle, Map_p, _textbox)
 		 && !TextCmdSolve  (command, argument, _battle, _textbox)
+		 && !MusicCmdSolve (command, argument)
 		 && !BattleCmdSolve(command, argument, _battle)){
-			WarningDx("Warning->CBattleCmdManager->Unregisterd command->%s", command);
+			WARNINGDX("CBattleCmdManager->Unregisterd command->%s", command);
 		}
 	}
 }
@@ -65,7 +70,7 @@ void CBattleFirstSetCmdManager::Main(CCmdList* _cmdlist, CBImgBank* _bimgbank, C
 
 	while (NextCommand(_cmdlist, commandline, command, argument)){
 		if (!BattleSystemCmdSolve(command, argument, _bimgbank, _playerSpeciesManager, _enemySpeciesManager, _trickManager)){
-			WarningDx("Warning->CBattleFirstSetCmdManager->Unregisterd command->%s", command);
+			WARNINGDX("CBattleFirstSetCmdManager->Unregisterd command->%s", command);
 		}
 	}
 }
@@ -164,7 +169,13 @@ bool CCmdManager::SystemCmdSolve(const char* _command, char* _argument, CField* 
 		argnum = 3;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 
 		_map->LoadPic(arg[0], arg[1], arg[2]);
-		
+
+//@Set_MapMusic(map_num, music_key)
+	} else if (mystrcmp(_command, "@Set_MapMusic")) {
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
+
+//		_map->SetMapMusic(arg[0], arg[1]);
+
 //@Set_EventObj
 	}else if (mystrcmp(_command,"@Set_EventObj")){
 		argnum = 6;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
@@ -456,6 +467,32 @@ finish:
 	delete [] arg;
 	return true;
 }
+
+bool CCmdManager::MusicSystemCmdSolve(const char* _command, char* _argument)
+{
+	int argnum = 0;	char** arg;
+
+	if (strlen(_command) == 0) {
+		ERRORDX("strlen(_command)==0->%s", _command);
+		return true;
+
+//@Load_Music
+	} else if (mystrcmp(_command, "@Load_Music", 'l')) {
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+
+		CMusicManager::GetInstance()->LoadMusic(arg[1], arg[0]);
+
+//ƒRƒ}ƒ“ƒh•sˆê’v
+	} else {
+		return false;
+	}
+
+finish:
+	delete[] arg;
+	return true;
+}
+
+
 bool CCmdManager::BattleSystemCmdSolve(const char* _command, char* _argument, CBImgBank* _bimgbank, CPlayerSpeciesManager* _playerSpeciesManager, CEnemySpeciesManager* _enemySpeciesManager, CTrickManager* _trickManager){
 	int argnum=0;	char** arg;
 		
@@ -860,16 +897,19 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 	}else if (mystrcmp(_command, "@GameOver",'p')){
 		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 		_field->SetGameMode(MODE_GAMEOVER);
+		CMusicManager::GetInstance()->StopAllMusic();
 		
 //@GameClear
-	}else if (mystrcmp(_command, "@GameOver",'p')){
+	}else if (mystrcmp(_command, "@GameClear",'p')){
 		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 		_field->SetGameMode(MODE_GAMECLEAR);
+		CMusicManager::GetInstance()->StopAllMusic();
 
 //@BackToTitle
-	}else if (mystrcmp(_command, "@GameOver",'p')){
+	}else if (mystrcmp(_command, "@BackToTitle",'p')){
 		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum, false);	//•K{
 		_field->SetGameMode(MODE_BACKTOTITLE);
+		CMusicManager::GetInstance()->StopAllMusic();
 
 //@BattleResult_Set
 	}else if (mystrcmp(_command, "@BattleResult_Set",'p')){
@@ -1725,6 +1765,48 @@ bool CCmdManager::TextCmdSolve(const char* _command, char* _argument, CWorldMana
 	
 finish:
 	delete [] arg;
+	return true;
+}
+
+bool CCmdManager::MusicCmdSolve(const char * _command, char * _argument)
+{
+	int argnum = 0;	char** arg;
+
+	if (strlen(_command) == 0) {
+		ERRORDX("strlen(_command)==0->%s", _command);
+		return true;
+
+//@Music_Play
+	} else if (mystrcmp(_command, "@Music_Play", 'l')) {
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+
+		CMusicManager::GetInstance()->PlayMusic(arg[0]);
+
+//@Music_Stop
+	} else if (mystrcmp(_command, "@Music_Stop", 'l')) {
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+
+		CMusicManager::GetInstance()->StopMusic(arg[0]);
+
+//@Music_AllStop
+	} else if (mystrcmp(_command, "@Music_AllStop", 'l')) {
+		argnum = 0;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+
+		CMusicManager::GetInstance()->StopAllMusic();
+
+//@Music_Pause
+	} else if (mystrcmp(_command, "@Music_Pause", 'l')) {
+		argnum = 1;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//•K{
+
+		CMusicManager::GetInstance()->PauseMusic(arg[0]);
+
+//ƒRƒ}ƒ“ƒh•sˆê’v
+	} else {
+		return false;
+	}
+
+finish:
+	delete[] arg;
 	return true;
 }
 
