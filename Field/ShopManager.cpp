@@ -54,6 +54,9 @@ bool CShopManager::OpenShop(int _index) {
 			ShopMenu->Basket.push_back(0);
 		}
 
+		//‡Œv‹àŠz
+		ShopMenuInstance.SumPrice = 0;
+
 		return true;
 
 	} else {
@@ -132,9 +135,13 @@ void CShopMenu::Move(int _dir) {
 
 		case direction_tag::RIGHT:
 			if (Cursor < (int)ItemList.size()) {
-				Basket[Cursor] =
-					min(ItemList[Cursor]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[Cursor]->Name)
-					, Basket[Cursor] + 1);
+
+				if (SumPrice + ItemList[Cursor]->Price <= ItemManager->GetGold()) {
+
+					Basket[Cursor] =
+						min(ItemList[Cursor]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[Cursor]->Name)
+							, Basket[Cursor] + 1);
+				}
 			}
 			break;
 
@@ -142,6 +149,14 @@ void CShopMenu::Move(int _dir) {
 			Basket[Cursor] = max(0, Basket[Cursor] - 1);
 			break;
 		}
+
+		//‡Œv‹àŠzŒvZ
+		SumPrice = 0;
+		for (unsigned int i = 0; i < ItemList.size(); i++) {
+			SumPrice += ItemList[i]->Price * Basket[i];
+		}
+
+
 	}
 
 }
@@ -169,6 +184,8 @@ bool CShopMenu::Buy() {
 		ItemManager->IncPlayerItem(ItemList[i]->Name, Basket[i]);
 		Basket[i] = 0;	//ƒoƒXƒPƒbƒg‚Í‹ó‚É‚·‚é
 	}
+	SumPrice = 0;
+
 	return true;
 
 }
@@ -197,7 +214,7 @@ void CShopMenu::Draw() {
 
 		//w“üŒÂ”
 		strNum = (Basket[i]>0 ? "< " : "  ") + std::to_string(Basket[i])
-			+ (Basket[i] < ItemList[i]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[i]->Name) ? " >" : "  ");
+			+ (Basket[i] < ItemList[i]->OwnLimit - ItemManager->GetPlayerItemNum(ItemList[i]->Name) && SumPrice+ItemList[i]->Price <= ItemManager->GetGold() ? " >" : "  ");
 		DrawString(rect.Right - 120, top, strNum.c_str(), WHITE, BLACK);
 
 		//ŠŒÂ”‚ÆŠãŒÀ
@@ -212,11 +229,7 @@ void CShopMenu::Draw() {
 	}
 	DrawString(rect.Left + 60, top, "Œˆ’è", (IsConfirm ? WHITE : GRAY), BLACK);
 
-	//‡Œv‹àŠz•Š‹àŠz
-	SumPrice = 0;
-	for (unsigned int i = 0; i < ItemList.size(); i++) {
-		SumPrice += ItemList[i]->Price * Basket[i];
-	}
+	//‡Œv‹àŠz‚ÆŠ‹àŠz
 	strNum = "ŒvF" + std::to_string(SumPrice) + "ƒKƒ‹  Š‹àF" + std::to_string(ItemManager->GetGold()) + "ƒKƒ‹";
 	DrawString(rect.Right - 250, top, strNum.c_str(), WHITE, BLACK);
 
