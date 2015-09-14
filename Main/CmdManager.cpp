@@ -1816,6 +1816,18 @@ bool CCmdManager::MusicCmdSolve(const char * _command, char * _argument)
 
 		CMusicManager::GetInstance()->PauseMusic(arg[0]);
 
+//@Music_ChangeNextVolume
+	} else if (mystrcmp(_command, "@Music_ChangeNextVolume", 'l')) {
+		argnum = 2;		arg = new char*[argnum];	ArgCut(_command, _argument, arg, argnum);	//必須
+
+		int per;
+		if (mystrtol(arg[1], &per)) {
+			CMusicManager::GetInstance()->ChangeNextMusicVolume(arg[0], per);
+		} else {
+			ERRORDX("%s->Check Arg Type[VolumePervent]:%s", _command, arg[1]);
+			goto finish;
+		}
+
 //コマンド不一致
 	} else {
 		return false;
