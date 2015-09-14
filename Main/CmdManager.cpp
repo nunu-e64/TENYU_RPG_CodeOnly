@@ -1439,7 +1439,7 @@ bool CCmdManager::FieldCmdSolve(const char* _command, char* _argument, CField* _
 		if (mystrtol(arg[1], &slot)) {
 			CPlayerSpeciesManager::GetInstance()->SetAccessory(arg[0], slot, arg[2]);
 		} else {
-			ERRORDX("Check Argument Type[index]. :%s:%s", _command, arg[1]);
+			ERRORDX("Check Argument Type[slotNum]. :%s:%s", _command, arg[1]);
 		}
 
 //コマンド不一致
