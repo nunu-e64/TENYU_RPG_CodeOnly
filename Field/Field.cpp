@@ -585,6 +585,15 @@ void CField::BattleStart(){
 	Battle->SetPlayer();
 	Battle->BattleReady(&FlagSet, &Map, EveManager);
 	
+	//音楽切り替え
+		std::string fieldMusic = Map.GetMapMusic(NowMap, false);
+		std::string battleMusic = Map.GetMapMusic(NowMap, true);
+
+		if (battleMusic.length() > 0 && battleMusic != fieldMusic) {
+			CMusicManager::GetInstance()->StopMusic(fieldMusic);
+			CMusicManager::GetInstance()->PlayMusic(battleMusic);
+		}
+
 	//画面切り替え効果（戦闘開始）
 		int fieldGraph = MakeScreen(WINDOW_WIDTH, WINDOW_HEIGHT);
 			SetDrawScreen(fieldGraph);
@@ -609,14 +618,6 @@ void CField::BattleStart(){
 			break;
 		}
 
-	//音楽切り替え
-		std::string fieldMusic = Map.GetMapMusic(NowMap, false);
-		std::string battleMusic = Map.GetMapMusic(NowMap, true);
-
-		if (battleMusic.length() > 0 && battleMusic != fieldMusic) {
-			CMusicManager::GetInstance()->StopMusic(fieldMusic);
-			CMusicManager::GetInstance()->PlayMusic(battleMusic);
-		}
 		
 	//戦闘開始（戦闘終了まで帰ってこない）
 	Battle->BattleStart(&result, &resultcmdlist);
