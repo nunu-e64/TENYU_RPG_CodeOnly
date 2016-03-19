@@ -12,6 +12,37 @@ void CMusicManager::Init()
 	MusicBank.clear();
 }
 
+void CMusicManager::Update()	//フェードインとフェードアウト進行
+{
+
+	for (auto it = FadeInVolume.begin(); it != FadeInVolume.end(); ) {
+
+		int volume = GetVolumeSoundMem(it->Handle);
+		volume = min(volume - it->Diff, it->MaxVolume);
+
+		if (volume < it->MaxVolume) {
+			ChangeVolumeSoundMem(it->Handle, volume);
+			++it;
+		} else {
+			it = FadeInVolume.erase(it);
+		}
+	}
+
+	for (auto it = FadeOutVolume.begin(); it != FadeOutVolume.end(); ) {
+
+		int volume = GetVolumeSoundMem(it->Handle);
+		volume = max(volume - it->Diff, 0);
+
+		if (volume > 0) {
+			ChangeVolumeSoundMem(it->Handle, volume);
+			++it;
+		} else {
+			StopSoundMem(it->Handle);
+			it = FadeOutVolume.erase(it); 
+		}
+	}
+}
+
 void CMusicManager::LoadMusic(std::string _key, const char * _address, bool _isPress)
 {
 
@@ -48,6 +79,16 @@ void CMusicManager::PlayMusic(std::string _key) {
 		} else {
 			PlaySoundMem(handle, DX_PLAYTYPE_BACK, true);	//通常再生（頭出し）
 		}
+	}
+}
+
+void CMusicManager::PlaySound(std::string _key) {
+
+	int handle = GetMusicHandle(_key);
+	if (handle != -1) {
+
+		PlaySoundMem(handle, DX_PLAYTYPE_BACK, true);	//通常再生（頭出し）
+
 	}
 }
 

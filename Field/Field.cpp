@@ -553,7 +553,7 @@ void CField::SetMyEffect(int _effectname, int _effectnum[]){
 			break;
 		case RND_DIR:
 		case WALK:
-			ErrorDx("Error->CField::SetMyEffect->You can't set [RND_DIR]or[WALK] for Player ....yet?",__FILE__,__LINE__);
+			ERRORDX("CField::SetMyEffect->You can't set [RND_DIR]or[WALK] for Player ....yet?");
 			goto reset;
 			break;
 		default:
